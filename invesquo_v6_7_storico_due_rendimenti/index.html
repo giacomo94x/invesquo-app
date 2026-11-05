@@ -894,26 +894,25 @@ function parseHistoryPayload(data,symbol){
 }
 async function fetchDetailHistory(a,range){
  const settings=DETAIL_RANGES[range],key=a.symbol+'|'+range+'|'+currencyOf(a),previous=detailCache.get(key);
- if(previous&&Date.now()-previous.at<(range==='1d'?120000:900000))return previous.data;
+ if(previous&&Date.now()-previous.at<(range==='1d'?60000:240000))return previous.data;
  const uri='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(a.symbol)+'?range='+settings.range+'&interval='+settings.interval+'&includePrePost=false';
- const sources=[
-   ['server','/.netlify/functions/history?symbol='+encodeURIComponent(a.symbol)+'&range='+encodeURIComponent(range)+'&currency='+encodeURIComponent(currencyOf(a))],
-   ['Yahoo',uri],
-   ...relayUrls(uri).map((url,i)=>['proxy'+i,url])
- ];
+ const sources=[['server','/.netlify/functions/history?symbol='+encodeURIComponent(a.symbol)+'&range='+encodeURIComponent(range)+'&currency='+encodeURIComponent(currencyOf(a))],['Yahoo',uri],...relayUrls(uri).map((url,i)=>['proxy'+i,url])];
  const failures=[];
  for(const [source,url] of sources){
   try{
-   const parsed=JSON.parse(await readUrl(url,5500));
-   const data=parseHistoryPayload(parsed,a.symbol);
-   if(data.points.length<2)throw Error('Rilevazioni insufficienti');const actual=parsed.invesquo?.effectiveRange;if(actual&&actual!==range)data.source+=' · periodo alternativo '+actual;data.source+=' · '+(source==='server'?'server':'web');detailCache.set(key,{at:Date.now(),data});return data;
+   const parsed=JSON.parse(await readUrl(url,6000));const data=parseHistoryPayload(parsed,a.symbol);
+   // v6.8: never present monthly candles for 1G or 1S.
+   const cutoff=range==='1d'?Date.now()-25*3600000:range==='5d'?Date.now()-7*86400000:null;
+   if(cutoff!==null)data.points=data.points.filter(p=>p.t>=cutoff);
+   if(!data.points.length)throw Error('Nessuna rilevazione nel periodo richiesto');
+   data.source+=' · '+(source==='server'?'server':'web');detailCache.set(key,{at:Date.now(),data});return data;
   }catch(e){failures.push(source+': '+(e.message||'errore'))}
  }
- // Final fallback for empty intraday charts: request an observed daily series.
- if(range==='1d'||range==='5d'){
-  try{const longer=await fetchDetailHistory(a,'1mo');return {...longer,source:longer.source+' · storico 1M (intraday non disponibile)',alternativeRange:'1mo'}}catch(e){failures.push('1M: '+e.message)}
- }
- throw Error('Dati storici non raggiungibili. '+failures.slice(0,3).join(' · '));
+ // Use actual locally observed quotes in the selected period, not fictional intraday candles.
+ const observed=localDetailSeries(a),days={'1d':1.04,'5d':7,'1mo':31,'6mo':183,'1y':366,'max':3650}[range]||31;
+ const points=observed.filter(pt=>pt.t>=Date.now()-days*86400000);
+ if(points.length)return {points,source:'Quotazioni verificate salvate sul dispositivo',previousClose:null,local:true};
+ throw Error('Dati del periodo non disponibili: '+failures.slice(0,2).join(' · '));
 }
 function localDetailSeries(a){
  // A BTP without an authenticated historical feed can use only future local observations.
@@ -1009,7 +1008,7 @@ async function updateDetailLiveQuote(req){
   const pts=base.points.slice(),last=pts[pts.length-1];
   // Do not draw an earlier quote after newer historical prices.
   // Same-day end-of-day candles might be dated at market open: replace with actual observed quote only if newer.
-  if(obs.t>last.t+60000){
+  if(!last||obs.t>last.t+60000){
    pts.push(obs);plotAssetDetail(pts,a,{previousClose:base.previousClose});
    $('assetDetailSource').textContent=base.source+' + '+obs.source+' · '+detailDate(obs.t,true)+(obs.delayed?' (differita)':'');
    $('assetDetailNote').textContent='Ultimo punto giallo: quotazione'+(obs.delayed?' differita':'')+' con data e ora effettive, aggiornata ogni 60 secondi mentre il grafico è aperto. Tratteggio giallo: collegamento con l’ultima chiusura storica disponibile; non sono prezzi intraday ricostruiti. PMC: linea gialla orizzontale.';
@@ -1036,15 +1035,15 @@ async function loadAssetDetail(){
     const address='/.netlify/functions/bond-history?isin='+encodeURIComponent(a.isin||'IT0005735227')+'&range='+encodeURIComponent(range);
     const feed=JSON.parse(await readUrl(address,9500));
     if(request!==assetDetailRequest)return;
-    if(!Array.isArray(feed.points)||feed.points.length<2)throw Error(feed.error||'Prezzi storici insufficienti');
+    if(!Array.isArray(feed.points)||feed.points.length<1)throw Error(feed.error||'Prezzi storici insufficienti');
     const points=feed.points.map(x=>({t:Number(x.t),p:Number(x.p)})).filter(x=>Number.isFinite(x.t)&&x.t>0&&Number.isFinite(x.p)&&x.p>0).sort((x,y)=>x.t-y.t);
-    if(points.length<2)throw Error('Serie storica non valida');
+    if(!points.length)throw Error('Serie storica non valida');
     plotAssetDetail(points,a);$('assetDetailSource').textContent=(feed.source||'Euronext MOT')+' · '+(feed.asOf||'date disponibili');
     $('assetDetailNote').textContent='Prezzi osservati in % del nominale; cedole escluse. Fonte esterna, soggetta a disponibilità.';
   }catch(e){if(request!==assetDetailRequest)return;
     const days={'1d':1,'5d':7,'1mo':31,'6mo':183,'1y':366,'max':3650}[range]||31;
     const recent=local.filter(x=>x.t>=Date.now()-days*86400000);
-    if(recent.length>=2){plotAssetDetail(recent,a);$('assetDetailSource').textContent='Rilevazioni verificate salvate nell’app';}
+    if(recent.length>=1){plotAssetDetail(recent,a);$('assetDetailSource').textContent='Rilevazioni verificate salvate nell’app';}
     else{detailEmpty('Storico MOT non raggiungibile. Nessun prezzo viene inventato.');$('assetDetailSource').textContent='Euronext · recupero non disponibile';}
     $('assetDetailNote').textContent='Fonte Euronext non disponibile ora: '+String(e.message||'errore').slice(0,140)+'. Prezzo corrente non modificato.';
   }
@@ -1062,11 +1061,28 @@ async function loadAssetDetail(){
  try{
   const data=await fetchDetailHistory(a,range);if(request!==assetDetailRequest)return;
   const pts=data.points;
-  if(pts.length<2){detailEmpty('Quotazioni insufficienti per questo intervallo.');$('assetDetailSource').textContent=data.source;return}
+  if(!pts.length){detailEmpty('Nessuna quotazione disponibile in questo periodo.');$('assetDetailSource').textContent=data.source;return}
   detailBaseSeries={points:pts,previousClose:data.previousClose,source:data.source};
   plotAssetDetail(pts,a,{previousClose:data.previousClose});void updateDetailLiveQuote(request);
   $('assetDetailSource').textContent=data.source+' · '+currencyOf(a)+' · '+detailMarketLabel(a);if(data.alternativeRange)$('assetDetailNote').textContent='I dati intraday non sono disponibili per questo titolo: viene mostrato lo storico reale di 1 mese. Tocca la curva per data e prezzo. Il prezzo del portafoglio resta indipendente.';
- }catch(e){if(request!==assetDetailRequest)return;detailEmpty('Grafico non disponibile in questa sessione. Puoi aprire la fonte dal link qui sotto.');$('assetDetailSource').textContent='Prezzo salvato invariato · storico non raggiungibile';}
+ }catch(e){if(request!==assetDetailRequest)return;
+  // Intraday can be unavailable on Yahoo GEM. Show a verified, timestamped quote as
+  // ONE observed point (never a fake line); additional observations accumulate.
+  if(range==='1d'||range==='5d'){
+   try{
+    const obs=await fetchDetailLiveQuote(a);if(request!==assetDetailRequest)return;
+    const days=range==='1d'?1.04:7;
+    const valid=localDetailSeries(a).filter(p=>p.t>=Date.now()-days*86400000&&p.t<=obs.t);
+    const pts=[...valid,obs].sort((x,y)=>x.t-y.t).filter((p,i,arr)=>i===0||p.t!==arr[i-1].t);
+    detailBaseSeries={points:pts.filter(p=>!p.live),source:'Osservazioni reali · '+obs.source,previousClose:null};
+    plotAssetDetail(pts,a);$('assetDetailSource').textContent=obs.source+' · '+detailDate(obs.t,true)+(obs.delayed?' (differita)':'');
+    $('assetDetailNote').textContent=pts.length===1?'Un solo prezzo osservato in questo periodo. Il grafico crescerà con nuove quotazioni reali; nessuna curva 1M mostrata al posto di 1G/1S.':'Quotazioni effettivamente osservate nel periodo; nessun dato mensile sostituito.';
+    return;
+   }catch(_){/* no verified quote */}
+  }
+  detailEmpty('Non ci sono prezzi verificati sufficienti per '+(range==='1d'?'1G':range==='5d'?'1S':'questo periodo')+'. Nessun grafico mensile sostitutivo.');
+  $('assetDetailSource').textContent='Storico non disponibile · prezzo del portafoglio invariato';
+ }
 }
 $('assetList').addEventListener('click',e=>{const btn=e.target.closest('[data-detail-id]');if(btn){openAssetDetail(btn.dataset.detailId);return}});
 
