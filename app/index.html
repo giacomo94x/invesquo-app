@@ -351,7 +351,122 @@ body[data-theme="light"] #historyRanges button.btn.selected,body[data-theme="lig
 .transaction-history-row .btn{font-size:11px;padding:6px 9px}
 @media(max-width:480px){.transaction-row{align-items:stretch}.transaction-controls{width:100%}.transaction-controls .btn{flex:1}}
 .history-compat-note{font-size:12px;line-height:1.55;color:#b8c8dd;background:rgba(75,121,194,.1);border:1px solid rgba(105,143,206,.28);border-radius:12px;padding:10px 12px;margin:10px 0 14px}
-</style></head><body><main><div id="simulationBanner" class="simulation-banner hidden"><strong>MODALITÀ TEST</strong><span>Profilo separato · nessun effetto sugli investimenti reali</span><button type="button" id="exitSimulation" aria-label="Esci dalla simulazione">×</button></div>
+
+/* v7.5 local profiles: app cannot be used before a profile is unlocked. */
+body:not(.account-unlocked) main{display:none!important}
+#accountGate{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px 14px;background:#091221;color:#f4f7fc;position:relative;z-index:999}
+body.account-unlocked #accountGate{display:none!important}
+.account-panel{width:min(100%,465px);background:#142239;border:1px solid #344865;border-radius:22px;padding:24px;box-shadow:0 20px 70px #0007}
+.account-panel h1{font-size:30px;margin:0 0 6px}.account-panel .hint{margin:7px 0 16px}
+.account-panel input:not([type=checkbox]),.account-panel select{width:100%;min-height:44px;padding:10px 12px;background:#0c192d;color:white;border:1px solid #435a7a;border-radius:10px;font-size:16px}
+.account-panel label:not(.account-check){display:block;font-size:12px;color:#b2c2d8;margin:10px 0 5px}
+.account-panel button{min-height:41px;cursor:pointer}
+.account-panel .account-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:15px 0}
+.account-panel .account-tabs button{background:#203550;border:1px solid #405776;color:#e6eefb;border-radius:9px;font-weight:700}
+.account-panel .account-tabs button.selected{background:#4775cf;border-color:#4775cf;color:#fff}
+.account-panel .account-check{display:flex;align-items:flex-start;gap:8px;margin:14px 0;font-size:12px;line-height:1.5;color:#c7d2e3}
+.account-panel .account-check input{margin-top:3px;flex-shrink:0}
+.account-primary{background:#4775cf;color:#fff;border:0;border-radius:10px;padding:10px 14px;width:100%;font-weight:750}
+.account-panel .account-error{color:#ffb5bf;min-height:22px;font-size:12px;margin-top:10px}
+.account-panel a{color:#9ec2ff}
+
+/* v7.6: small, factual diagnostics above settings */
+.settings-status-panel{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1fr) auto;align-items:center;gap:12px;border:1px solid var(--border);border-radius:15px;padding:12px 14px;margin:12px 0 14px;background:var(--panel2)}
+.settings-status-info{min-width:0;display:flex;flex-direction:column;gap:4px}
+.settings-status-label{font-size:10px;font-weight:800;letter-spacing:.12em;color:var(--muted)}
+.settings-status-info strong{font-size:14px}
+.settings-status-info .sub{font-size:10.5px;line-height:1.35}
+.settings-status-state{display:flex;align-items:center;gap:7px;min-width:0}
+.settings-status-state strong{font-size:12px;line-height:1.3}
+.server-led{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none;background:#9ba3b4;box-shadow:0 0 0 3px rgba(155,163,180,.13)}
+.server-led.online{background:#39d79d;box-shadow:0 0 0 3px rgba(57,215,157,.14)}
+.server-led.offline{background:#f16b75;box-shadow:0 0 0 3px rgba(241,107,117,.16)}
+.server-led.checking{background:#e7ba58;box-shadow:0 0 0 3px rgba(231,186,88,.13)}
+.settings-status-refresh{padding:8px!important;min-width:36px;height:36px;align-self:center}
+@media(max-width:520px){.settings-status-panel{grid-template-columns:minmax(0,1fr) auto;gap:12px}.settings-status-info:first-child{grid-column:1/-1;padding-bottom:9px;border-bottom:1px solid var(--border)}.settings-status-refresh{grid-column:2;grid-row:2}}
+</style></head><body><section id="accountGate" aria-labelledby="accountTitle">
+<div class="account-panel"><div class="eyebrow">INVESQUO · PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
+<p class="hint">Crea un profilo sul dispositivo oppure accedi a un profilo già presente. Nessun account online: i dati restano in questo browser.</p>
+<div class="account-tabs"><button type="button" id="accountTabCreate" class="selected">Nuovo profilo</button><button type="button" id="accountTabLogin">Accedi</button></div>
+<form id="accountCreateForm" autocomplete="off"><label for="localAccountName">Nome utente</label><input id="localAccountName" maxlength="36" minlength="2" placeholder="Come vuoi chiamare il profilo?" required>
+<label for="localAccountPassword">Password facoltativa (min. 8 caratteri)</label><input id="localAccountPassword" type="password" autocomplete="new-password" placeholder="Lascia vuoto per non usarla">
+<label class="account-check"><input type="checkbox" id="accountReadPolicy" required> <span>Confermo di aver letto l'<a href="./privacy.html" target="_blank" rel="noopener noreferrer">informativa sulla privacy e sui dati locali</a>. Non è un consenso al tracciamento.</span></label>
+<button class="account-primary" type="submit">Crea profilo e inizia</button></form>
+<form id="accountLoginForm" class="hidden"><label for="localAccountChoice">Profilo presente su questo dispositivo</label><select id="localAccountChoice"></select>
+<label for="localLoginPassword">Password, se impostata</label><input id="localLoginPassword" type="password" autocomplete="current-password" placeholder="Password del profilo">
+<button class="account-primary" type="submit" style="margin-top:14px">Accedi al portafoglio</button></form>
+<p class="account-error" id="accountError" role="alert"></p>
+<p class="foot">Niente cloud o recupero password: per non perdere i dati esporta spesso un backup JSON. La password è un blocco d'accesso locale, <strong>non cifra il portafoglio</strong>.</p>
+<a href="./privacy.html" target="_blank" rel="noopener noreferrer">Privacy, cookie e trattamento dei dati</a>
+</div></section>
+<script>
+/* Standalone local-only profiles. Passwords are stored only as PBKDF2 salted verifier.
+   This is a local access lock, NOT encryption or a network authentication system. */
+(function(){
+ 'use strict';
+ const META='invesquo_local_profiles_v75',SESSION='invesquo_unlocked_account_v75';
+ const getProfiles=()=>{try{const p=JSON.parse(localStorage.getItem(META)||'[]');return Array.isArray(p)?p:[]}catch(_){return []}};
+ const profiles=getProfiles();
+ const sessionId=sessionStorage.getItem(SESSION);
+ const unlocked=profiles.find(p=>p.id===sessionId);
+ window.INVESQUO_ACCOUNT_ID=unlocked?unlocked.id:null;
+ if(unlocked)document.body.classList.add('account-unlocked');
+ const $=id=>document.getElementById(id), msg=t=>$('accountError').textContent=t;
+ const enc=new TextEncoder(), hex=a=>Array.from(new Uint8Array(a)).map(x=>x.toString(16).padStart(2,'0')).join('');
+ async function passwordHash(pw,salt){
+  if(!crypto.subtle)throw Error('Password non disponibile: usa HTTPS oppure crea un profilo senza password.');
+  const master=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveBits']);
+  return hex(await crypto.subtle.deriveBits({name:'PBKDF2',salt:Uint8Array.from(salt.match(/.{2}/g).map(x=>parseInt(x,16))),iterations:160000,hash:'SHA-256'},master,256));
+ }
+ const randomHex=()=>hex(crypto.getRandomValues(new Uint8Array(16)));
+ const tabs={create:$('accountTabCreate'),login:$('accountTabLogin')};
+ function showTab(kind){
+  $('accountCreateForm').classList.toggle('hidden',kind!=='create');$('accountLoginForm').classList.toggle('hidden',kind!=='login');
+  tabs.create.classList.toggle('selected',kind==='create');tabs.login.classList.toggle('selected',kind==='login');msg('');
+  $('localAccountChoice').innerHTML='';getProfiles().forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;$('localAccountChoice').appendChild(o)});
+  if(!getProfiles().length&&kind==='login')msg('Non ci sono ancora profili. Crea il primo utente.');
+ }
+ tabs.create.onclick=()=>showTab('create');tabs.login.onclick=()=>showTab('login');
+ $('accountCreateForm').onsubmit=async e=>{
+  e.preventDefault();msg('');const btn=e.submitter||$('accountCreateForm').querySelector('button[type=submit]');btn.disabled=true;
+  try{
+   const name=$('localAccountName').value.trim(),pw=$('localAccountPassword').value;
+   if(name.length<2||name.length>36)throw Error('Il nome deve contenere da 2 a 36 caratteri.');
+   if(pw&&pw.length<8)throw Error('La password deve avere almeno 8 caratteri.');
+   if(!$('accountReadPolicy').checked)throw Error('Leggi l’informativa privacy prima di continuare.');
+   const existing=getProfiles();if(existing.some(p=>p.name.toLocaleLowerCase('it')===name.toLocaleLowerCase('it')))throw Error('Esiste già un profilo con questo nome.');
+   const salt=pw?randomHex():null,hash=pw?await passwordHash(pw,salt):null;
+   const id=randomHex();existing.push({id,name,salt,hash,createdAt:new Date().toISOString(),policyVersion:'2026-11-05'});
+   localStorage.setItem(META,JSON.stringify(existing));sessionStorage.setItem(SESSION,id);location.reload();
+  }catch(err){msg(err.message||'Impossibile creare il profilo.');btn.disabled=false}
+ };
+ $('accountLoginForm').onsubmit=async e=>{
+  e.preventDefault();msg('');const btn=e.submitter||$('accountLoginForm').querySelector('button[type=submit]');btn.disabled=true;
+  try{
+   const p=getProfiles().find(x=>x.id===$('localAccountChoice').value);if(!p)throw Error('Profilo non trovato.');
+   if(p.hash){const pw=$('localLoginPassword').value;if(!pw||await passwordHash(pw,p.salt)!==p.hash)throw Error('Password non corretta.');}
+   sessionStorage.setItem(SESSION,p.id);location.reload();
+  }catch(err){msg(err.message||'Accesso non riuscito.');btn.disabled=false}
+ };
+ window.invesquoLocalAccount={
+  name:unlocked?.name||'',
+  logout(){sessionStorage.removeItem(SESSION);location.reload()},
+  showPrivacy(){window.open('./privacy.html','_blank','noopener,noreferrer')},
+  deleteProfile(){
+   if(!unlocked)return;
+   if(!confirm('Eliminare DEFINITIVAMENTE questo profilo e TUTTI i suoi dati locali? Esporta prima un backup JSON.'))return;
+   const confirmation=prompt('Per confermare scrivi ELIMINA in maiuscolo:');
+   if(confirmation!=='ELIMINA')return;
+   const prefix='invesquo_account_'+unlocked.id+'_';
+   const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k?.startsWith(prefix))keys.push(k)}
+   keys.forEach(k=>localStorage.removeItem(k));
+   localStorage.setItem(META,JSON.stringify(getProfiles().filter(p=>p.id!==unlocked.id)));
+   sessionStorage.removeItem(SESSION);location.reload();
+  }
+ };
+ if(!unlocked)showTab(profiles.length?'login':'create');
+})();
+</script><main><div id="simulationBanner" class="simulation-banner hidden"><strong>MODALITÀ TEST</strong><span>Profilo separato · nessun effetto sugli investimenti reali</span><button type="button" id="exitSimulation" aria-label="Esci dalla simulazione">×</button></div>
 <div aria-describedby="visitAlertText" aria-labelledby="visitAlertTitle" aria-modal="true" class="visit-alert hidden" id="visitAlert" role="dialog">
 <div class="visit-dialog">
 <div aria-hidden="true" class="visit-figure" id="visitMascot"></div>
@@ -376,8 +491,16 @@ body[data-theme="light"] #historyRanges button.btn.selected,body[data-theme="lig
 </div>
 <div aria-label="Storico del patrimonio" class="app-view hidden" id="historyView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Storico del patrimonio</h2><p>Valori effettivamente rilevati per tutti gli strumenti, inclusi crypto, ETF e obbligazioni. Gli acquisti e le vendite non sono rendimenti.</p></div><section class="card" id="historySection"><div class="section-head"><h2>Storico del patrimonio</h2><span class="sub" id="historyStart">Dalla prima rilevazione</span></div><div class="timeline-range" id="historyRanges"><button class="btn selected" data-range="7" aria-pressed="true">7G</button><button class="btn" data-range="30" aria-pressed="false">1M</button><button class="btn" data-range="183" aria-pressed="false">6M</button><button class="btn" data-range="365" aria-pressed="false">1A</button><button class="btn" data-range="all" aria-pressed="false">MAX</button></div><div aria-label="Andamento del patrimonio nel tempo" id="historyGraph"></div><div aria-live="polite" class="history-day-detail hidden" id="historyDayDetail"></div><div class="hist-performance" id="historyPerformance"></div><div class="method-picker"><span class="method-label">Metodo di rendimento</span><div aria-label="Metodo di rendimento" class="method-buttons" id="returnMethods" role="group"><button data-method="portfolio" type="button">Portafoglio</button><button data-method="twrr" type="button">TWRR</button></div></div><p aria-live="polite" class="method-help" id="methodHelp"></p><p class="hint">Lo storico del valore inizia dalla prima osservazione disponibile dopo l'inserimento del portafoglio. Le date passate degli acquisti restano nello storico transazioni, ma non producono automaticamente quotazioni retroattive. Le rilevazioni hanno copertura completa di tutti gli strumenti, anche se alcune categorie sono nascoste nella Dashboard.</p><div class="hist-foot sub" id="historySummary"></div><div class="trade-event-list" id="tradeEventList"></div><div id="transactionTimeline" class="transaction-timeline"></div></section></div><div aria-label="Investimenti e operazioni" class="app-view hidden" id="portfolioView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Investimenti</h2><p>Posizioni, prezzi, acquisti e vendite.</p></div><section class="card"><div class="section-head"><h2>Composizione e rendimenti</h2><button class="btn" id="editToggle">Rettifica dati</button></div><div class="hint" style="margin-bottom:6px">Valori lordi · capitale = quantità × prezzo medio di carico</div><div id="assetList"></div><div class="editor" id="editor"><div class="notice">Usa “Registra acquisto” per aggiungere nuove quote. Questa sezione serve soltanto a correggere dati iniziali o errori di inserimento.</div><div id="editItems"></div><button class="btn primary" id="editDone" style="width:100%;margin-top:12px">Salva e chiudi</button></div></section><section class="card" id="purchaseSection"><h2>Registra un acquisto</h2><p class="hint">Hai comprato, ad esempio, 2 quote VWCE? Inserisci la quantità e il prezzo effettivo di esecuzione. L'app aggiornerà quantità, capitale investito e PMC ponderato soltanto dopo la conferma.</p><div class="field"><label for="buyAsset">Strumento</label><select class="order-select" id="buyAsset"></select></div><div class="investment-entry"><div class="field"><label for="buyDate">Data effettiva dell’acquisto</label><div class="entry-date-row"><input type="date" id="buyDate"/><button type="button" class="btn" data-first-date="buyDate">Prima data app</button></div></div><p class="entry-explain">Predefinita: oggi. Puoi selezionare la prima data registrata nell’app per inserire un investimento già posseduto. La data non crea quotazioni storiche mancanti.</p><label class="sub">Come vuoi registrare l’operazione?</label><div class="entry-choice"><label><input type="radio" name="buyInputMode" value="qty" checked/> Quantità di quote</label><label><input type="radio" name="buyInputMode" value="eur"/> Importo speso in €</label></div><div class="field entry-field-hidden" id="buyAmountWrap"><label for="buyAmount">Importo effettivamente acquistato (€)</label><input id="buyAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Per Bitcoin o altri strumenti frazionabili: scrivi 500 € e calcolerò automaticamente le quote.</p></div></div><div class="editgrid"><div class="field" id="buyQuantityWrap"><label for="buyQuantity">Nuove quote acquistate (frazioni ammesse)</label><input id="buyQuantity" inputmode="decimal" min="0" step="any" type="number" value="2"/></div><div class="field"><label for="buyPrice">Prezzo effettivo di acquisto per quota (nella valuta del titolo)</label><input id="buyPrice" inputmode="decimal" min="0" step="any" type="number"/></div></div><div class="order-preview" id="buyPreview"></div><div class="notice warn hidden" id="buyStale"></div><label class="toggle" style="margin-top:12px"><input id="buyVerify" type="checkbox"/> Confermo data, quantità/importo e prezzo effettivo pagato</label><button class="btn primary buy-confirm" disabled="" id="buyCommit">Registra acquisto e aggiorna PMC</button><p class="foot">Inserisci sempre il prezzo effettivo pagato al broker, non necessariamente la quotazione attuale. Sono ammesse quote frazionate (es. Bitcoin); puoi indicare direttamente l’importo in euro. Commissioni escluse. Un acquisto storico non ricrea i prezzi passati del portafoglio.</p><div class="notice hidden" id="buyStatus"></div></section><section class="card"><button class="btn primary full-btn" id="newAssetOpen">＋ Aggiungi titolo</button><button class="btn full-btn" id="purchaseOpen">＋ Registra acquisto</button><button class="btn full-btn" id="saleOpen">− Registra vendita</button></section><section class="card" id="ingSection"><h2>Conto deposito ING</h2><div class="rowline"><span class="sub">Decorrenza</span><strong>08/08/2026</strong></div><div class="rowline"><span class="sub">Tasso lordo annuo</span><strong id="ingRate">4,00%</strong></div><div class="rowline"><span class="sub">Interessi maturati, stima</span><strong class="gain nums" id="ingInterest">305,67 €</strong></div><div class="rowline"><span class="sub">Capitale + interessi</span><strong id="ingBalance">50.305,67 €</strong></div><p class="foot">Interessi calcolati ogni giorno, partendo dai 305,67 € comunicati il 03/11/2026. Non sono un saldo bancario certificato né interessi già accreditati.</p></section><section class="card"><h2>Valori a scadenza</h2><div id="maturities"></div><p class="foot">Per il BTP il valore include il capitale e tutte le cedole lorde previste, non un unico pagamento finale. I valori a scadenza non si sommano al patrimonio odierno.</p></section><section class="card"><h2>Quotazioni e dati</h2><div class="flex"><label class="toggle"><input checked="" id="auto" type="checkbox"/> Aggiornamento automatico</label><button class="btn primary" id="refresh">↻ Aggiorna</button></div><div class="sub" id="refreshInfo" style="margin-top:8px">Lettura dei prezzi non garantita</div><div class="notice" id="notice">I prezzi non verificati restano salvati con l’ultima fonte e data disponibili. I grafici esterni possono non essere accessibili.</div><p class="foot">Controllo dei prezzi con frequenza regolabile nelle Impostazioni, solo quando l’app è aperta. Le quotazioni dipendono dalle fonti esterne e potrebbero essere ritardate o non disponibili. Preferenze, backup e prova della faccina sono in <strong>Impostazioni</strong>.</p></section></div><section aria-label="Impostazioni Invesquo" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">INVESQUO</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div>
-<p class="settings-intro">Personalizza l’esperienza e gestisci le informazioni salvate sul dispositivo.</p><section class="card"><h2>Modalità simulazione</h2><p class="hint">Apri un portafoglio di prova separato: acquisti e vendite non modificano i dati reali.</p><button class="btn primary full-btn" id="simulationToggle">Avvia simulazione</button></section>
-<section class="card settings-card" id="settingsSection">
+<div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">b.7.6</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">SERVER NETLIFY</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span id="netlifyServerDetail" class="sub">Controllo delle funzioni server dell’app.</span></div>
+ <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
+ </div>
+ <p class="settings-intro">Personalizza l’esperienza e gestisci le informazioni salvate sul dispositivo. La spia verifica le funzioni Netlify, non la disponibilità delle singole fonti finanziarie.</p><section class="card"><h2>Modalità simulazione</h2><p class="hint">Apri un portafoglio di prova separato: acquisti e vendite non modificano i dati reali.</p><button class="btn primary full-btn" id="simulationToggle">Avvia simulazione</button></section>
+<section class="card"><div class="section-head"><h2>Profilo locale</h2><span class="pill">Solo su questo dispositivo</span></div>
+<p class="hint">Utente attivo: <strong id="currentAccountName">—</strong>. Portafogli separati per ciascun profilo. I dati non sono sincronizzati né cifrati.</p>
+<div class="actions"><button class="btn" id="switchLocalAccount" type="button">Cambia profilo / Esci</button><button class="btn" id="openLocalPrivacy" type="button">Privacy e archiviazione</button><button class="btn danger-outline" id="deleteLocalAccount" type="button">Elimina profilo e dati</button></div>
+<p class="foot">Per trasferire dati tra profili o dispositivi usa il backup JSON in questa schermata. La password opzionale non protegge i file del browser da chi accede al dispositivo.</p></section><section class="card settings-card" id="settingsSection">
 <div class="section-head"><h2>Preferenze</h2><span class="sub">Le modifiche si salvano automaticamente</span></div>
 <details class="setting-group" open=""><summary>Aspetto e colori</summary>
 <div class="setting-field"><label for="settingTheme">Tema dell'app</label><select id="settingTheme"><option value="dark">Blu notte (attuale)</option><option value="ocean">Blu oceano</option><option value="light">Chiaro</option><option value="amethyst">Ametista</option><option value="graphite">Grafite</option><option value="pine">Verde petrolio</option><option value="system">Automatico (iPhone)</option></select></div>
@@ -432,17 +555,16 @@ body[data-theme="light"] #historyRanges button.btn.selected,body[data-theme="lig
 </main><script>
 'use strict';
 const SIM_MODE=new URLSearchParams(location.search).get('simulation')==='1';
-const store={getItem:k=>localStorage.getItem((SIM_MODE?'invesquo_sim_':'')+k),setItem:(k,v)=>localStorage.setItem((SIM_MODE?'invesquo_sim_':'')+k,v),removeItem:k=>localStorage.removeItem((SIM_MODE?'invesquo_sim_':'')+k)};
+// v7.5: strictly isolated local portfolios; legacy anonymous keys are never read.
+const ACCOUNT_ID=window.INVESQUO_ACCOUNT_ID||null;
+const ACCOUNT_PREFIX=ACCOUNT_ID?'invesquo_account_'+ACCOUNT_ID+'_':null;
+const store={
+ getItem:k=>ACCOUNT_PREFIX?localStorage.getItem(ACCOUNT_PREFIX+(SIM_MODE?'invesquo_sim_':'')+k):null,
+ setItem:(k,v)=>{if(ACCOUNT_PREFIX)localStorage.setItem(ACCOUNT_PREFIX+(SIM_MODE?'invesquo_sim_':'')+k,v)},
+ removeItem:k=>{if(ACCOUNT_PREFIX)localStorage.removeItem(ACCOUNT_PREFIX+(SIM_MODE?'invesquo_sim_':'')+k)}
+};
 const STORAGE='patrimonio_iphone_v2',OLD_STORAGE='patrimonio_iphone_v1',FILTER_KEY='patrimonio_filters_v2',HISTORY_KEY='patrimonio_history_v36',TRADES_KEY='patrimonio_trades_v36';
-const DEFAULTS=[
-{id:'bfp',name:'Buono minori',cat:'Risparmio postale',q:1,pmc:10000,p:10000,maturity:23295.99,symbol:''},
-{id:'btp',name:'Btp Valore Insieme Oc Oct31 Eur',cat:'Obbligazioni',q:10000,pmc:100,p:101.17,maturity:12270,symbol:'',isin:'IT0005735227'},
-{id:'goog',name:'Alphabet C · 1GOOG',cat:'Azioni',q:4,pmc:253.3,p:249.15,symbol:'1GOOG.MI',isin:'US02079K1079',sourceUrl:'https://it.investing.com/equities/google-inc-c?cid=1122334'},
-{id:'vwce',name:'VWCE',cat:'ETF',q:26,pmc:167.7,p:168.03,symbol:'VWCE.MI',isin:'IE00BK5BQT80',exchangeMic:'ETFP'},
-{id:'xdev',name:'XDEV',cat:'ETF',q:4,pmc:72.4,p:72.46,symbol:'XDEV.MI',isin:'IE00BL25JM42',exchangeMic:'ETFP'},
-{id:'rbot',name:'RBOT',cat:'ETF',q:8,pmc:18.62,p:18.184,symbol:'RBOT.MI',isin:'IE00BYZK4552',exchangeMic:'ETFP'},
-{id:'ing',name:'ING · Conto deposito',cat:'Conto deposito',q:1,pmc:50000,p:50000,interestBase:305.67,interestAnchor:'2026-11-03',interestStart:'2026-08-08',annualRate:4,symbol:''}
-];
+const DEFAULTS=[];
 
 // Product-specific branding. Icons use issuer logos, not a logo for the underlying index.
 // A text fallback remains visible when an external branding service is blocked/offline.
@@ -471,7 +593,11 @@ const pct=n=>new Intl.NumberFormat('it-IT',{style:'percent',minimumFractionDigit
 const number=n=>new Intl.NumberFormat('it-IT',{maximumFractionDigits:4}).format(n);
 const cloneDefaults=()=>DEFAULTS.map(a=>Object.assign({},a));
 const num=(v,backup=0)=>Number.isFinite(Number(v))?Math.max(0,Number(v)):backup;
-function migrate(){let saved=null;try{saved=JSON.parse(store.getItem(STORAGE));if(!saved||!Array.isArray(saved.assets))saved=null}catch(e){}if(saved)return saved;let old=null;try{old=JSON.parse(store.getItem(OLD_STORAGE))}catch(e){}if(!old||!Array.isArray(old.assets))return{assets:[],lastUpdate:'Portafoglio nuovo'};let assets=cloneDefaults();for(const a of assets){const x=old.assets.find(o=>o.id===a.id);if(!x)continue;a.q=num(x.q,a.q);a.p=num(x.p,a.p);if(a.id==='btp')a.pmc=num(x.c,10000)/Math.max(a.q,1)*100;else if(a.id==='goog'){a.pmc=253.3;/* preserve original user-specified cost per share */}else a.pmc=num(x.c,a.pmc*a.q)/Math.max(a.q,1);if(a.id==='ing'){a.annualRate=num(x.annualRate,4);a.interestBase=num(x.interestBase,305.67);a.interestAnchor=x.interestAnchor||'2026-11-03'}if(x.maturity!=null)a.maturity=num(x.maturity,a.maturity);/* Symbol identifiers come from the verified defaults, never an old backup. */}return{assets,lastUpdate:old.lastUpdate||'03/11/2026'}}
+function migrate(){
+ let saved=null;
+ try{saved=JSON.parse(store.getItem(STORAGE));if(!saved||!Array.isArray(saved.assets))saved=null}catch(e){}
+ return saved||{assets:[],lastUpdate:'Portafoglio nuovo'};
+}
 let state=SIM_MODE?(()=>{try{const q=JSON.parse(store.getItem(STORAGE)||'null');return q&&Array.isArray(q.assets)?q:{assets:[],lastUpdate:'Profilo test senza titoli'}}catch(e){return {assets:[],lastUpdate:'Profilo test senza titoli'}}})():migrate();for(const a of state.assets){if(a.id==='goog'){a.symbol='1GOOG.MI';a.isin='US02079K1079'}if(a.id==='btp'){a.symbol='';a.isin='IT0005735227';a.name='Btp Valore Insieme Oc Oct31 Eur'}if(a.id==='vwce'){a.isin='IE00BK5BQT80';a.exchangeMic='ETFP'}if(a.id==='xdev'){a.isin='IE00BL25JM42';a.exchangeMic='ETFP'}if(a.id==='rbot'){a.isin='IE00BYZK4552';a.exchangeMic='ETFP'}}let mode='now',editing=false,filter={};try{filter=JSON.parse(store.getItem(FILTER_KEY))||{}}catch(e){};CAT.forEach(([cat])=>{if(typeof filter[cat]!=='boolean')filter[cat]=true});
 function save(){try{store.setItem(STORAGE,JSON.stringify(state))}catch(e){notice('I dati non sono stati salvati. Controlla lo spazio disponibile.',true)}}
 function saveFilters(){try{store.setItem(FILTER_KEY,JSON.stringify(filter))}catch(e){}}
@@ -850,6 +976,7 @@ $('settingGlow').onchange=e=>{prefs.glow=e.target.checked;savePreferences()};
 $('resetVisitCounter').onclick=()=>{if(!confirm('Azzerare il conteggio degli ingressi di oggi?'))return;store.removeItem(VISIT_COUNTER_KEY);visitAlertShown=false;lastVisitAttempt=Date.now();updateVisitStatus();$('settingsSaved').textContent='Conteggio giornaliero azzerato.'};
 let dashboardScrollY=0;
 function openSettings(){
+ invesquoCheckServer();
  dashboardScrollY=window.scrollY||0;
  $('dashboardView').classList.add('hidden');
  $('settingsView').classList.remove('hidden');
@@ -914,7 +1041,7 @@ if(facePanelOpen)renderFacePanel();
 face.setAttribute('aria-label','Mascotte '+MASCOT_LABELS[emotion]+'. Performance lorda '+(faceMood==='positive'?'superiore a +2%':faceMood==='negative'?'inferiore a -2%':'compresa tra -2% e +2%')+': '+pct(performanceRatio));face.title=face.getAttribute('aria-label');
 const visible=groups(),den=visible.reduce((s,x)=>s+(mode==='now'?x.value:x.capital),0);let offset=0;const parts=visible.filter(g=>(mode==='now'?g.value:g.capital)>0).map(g=>{let from=offset;offset+=den?(mode==='now'?g.value:g.capital)/den*100:0;return `${g.color} ${from}% ${offset}%`});$('donut').style.background=parts.length?'conic-gradient('+parts.join(',')+')':'#354258';$('donutLabel').textContent=mode==='now'?'Patrimonio oggi':'Patrimonio investito';$('donutAmount').textContent=eur(den);$('legend').innerHTML=visible.length?visible.map(g=>`<div class="legend-row"><span class="swatch" style="background:${g.color}"></span><div><div class="legend-title">${g.name}</div><div class="legend-label">${eur(mode==='now'?g.value:g.capital)}</div></div><div class="legend-col"><span class="legend-label">Peso</span><strong>${pct(den?(mode==='now'?g.value:g.capital)/den:0)}</strong></div><div class="legend-col"><span class="legend-label">Rend. lordo</span><strong class="${g.ret>=0?'gain':'loss'}">${g.ret>=0?'+':''}${pct(g.ret)}</strong><strong class="legend-euro ${g.value-g.capital>=0?'gain':'loss'}">${g.value-g.capital>=0?'+':''}${eur(g.value-g.capital)}</strong></div></div>`).join(''):'<p class="hint">Nessuna categoria selezionata.</p>';$('modeNow').classList.toggle('selected',mode==='now');$('modeCost').classList.toggle('selected',mode==='cost');$('filters').innerHTML=CAT.map(([cat,color])=>`<button class="chip ${filter[cat]?'':'off'}" data-filter="${cat}" aria-pressed="${filter[cat]}"><i class="dot" style="background:${color}"></i>${cat} ${filter[cat]?'✓':'+'}</button>`).join('');
 const displayed=state.assets.filter(a=>filter[a.cat]&&Number(a.q)>0);$('assetList').innerHTML=displayed.length?displayed.map(a=>{const c=cap(a),v=val(a),g=v-c;return `<div class="asset"><div class="flex"><div class="asset-ident">${prefs.showLogos!==false?issuerIcon(a.id):''}<div class="asset-ident-copy"><div class="asset-name"><button type="button" class="asset-name-button" data-detail-id="${svgEscape(a.id)}" aria-label="Apri grafico di ${svgEscape(a.name)}"><span>${svgEscape(a.name)}</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 3 8-8"/><path d="M15 6h6v6"/></svg></button></div><div class="asset-meta">${a.id==='btp'?eur(a.q)+' nominali':a.id==='ing'?'Tasso '+pct(a.annualRate/100):number(a.q)+' quote'}${a.id==='goog'?' · GEM Milano EUR':a.id==='btp'?' · MOT EUR':''}${currencyOf(a)!=='EUR'?' · '+currencyOf(a)+' · cambio '+number(assetFx(a))+' EUR':''}${prefs.showQuoteTime&&a.quoteAt?' · Quotazione '+a.quoteAt:''}</div><div class="asset-topstats"><span>Quote: <b>${a.id==='btp'?eur(a.q)+' nominali':number(a.q)}</b></span><span>Peso selezione: <b>${pct(value?v/value:0)}</b></span></div></div></div><strong class="${g>=0?'gain':'loss'} nums">${g>=0?'+':''}${pct(c?g/c:0)}</strong></div><div class="asset-cols"><div class="asset-col"><span>Investito</span><strong>${eur(c)}</strong></div><div class="asset-col"><span>Valore oggi</span><strong>${eur(v)}</strong></div><div class="asset-col"><span>${a.id==='btp'?'PMC (% nominale)':'PMC'}</span><strong>${a.cat==='Obbligazioni'?number(a.pmc)+' / 100':localMoney(a.pmc,currencyOf(a))}</strong></div><div class="asset-col"><span>${a.id==='ing'?'Tasso annuo lordo':a.id==='btp'?'Prezzo oggi / 100 €':a.id==='bfp'?'Quotazione':'Prezzo attuale'}</span><strong>${a.id==='ing'?pct(a.annualRate/100):a.id==='bfp'?'Non quotato':a.cat==='Obbligazioni'?number(a.p)+' / 100':localMoney(a.p,currencyOf(a))}</strong>${currencyOf(a)!=='EUR'?`<span class="currency-help">≈ ${eur(Number(a.p)*assetFx(a))} / unità</span>`:''}</div></div><div class="asset-profit ${g>=0?'gain':'loss'}">${g>=0?'+':''}${eur(g)} lordi</div>${(['ETF','Azioni','Obbligazioni','ETC/ETN','Oro','Crypto','Valute'].includes(a.cat))?`<div class="asset-actions"><button class="btn" data-buy-id="${a.id}">+ Registra acquisto</button><button class="btn" data-sale-id="${a.id}">− Registra vendita</button><button class="btn" data-transactions-id="${a.id}">◷ Storico transazioni</button><button class="asset-delete" aria-label="Elimina ${svgEscape(a.name)} inserito per errore" data-delete-id="${a.id}">×</button></div>`:`<div class="asset-actions"><button class="btn" data-transactions-id="${a.id}">◷ Storico transazioni</button><button class="asset-delete" data-delete-id="${a.id}" aria-label="Elimina ${svgEscape(a.name)} inserito per errore">×</button></div>`}</div>`}).join(''):'<p class="hint">Nessuna posizione visibile. Riattiva una categoria per mostrarla.</p>';
-const ing=state.assets.find(a=>a.id==='ing');$('ingSection').classList.toggle('hidden',!filter['Conto deposito']);if(ing){$('ingRate').textContent=pct(ing.annualRate/100);$('ingInterest').textContent=eur(ingInterest(ing));$('ingBalance').textContent=eur(val(ing))} $('maturities').innerHTML=state.assets.filter(a=>a.maturity!=null&&filter[a.cat]).map(a=>`<div class="box"><strong>${a.name}</strong><div class="maturity-grid" style="margin-top:9px"><div><span>Investito</span><strong>${eur(cap(a))}</strong></div><div><span>A scadenza lordo</span><strong>${eur(a.maturity)}</strong></div></div><div class="gain" style="margin-top:7px;font-size:13px;font-weight:700">${a.maturity>=cap(a)?'+':''}${eur(a.maturity-cap(a))} (${pct(cap(a)?(a.maturity-cap(a))/cap(a):0)})</div></div>`).join('');
+const ing=state.assets.find(a=>a.id==='ing');$('ingSection').classList.toggle('hidden',!ing||!filter['Conto deposito']);if(ing){$('ingRate').textContent=pct(ing.annualRate/100);$('ingInterest').textContent=eur(ingInterest(ing));$('ingBalance').textContent=eur(val(ing))} $('maturities').innerHTML=state.assets.filter(a=>a.maturity!=null&&filter[a.cat]).map(a=>`<div class="box"><strong>${a.name}</strong><div class="maturity-grid" style="margin-top:9px"><div><span>Investito</span><strong>${eur(cap(a))}</strong></div><div><span>A scadenza lordo</span><strong>${eur(a.maturity)}</strong></div></div><div class="gain" style="margin-top:7px;font-size:13px;font-weight:700">${a.maturity>=cap(a)?'+':''}${eur(a.maturity-cap(a))} (${pct(cap(a)?(a.maturity-cap(a))/cap(a):0)})</div></div>`).join('');
 if(!editing)$('editor').classList.remove('open');renderHistory();}
 function renderEditor(){ $('editor').classList.toggle('open',editing);$('editToggle').textContent=editing?'Chiudi':'Rettifica dati'; if(!editing)return;const list=state.assets.filter(a=>filter[a.cat]);$('editItems').innerHTML=list.map(a=>`<div class="editrow"><strong>${a.name}</strong><div class="editgrid"><div class="field"><label>${a.id==='btp'?'Nominale (€)':'Quantità / unità'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="q" value="${a.q}"></div><div class="field"><label>${a.id==='btp'?'PMC (% del nominale)':'Prezzo medio carico (€)'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="pmc" value="${a.pmc}"></div><div class="field"><label>${a.id==='btp'?'Prezzo attuale (%)':'Prezzo attuale (€)'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="p" value="${a.p}"></div><div class="field"><label>Capitale investito (€)</label><div style="padding-top:10px;font-weight:800" id="computed-${a.id}">${eur(cap(a))}</div></div>${currencyOf(a)!=='EUR'?`<div class="field"><label>Cambio EUR per 1 ${currencyOf(a)}</label><input data-id="${a.id}" data-key="fxRate" type="number" inputmode="decimal" step="any" min="0.000001" value="${assetFx(a)}"/></div>`:''}</div>${a.id==='ing'?`<div class="editgrid"><div class="field"><label>Tasso annuo lordo (%)</label><input data-id="ing" data-key="annualRate" type="number" inputmode="decimal" step="any" min="0" value="${a.annualRate}"></div><div class="field"><label>Interessi di partenza (€)</label><input data-id="ing" data-key="interestBase" type="number" inputmode="decimal" step="any" min="0" value="${a.interestBase}"></div><div class="field"><label>Data riferimento interessi</label><input data-id="ing" data-key="interestAnchor" type="date" value="${a.interestAnchor}"></div></div>`:''}${a.maturity!=null?`<div class="field"><label>Valore lordo a scadenza (€)</label><input data-id="${a.id}" data-key="maturity" type="number" inputmode="decimal" step="any" min="0" value="${a.maturity}"></div>`:''}</div>`).join('');}
 $('editItems').addEventListener('change',function(e){const node=e.target;if(!node.dataset.id)return;const a=state.assets.find(x=>x.id===node.dataset.id);if(!a)return;const k=node.dataset.key;let v=k==='interestAnchor'?node.value:Number(String(node.value).replace(',','.'));if(k!=='interestAnchor'&&(!Number.isFinite(v)||v<0))return;if(k==='interestAnchor'&&!/^\d{4}-\d{2}-\d{2}$/.test(v))return;a[k]=v;if(k==='p'){a.quoteAt=new Date().toLocaleString('it-IT')+' · manuale';a.quoteSource='Prezzo inserito manualmente';a.quoteUpdatedAt=null}save();trackSnapshot();render();renderEditor();if(k==='p'&&buyTarget()?.id===a.id&&!buyPriceEdited)syncBuyPrice()});
@@ -994,6 +1121,10 @@ $('fileInput').onchange=async e=>{
  }catch(err){alert('Importazione fallita: '+err.message)}finally{e.target.value=''}
 };
 showResetUndo();
+$('currentAccountName').textContent=window.invesquoLocalAccount?.name||'Profilo locale';
+$('switchLocalAccount').onclick=()=>{if(confirm('Uscire dal profilo corrente? Potrai rientrare da questo dispositivo. Prima esporta un backup se necessario.'))window.invesquoLocalAccount.logout()};
+$('openLocalPrivacy').onclick=()=>window.invesquoLocalAccount.showPrivacy();
+$('deleteLocalAccount').onclick=()=>window.invesquoLocalAccount.deleteProfile();
 const AUTO_KEY='patrimonio_auto_refresh_60s';let auto=!SIM_MODE;try{auto=SIM_MODE?store.getItem(AUTO_KEY)==='true':store.getItem(AUTO_KEY)!=='false'}catch(e){}$('auto').checked=auto;let busy=false,lastAttempt=0;
 // Version 3.2: Investing.com Milano for Alphabet via HTTPS CORS relays; other quotes unchanged.
 // Some public relays refuse financial sites; never replace valid local prices on failure.
@@ -1619,7 +1750,7 @@ $('addAssetCommit').onclick=()=>{const a=pendingQuote;if(!a)return;
  trackSnapshot();state.assets.push(newAsset);trades.push({id:Date.now()+'-add',kind:'buy',date:purchaseDate,asset:newAsset.id,assetName:newAsset.name,cat:newAsset.cat,spent:newAsset.costEur,quantity:qty,price:pmc,fxExecution:fx});
  save();saveTimeline();trackSnapshot();refreshBuyOptions();render();closeAddAsset();};
 
-try{normalizeLegacyTrades();initInvestmentDates();trackSnapshot();render();renderEditor();renderBuy();countPortfolioVisit()}catch(e){notice('Errore nel cruscotto: '+e.message,true)}if(auto)refresh(false);if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if(ACCOUNT_ID){try{normalizeLegacyTrades();initInvestmentDates();trackSnapshot();render();renderEditor();renderBuy();countPortfolioVisit()}catch(e){notice('Errore nel cruscotto: '+e.message,true)}if(auto)refresh(false);}if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
 
 // Invesquo v5.9: independent views, sharing the same portfolio state.
@@ -1636,6 +1767,7 @@ function invesquoShowView(name){
   if(key===name)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');
  }
  document.title=(name==='dashboard'?'Invesquo':({history:'Storico',portfolio:'Investimenti',settings:'Impostazioni'}[name]+' · Invesquo'));
+ if(name==='settings')invesquoCheckServer();
  window.scrollTo({top:invesquoSavedScroll[name]||0,left:0,behavior:'instant'});
 }
 $('navDashboard').onclick=()=>invesquoShowView('dashboard');
@@ -1715,4 +1847,27 @@ for(const eventName of ['pointerup','pointercancel','pointerleave'])mascotPlayCo
 mascotPlayContainer.addEventListener('click',e=>{if(bananaTriggered){e.stopImmediatePropagation();bananaTriggered=false}},true);
 
 mascotPlayRender();
+
+// v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
+const INVESQUO_VERSION='b.7.6';
+let invesquoHealthToken=0;
+async function invesquoCheckServer(){
+ const token=++invesquoHealthToken,led=document.getElementById('netlifyServerLed'),status=document.getElementById('netlifyServerState'),detail=document.getElementById('netlifyServerDetail');
+ if(!led||!status||!detail)return;
+ led.className='server-led checking';status.textContent='Verifica in corso';detail.textContent='Controllo delle funzioni server…';
+ const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),6000);
+ try{
+  const response=await fetch('/.netlify/functions/health?ts='+Date.now(),{cache:'no-store',headers:{'Accept':'application/json'},signal:controller.signal});
+  if(!response.ok)throw Error('HTTP '+response.status);
+  const data=await response.json();
+  if(data?.service!=='invesquo-netlify-functions'||data?.ok!==true)throw Error('Risposta inattesa');
+  if(token!==invesquoHealthToken)return;
+  led.className='server-led online';status.textContent='Operativo';detail.textContent='Funzioni Netlify raggiungibili · '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+ }catch(err){if(token!==invesquoHealthToken)return;led.className='server-led offline';status.textContent='Non raggiungibile';detail.textContent=err.name==='AbortError'?'La verifica ha superato 6 secondi.':String(err.message||'Errore di collegamento').slice(0,85);}
+ finally{clearTimeout(timeout)}
+}
+document.getElementById('appBuildVersion').textContent=INVESQUO_VERSION;
+document.getElementById('checkNetlifyServer').addEventListener('click',invesquoCheckServer);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!document.getElementById('settingsView').classList.contains('hidden'))invesquoCheckServer()});
+window.addEventListener('online',()=>{if(!document.getElementById('settingsView').classList.contains('hidden'))invesquoCheckServer()});
 </script></body></html>

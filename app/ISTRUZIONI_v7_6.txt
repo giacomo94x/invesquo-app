@@ -1,0 +1,12 @@
+INVESQUO 7.6.0 — VERSIONE E STATO SERVER
+
+Nuova barra all'inizio di Impostazioni:
+- Versione app 7.6.0
+- Lucina verde = /.netlify/functions/health risponde correttamente
+- Lucina rossa = funzione non raggiungibile (anche se offline)
+- Lucina gialla = verifica in corso
+- Pulsante ↻ per verificare di nuovo
+
+Lo stato Netlify NON conferma Yahoo, Borsa Italiana, Euronext o il futuro servizio Supabase. Nessuna sincronizzazione cloud e nessuna raccolta dati aggiunte.
+
+Per pubblicare: estrai lo ZIP, copia TUTTI i file dentro la cartella già collegata a GitHub/Netlify, compreso il NUOVO netlify/functions/health.js. Commit e push. Verifica https://<TUO-DOMINIO>/.netlify/functions/health: deve rispondere con ok:true.

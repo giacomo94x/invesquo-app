@@ -1,0 +1,11 @@
+INVESQUO 7.5 — PROFILI LOCALI
+
+Nuova installazione: l'app chiede nome utente e password facoltativa. Nessuna posizione finanziaria viene precaricata.
+Ogni profilo ha archiviazione locale separata, senza sincronizzazione online. Il nome utente non viene inviato al server.
+Chi aggiorna da versioni precedenti trovera il nuovo portafoglio VUOTO; deve importare in Impostazioni il JSON esportato dalla versione precedente. Il vecchio localStorage anonimo NON viene letto automaticamente.
+La password NON cifra il portafoglio ed e' conservata soltanto come verifica PBKDF2 con sale casuale; se viene smarrita non esiste recupero. Usare solo dispositivi fidati.
+
+La pagina privacy.html e' una BOZZA TECNICA: prima di diffondere pubblicamente il servizio, completare i dati del titolare e verificare la compliance GDPR con consulente competente. L'app non utilizza cookie di profilazione; Netlify e le fonti esterne trattano comunque dati tecnici.
+
+Per aggiornare GitHub: sostituire i file dentro la medesima cartella collegata a Netlify, inclusa la nuova pagina privacy.html, senza aggiungere un livello di cartella. Commit & Push.
+Conservare un backup JSON al sicuro: cambiando dominio/PC/browser non si trasferiscono i profili locali automaticamente.
