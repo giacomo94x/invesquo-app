@@ -1,0 +1,10 @@
+INVESQUO 7.1 — Vendite guidate e BTP
+
+- Registra vendita per titolo e pulsante generale, con data effettiva (oggi o prima data app), inserimento per quote frazionate oppure importo incassato in euro, prezzo di esecuzione, anteprima P/L realizzato e conferma.
+- Vendita parziale: le quote residue conservano PMC; costo residuo ridotto pro quota. Vendita totale: posizione tolta, operazione conservata nello storico.
+- La X elimina soltanto un titolo inserito per errore, previa conferma. La rimozione per errore riavvia lo storico perché non può ricostruire i dati pregressi.
+- BTP Valore Insieme: lasciato il solo periodo 1G fino a quando non si recupera uno storico pluriseduta. La quotazione osservata è un livello, non un andamento storico inventato.
+- Netlify functions/alphabet.js e le altre funzioni di rete non modificate.
+
+Per aggiornare: copia il CONTENUTO di questo ZIP nella cartella del repository attualmente pubblicata, sovrascrivendo i vecchi file; esegui Commit e Push. Non creare una sottocartella v7_1.
+Prima esportare backup dal pannello Impostazioni.
