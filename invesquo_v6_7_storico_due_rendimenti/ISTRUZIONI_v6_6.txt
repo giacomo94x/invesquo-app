@@ -1,0 +1,9 @@
+INVESQUO 6.6 — Grafici con ultimo prezzo verificato
+
+GitHub → Netlify (funzioni server obbligatorie). Caricare tutti i file nella medesima cartella del repository gia configurata; mantenere netlify/functions/.
+
+Alphabet: ultimo punto del grafico dalla funzione v3.6 /alphabet, rimasta identica; storico 1GOOG.MI da Yahoo. Prezzi con timestamp effettivo, quote differite etichettate come tali. Nessun prezzo intraday inventato: se lo storico Yahoo è vecchio, il tratteggio tra ultimo storico e quotazione attuale NON rappresenta rilevazioni intermedie.
+
+Altre azioni ed ETF: nuovo endpoint /live-quote?symbol=VWCE.MI&currency=EUR (Yahoo query1/query2). Se il dato è vecchio, errato o manca, mantiene il solo storico senza aggiungere un punto inventato. Il grafico aperto cerca una nuova quotazione ogni 60 secondi; questo non garantisce un dato tick-by-tick o un aggiornamento durante la chiusura di mercato. Le risposte del feed restano soggette ai limiti di Yahoo.
+
+La funzione alfabet.js di quotazione è identica alla versione 6.5/3.6. Nessun cambiamento al portfolio salvato. Testare prima sul sito di prova e su iPhone. Non utilizzare Netlify Drop per funzioni server.

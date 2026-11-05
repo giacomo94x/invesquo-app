@@ -1,0 +1,11 @@
+INVESQUO 6.5 — Fonti grafici verificabili
+
+Conserva la cartella esistente nel repository GitHub per evitare modifiche alle impostazioni di Netlify. Sostituisci TUTTI i file della cartella, inclusa netlify/functions/bond-history.js, senza creare una sottocartella aggiuntiva.
+
+Grafici azioni/ETF: Yahoo Finance tramite funzione Netlify, endpoint alternativi query1/query2, verifica simbolo/valuta/date e fallback 1 mese se non si trova intraday. Non è disponibile una garanzia di continuità: il servizio Yahoo chart è non ufficiale. Grafici Investing eliminati dal selettore.
+
+BTP IT0005735227: il nuovo endpoint bond-history tenta la tabella prezzi storici Euronext via POST e restituisce esclusivamente date/prezzi realmente trovati. Se Euronext nega o cambia accesso, la funzione restituisce errore e l'app mostra rilevazioni locali reali, se disponibili. Serve test sul sito pubblicato: /.netlify/functions/bond-history?isin=IT0005735227&range=1mo
+
+Non confondere quotazioni correnti con dati storici: la funzione Alphabet della 3.6 è INVARIATA (SHA256 verificabile). Il nuovo adapter BTP non modifica il valore patrimoniale registrato dalla funzione di quotazione.
+
+Non eliminare i dati del browser. Esporta il backup dall'app prima di pubblicare.

@@ -1,0 +1,26 @@
+INVESQUO 6.4 — GitHub + Netlify (piano Free)
+
+NOVITÀ
+- Grafici azionari: apertura sul periodo 1M (le borse con intraday non disponibile non mostrano più una scheda vuota per impostazione predefinita).
+- Funzione history.js: conferma ticker/valuta, controlla almeno due prezzi validi, fallback intraday 1G -> 1S -> 1M e 1S -> 1M quando non vi sono punti sufficienti, etichetta il periodo effettivamente usato.
+- Supporto storico anche per titoli in USD/GBP/CHF ecc. La conversione del portafoglio resta distinta.
+- Prezzo Alphabet: funzione v3.6 IDENTICA byte per byte; il grafico non sovrascrive il prezzo salvato.
+- Schermata grafici: popup a tutta altezza e senza scroll orizzontale su iPhone; trascinamento del dito sul grafico con tooltip.
+- Ricerca: bandiera della borsa/paese per i mercati conosciuti; loghi per emittenti conosciuti e sigla fallback per altri.
+
+PUBBLICAZIONE SUL REPOSITORY ESISTENTE
+1. Fai un backup del portafoglio dal sito ATTUALE.
+2. Su GitHub, apri il repository che usa Netlify.
+3. Se sul sito Netlify hai Publish directory = invesquo_v6_2_storico_periodo_visibile, entra ESATTAMENTE in quella cartella su GitHub.
+4. Sostituisci i file con il CONTENUTO di questo ZIP, mantenendo index.html e netlify.toml in quella cartella, e le funzioni dentro netlify/functions.
+5. Conferma il commit. Netlify deve ricevere un deploy Git, non un drag & drop.
+6. In Netlify verifica che Functions directory punti a invesquo_v6_2_storico_periodo_visibile/netlify/functions (oppure, se in Build settings Base directory è quella cartella, a netlify/functions).
+7. Controlla /.netlify/functions/alphabet e /.netlify/functions/history?symbol=1GOOG.MI&range=1mo.
+8. Su iPhone ricarica il sito (il service worker è aggiornato), senza cancellare dati sito/localStorage.
+
+ATTENZIONE SU LE FONTI
+- Per Alphabet: la quotazione corrente proviene dalla funzione alphabet.js basata su Borsa Italiana (versione 3.6); lo storico interno proviene da Yahoo Finance. Investing.com è solo un collegamento esterno: non esiste qui una API pubblica Investing.com autorizzata/affidabile.
+- Alcuni ticker (in particolare GEM Milano) hanno storico intraday mancante o ritardato; si mostrano solo osservazioni effettive e, in caso di fallback, un periodo più lungo.
+- Il BTP IT0005735227 NON dispone ancora di serie storica MOT ottenibile in modo affidabile; non viene disegnato un grafico falso. Restano visibili, quando ci sono, almeno due quotazioni salvate in locale e il link ufficiale. Il prezzo BTP potrebbe restare non aggiornato se la fonte MOT nega l'accesso.
+- Logo da favicon provider: immagini esterne soggette a rete e disponibilità; sigle visibili come fallback.
+- Nessun file modifica automaticamente il vecchio backup; verificare dati prima dell'uso.

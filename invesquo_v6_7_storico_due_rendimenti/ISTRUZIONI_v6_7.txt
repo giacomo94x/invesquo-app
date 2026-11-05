@@ -1,0 +1,11 @@
+INVESQUO 6.7 — STORICO SEMPLIFICATO
+
+- Mantiene le funzioni di recupero prezzi e grafici della 6.6, inclusa la funzione Alphabet 3.6 invariata.
+- Una sola linea nello Storico: valore complessivo degli strumenti selezionati. Gli acquisti non sono una seconda linea.
+- Due metodi: Portafoglio (principale) e TWRR (stima). Per MAX Portafoglio usa il rendimento dal costo; TWRR usa le rilevazioni storiche, quindi non è necessariamente confrontabile con l’intera vita degli acquisti.
+- La variazione in euro del periodo esclude gli acquisti/vendite registrati. Senza registrazione di un acquisto non è possibile correggere retroattivamente il grafico.
+- Gioia mascotte senza lingua, sorriso chiuso. Storico più compatto su PC, mobile invariato.
+
+COME AGGIORNARE
+Caricare i file nello stesso percorso del repository GitHub già configurato, sostituendo quelli precedenti; mantenere netlify/functions. Commit e attesa deploy automatico.
+Backup da Impostazioni prima di aggiornare. Non cancellare i dati del browser.

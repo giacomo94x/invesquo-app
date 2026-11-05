@@ -1,0 +1,13 @@
+INVESQUO 6.0 — Installazione e limiti
+
+1) Netlify Drop: carica lo ZIP con file index.html nella radice dell'archivio.
+2) Prima di aggiornare sullo stesso dominio, esporta il backup da Impostazioni.
+3) I dati di portafoglio e le rilevazioni (inclusi 3/11 e 4/11, se già presenti sullo stesso dispositivo/dominio) sono letti dalle chiavi locali delle precedenti versioni.
+4) Le vendite sono registrate al prezzo inserito, come flusso in uscita e plus/minusvalenza lorda realizzata; le imposte e le commissioni non sono incluse.
+5) Eliminazione per errore: la precedente cronologia v3.6 aggregava i valori per categoria, non per singolo titolo. Per non inventare performance individuali, la rimozione retroattiva richiede il reset delle rilevazioni storiche, con avviso e conferma.
+6) Ricerca ISIN: OpenFIGI è disponibile tramite la funzione server opzionale netlify/functions/instruments.js e restituisce possibili sedi di negoziazione. Un risultato va sempre verificato per ISIN, borsa e valuta EUR. La ricerca Yahoo per nome/ticker è un fallback e non garantisce risultati per ISIN.
+7) Grafici: Yahoo Finance (serie temporali verificando ticker/valuta) oppure un link ufficiale Investing.com. La fonte Investing non è una API pubblica di serie storiche all'interno di questo ZIP; il collegamento apre il grafico esterno. Il BTP usa il grafico MOT ufficiale tramite iframe e link esterno se non incorporabile.
+8) Le funzioni Netlify serverless NON si attivano con il solo Netlify Drop: occorre un deploy con build/functions mediante Git o Netlify CLI. Il modulo Alphabet (netlify/functions/alphabet.js) è IDENTICO alla versione 3.6; la disponibilità effettiva della quotazione non può essere garantita su Drop.
+9) Modalità simulazione: separata con prefisso 'invesquo_sim_' nello storage locale; il banner giallo TEST e la X consentono di tornare al portafoglio reale.
+10) Il passaggio a un nuovo dominio Netlify non trasferisce automaticamente i dati del vecchio dominio: usare esporta/importa backup.
+11) Non usare l'app come unica fonte per negoziazioni o dichiarazioni fiscali: dati esterni non garantiti e calcoli lordi.
