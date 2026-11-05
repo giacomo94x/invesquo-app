@@ -374,7 +374,7 @@ body[data-theme="light"] #historyRanges button.btn.selected,body[data-theme="lig
 
 
 </div>
-<div aria-label="Storico del patrimonio" class="app-view hidden" id="historyView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Storico del patrimonio</h2><p>Performance e andamento nel tempo.</p></div><section class="card" id="historySection"><div class="section-head"><h2>Storico del patrimonio</h2><span class="sub" id="historyStart">Dalla prima rilevazione</span></div><div class="timeline-range" id="historyRanges"><button class="btn selected" data-range="7" aria-pressed="true">7G</button><button class="btn" data-range="30" aria-pressed="false">1M</button><button class="btn" data-range="183" aria-pressed="false">6M</button><button class="btn" data-range="365" aria-pressed="false">1A</button><button class="btn" data-range="all" aria-pressed="false">MAX</button></div><div aria-label="Andamento del patrimonio nel tempo" id="historyGraph"></div><div aria-live="polite" class="history-day-detail hidden" id="historyDayDetail"></div><div class="hist-performance" id="historyPerformance"></div><div class="method-picker"><span class="method-label">Metodo di rendimento</span><div aria-label="Metodo di rendimento" class="method-buttons" id="returnMethods" role="group"><button data-method="portfolio" type="button">Portafoglio</button><button data-method="twrr" type="button">TWRR</button></div></div><p aria-live="polite" class="method-help" id="methodHelp"></p><div class="hist-foot sub" id="historySummary"></div><div class="trade-event-list" id="tradeEventList"></div><div id="transactionTimeline" class="transaction-timeline"></div></section></div><div aria-label="Investimenti e operazioni" class="app-view hidden" id="portfolioView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Investimenti</h2><p>Posizioni, prezzi, acquisti e vendite.</p></div><section class="card"><div class="section-head"><h2>Composizione e rendimenti</h2><button class="btn" id="editToggle">Rettifica dati</button></div><div class="hint" style="margin-bottom:6px">Valori lordi · capitale = quantità × prezzo medio di carico</div><div id="assetList"></div><div class="editor" id="editor"><div class="notice">Usa “Registra acquisto” per aggiungere nuove quote. Questa sezione serve soltanto a correggere dati iniziali o errori di inserimento.</div><div id="editItems"></div><button class="btn primary" id="editDone" style="width:100%;margin-top:12px">Salva e chiudi</button></div></section><section class="card" id="purchaseSection"><h2>Registra un acquisto</h2><p class="hint">Hai comprato, ad esempio, 2 quote VWCE? Inserisci la quantità e il prezzo effettivo di esecuzione. L'app aggiornerà quantità, capitale investito e PMC ponderato soltanto dopo la conferma.</p><div class="field"><label for="buyAsset">Strumento</label><select class="order-select" id="buyAsset"></select></div><div class="investment-entry"><div class="field"><label for="buyDate">Data effettiva dell’acquisto</label><div class="entry-date-row"><input type="date" id="buyDate"/><button type="button" class="btn" data-first-date="buyDate">Prima data app</button></div></div><p class="entry-explain">Predefinita: oggi. Puoi selezionare la prima data registrata nell’app per inserire un investimento già posseduto. La data non crea quotazioni storiche mancanti.</p><label class="sub">Come vuoi registrare l’operazione?</label><div class="entry-choice"><label><input type="radio" name="buyInputMode" value="qty" checked/> Quantità di quote</label><label><input type="radio" name="buyInputMode" value="eur"/> Importo speso in €</label></div><div class="field entry-field-hidden" id="buyAmountWrap"><label for="buyAmount">Importo effettivamente acquistato (€)</label><input id="buyAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Per Bitcoin o altri strumenti frazionabili: scrivi 500 € e calcolerò automaticamente le quote.</p></div></div><div class="editgrid"><div class="field" id="buyQuantityWrap"><label for="buyQuantity">Nuove quote acquistate (frazioni ammesse)</label><input id="buyQuantity" inputmode="decimal" min="0" step="any" type="number" value="2"/></div><div class="field"><label for="buyPrice">Prezzo effettivo di acquisto per quota (nella valuta del titolo)</label><input id="buyPrice" inputmode="decimal" min="0" step="any" type="number"/></div></div><div class="order-preview" id="buyPreview"></div><div class="notice warn hidden" id="buyStale"></div><label class="toggle" style="margin-top:12px"><input id="buyVerify" type="checkbox"/> Confermo data, quantità/importo e prezzo effettivo pagato</label><button class="btn primary buy-confirm" disabled="" id="buyCommit">Registra acquisto e aggiorna PMC</button><p class="foot">Inserisci sempre il prezzo effettivo pagato al broker, non necessariamente la quotazione attuale. Sono ammesse quote frazionate (es. Bitcoin); puoi indicare direttamente l’importo in euro. Commissioni escluse. Un acquisto storico non ricrea i prezzi passati del portafoglio.</p><div class="notice hidden" id="buyStatus"></div></section><section class="card"><button class="btn primary full-btn" id="newAssetOpen">＋ Aggiungi titolo</button><button class="btn full-btn" id="purchaseOpen">＋ Registra acquisto</button><button class="btn full-btn" id="saleOpen">− Registra vendita</button></section><section class="card" id="ingSection"><h2>Conto deposito ING</h2><div class="rowline"><span class="sub">Decorrenza</span><strong>08/08/2026</strong></div><div class="rowline"><span class="sub">Tasso lordo annuo</span><strong id="ingRate">4,00%</strong></div><div class="rowline"><span class="sub">Interessi maturati, stima</span><strong class="gain nums" id="ingInterest">305,67 €</strong></div><div class="rowline"><span class="sub">Capitale + interessi</span><strong id="ingBalance">50.305,67 €</strong></div><p class="foot">Interessi calcolati ogni giorno, partendo dai 305,67 € comunicati il 03/11/2026. Non sono un saldo bancario certificato né interessi già accreditati.</p></section><section class="card"><h2>Valori a scadenza</h2><div id="maturities"></div><p class="foot">Per il BTP il valore include il capitale e tutte le cedole lorde previste, non un unico pagamento finale. I valori a scadenza non si sommano al patrimonio odierno.</p></section><section class="card"><h2>Quotazioni e dati</h2><div class="flex"><label class="toggle"><input checked="" id="auto" type="checkbox"/> Aggiornamento automatico</label><button class="btn primary" id="refresh">↻ Aggiorna</button></div><div class="sub" id="refreshInfo" style="margin-top:8px">Lettura dei prezzi non garantita</div><div class="notice" id="notice">I prezzi non verificati restano salvati con l’ultima fonte e data disponibili. I grafici esterni possono non essere accessibili.</div><p class="foot">Controllo dei prezzi con frequenza regolabile nelle Impostazioni, solo quando l’app è aperta. Le quotazioni dipendono dalle fonti esterne e potrebbero essere ritardate o non disponibili. Preferenze, backup e prova della faccina sono in <strong>Impostazioni</strong>.</p></section></div><section aria-label="Impostazioni Invesquo" class="settings-view app-view hidden" id="settingsView">
+<div aria-label="Storico del patrimonio" class="app-view hidden" id="historyView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Storico del patrimonio</h2><p>Valori effettivamente rilevati per tutti gli strumenti, inclusi crypto, ETF e obbligazioni. Gli acquisti e le vendite non sono rendimenti.</p></div><section class="card" id="historySection"><div class="section-head"><h2>Storico del patrimonio</h2><span class="sub" id="historyStart">Dalla prima rilevazione</span></div><div class="timeline-range" id="historyRanges"><button class="btn selected" data-range="7" aria-pressed="true">7G</button><button class="btn" data-range="30" aria-pressed="false">1M</button><button class="btn" data-range="183" aria-pressed="false">6M</button><button class="btn" data-range="365" aria-pressed="false">1A</button><button class="btn" data-range="all" aria-pressed="false">MAX</button></div><div aria-label="Andamento del patrimonio nel tempo" id="historyGraph"></div><div aria-live="polite" class="history-day-detail hidden" id="historyDayDetail"></div><div class="hist-performance" id="historyPerformance"></div><div class="method-picker"><span class="method-label">Metodo di rendimento</span><div aria-label="Metodo di rendimento" class="method-buttons" id="returnMethods" role="group"><button data-method="portfolio" type="button">Portafoglio</button><button data-method="twrr" type="button">TWRR</button></div></div><p aria-live="polite" class="method-help" id="methodHelp"></p><p class="hint">Lo storico del valore inizia dalla prima osservazione disponibile dopo l'inserimento del portafoglio. Le date passate degli acquisti restano nello storico transazioni, ma non producono automaticamente quotazioni retroattive. Le rilevazioni hanno copertura completa di tutti gli strumenti, anche se alcune categorie sono nascoste nella Dashboard.</p><div class="hist-foot sub" id="historySummary"></div><div class="trade-event-list" id="tradeEventList"></div><div id="transactionTimeline" class="transaction-timeline"></div></section></div><div aria-label="Investimenti e operazioni" class="app-view hidden" id="portfolioView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Investimenti</h2><p>Posizioni, prezzi, acquisti e vendite.</p></div><section class="card"><div class="section-head"><h2>Composizione e rendimenti</h2><button class="btn" id="editToggle">Rettifica dati</button></div><div class="hint" style="margin-bottom:6px">Valori lordi · capitale = quantità × prezzo medio di carico</div><div id="assetList"></div><div class="editor" id="editor"><div class="notice">Usa “Registra acquisto” per aggiungere nuove quote. Questa sezione serve soltanto a correggere dati iniziali o errori di inserimento.</div><div id="editItems"></div><button class="btn primary" id="editDone" style="width:100%;margin-top:12px">Salva e chiudi</button></div></section><section class="card" id="purchaseSection"><h2>Registra un acquisto</h2><p class="hint">Hai comprato, ad esempio, 2 quote VWCE? Inserisci la quantità e il prezzo effettivo di esecuzione. L'app aggiornerà quantità, capitale investito e PMC ponderato soltanto dopo la conferma.</p><div class="field"><label for="buyAsset">Strumento</label><select class="order-select" id="buyAsset"></select></div><div class="investment-entry"><div class="field"><label for="buyDate">Data effettiva dell’acquisto</label><div class="entry-date-row"><input type="date" id="buyDate"/><button type="button" class="btn" data-first-date="buyDate">Prima data app</button></div></div><p class="entry-explain">Predefinita: oggi. Puoi selezionare la prima data registrata nell’app per inserire un investimento già posseduto. La data non crea quotazioni storiche mancanti.</p><label class="sub">Come vuoi registrare l’operazione?</label><div class="entry-choice"><label><input type="radio" name="buyInputMode" value="qty" checked/> Quantità di quote</label><label><input type="radio" name="buyInputMode" value="eur"/> Importo speso in €</label></div><div class="field entry-field-hidden" id="buyAmountWrap"><label for="buyAmount">Importo effettivamente acquistato (€)</label><input id="buyAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Per Bitcoin o altri strumenti frazionabili: scrivi 500 € e calcolerò automaticamente le quote.</p></div></div><div class="editgrid"><div class="field" id="buyQuantityWrap"><label for="buyQuantity">Nuove quote acquistate (frazioni ammesse)</label><input id="buyQuantity" inputmode="decimal" min="0" step="any" type="number" value="2"/></div><div class="field"><label for="buyPrice">Prezzo effettivo di acquisto per quota (nella valuta del titolo)</label><input id="buyPrice" inputmode="decimal" min="0" step="any" type="number"/></div></div><div class="order-preview" id="buyPreview"></div><div class="notice warn hidden" id="buyStale"></div><label class="toggle" style="margin-top:12px"><input id="buyVerify" type="checkbox"/> Confermo data, quantità/importo e prezzo effettivo pagato</label><button class="btn primary buy-confirm" disabled="" id="buyCommit">Registra acquisto e aggiorna PMC</button><p class="foot">Inserisci sempre il prezzo effettivo pagato al broker, non necessariamente la quotazione attuale. Sono ammesse quote frazionate (es. Bitcoin); puoi indicare direttamente l’importo in euro. Commissioni escluse. Un acquisto storico non ricrea i prezzi passati del portafoglio.</p><div class="notice hidden" id="buyStatus"></div></section><section class="card"><button class="btn primary full-btn" id="newAssetOpen">＋ Aggiungi titolo</button><button class="btn full-btn" id="purchaseOpen">＋ Registra acquisto</button><button class="btn full-btn" id="saleOpen">− Registra vendita</button></section><section class="card" id="ingSection"><h2>Conto deposito ING</h2><div class="rowline"><span class="sub">Decorrenza</span><strong>08/08/2026</strong></div><div class="rowline"><span class="sub">Tasso lordo annuo</span><strong id="ingRate">4,00%</strong></div><div class="rowline"><span class="sub">Interessi maturati, stima</span><strong class="gain nums" id="ingInterest">305,67 €</strong></div><div class="rowline"><span class="sub">Capitale + interessi</span><strong id="ingBalance">50.305,67 €</strong></div><p class="foot">Interessi calcolati ogni giorno, partendo dai 305,67 € comunicati il 03/11/2026. Non sono un saldo bancario certificato né interessi già accreditati.</p></section><section class="card"><h2>Valori a scadenza</h2><div id="maturities"></div><p class="foot">Per il BTP il valore include il capitale e tutte le cedole lorde previste, non un unico pagamento finale. I valori a scadenza non si sommano al patrimonio odierno.</p></section><section class="card"><h2>Quotazioni e dati</h2><div class="flex"><label class="toggle"><input checked="" id="auto" type="checkbox"/> Aggiornamento automatico</label><button class="btn primary" id="refresh">↻ Aggiorna</button></div><div class="sub" id="refreshInfo" style="margin-top:8px">Lettura dei prezzi non garantita</div><div class="notice" id="notice">I prezzi non verificati restano salvati con l’ultima fonte e data disponibili. I grafici esterni possono non essere accessibili.</div><p class="foot">Controllo dei prezzi con frequenza regolabile nelle Impostazioni, solo quando l’app è aperta. Le quotazioni dipendono dalle fonti esterne e potrebbero essere ritardate o non disponibili. Preferenze, backup e prova della faccina sono in <strong>Impostazioni</strong>.</p></section></div><section aria-label="Impostazioni Invesquo" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">INVESQUO</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div>
 <p class="settings-intro">Personalizza l’esperienza e gestisci le informazioni salvate sul dispositivo.</p><section class="card"><h2>Modalità simulazione</h2><p class="hint">Apri un portafoglio di prova separato: acquisti e vendite non modificano i dati reali.</p><button class="btn primary full-btn" id="simulationToggle">Avvia simulazione</button></section>
 <section class="card settings-card" id="settingsSection">
@@ -399,12 +399,14 @@ body[data-theme="light"] #historyRanges button.btn.selected,body[data-theme="lig
 <button class="btn primary full-btn" id="testVisitAlert" type="button">▶ Prova avviso mascotte</button>
 <p class="foot">La prova non viene conteggiata come ingresso. L'avviso normale compare a ogni accesso dal limite in poi, finché resta attivo nelle Impostazioni.</p>
 </details>
-<details class="setting-group"><summary>Backup e sicurezza dati</summary>
-<p class="hint">I dati restano salvati nel browser dell'iPhone. Esporta regolarmente una copia prima di aggiornare l'app.</p>
-<div class="actions"><button class="btn" id="backup">Esporta backup</button><button class="btn" id="import">Importa backup</button></div>
+<details class="setting-group" open><summary>Dati, transazioni e sicurezza</summary>
+<p class="hint">Esporta un archivio JSON completo con titoli, tutte le transazioni, acquisti e vendite, rilevazioni storiche, preferenze e prezzi osservati. Importalo su un altro dispositivo o dopo un aggiornamento.</p>
+<div class="actions"><button class="btn primary" id="backup" type="button">↓ Scarica tutti i dati (.json)</button><button class="btn" id="import" type="button">↑ Carica dati (.json)</button></div>
 <input accept="application/json,.json" class="hidden" id="fileInput" type="file"/>
-<button class="btn danger-outline full-btn" id="reset">Ripristina portafoglio e storico</button>
-<p class="foot">Il ripristino cancella posizioni modificate e storico dopo conferma; non avviene automaticamente.</p>
+<p class="foot">Il caricamento sostituisce il portafoglio e lo storico locali dopo conferma. Non caricare file provenienti da sconosciuti.</p>
+<button class="btn danger-outline full-btn" id="reset" type="button">Azzera portafoglio e cronologia</button>
+<div class="notice hidden" id="resetUndoBar" role="status" aria-live="polite"><strong>Portafoglio azzerato.</strong> Puoi ripristinare immediatamente lo stato precedente. <button type="button" class="btn primary" id="undoReset">↶ Annulla reset</button></div>
+<p class="foot">Il reset lascia l'app completamente vuota. La copia di annullamento resta disponibile sullo stesso dispositivo fino alla successiva importazione o reset (salvo cancellazione dei dati del browser).</p>
 </details>
 <p aria-live="polite" class="sub" id="settingsSaved" role="status">Le preferenze vengono salvate su questo dispositivo.</p>
 </section>
@@ -469,7 +471,7 @@ const pct=n=>new Intl.NumberFormat('it-IT',{style:'percent',minimumFractionDigit
 const number=n=>new Intl.NumberFormat('it-IT',{maximumFractionDigits:4}).format(n);
 const cloneDefaults=()=>DEFAULTS.map(a=>Object.assign({},a));
 const num=(v,backup=0)=>Number.isFinite(Number(v))?Math.max(0,Number(v)):backup;
-function migrate(){let saved=null;try{saved=JSON.parse(store.getItem(STORAGE));if(!saved||!Array.isArray(saved.assets))saved=null}catch(e){}if(saved)return saved;let old=null;try{old=JSON.parse(store.getItem(OLD_STORAGE))}catch(e){}if(!old||!Array.isArray(old.assets))return{assets:cloneDefaults(),lastUpdate:'03/11/2026'};let assets=cloneDefaults();for(const a of assets){const x=old.assets.find(o=>o.id===a.id);if(!x)continue;a.q=num(x.q,a.q);a.p=num(x.p,a.p);if(a.id==='btp')a.pmc=num(x.c,10000)/Math.max(a.q,1)*100;else if(a.id==='goog'){a.pmc=253.3;/* preserve original user-specified cost per share */}else a.pmc=num(x.c,a.pmc*a.q)/Math.max(a.q,1);if(a.id==='ing'){a.annualRate=num(x.annualRate,4);a.interestBase=num(x.interestBase,305.67);a.interestAnchor=x.interestAnchor||'2026-11-03'}if(x.maturity!=null)a.maturity=num(x.maturity,a.maturity);/* Symbol identifiers come from the verified defaults, never an old backup. */}return{assets,lastUpdate:old.lastUpdate||'03/11/2026'}}
+function migrate(){let saved=null;try{saved=JSON.parse(store.getItem(STORAGE));if(!saved||!Array.isArray(saved.assets))saved=null}catch(e){}if(saved)return saved;let old=null;try{old=JSON.parse(store.getItem(OLD_STORAGE))}catch(e){}if(!old||!Array.isArray(old.assets))return{assets:[],lastUpdate:'Portafoglio nuovo'};let assets=cloneDefaults();for(const a of assets){const x=old.assets.find(o=>o.id===a.id);if(!x)continue;a.q=num(x.q,a.q);a.p=num(x.p,a.p);if(a.id==='btp')a.pmc=num(x.c,10000)/Math.max(a.q,1)*100;else if(a.id==='goog'){a.pmc=253.3;/* preserve original user-specified cost per share */}else a.pmc=num(x.c,a.pmc*a.q)/Math.max(a.q,1);if(a.id==='ing'){a.annualRate=num(x.annualRate,4);a.interestBase=num(x.interestBase,305.67);a.interestAnchor=x.interestAnchor||'2026-11-03'}if(x.maturity!=null)a.maturity=num(x.maturity,a.maturity);/* Symbol identifiers come from the verified defaults, never an old backup. */}return{assets,lastUpdate:old.lastUpdate||'03/11/2026'}}
 let state=SIM_MODE?(()=>{try{const q=JSON.parse(store.getItem(STORAGE)||'null');return q&&Array.isArray(q.assets)?q:{assets:[],lastUpdate:'Profilo test senza titoli'}}catch(e){return {assets:[],lastUpdate:'Profilo test senza titoli'}}})():migrate();for(const a of state.assets){if(a.id==='goog'){a.symbol='1GOOG.MI';a.isin='US02079K1079'}if(a.id==='btp'){a.symbol='';a.isin='IT0005735227';a.name='Btp Valore Insieme Oc Oct31 Eur'}if(a.id==='vwce'){a.isin='IE00BK5BQT80';a.exchangeMic='ETFP'}if(a.id==='xdev'){a.isin='IE00BL25JM42';a.exchangeMic='ETFP'}if(a.id==='rbot'){a.isin='IE00BYZK4552';a.exchangeMic='ETFP'}}let mode='now',editing=false,filter={};try{filter=JSON.parse(store.getItem(FILTER_KEY))||{}}catch(e){};CAT.forEach(([cat])=>{if(typeof filter[cat]!=='boolean')filter[cat]=true});
 function save(){try{store.setItem(STORAGE,JSON.stringify(state))}catch(e){notice('I dati non sono stati salvati. Controlla lo spazio disponibile.',true)}}
 function saveFilters(){try{store.setItem(FILTER_KEY,JSON.stringify(filter))}catch(e){}}
@@ -480,18 +482,9 @@ function updateMethodButtons(){document.querySelectorAll('#returnMethods button'
 $('returnMethods').onclick=e=>{const b=e.target.closest('button[data-method]');if(!b)return;returnMethod=b.dataset.method;try{store.setItem(RETURN_METHOD_KEY,returnMethod)}catch(_){}renderHistory()};updateMethodButtons();
 try{snapshots=JSON.parse(store.getItem(HISTORY_KEY))||[];if(!Array.isArray(snapshots))snapshots=[]}catch(e){snapshots=[]}
 try{trades=JSON.parse(store.getItem(TRADES_KEY))||[];if(!Array.isArray(trades))trades=[]}catch(e){trades=[]}
-// Screenshots supplied by the owner: 3 Nov 15,896.13 €, 4 Nov 16,025.31 € for five displayed securities
-// (BTP + 3 ETF + Alphabet). Historical category breakdown is unknown: never fabricate one.
-if(!SIM_MODE){
- const scope=['Obbligazioni','ETF','Azioni'];
- const archived=[['2026-11-03',15896.13],['2026-11-04',16025.31]];
- let changed=false;
- for(const [date,value] of archived){if(!snapshots.some(x=>x.date===date)){
-   snapshots.push({date,stamp:Date.parse(date+'T21:00:00'),legacyTotal:value,legacyScope:scope,legacySource:'Rilevazione fornita dall’utente (screenshot); categoria non ricostruibile'});changed=true;
- }}
- if(changed){snapshots.sort((a,b)=>a.date.localeCompare(b.date));store.setItem(HISTORY_KEY,JSON.stringify(snapshots))}
-}
-
+// Invesquo 7.4: Never preload another user's historical balances. Historical
+// screenshots already saved on older installations remain in storage/exports,
+// but incomplete category-only entries cannot be used as full-portfolio history.
 
 // 7.2: convert old positions without dated opening transactions to dated opening lots.
 // Do not overwrite actual dated trades. Derive original quantities/costs by reversing
@@ -567,22 +560,38 @@ function commitLedger(assetId,changedTrades){const r=computeLedger(assetId,chang
 }
 
 function saveTimeline(){try{store.setItem(HISTORY_KEY,JSON.stringify(snapshots));store.setItem(TRADES_KEY,JSON.stringify(trades))}catch(e){notice('Impossibile salvare storico o acquisti: spazio sul dispositivo esaurito.',true)}}
-function trackSnapshot(){const day=today(),stamp=Date.now();const byCat={};CAT.forEach(([cat])=>{const list=state.assets.filter(a=>a.cat===cat);byCat[cat]={value:list.reduce((s,a)=>s+val(a),0),capital:list.reduce((s,a)=>s+cap(a),0)}});const snap={date:day,stamp,byCat};const i=snapshots.findIndex(x=>x.date===day);if(i>=0){if(snapshots[i].legacySource){/* Non sovrascrivere la rilevazione del 4/11 fornita nello screenshot. */}else snapshots[i]=snap}else snapshots.push(snap);snapshots.sort((a,b)=>a.date.localeCompare(b.date));if(snapshots.length>1800)snapshots=snapshots.slice(-1800);saveTimeline()}
+function trackSnapshot(){
+ // Observation begins only after first instrument is recorded. Backdated
+ // transactions do not create unverifiable backdated market prices.
+ if(!state.assets.length)return;
+ const day=today(),stamp=Date.now(),byCat={},byAsset={};
+ CAT.forEach(([cat])=>{const list=state.assets.filter(a=>a.cat===cat);
+  byCat[cat]={value:list.reduce((s,a)=>s+val(a),0),capital:list.reduce((s,a)=>s+cap(a),0)};
+  for(const a of list)byAsset[a.id]={cat,quantity:Number(a.q)||0,value:val(a),capital:cap(a),price:Number(a.p),currency:currencyOf(a),fxRate:assetFx(a)};
+ });
+ const snap={date:day,stamp,byCat,byAsset,coverage:'all-assets',source:'observed'};
+ const i=snapshots.findIndex(x=>x.date===day&&!x.legacySource);
+ if(i>=0)snapshots[i]=snap;else snapshots.push(snap);
+ snapshots.sort((a,b)=>a.date.localeCompare(b.date));
+ if(snapshots.length>1800)snapshots=snapshots.slice(-1800);
+ saveTimeline();
+}
 const svgEscape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Only the five securities (Obbligazioni, ETF, Azioni) have a supported
 // 3/11 and 4/11 total. Compare the same scope across ALL plotted dates.
 // Other portfolio categories stay untouched in the dashboard.
 let historyComparableScope=null;
-function historyCatIncluded(cat){return !!filter[cat]&&(!historyComparableScope||historyComparableScope.includes(cat))}
+function historyCatIncluded(cat){return CAT.some(([name])=>name===cat)}
 function trackedValue(s){
- const selected=(historyComparableScope||CAT.filter(([c])=>filter[c]&&state.assets.some(a=>a.cat===c)).map(([c])=>c)).slice().sort();
- if(Number.isFinite(Number(s?.legacyTotal))&&Array.isArray(s?.legacyScope)){
-  const legacy=[...s.legacyScope].sort();return selected.join('|')===legacy.join('|')?Number(s.legacyTotal):NaN;
- }
- if(!s?.byCat)return NaN;
- return selected.reduce((n,cat)=>n+Number(s.byCat?.[cat]?.value||0),0);
+ // A valid portfolio-wide observation contains every category (even disabled
+ // dashboard categories). Partial legacy totals lack an asset breakdown; they
+ // cannot be compared against all categories without misleading returns.
+ if(!s?.byCat||typeof s.byCat!=='object')return NaN;
+ const values=CAT.map(([cat])=>Number(s.byCat?.[cat]?.value));
+ if(values.some(v=>!Number.isFinite(v)))return NaN;
+ return values.reduce((a,v)=>a+v,0);
 }
-function trackedCapital(s){return CAT.filter(([cat])=>filter[cat]).reduce((n,[cat])=>n+Number(s.byCat?.[cat]?.capital||0),0)}
+function trackedCapital(s){return CAT.reduce((n,[cat])=>n+Number(s.byCat?.[cat]?.capital||0),0)}
 function shortDate(date){const m=String(date||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[3]+'/'+m[2]+'/'+m[1].slice(2):String(date||'')}
 function historyInterval(from,to){
  if(!from||!to||days(to.date)<=days(from.date))return null;
@@ -636,7 +645,7 @@ function methodDescription(){
  return 'TWRR: rendimento concatenato delle rilevazioni, per confrontare la resa dei titoli riducendo l’effetto della tempistica degli acquisti. Stima basata su rilevazioni giornaliere.';
 }
 function showMethodHelp(maxMode=false,series=null){
- if(maxMode){$('methodHelp').textContent=(returnMethod==='portfolio'?'MAX: rendimento complessivo sul costo delle posizioni, con utili/perdite realizzati registrati. ':'MAX: rendimento TWRR stimato dall’inizio delle rilevazioni (non dal primo acquisto). ')+methodDescription();return}
+ if(maxMode){$('methodHelp').textContent='MAX: dalla prima rilevazione verificabile del portafoglio (non dalla data del primo acquisto). '+methodDescription();return}
  $('methodHelp').textContent=methodDescription();
 }
 function renderHistoryDay(){
@@ -649,7 +658,7 @@ function renderHistoryDay(){
  detail.innerHTML='<div class="hist-period">'+(d.days===1?'Performance del '+shortDate(d.to):'Variazione '+shortDate(d.from)+' – '+shortDate(d.to)+' ('+d.days+' giorni)')+'</div><div class="hist-figures"><strong class="'+cls+'">'+sgn+eur(d.gain)+'</strong><strong class="'+cls+'">'+(shownPct===null?'n.d.':(shownPct>=0?'+':'')+pct(shownPct))+'</strong></div><span class="sub">Patrimonio alla rilevazione: '+eur(d.ending)+(d.flow?' · Acquisti registrati: '+eur(d.flow):'')+'</span>';
 }
 function renderTradeEvents(){const el=$('tradeEventList');if(!el)return;
- const completed=trades.filter(t=>filter[t.cat]).slice().sort((a,b)=>a.date.localeCompare(b.date));
+ const completed=trades.slice().sort((a,b)=>a.date.localeCompare(b.date));
  el.innerHTML=completed.length?'<div class="eyebrow" style="margin:14px 0 8px">Acquisti e vendite · tutte le transazioni</div>'+completed.slice().reverse().map(t=>{
   const buy=t.kind==='buy',name=tradeAssetName(t);
   return '<div class="transaction-history-row"><div><strong style="color:'+(buy?'#55d5b0':'#efb76e')+'">'+(buy?'＋ Acquisto':'− Vendita')+'</strong> · '+shortDate(t.date)+' · '+svgEscape(name)+(t.assumedDate?' *':'')+'<div class="sub">'+entryDecimal(Number(t.quantity))+' '+(t.cat==='Obbligazioni'?'€ nominali':'quote')+' · '+eur(Math.abs(Number(t.spent||0)))+(buy?'':' · '+(Number(t.realized)>=0?'+':'')+eur(Number(t.realized||0))+' realizzati')+'</div></div><button type="button" class="btn" data-history-ledger="'+svgEscape(t.asset)+'">Dettagli</button></div>';
@@ -670,34 +679,26 @@ function renderHistory(){
  const el=$('historyGraph'),start=$('historyStart'),summary=$('historySummary'),perf=$('historyPerformance'),detail=$('historyDayDetail');
  const maxMode=historyRange==='all';
  historyComparableScope=null;
- // Old snapshots were user-verified for exactly five holdings; other categories
- // were not recorded by instrument. If the current filters include extras,
- // choose the historical scope instead of silently dropping the old dates.
- const legacy=snapshots.find(s=>Number.isFinite(Number(s?.legacyTotal))&&Array.isArray(s?.legacyScope));
- const selectedCats=CAT.filter(([cat])=>filter[cat]&&state.assets.some(a=>a.cat===cat)).map(([cat])=>cat);
- const allLegacySelected=legacy&&legacy.legacyScope.every(cat=>selectedCats.includes(cat));
- const comparables=snapshots.filter(s=>Number.isFinite(trackedValue(s)));
- if(allLegacySelected&&comparables.length<2){historyComparableScope=[...legacy.legacyScope]}
+ const observed=snapshots.filter(s=>Number.isFinite(trackedValue(s)));
  updateMethodButtons();showMethodHelp(maxMode);renderTradeEvents();
- if(!snapshots.length){el.innerHTML='<div class="history-empty">La prima rilevazione verrà registrata automaticamente.</div>';summary.innerHTML='';perf.innerHTML='';detail.classList.add('hidden');return}
- start.textContent='Dal '+shortDate(snapshots.filter(s=>Number.isFinite(trackedValue(s)))[0]?.date||snapshots[0].date);
- const comparableNote=historyComparableScope?'<div class="history-compat-note">Confronto omogeneo: <strong>BTP, ETF e azioni</strong> (5 titoli nelle rilevazioni originarie). Gli altri strumenti non hanno valori storici verificati per il 3–4 novembre; restano inclusi nel patrimonio attuale ma non in questo grafico.</div>':'';
- const end=days(today()),selected=snapshots.filter(s=>(historyRange==='all'||end-days(s.date)<=Number(historyRange))&&Number.isFinite(trackedValue(s)));
- const series=selected.length?selected:[snapshots[snapshots.length-1]],first=series[0],last=series[series.length-1];if(!Number.isFinite(trackedValue(first))){el.innerHTML='<div class="history-empty">Le rilevazioni del 3–4/11 riguardano soltanto BTP, ETF e azioni. Seleziona queste categorie insieme per confrontarle.</div>';perf.innerHTML='';summary.innerHTML='';detail.classList.add('hidden');return}showMethodHelp(maxMode&&!historyComparableScope,series);
- if(series.length<2){el.innerHTML=comparableNote+'<div class="history-empty">Prima rilevazione confrontabile salvata. Il grafico apparirà dalla seconda giornata.</div>';const gain=totalValue()-totalCapital(),r=totalCapital()?gain/totalCapital():null;
- perf.innerHTML=maxMode?'<div><small>Guadagno totale (€)</small><strong class="'+(gain>=0?'gain':'loss')+'">'+(gain>=0?'+':'')+eur(gain)+'</strong></div><div><small>Rendimento sul capitale (%)</small><strong class="'+(gain>=0?'gain':'loss')+'">'+(r===null?'n.d.':(r>=0?'+':'')+pct(r))+'</strong></div>':'<div><small>Rendimento periodo (€)</small><strong>—</strong></div><div><small>Rendimento periodo (%)</small><strong>—</strong></div>';
+ if(!observed.length){el.innerHTML='<div class="history-empty">Lo storico inizierà alla prima rilevazione del portafoglio. I movimenti passati restano nell’elenco, ma non generano prezzi storici.</div>';summary.innerHTML='';perf.innerHTML='';detail.classList.add('hidden');return}
+ start.textContent='Dal '+shortDate(observed[0].date);
+ const comparableNote='';
+ const end=days(today()),selected=observed.filter(s=>(historyRange==='all'||end-days(s.date)<=Number(historyRange))&&Number.isFinite(trackedValue(s)));
+ const series=selected.length?selected:[observed[observed.length-1]],first=series[0],last=series[series.length-1];showMethodHelp(maxMode,series);
+ if(series.length<2){el.innerHTML=comparableNote+'<div class="history-empty">Prima rilevazione del portafoglio completo salvata. Il grafico e il rendimento giornaliero appariranno quando esisterà una seconda giornata osservata.</div>';
+ perf.innerHTML='<div><small>Rendimento periodo (€)</small><strong>—</strong></div><div><small>Rendimento periodo (%)</small><strong>—</strong></div>';
  summary.innerHTML='<span>Rilevazione: '+shortDate(first.date)+'</span>';detail.classList.add('hidden');return}
  const d=historyInterval(first,last),flow=d.flow,startingValue=trackedValue(first),endingValue=trackedValue(last);
  const historicalGain=d.gain,historicalPct=methodResult(series);
- const realized=trades.filter(t=>t.kind==='sale'&&historyCatIncluded(t.cat)).reduce((n,t)=>n+Number(t.realized||0),0),totalGain=totalValue()-totalCapital()+realized,denominator=totalCapital()+trades.filter(t=>t.kind==='sale'&&historyCatIncluded(t.cat)).reduce((n,t)=>n+Number(t.costBasis||0),0),totalPct=denominator>0?totalGain/denominator:null;
- const periodGain=maxMode&&!historyComparableScope?totalGain:historicalGain,periodPct=maxMode&&returnMethod==='portfolio'&&!historyComparableScope?totalPct:historicalPct;
+ const periodGain=historicalGain,periodPct=historicalPct;
  const sign=periodGain>=0?'+':'',cls=periodGain>=0?'gain':'loss';
- perf.innerHTML='<div><small>'+(maxMode&&!historyComparableScope?'Guadagno totale · dal costo':'Guadagno · periodo')+'</small><strong class="'+cls+'">'+sign+eur(periodGain)+'</strong></div><div><small>'+(maxMode&&!historyComparableScope&&returnMethod==='portfolio'?'Rendimento totale · dal costo':(returnMethod==='portfolio'?'Rendimento portafoglio · periodo':'TWRR stimato · periodo'))+'</small><strong class="'+cls+'">'+(periodPct===null?'n.d.':(periodPct>=0?'+':'')+pct(periodPct))+'</strong></div>';
+ perf.innerHTML='<div><small>'+'Guadagno · periodo'+'</small><strong class="'+cls+'">'+sign+eur(periodGain)+'</strong></div><div><small>'+(returnMethod==='portfolio'?'Rendimento portafoglio · periodo':'TWRR stimato · periodo')+'</small><strong class="'+cls+'">'+(periodPct===null?'n.d.':(periodPct>=0?'+':'')+pct(periodPct))+'</strong></div>';
  const flows=trades.filter(t=>t.date>first.date&&t.date<=last.date&&historyCatIncluded(t.cat)&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0);
  const points=series.map((s,i)=>({date:s.date,value:trackedValue(s),interval:null}));
  // Compare with the immediately preceding stored observation. Never label multi-day gaps as daily returns.
  for(let i=0;i<series.length;i++){
-   const previous=snapshots.filter(p=>p.date<series[i].date).slice(-1)[0];
+   const previous=observed.filter(p=>p.date<series[i].date).slice(-1)[0];
    points[i].interval=previous?historyInterval(previous,series[i]):null;
    if(points[i].interval&&previous){points[i].interval={...points[i].interval,pct:methodResult([previous,series[i]])}}
  }
@@ -918,9 +919,81 @@ if(!editing)$('editor').classList.remove('open');renderHistory();}
 function renderEditor(){ $('editor').classList.toggle('open',editing);$('editToggle').textContent=editing?'Chiudi':'Rettifica dati'; if(!editing)return;const list=state.assets.filter(a=>filter[a.cat]);$('editItems').innerHTML=list.map(a=>`<div class="editrow"><strong>${a.name}</strong><div class="editgrid"><div class="field"><label>${a.id==='btp'?'Nominale (€)':'Quantità / unità'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="q" value="${a.q}"></div><div class="field"><label>${a.id==='btp'?'PMC (% del nominale)':'Prezzo medio carico (€)'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="pmc" value="${a.pmc}"></div><div class="field"><label>${a.id==='btp'?'Prezzo attuale (%)':'Prezzo attuale (€)'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="p" value="${a.p}"></div><div class="field"><label>Capitale investito (€)</label><div style="padding-top:10px;font-weight:800" id="computed-${a.id}">${eur(cap(a))}</div></div>${currencyOf(a)!=='EUR'?`<div class="field"><label>Cambio EUR per 1 ${currencyOf(a)}</label><input data-id="${a.id}" data-key="fxRate" type="number" inputmode="decimal" step="any" min="0.000001" value="${assetFx(a)}"/></div>`:''}</div>${a.id==='ing'?`<div class="editgrid"><div class="field"><label>Tasso annuo lordo (%)</label><input data-id="ing" data-key="annualRate" type="number" inputmode="decimal" step="any" min="0" value="${a.annualRate}"></div><div class="field"><label>Interessi di partenza (€)</label><input data-id="ing" data-key="interestBase" type="number" inputmode="decimal" step="any" min="0" value="${a.interestBase}"></div><div class="field"><label>Data riferimento interessi</label><input data-id="ing" data-key="interestAnchor" type="date" value="${a.interestAnchor}"></div></div>`:''}${a.maturity!=null?`<div class="field"><label>Valore lordo a scadenza (€)</label><input data-id="${a.id}" data-key="maturity" type="number" inputmode="decimal" step="any" min="0" value="${a.maturity}"></div>`:''}</div>`).join('');}
 $('editItems').addEventListener('change',function(e){const node=e.target;if(!node.dataset.id)return;const a=state.assets.find(x=>x.id===node.dataset.id);if(!a)return;const k=node.dataset.key;let v=k==='interestAnchor'?node.value:Number(String(node.value).replace(',','.'));if(k!=='interestAnchor'&&(!Number.isFinite(v)||v<0))return;if(k==='interestAnchor'&&!/^\d{4}-\d{2}-\d{2}$/.test(v))return;a[k]=v;if(k==='p'){a.quoteAt=new Date().toLocaleString('it-IT')+' · manuale';a.quoteSource='Prezzo inserito manualmente';a.quoteUpdatedAt=null}save();trackSnapshot();render();renderEditor();if(k==='p'&&buyTarget()?.id===a.id&&!buyPriceEdited)syncBuyPrice()});
 $('modeNow').onclick=()=>{mode='now';render()};$('modeCost').onclick=()=>{mode='cost';render()};$('filters').onclick=e=>{const b=e.target.closest('button[data-filter]');if(!b)return;filter[b.dataset.filter]=!filter[b.dataset.filter];saveFilters();render();if(editing)renderEditor()};$('editToggle').onclick=()=>{editing=!editing;renderEditor()};$('editDone').onclick=()=>{editing=false;renderEditor()};
-$('reset').onclick=()=>{if(confirm('Ripristinare i valori iniziali e cancellare lo storico locale? Esporta prima un backup: l’azione non è annullabile.')){state={assets:cloneDefaults(),lastUpdate:'03/11/2026'};snapshots=[];trades=[];normalizeLegacyTrades();saveTimeline();save();trackSnapshot();refreshBuyOptions();render();if(editing)renderEditor();notice('Valori iniziali ripristinati.',false)}};
-$('backup').onclick=()=>{const blob=new Blob([JSON.stringify({version:3,assets:state.assets,lastUpdate:state.lastUpdate,filters:filter,snapshots,trades,preferences:prefs},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='backup-patrimonio.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
-$('import').onclick=()=>$('fileInput').click();$('fileInput').onchange=async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;try{const text=await f.text(),json=JSON.parse(text);if(!json||!Array.isArray(json.assets))throw Error('formato non valido');const incoming=Array.isArray(json.assets)?json.assets.map(x=>({...x})):cloneDefaults();for(const a of incoming){const x=json.assets.find(z=>z.id===a.id);if(!x)continue;a.q=num(x.q,a.q);a.p=num(x.p,a.p);a.pmc=num(x.pmc,a.pmc);if(x.quoteAt)a.quoteAt=x.quoteAt;if(x.pmc===undefined&&x.c!==undefined)a.pmc=a.id==='btp'?num(x.c)/Math.max(a.q,1)*100:num(x.c)/Math.max(a.q,1);if(a.id==='goog'&&x.pmc===undefined)a.pmc=253.3;if(a.id==='ing'){a.annualRate=num(x.annualRate,4);a.interestBase=num(x.interestBase,305.67);a.interestAnchor=x.interestAnchor||'2026-11-03'}if(x.maturity!==undefined)a.maturity=num(x.maturity,a.maturity)}state={assets:incoming,lastUpdate:json.lastUpdate||'Backup importato'};if(json.filters){CAT.forEach(([cat])=>{if(typeof json.filters[cat]==='boolean')filter[cat]=json.filters[cat]});saveFilters()}snapshots=Array.isArray(json.snapshots)?json.snapshots:[];trades=Array.isArray(json.trades)?json.trades:[];normalizeLegacyTrades();saveTimeline();save();trackSnapshot();refreshBuyOptions();render();if(editing)renderEditor();if(json.preferences&&typeof json.preferences==='object'){prefs={...PREF_DEFAULTS,...json.preferences,colors:{...PREF_DEFAULTS.colors,...json.preferences.colors}};savePreferences()}notice('Backup importato. Quantità e PMC ora determinano automaticamente il capitale investito in Invesquo.',false)}catch(err){notice('Importazione fallita: '+err.message,true)}e.target.value=''};
+// Universal, portable backup. Store existing quote observations as well as
+// positions, transactions and daily full-portfolio readings.
+const PRICE_HISTORY_KEY='invesquo_asset_prices_v58';
+const RESET_UNDO_KEY='invesquo_reset_undo_v74';
+const BUNDLE_FORMAT='invesquo-portable';
+function makePortableBundle(){
+ let observedPrices={};try{observedPrices=JSON.parse(store.getItem(PRICE_HISTORY_KEY)||'{}')}catch(_){}
+ return {format:BUNDLE_FORMAT,version:4,createdAt:new Date().toISOString(),
+  assets:JSON.parse(JSON.stringify(state.assets)),lastUpdate:state.lastUpdate,
+  filters:{...filter},snapshots:JSON.parse(JSON.stringify(snapshots)),
+  trades:JSON.parse(JSON.stringify(trades)),preferences:JSON.parse(JSON.stringify(prefs)),
+  quoteHistory:observedPrices,returnMethod,historyRange,
+  note:'Solo rilevazioni effettivamente salvate. Le transazioni retrodatate non generano prezzi storici mancanti.'};
+}
+function applyPortableBundle(json){
+ if(!json||!Array.isArray(json.assets)||!Array.isArray(json.trades||[])||!Array.isArray(json.snapshots||[]))throw Error('Archivio incompleto o non valido.');
+ if(json.assets.length>10000||json.trades?.length>100000||json.snapshots?.length>20000)throw Error('Archivio troppo grande.');
+ const unique=new Set();for(const a of json.assets){
+  if(!a||typeof a.id!=='string'||!a.id||unique.has(a.id)||!CAT.some(([c])=>c===a.cat))throw Error('Titolo non valido o duplicato nel file.');
+  if(!Number.isFinite(Number(a.q))||Number(a.q)<0||!Number.isFinite(Number(a.p))||Number(a.p)<0)throw Error('Quote o prezzo non validi per '+a.id);
+  unique.add(a.id);
+ }
+ const incoming=json.assets.map(a=>({...a}));
+ const importedTrades=Array.isArray(json.trades)?json.trades.map(t=>({...t})):[];
+ for(const t of importedTrades){if(!t||!t.asset||!['buy','sale'].includes(t.kind)||!/^\d{4}-\d{2}-\d{2}$/.test(t.date)||!Number.isFinite(Number(t.quantity)))throw Error('Transazione non valida.');}
+ const importedSnapshots=Array.isArray(json.snapshots)?json.snapshots.map(x=>({...x})):[];
+ for(const x of importedSnapshots){if(!x||!/^\d{4}-\d{2}-\d{2}$/.test(x.date))throw Error('Data di una rilevazione non valida.');}
+ // validate first, then publish the whole state in the same operation
+ state={assets:incoming,lastUpdate:String(json.lastUpdate||'Archivio importato')};
+ snapshots=importedSnapshots;trades=importedTrades;
+ filter={};CAT.forEach(([c])=>{filter[c]=typeof json.filters?.[c]==='boolean'?json.filters[c]:true});
+ if(json.preferences&&typeof json.preferences==='object')prefs={...PREF_DEFAULTS,...json.preferences,colors:{...PREF_DEFAULTS.colors,...json.preferences.colors}};
+ returnMethod=['portfolio','twrr'].includes(json.returnMethod)?json.returnMethod:'portfolio';
+ historyRange=['7','30','183','365','all'].includes(String(json.historyRange))?String(json.historyRange):'30';
+ try{store.setItem(PRICE_HISTORY_KEY,JSON.stringify(json.quoteHistory&&typeof json.quoteHistory==='object'?json.quoteHistory:{}))}catch(_){}
+ save();saveTimeline();saveFilters();savePreferences();
+ store.setItem(RETURN_METHOD_KEY,returnMethod);
+ normalizeLegacyTrades();
+ // Never overwrite imported past observations with current prices on import.
+ refreshBuyOptions();applyPreferences();render();if(editing)renderEditor();
+ updateMethodButtons();
+}
+function showResetUndo(){const bar=$('resetUndoBar');if(bar)bar.classList.toggle('hidden',!store.getItem(RESET_UNDO_KEY))}
+$('reset').onclick=()=>{
+ if(!confirm('Azzerare TUTTI i titoli, le transazioni e le rilevazioni del portafoglio? La schermata diventerà vuota. Subito dopo potrai premere «Annulla reset».'))return;
+ try{store.setItem(RESET_UNDO_KEY,JSON.stringify(makePortableBundle()))}catch(e){alert('Impossibile salvare una copia di sicurezza per annullare. Reset interrotto.');return}
+ state={assets:[],lastUpdate:'Portafoglio vuoto'};snapshots=[];trades=[];historySelectedDay=null;filter={};CAT.forEach(([c])=>filter[c]=true);
+ store.removeItem(PRICE_HISTORY_KEY);save();saveTimeline();saveFilters();refreshBuyOptions();render();if(editing)renderEditor();showResetUndo();
+ $('settingsSaved').textContent='Portafoglio azzerato. Se è stato un errore, premi «Annulla reset» qui sotto.';
+};
+$('undoReset').onclick=()=>{
+ try{const raw=store.getItem(RESET_UNDO_KEY);if(!raw)throw Error('Copia di annullamento non disponibile.');
+  applyPortableBundle(JSON.parse(raw));store.removeItem(RESET_UNDO_KEY);showResetUndo();
+  $('settingsSaved').textContent='Reset annullato: portafoglio, transazioni e rilevazioni ripristinati.';
+ }catch(e){alert('Impossibile annullare il reset: '+e.message)}
+};
+$('backup').onclick=()=>{
+ try{const bundle=makePortableBundle(),blob=new Blob([JSON.stringify(bundle,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+ link.href=url;link.download='invesquo-dati-'+today()+'.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);
+ $('settingsSaved').textContent='Archivio completo esportato: posizioni, transazioni, storico e quotazioni osservate.';
+ }catch(e){alert('Esportazione non riuscita: '+e.message)}
+};
+$('import').onclick=()=>$('fileInput').click();
+$('fileInput').onchange=async e=>{
+ const file=e.target.files?.[0];if(!file)return;
+ try{
+  if(file.size>20*1024*1024)throw Error('Il file supera 20 MB.');
+  const json=JSON.parse(await file.text());
+  if(!json||!Array.isArray(json.assets))throw Error('Il file non contiene un portafoglio valido.');
+  if(!confirm('Importare '+json.assets.length+' strumenti e '+(json.trades?.length||0)+' transazioni? I dati attuali saranno SOSTITUITI. Esporta prima una copia, se necessario.'))return;
+  applyPortableBundle(json);store.removeItem(RESET_UNDO_KEY);showResetUndo();
+  $('settingsSaved').textContent='Dati importati correttamente. Le osservazioni storiche non verificabili non vengono ricostruite.';
+ }catch(err){alert('Importazione fallita: '+err.message)}finally{e.target.value=''}
+};
+showResetUndo();
 const AUTO_KEY='patrimonio_auto_refresh_60s';let auto=!SIM_MODE;try{auto=SIM_MODE?store.getItem(AUTO_KEY)==='true':store.getItem(AUTO_KEY)!=='false'}catch(e){}$('auto').checked=auto;let busy=false,lastAttempt=0;
 // Version 3.2: Investing.com Milano for Alphabet via HTTPS CORS relays; other quotes unchanged.
 // Some public relays refuse financial sites; never replace valid local prices on failure.

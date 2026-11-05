@@ -1,0 +1,13 @@
+INVESQUO 7.4 — Portafoglio universale e archivio dati
+
+- Nuove installazioni: portafoglio VUOTO, niente titoli o dati dimostrativi.
+- Archivio JSON scaricabile e ricaricabile da Impostazioni: include titoli, transazioni, tutte le rilevazioni, storico prezzi osservati e preferenze.
+- Reset con conferma e pulsante Annulla reset: copia locale disponibile finche non importi o azzeri ancora.
+- Storico completo su TUTTE le categorie, senza dipendere da filtri Dashboard. Primo giorno del grafico = prima rilevazione reale con copertura di tutto il portafoglio.
+- Le operazioni retrodatate si registrano nello storico delle transazioni, ma non producono quotazioni di mercato retroattive senza fonte verificata. Per questo non vengono ricostruiti falsi rendimenti passati.
+- Il rendimento fra due giornate osservate sottrae gli acquisti e le vendite; TWRR stimato tramite le rilevazioni disponibili.
+- Dati legacy storici parziali vengono conservati nei backup ma non tracciati come patrimonio completo.
+
+AGGIORNAMENTO: sostituisci il contenuto della cartella esistente nel repository GitHub; non creare nuove cartelle.
+FUNZIONI: alphabet.js identica alla 7.3.
+IMPORTANTE: esporta sempre un archivio prima di aggiornare.
