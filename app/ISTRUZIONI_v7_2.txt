@@ -1,0 +1,12 @@
+Invesquo 7.2 — Storico transazioni modificabile
+
+- Storico transazioni per ogni strumento, accanto a Registra acquisto e Registra vendita.
+- Correzione ed eliminazione di singole operazioni con ricalcolo di quote, PMC, costi in EUR e plus/minusvalenze realizzate.
+- Migrazione NON distruttiva delle posizioni prive di transazione iniziale: lotto di apertura stimato al 03/11/2026, con etichetta di data assunta.
+- Sezione Storico: lista completa degli acquisti e delle vendite, con grafico dei flussi registrati e marcatori sulle date con snapshot.
+- Le rilevazioni pregresse del valore di mercato non vengono ricostruite dopo modifiche retroattive: senza i prezzi storici per titolo sarebbe fuorviante.
+- Le funzioni Netlify, incluso alphabet.js della 3.6, restano identiche.
+
+ATTENZIONE: prima di caricare su GitHub esportare un backup JSON dalle Impostazioni. La cronologia delle transazioni viene salvata localmente su ogni dispositivo.
+
+Pubblicazione: estrarre lo ZIP e copiare SOLO IL CONTENUTO nella cartella del repository gia collegata al sito Netlify. Non creare una sottocartella v7_2. Commit e Push, poi verificare la nuova pubblicazione.
