@@ -1,0 +1,4 @@
+Invesquo 7.3 - recupero grafico storico
+Correzione: rilevazioni 03 e 04 novembre 2026 disponibili per BTP, ETF e Azioni; il grafico confronta lo stesso gruppo di 5 strumenti sul 05 novembre, evitando di combinarli con categorie senza storico per quelle date.
+Non si inventano i valori passati delle categorie aggiuntive. Le transazioni rimangono tutte consultabili. Alphabet e funzioni server invariate.
+Carica i file dentro la cartella GitHub gia pubblicata da Netlify, senza sottocartelle di versione. Esporta backup prima di installare.

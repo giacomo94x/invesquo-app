@@ -350,6 +350,7 @@ body[data-theme="light"] #historyRanges button.btn.selected,body[data-theme="lig
 .transaction-history-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid #31415a;padding:9px 0;font-size:12px;flex-wrap:wrap}
 .transaction-history-row .btn{font-size:11px;padding:6px 9px}
 @media(max-width:480px){.transaction-row{align-items:stretch}.transaction-controls{width:100%}.transaction-controls .btn{flex:1}}
+.history-compat-note{font-size:12px;line-height:1.55;color:#b8c8dd;background:rgba(75,121,194,.1);border:1px solid rgba(105,143,206,.28);border-radius:12px;padding:10px 12px;margin:10px 0 14px}
 </style></head><body><main><div id="simulationBanner" class="simulation-banner hidden"><strong>MODALITÀ TEST</strong><span>Profilo separato · nessun effetto sugli investimenti reali</span><button type="button" id="exitSimulation" aria-label="Esci dalla simulazione">×</button></div>
 <div aria-describedby="visitAlertText" aria-labelledby="visitAlertTitle" aria-modal="true" class="visit-alert hidden" id="visitAlert" role="dialog">
 <div class="visit-dialog">
@@ -568,20 +569,32 @@ function commitLedger(assetId,changedTrades){const r=computeLedger(assetId,chang
 function saveTimeline(){try{store.setItem(HISTORY_KEY,JSON.stringify(snapshots));store.setItem(TRADES_KEY,JSON.stringify(trades))}catch(e){notice('Impossibile salvare storico o acquisti: spazio sul dispositivo esaurito.',true)}}
 function trackSnapshot(){const day=today(),stamp=Date.now();const byCat={};CAT.forEach(([cat])=>{const list=state.assets.filter(a=>a.cat===cat);byCat[cat]={value:list.reduce((s,a)=>s+val(a),0),capital:list.reduce((s,a)=>s+cap(a),0)}});const snap={date:day,stamp,byCat};const i=snapshots.findIndex(x=>x.date===day);if(i>=0){if(snapshots[i].legacySource){/* Non sovrascrivere la rilevazione del 4/11 fornita nello screenshot. */}else snapshots[i]=snap}else snapshots.push(snap);snapshots.sort((a,b)=>a.date.localeCompare(b.date));if(snapshots.length>1800)snapshots=snapshots.slice(-1800);saveTimeline()}
 const svgEscape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function trackedValue(s){if(Number.isFinite(Number(s?.legacyTotal))&&s?.legacyScope){const active=CAT.filter(([c])=>filter[c]&&state.assets.some(a=>a.cat===c)).map(([c])=>c).sort();const scope=[...s.legacyScope].sort();return active.join('|')===scope.join('|')?Number(s.legacyTotal):NaN}return CAT.filter(([cat])=>filter[cat]).reduce((n,[cat])=>n+Number(s.byCat?.[cat]?.value||0),0)}
+// Only the five securities (Obbligazioni, ETF, Azioni) have a supported
+// 3/11 and 4/11 total. Compare the same scope across ALL plotted dates.
+// Other portfolio categories stay untouched in the dashboard.
+let historyComparableScope=null;
+function historyCatIncluded(cat){return !!filter[cat]&&(!historyComparableScope||historyComparableScope.includes(cat))}
+function trackedValue(s){
+ const selected=(historyComparableScope||CAT.filter(([c])=>filter[c]&&state.assets.some(a=>a.cat===c)).map(([c])=>c)).slice().sort();
+ if(Number.isFinite(Number(s?.legacyTotal))&&Array.isArray(s?.legacyScope)){
+  const legacy=[...s.legacyScope].sort();return selected.join('|')===legacy.join('|')?Number(s.legacyTotal):NaN;
+ }
+ if(!s?.byCat)return NaN;
+ return selected.reduce((n,cat)=>n+Number(s.byCat?.[cat]?.value||0),0);
+}
 function trackedCapital(s){return CAT.filter(([cat])=>filter[cat]).reduce((n,[cat])=>n+Number(s.byCat?.[cat]?.capital||0),0)}
 function shortDate(date){const m=String(date||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[3]+'/'+m[2]+'/'+m[1].slice(2):String(date||'')}
 function historyInterval(from,to){
  if(!from||!to||days(to.date)<=days(from.date))return null;
  const fromDay=days(from.date),toDay=days(to.date),duration=toDay-fromDay;
- const intervalFlows=trades.filter(t=>t.date>from.date&&t.date<=to.date&&filter[t.cat]&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0);
+ const intervalFlows=trades.filter(t=>t.date>from.date&&t.date<=to.date&&historyCatIncluded(t.cat)&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0);
  const flow=intervalFlows.reduce((sum,t)=>sum+Number(t.spent),0);
  const weighted=intervalFlows.reduce((sum,t)=>sum+Number(t.spent)*Math.max(0,Math.min(1,(toDay-days(t.date))/duration)),0);
  const baseline=trackedValue(from),ending=trackedValue(to),gain=ending-baseline-flow;
  const denominator=baseline+weighted;
  return {from:from.date,to:to.date,days:duration,gain,pct:denominator>0?gain/denominator:null,flow,ending};
 }
-function periodFlows(from,to){return trades.filter(t=>t.date>from.date&&t.date<=to.date&&filter[t.cat]&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0)}
+function periodFlows(from,to){return trades.filter(t=>t.date>from.date&&t.date<=to.date&&historyCatIncluded(t.cat)&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0)}
 // TWRR: chain returns across each observed subperiod. Trades between daily observations
 // are time-weighted with Dietz, so this is an approximation rather than transaction-exact TWRR.
 function twrrEstimate(series){
@@ -655,21 +668,32 @@ function renderTransactionTimeline(items){const target=$('transactionTimeline');
 
 function renderHistory(){
  const el=$('historyGraph'),start=$('historyStart'),summary=$('historySummary'),perf=$('historyPerformance'),detail=$('historyDayDetail');
- const maxMode=historyRange==='all';updateMethodButtons();showMethodHelp(maxMode);renderTradeEvents();
+ const maxMode=historyRange==='all';
+ historyComparableScope=null;
+ // Old snapshots were user-verified for exactly five holdings; other categories
+ // were not recorded by instrument. If the current filters include extras,
+ // choose the historical scope instead of silently dropping the old dates.
+ const legacy=snapshots.find(s=>Number.isFinite(Number(s?.legacyTotal))&&Array.isArray(s?.legacyScope));
+ const selectedCats=CAT.filter(([cat])=>filter[cat]&&state.assets.some(a=>a.cat===cat)).map(([cat])=>cat);
+ const allLegacySelected=legacy&&legacy.legacyScope.every(cat=>selectedCats.includes(cat));
+ const comparables=snapshots.filter(s=>Number.isFinite(trackedValue(s)));
+ if(allLegacySelected&&comparables.length<2){historyComparableScope=[...legacy.legacyScope]}
+ updateMethodButtons();showMethodHelp(maxMode);renderTradeEvents();
  if(!snapshots.length){el.innerHTML='<div class="history-empty">La prima rilevazione verrà registrata automaticamente.</div>';summary.innerHTML='';perf.innerHTML='';detail.classList.add('hidden');return}
  start.textContent='Dal '+shortDate(snapshots.filter(s=>Number.isFinite(trackedValue(s)))[0]?.date||snapshots[0].date);
+ const comparableNote=historyComparableScope?'<div class="history-compat-note">Confronto omogeneo: <strong>BTP, ETF e azioni</strong> (5 titoli nelle rilevazioni originarie). Gli altri strumenti non hanno valori storici verificati per il 3–4 novembre; restano inclusi nel patrimonio attuale ma non in questo grafico.</div>':'';
  const end=days(today()),selected=snapshots.filter(s=>(historyRange==='all'||end-days(s.date)<=Number(historyRange))&&Number.isFinite(trackedValue(s)));
- const series=selected.length?selected:[snapshots[snapshots.length-1]],first=series[0],last=series[series.length-1];if(!Number.isFinite(trackedValue(first))){el.innerHTML='<div class="history-empty">Le rilevazioni del 3–4/11 riguardano solo BTP, ETF e azioni. Riattiva queste categorie per vederle.</div>';perf.innerHTML='';summary.innerHTML='';detail.classList.add('hidden');return}showMethodHelp(maxMode,series);
- if(series.length<2){el.innerHTML='<div class="history-empty">Prima rilevazione salvata. Il grafico apparirà dalla seconda giornata.</div>';const gain=totalValue()-totalCapital(),r=totalCapital()?gain/totalCapital():null;
+ const series=selected.length?selected:[snapshots[snapshots.length-1]],first=series[0],last=series[series.length-1];if(!Number.isFinite(trackedValue(first))){el.innerHTML='<div class="history-empty">Le rilevazioni del 3–4/11 riguardano soltanto BTP, ETF e azioni. Seleziona queste categorie insieme per confrontarle.</div>';perf.innerHTML='';summary.innerHTML='';detail.classList.add('hidden');return}showMethodHelp(maxMode&&!historyComparableScope,series);
+ if(series.length<2){el.innerHTML=comparableNote+'<div class="history-empty">Prima rilevazione confrontabile salvata. Il grafico apparirà dalla seconda giornata.</div>';const gain=totalValue()-totalCapital(),r=totalCapital()?gain/totalCapital():null;
  perf.innerHTML=maxMode?'<div><small>Guadagno totale (€)</small><strong class="'+(gain>=0?'gain':'loss')+'">'+(gain>=0?'+':'')+eur(gain)+'</strong></div><div><small>Rendimento sul capitale (%)</small><strong class="'+(gain>=0?'gain':'loss')+'">'+(r===null?'n.d.':(r>=0?'+':'')+pct(r))+'</strong></div>':'<div><small>Rendimento periodo (€)</small><strong>—</strong></div><div><small>Rendimento periodo (%)</small><strong>—</strong></div>';
  summary.innerHTML='<span>Rilevazione: '+shortDate(first.date)+'</span>';detail.classList.add('hidden');return}
  const d=historyInterval(first,last),flow=d.flow,startingValue=trackedValue(first),endingValue=trackedValue(last);
  const historicalGain=d.gain,historicalPct=methodResult(series);
- const realized=trades.filter(t=>t.kind==='sale'&&filter[t.cat]).reduce((n,t)=>n+Number(t.realized||0),0),totalGain=totalValue()-totalCapital()+realized,denominator=totalCapital()+trades.filter(t=>t.kind==='sale'&&filter[t.cat]).reduce((n,t)=>n+Number(t.costBasis||0),0),totalPct=denominator>0?totalGain/denominator:null;
- const periodGain=maxMode?totalGain:historicalGain,periodPct=maxMode&&returnMethod==='portfolio'?totalPct:historicalPct;
+ const realized=trades.filter(t=>t.kind==='sale'&&historyCatIncluded(t.cat)).reduce((n,t)=>n+Number(t.realized||0),0),totalGain=totalValue()-totalCapital()+realized,denominator=totalCapital()+trades.filter(t=>t.kind==='sale'&&historyCatIncluded(t.cat)).reduce((n,t)=>n+Number(t.costBasis||0),0),totalPct=denominator>0?totalGain/denominator:null;
+ const periodGain=maxMode&&!historyComparableScope?totalGain:historicalGain,periodPct=maxMode&&returnMethod==='portfolio'&&!historyComparableScope?totalPct:historicalPct;
  const sign=periodGain>=0?'+':'',cls=periodGain>=0?'gain':'loss';
- perf.innerHTML='<div><small>'+(maxMode?'Guadagno totale · dal costo':'Guadagno · periodo')+'</small><strong class="'+cls+'">'+sign+eur(periodGain)+'</strong></div><div><small>'+(maxMode&&returnMethod==='portfolio'?'Rendimento totale · dal costo':(returnMethod==='portfolio'?'Rendimento portafoglio · periodo':'TWRR stimato · periodo'))+'</small><strong class="'+cls+'">'+(periodPct===null?'n.d.':(periodPct>=0?'+':'')+pct(periodPct))+'</strong></div>';
- const flows=trades.filter(t=>t.date>first.date&&t.date<=last.date&&filter[t.cat]&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0);
+ perf.innerHTML='<div><small>'+(maxMode&&!historyComparableScope?'Guadagno totale · dal costo':'Guadagno · periodo')+'</small><strong class="'+cls+'">'+sign+eur(periodGain)+'</strong></div><div><small>'+(maxMode&&!historyComparableScope&&returnMethod==='portfolio'?'Rendimento totale · dal costo':(returnMethod==='portfolio'?'Rendimento portafoglio · periodo':'TWRR stimato · periodo'))+'</small><strong class="'+cls+'">'+(periodPct===null?'n.d.':(periodPct>=0?'+':'')+pct(periodPct))+'</strong></div>';
+ const flows=trades.filter(t=>t.date>first.date&&t.date<=last.date&&historyCatIncluded(t.cat)&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0);
  const points=series.map((s,i)=>({date:s.date,value:trackedValue(s),interval:null}));
  // Compare with the immediately preceding stored observation. Never label multi-day gaps as daily returns.
  for(let i=0;i<series.length;i++){
@@ -689,8 +713,8 @@ function renderHistory(){
  if(isSeven){marked=eligible}
  else {marked=eligible.filter(({p,i})=>i===points.length-1||(i>0&&i<points.length-1&&((p.value>=points[i-1].value&&p.value>=points[i+1].value)||(p.value<=points[i-1].value&&p.value<=points[i+1].value))))}
  const chosen=new Set(marked.map(x=>x.i));
- const saleFlags=trades.filter(t=>t.kind==='sale'&&t.date>=first.date&&t.date<=last.date&&filter[t.cat]).map(t=>{const pt=points.find(p=>p.date===t.date);if(!pt)return '';const up=Number(t.realized)>=0;const xx=x(points.indexOf(pt)),yy=y(pt.value)-12;return '<g><path d="M'+xx+' '+yy+' v-17" stroke="'+(up?'#36d8a2':'#fa8090')+'" stroke-width="1.5"/><path d="M'+xx+' '+(yy-17)+' l12 4 l-12 5z" fill="'+(up?'#36d8a2':'#fa8090')+'"/><title>'+(up?'Guadagno':'Perdita')+' realizzata '+svgEscape(eur(t.realized))+'</title></g>'}).join('');
- const operationMarkers=trades.filter(t=>filter[t.cat]&&t.date>=first.date&&t.date<=last.date).map(t=>{
+ const saleFlags=trades.filter(t=>t.kind==='sale'&&t.date>=first.date&&t.date<=last.date&&historyCatIncluded(t.cat)).map(t=>{const pt=points.find(p=>p.date===t.date);if(!pt)return '';const up=Number(t.realized)>=0;const xx=x(points.indexOf(pt)),yy=y(pt.value)-12;return '<g><path d="M'+xx+' '+yy+' v-17" stroke="'+(up?'#36d8a2':'#fa8090')+'" stroke-width="1.5"/><path d="M'+xx+' '+(yy-17)+' l12 4 l-12 5z" fill="'+(up?'#36d8a2':'#fa8090')+'"/><title>'+(up?'Guadagno':'Perdita')+' realizzata '+svgEscape(eur(t.realized))+'</title></g>'}).join('');
+ const operationMarkers=trades.filter(t=>historyCatIncluded(t.cat)&&t.date>=first.date&&t.date<=last.date).map(t=>{
   const j=points.findIndex(p=>p.date===t.date);if(j<0)return '';const xx=x(j),yy=y(points[j].value);
   return '<g><circle cx="'+xx+'" cy="'+(yy-22)+'" r="4.5" fill="'+(t.kind==='buy'?'#49d5ac':'#efb469')+'" stroke="#0b182a" stroke-width="1"><title>'+(t.kind==='buy'?'Acquisto':'Vendita')+' '+svgEscape(tradeAssetName(t))+' '+svgEscape(eur(Math.abs(Number(t.spent||0))))+'</title></circle></g>';
  }).join('');
@@ -705,7 +729,7 @@ function renderHistory(){
    }
    return '<g class="history-point'+(active?' selected':'')+'" data-history-date="'+p.date+'" role="button" tabindex="0" aria-label="'+svgEscape(shortDate(p.date)+(interval?', '+(interval.days===1?'rendimento giornaliero ':'rendimento su '+interval.days+' giorni ')+(interval.pct===null?'non disponibile':pct(interval.pct)):' senza confronto precedente'))+'"><circle cx="'+cx+'" cy="'+cy+'" r="'+(active?6:4.5)+'" fill="'+color+'"/><circle cx="'+cx+'" cy="'+cy+'" r="13" fill="transparent" stroke="none"/>'+label+'</g>';
  }).join('');
- el.innerHTML='<svg class="history-plot" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Storico dal '+svgEscape(shortDate(first.date))+' al '+svgEscape(shortDate(last.date))+'"><g>'+ticks+'</g><path d="'+path('value')+'" fill="none" stroke="#37c9ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+marks+operationMarkers+'<text x="'+L+'" y="'+(H-6)+'" fill="#b8c5da" font-size="10">'+shortDate(first.date)+'</text><text x="'+(W-R)+'" y="'+(H-6)+'" fill="#b8c5da" text-anchor="end" font-size="10">'+shortDate(last.date)+'</text></svg><p class="history-helper">'+(isSeven?'Percentuali sui punti: rendimento rispetto al giorno precedente.':'Tocca un punto per leggere il rendimento rispetto alla rilevazione precedente.')+' Cerchietti sopra la linea: operazioni (verde acquisti, arancione vendite) sulle date con rilevazione.</p>';
+ el.innerHTML=comparableNote+'<svg class="history-plot" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Storico dal '+svgEscape(shortDate(first.date))+' al '+svgEscape(shortDate(last.date))+'"><g>'+ticks+'</g><path d="'+path('value')+'" fill="none" stroke="#37c9ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+marks+operationMarkers+'<text x="'+L+'" y="'+(H-6)+'" fill="#b8c5da" font-size="10">'+shortDate(first.date)+'</text><text x="'+(W-R)+'" y="'+(H-6)+'" fill="#b8c5da" text-anchor="end" font-size="10">'+shortDate(last.date)+'</text></svg><p class="history-helper">'+(isSeven?'Percentuali sui punti: rendimento rispetto al giorno precedente.':'Tocca un punto per leggere il rendimento rispetto alla rilevazione precedente.')+' Cerchietti sopra la linea: operazioni (verde acquisti, arancione vendite) sulle date con rilevazione.</p>';
  if(!historySelectedDay||!points.some(p=>p.date===historySelectedDay))historySelectedDay=points[points.length-1].date;
  renderHistoryDay();
  summary.innerHTML='<span><i class="hist-dot" style="background:#37c9ff"></i>Valore dei titoli posseduti</span><span>Storico: <b>'+shortDate(first.date)+' – '+shortDate(last.date)+'</b></span>'+(flow?'<span>Nuovi acquisti: '+eur(flow)+'</span>':'');
