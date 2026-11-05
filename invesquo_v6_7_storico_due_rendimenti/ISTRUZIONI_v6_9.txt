@@ -1,0 +1,6 @@
+Invesquo 6.9 — grafici piu leggibili
+- Le azioni non mostrano piu 1G/1S: storico Yahoo intraday non affidabile per diversi mercati.
+- ETF: 1G/1S continuano a essere disponibili.
+- BTP: se esiste una sola quotazione verificata, appare una linea verde orizzontale tratteggiata (riferimento visivo, NON serie storica), con PMC giallo separato. Nessun dato storico viene inventato.
+- Resta invariata la funzione Alphabet e le altre funzioni Netlify.
+Installare copiando i file NELLA cartella esistente del repository GitHub collegato a Netlify; fare Commit/Push.
