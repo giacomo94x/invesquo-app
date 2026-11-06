@@ -1,0 +1,13 @@
+INVESQUO b.7.10 — NOTE DI RILASCIO
+
+1. Dashboard: nastro orizzontale con principali indici (ultima variazione fra due chiusure confermate, NON live tick-by-tick; n.d. se Yahoo non disponibile). Nessuna statuetta nella Dashboard. Grafico patrimonio spostato dopo Allocazione; nelle Impostazioni resta disattivabile. Il grafico usa solo le rilevazioni osservate, disponibili in backup JSON, e non inventa giornate.
+2. Storico: solo una categoria; TWRR a intervalli (stima Modified Dietz) e MWRR/TIR del periodo non annualizzato. Dati mancanti producono lacune o avviso, non prezzi inventati. Diminuiti i marcatori, rimossi i puntini delle transazioni sospesi sopra la curva. Transazioni consultabili nell'elenco sotto.
+3. Mascotte: soglie configurabili, 5 espressioni; gioco con scimmietta (pressione prolungata per banane), cappello IPF, statuette bull/bear illuminate secondo VWCE ultime sedute verificabili; quando fonte non disponibile nessun segnale.
+4. Tutti i profili locali, quote, transazioni, prezzi osservati e rilevazioni sono preservati. Non sono presenti dati personali preimpostati. Nessuna sincronizzazione cloud.
+5. La funzione Alphabet e tutte le funzioni server sono identiche alla b.7.9.
+
+INSTALLAZIONE
+Prima esportare JSON da Impostazioni. Copiare il CONTENUTO di questo ZIP dentro la cartella app del repository GitHub, sostituendo i file. Fare commit; Netlify ripubblica automaticamente. Non caricare lo ZIP come file.
+
+AVVERTENZE
+Non esiste garanzia di accesso ininterrotto gratuito a Yahoo Finance. Il nastro riporta chiusure passate, talvolta differite, NON quotazioni intraday real-time. Il TWRR rigoroso richiederebbe valutazioni ai tempi dei flussi. Il TIR/MWRR viene visualizzato solo in presenza di almeno due valutazioni e dati sufficienti. La resa su Safari iPhone e il collegamento reale alle fonti devono essere collaudati dopo il deploy.
