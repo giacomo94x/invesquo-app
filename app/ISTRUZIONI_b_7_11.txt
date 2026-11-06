@@ -1,0 +1,8 @@
+Invesquo b.7.11 — Educational e scena interattiva
+- Rimossa la striscia Teleborsa, nessun polling indici nella Dashboard.
+- Pulsanti Educational e Refresh in header.
+- Educational: 10 argomenti con icone SVG, schede e quiz.
+- Gioco mascotte: scimmietta, cappello IPF, toro e orso sono illustrazioni SVG integrate nella stessa scena. Tieni premuta la scimmietta per attivare banane; clicca cappello per indossarlo. Le statuette si illuminano secondo il rendimento del portafoglio nella Dashboard, non secondo VWCE.
+- Icona PNG tratta dall'immagine approvata dall'utente.
+- Nessuna modifica ai backend delle quotazioni, ai dati personali, ai profili o ai movimenti.
+Deploy: copia i singoli file e la cartella netlify dentro app/ del repository GitHub; commit. Esporta prima il backup JSON.
