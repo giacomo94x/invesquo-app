@@ -1,0 +1,9 @@
+Invesquo b.7.8 — Storico e stato mercati
+- Patrimonio mostra il valore in EUR con effetto di acquisti/vendite.
+- TWRR mostra una curva percentuale concatenata da 0%, neutralizzando flussi via Modified Dietz fra rilevazioni; stima, non rendimento intraday esatto.
+- Numeri sui punti solo in 7G; in altri periodi click/tocco sul punto. Rimosse decorazioni e aloni.
+- Filtro categoria sopra i periodi, ristretto alle categorie abilitate in Dashboard.
+- Spia mercati aperti/chiusi: orari regolari e alcune festività, non feed ufficiale in tempo reale. Scelta della borsa da Impostazioni, default Milano.
+- Sessione dispositivo persistente fino a logout. Il profilo locale non è cifrato e non è sincronizzato.
+- Le funzioni server di quotazione non sono modificate.
+Backup JSON consigliato prima dell'aggiornamento. GitHub: copiare CONTENUTO zip dentro cartella app esistente; Commit/Push.

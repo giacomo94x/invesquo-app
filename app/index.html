@@ -386,6 +386,24 @@ body.account-unlocked #accountGate{display:none!important}
 .server-led.checking{background:#e7ba58;box-shadow:0 0 0 3px rgba(231,186,88,.13)}
 .settings-status-refresh{padding:8px!important;min-width:36px;height:36px;align-self:center}
 @media(max-width:520px){.settings-status-panel{grid-template-columns:minmax(0,1fr) auto;gap:12px}.settings-status-info:first-child{grid-column:1/-1;padding-bottom:9px;border-bottom:1px solid var(--border)}.settings-status-refresh{grid-column:2;grid-row:2}}
+
+/* b.7.8: quiet and responsive status/nav area, market LED */
+.top .header-tools{display:grid!important;grid-template-columns:1fr repeat(5,minmax(32px,38px));align-items:center;column-gap:6px!important;row-gap:8px!important;width:100%!important;justify-content:stretch!important}
+.top .header-tools .pill{grid-column:1;grid-row:1;margin:0!important;justify-self:start}
+.top .header-tools .header-state-group{grid-column:2/7;grid-row:1;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:flex-end;min-width:0}
+.top .header-tools .gear-btn{grid-row:2;margin:0!important;justify-self:center}
+.top .header-tools #navDashboard{grid-column:2}.top .header-tools #navHistory{grid-column:3}.top .header-tools #navPortfolio{grid-column:4}.top .header-tools #privacyShortcut{grid-column:5}.top .header-tools #settingsShortcut{grid-column:6}
+.header-state-group .header-mood-status{white-space:nowrap}
+.market-status{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:11px;color:var(--muted);font-weight:700}
+.market-led{display:inline-block;width:9px;height:9px;border-radius:50%;background:#9ba3b4;flex:none;box-shadow:none}
+.market-status.open .market-led{background:#45dbab}.market-status.closed .market-led{background:#f17d8b}
+.history-scope-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 12px}
+.history-scope-row label{font-size:12px;color:var(--muted);font-weight:700}
+.history-scope-row select{min-width:175px;max-width:70%;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:9px;padding:9px 12px;font-size:13px}
+#historyGraph .history-plot .history-point circle{filter:none!important;box-shadow:none!important}
+#historyGraph .history-plot .history-point circle[data-hit-area]{pointer-events:all}
+@media(min-width:700px){.top .header-tools{grid-template-columns:auto auto repeat(5,36px);width:auto!important;column-gap:6px!important}.top .header-tools .pill{grid-column:1;grid-row:1}.top .header-tools .header-state-group{grid-column:2;grid-row:1}.top .header-tools .gear-btn{grid-row:1}.top .header-tools #navDashboard{grid-column:3}.top .header-tools #navHistory{grid-column:4}.top .header-tools #navPortfolio{grid-column:5}.top .header-tools #privacyShortcut{grid-column:6}.top .header-tools #settingsShortcut{grid-column:7}}
+@media(max-width:420px){.top .header-tools{grid-template-columns:1fr repeat(5,32px);column-gap:5px!important}.top .header-tools .header-state-group{gap:8px}.market-status{font-size:10px}.top .header-tools .gear-btn{min-width:32px!important;width:32px!important;height:34px!important}}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><div class="eyebrow">INVESQUO · PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Crea un profilo sul dispositivo oppure accedi a un profilo già presente. Nessun account online: i dati restano in questo browser.</p>
@@ -409,8 +427,10 @@ body.account-unlocked #accountGate{display:none!important}
  const META='invesquo_local_profiles_v75',SESSION='invesquo_unlocked_account_v75';
  const getProfiles=()=>{try{const p=JSON.parse(localStorage.getItem(META)||'[]');return Array.isArray(p)?p:[]}catch(_){return []}};
  const profiles=getProfiles();
- const sessionId=sessionStorage.getItem(SESSION);
+ const sessionId=localStorage.getItem(SESSION)||sessionStorage.getItem(SESSION);
  const unlocked=profiles.find(p=>p.id===sessionId);
+ // Seamless one-time migration of an already unlocked older session.
+ if(unlocked&&!localStorage.getItem(SESSION))localStorage.setItem(SESSION,unlocked.id);
  window.INVESQUO_ACCOUNT_ID=unlocked?unlocked.id:null;
  if(unlocked)document.body.classList.add('account-unlocked');
  const $=id=>document.getElementById(id), msg=t=>$('accountError').textContent=t;
@@ -439,7 +459,7 @@ body.account-unlocked #accountGate{display:none!important}
    const existing=getProfiles();if(existing.some(p=>p.name.toLocaleLowerCase('it')===name.toLocaleLowerCase('it')))throw Error('Esiste già un profilo con questo nome.');
    const salt=pw?randomHex():null,hash=pw?await passwordHash(pw,salt):null;
    const id=randomHex();existing.push({id,name,salt,hash,createdAt:new Date().toISOString(),policyVersion:'2026-11-05'});
-   localStorage.setItem(META,JSON.stringify(existing));sessionStorage.setItem(SESSION,id);location.reload();
+   localStorage.setItem(META,JSON.stringify(existing));localStorage.setItem(SESSION,id);localStorage.removeItem(SESSION);sessionStorage.removeItem(SESSION);location.reload();
   }catch(err){msg(err.message||'Impossibile creare il profilo.');btn.disabled=false}
  };
  $('accountLoginForm').onsubmit=async e=>{
@@ -447,12 +467,12 @@ body.account-unlocked #accountGate{display:none!important}
   try{
    const p=getProfiles().find(x=>x.id===$('localAccountChoice').value);if(!p)throw Error('Profilo non trovato.');
    if(p.hash){const pw=$('localLoginPassword').value;if(!pw||await passwordHash(pw,p.salt)!==p.hash)throw Error('Password non corretta.');}
-   sessionStorage.setItem(SESSION,p.id);location.reload();
+   localStorage.setItem(SESSION,p.id);localStorage.removeItem(SESSION);sessionStorage.removeItem(SESSION);location.reload();
   }catch(err){msg(err.message||'Accesso non riuscito.');btn.disabled=false}
  };
  window.invesquoLocalAccount={
   name:unlocked?.name||'',
-  logout(){sessionStorage.removeItem(SESSION);location.reload()},
+  logout(){localStorage.removeItem(SESSION);sessionStorage.removeItem(SESSION);location.reload()},
   showPrivacy(){window.open('./privacy.html','_blank','noopener,noreferrer')},
   deleteProfile(){
    if(!unlocked)return;
@@ -463,7 +483,7 @@ body.account-unlocked #accountGate{display:none!important}
    const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k?.startsWith(prefix))keys.push(k)}
    keys.forEach(k=>localStorage.removeItem(k));
    localStorage.setItem(META,JSON.stringify(getProfiles().filter(p=>p.id!==unlocked.id)));
-   sessionStorage.removeItem(SESSION);location.reload();
+   localStorage.removeItem(SESSION);sessionStorage.removeItem(SESSION);location.reload();
   }
  };
  if(!unlocked)showTab(profiles.length?'login':'create');
@@ -478,7 +498,7 @@ body.account-unlocked #accountGate{display:none!important}
 <button class="btn primary" id="visitClose" type="button">Ricevuto, a dopo</button>
 </div>
 </div>
-<header class="top"><div class="brand-area"><div class="eyebrow">Dashboard personale</div><div class="brand-row"><h1>Invesquo</h1><button aria-expanded="false" aria-label="Apri analisi performance" class="face-button" id="faceButton" type="button"><span aria-label="Performance stabile" class="performance-face" id="performanceFace" role="img"></span></button></div></div><div class="header-tools"><span class="pill" id="count">7 strumenti</span><span aria-live="off" class="header-mood-status" id="headerMoodStatus"><i class="mood-dot"></i><span id="headerMoodText">Stabile</span></span><button aria-current="page" aria-label="Dashboard" class="gear-btn nav-tool active" id="navDashboard" title="Dashboard" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button id="navHistory" class="gear-btn nav-tool" type="button" aria-label="Storico" title="Storico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M7 15l5-5 4 3 5-7"/></svg></button><button aria-label="Investimenti" class="gear-btn nav-tool" id="navPortfolio" title="Investimenti" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M8 15h4"></path></svg></button><button aria-label="Nascondi importi" class="gear-btn" id="privacyShortcut" title="Mostra / nascondi importi">◉</button><button aria-label="Apri impostazioni" class="gear-btn" id="settingsShortcut" title="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3v2.1m0 13.2v2.1M3.3 12h2.1m13.2 0h2.1M5.85 5.85l1.5 1.5m9.3 9.3 1.5 1.5m0-12.3-1.5 1.5m-9.3 9.3-1.5 1.5"/><circle cx="12" cy="12" r="4.1"/></svg></button></div></header><div class="app-view" id="dashboardView">
+<header class="top"><div class="brand-area"><div class="eyebrow">Dashboard personale</div><div class="brand-row"><h1>Invesquo</h1><button aria-expanded="false" aria-label="Apri analisi performance" class="face-button" id="faceButton" type="button"><span aria-label="Performance stabile" class="performance-face" id="performanceFace" role="img"></span></button></div></div><div class="header-tools"><span class="pill" id="count">7 strumenti</span><span class="header-state-group"><span aria-live="off" class="header-mood-status" id="headerMoodStatus"><i class="mood-dot"></i><span id="headerMoodText">Stabile</span></span><span class="market-status" id="marketStatus" title="Orari di negoziazione della borsa selezionata"><i class="market-led" id="marketLed"></i><span id="marketText">Mercati · …</span></span></span><button aria-current="page" aria-label="Dashboard" class="gear-btn nav-tool active" id="navDashboard" title="Dashboard" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button id="navHistory" class="gear-btn nav-tool" type="button" aria-label="Storico" title="Storico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M7 15l5-5 4 3 5-7"/></svg></button><button aria-label="Investimenti" class="gear-btn nav-tool" id="navPortfolio" title="Investimenti" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M8 15h4"></path></svg></button><button aria-label="Nascondi importi" class="gear-btn" id="privacyShortcut" title="Mostra / nascondi importi">◉</button><button aria-label="Apri impostazioni" class="gear-btn" id="settingsShortcut" title="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3v2.1m0 13.2v2.1M3.3 12h2.1m13.2 0h2.1M5.85 5.85l1.5 1.5m9.3 9.3 1.5 1.5m0-12.3-1.5 1.5m-9.3 9.3-1.5 1.5"/><circle cx="12" cy="12" r="4.1"/></svg></button></div></header><div class="app-view" id="dashboardView">
 
 <div aria-live="polite" class="card face-analysis hidden" id="faceAnalysis"></div>
 <section class="card hero"><div class="eyebrow">Patrimonio delle categorie selezionate</div><div class="big nums" id="total">76.223,36 €</div><div class="flex"><strong class="gain nums" id="profit">+411,40 € (+0,54%)</strong><span class="sub" id="stamp">Dati di riferimento: 03/11/2026</span></div></section>
@@ -491,14 +511,14 @@ body.account-unlocked #accountGate{display:none!important}
 
 
 </div>
-<div aria-label="Storico del patrimonio" class="app-view hidden" id="historyView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Storico del patrimonio</h2><p>Storico delle categorie attualmente selezionate nella Dashboard. Gli acquisti e le vendite non sono rendimenti.</p></div><section class="card" id="historySection"><div class="section-head"><h2>Storico del patrimonio</h2><span class="sub" id="historyStart">Dalla prima rilevazione</span></div><div class="timeline-range" id="historyRanges"><button class="btn selected" data-range="7" aria-pressed="true">7G</button><button class="btn" data-range="30" aria-pressed="false">1M</button><button class="btn" data-range="183" aria-pressed="false">6M</button><button class="btn" data-range="365" aria-pressed="false">1A</button><button class="btn" data-range="all" aria-pressed="false">MAX</button></div><div class="history-rebuild-controls"><button type="button" class="btn" id="historyBackfill">↻ Recupera prezzi delle transazioni passate</button><span class="sub" id="historyBackfillStatus" role="status">I prezzi retroattivi sono ricostruiti solo se disponibili e verificati.</span></div><div aria-label="Andamento del patrimonio nel tempo" id="historyGraph"></div><div aria-live="polite" class="history-day-detail hidden" id="historyDayDetail"></div><div class="hist-performance" id="historyPerformance"></div><div class="method-picker"><span class="method-label">Metodo di rendimento</span><div aria-label="Metodo di rendimento" class="method-buttons" id="returnMethods" role="group"><button data-method="portfolio" type="button">Portafoglio</button><button data-method="twrr" type="button">TWRR</button></div></div><p aria-live="polite" class="method-help" id="methodHelp"></p><p class="hint">Lo storico segue le categorie attive nella Dashboard. Premi «Recupera prezzi» per tentare la ricostruzione retroattiva dalle transazioni: si usano soltanto prezzi di mercato disponibili; se uno strumento manca, la giornata non viene ricostruita. I periodi senza dati non sono stimati.</p><div class="hist-foot sub" id="historySummary"></div><div class="trade-event-list" id="tradeEventList"></div><div id="transactionTimeline" class="transaction-timeline"></div></section></div><div aria-label="Investimenti e operazioni" class="app-view hidden" id="portfolioView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Investimenti</h2><p>Posizioni, prezzi, acquisti e vendite.</p></div><section class="card"><div class="section-head"><h2>Composizione e rendimenti</h2><button class="btn" id="editToggle">Rettifica dati</button></div><div class="hint" style="margin-bottom:6px">Valori lordi · capitale = quantità × prezzo medio di carico</div><div id="assetList"></div><div class="editor" id="editor"><div class="notice">Usa “Registra acquisto” per aggiungere nuove quote. Questa sezione serve soltanto a correggere dati iniziali o errori di inserimento.</div><div id="editItems"></div><button class="btn primary" id="editDone" style="width:100%;margin-top:12px">Salva e chiudi</button></div></section><section class="card" id="purchaseSection"><h2>Registra un acquisto</h2><p class="hint">Hai comprato, ad esempio, 2 quote VWCE? Inserisci la quantità e il prezzo effettivo di esecuzione. L'app aggiornerà quantità, capitale investito e PMC ponderato soltanto dopo la conferma.</p><div class="field"><label for="buyAsset">Strumento</label><select class="order-select" id="buyAsset"></select></div><div class="investment-entry"><div class="field"><label for="buyDate">Data effettiva dell’acquisto</label><div class="entry-date-row"><input type="date" id="buyDate"/><button type="button" class="btn" data-first-date="buyDate">Prima data app</button></div></div><p class="entry-explain">Predefinita: oggi. Puoi selezionare la prima data registrata nell’app per inserire un investimento già posseduto. La data non crea quotazioni storiche mancanti.</p><label class="sub">Come vuoi registrare l’operazione?</label><div class="entry-choice"><label><input type="radio" name="buyInputMode" value="qty" checked/> Quantità di quote</label><label><input type="radio" name="buyInputMode" value="eur"/> Importo speso in €</label></div><div class="field entry-field-hidden" id="buyAmountWrap"><label for="buyAmount">Importo effettivamente acquistato (€)</label><input id="buyAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Per Bitcoin o altri strumenti frazionabili: scrivi 500 € e calcolerò automaticamente le quote.</p></div></div><div class="editgrid"><div class="field" id="buyQuantityWrap"><label for="buyQuantity">Nuove quote acquistate (frazioni ammesse)</label><input id="buyQuantity" inputmode="decimal" min="0" step="any" type="number" value="2"/></div><div class="field"><label for="buyPrice">Prezzo effettivo di acquisto per quota (nella valuta del titolo)</label><input id="buyPrice" inputmode="decimal" min="0" step="any" type="number"/></div></div><div class="order-preview" id="buyPreview"></div><div class="notice warn hidden" id="buyStale"></div><label class="toggle" style="margin-top:12px"><input id="buyVerify" type="checkbox"/> Confermo data, quantità/importo e prezzo effettivo pagato</label><button class="btn primary buy-confirm" disabled="" id="buyCommit">Registra acquisto e aggiorna PMC</button><p class="foot">Inserisci sempre il prezzo effettivo pagato al broker, non necessariamente la quotazione attuale. Sono ammesse quote frazionate (es. Bitcoin); puoi indicare direttamente l’importo in euro. Commissioni escluse. Un acquisto storico non ricrea i prezzi passati del portafoglio.</p><div class="notice hidden" id="buyStatus"></div></section><section class="card"><button class="btn primary full-btn" id="newAssetOpen">＋ Aggiungi titolo</button><button class="btn full-btn" id="purchaseOpen">＋ Registra acquisto</button><button class="btn full-btn" id="saleOpen">− Registra vendita</button></section><section class="card" id="ingSection"><h2>Conto deposito ING</h2><div class="rowline"><span class="sub">Decorrenza</span><strong>08/08/2026</strong></div><div class="rowline"><span class="sub">Tasso lordo annuo</span><strong id="ingRate">4,00%</strong></div><div class="rowline"><span class="sub">Interessi maturati, stima</span><strong class="gain nums" id="ingInterest">305,67 €</strong></div><div class="rowline"><span class="sub">Capitale + interessi</span><strong id="ingBalance">50.305,67 €</strong></div><p class="foot">Interessi calcolati ogni giorno, partendo dai 305,67 € comunicati il 03/11/2026. Non sono un saldo bancario certificato né interessi già accreditati.</p></section><section class="card"><h2>Valori a scadenza</h2><div id="maturities"></div><p class="foot">Per il BTP il valore include il capitale e tutte le cedole lorde previste, non un unico pagamento finale. I valori a scadenza non si sommano al patrimonio odierno.</p></section><section class="card"><h2>Quotazioni e dati</h2><div class="flex"><label class="toggle"><input checked="" id="auto" type="checkbox"/> Aggiornamento automatico</label><button class="btn primary" id="refresh">↻ Aggiorna</button></div><div class="sub" id="refreshInfo" style="margin-top:8px">Lettura dei prezzi non garantita</div><div class="notice" id="notice">I prezzi non verificati restano salvati con l’ultima fonte e data disponibili. I grafici esterni possono non essere accessibili.</div><p class="foot">Controllo dei prezzi con frequenza regolabile nelle Impostazioni, solo quando l’app è aperta. Le quotazioni dipendono dalle fonti esterne e potrebbero essere ritardate o non disponibili. Preferenze, backup e prova della faccina sono in <strong>Impostazioni</strong>.</p></section></div><section aria-label="Impostazioni Invesquo" class="settings-view app-view hidden" id="settingsView">
+<div aria-label="Storico del patrimonio" class="app-view hidden" id="historyView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Storico del patrimonio</h2><p>Filtra per categorie della Dashboard. Patrimonio (€) include i nuovi acquisti; TWRR (%) ne neutralizza l’effetto.</p></div><section class="card" id="historySection"><div class="section-head"><h2>Storico del patrimonio</h2><span class="sub" id="historyStart">Dalla prima rilevazione</span></div><div class="history-scope-row"><label for="historyCategory">Categoria del grafico</label><select id="historyCategory" aria-label="Seleziona la categoria da visualizzare nello storico"></select></div><div class="timeline-range" id="historyRanges"><button class="btn selected" data-range="7" aria-pressed="true">7G</button><button class="btn" data-range="30" aria-pressed="false">1M</button><button class="btn" data-range="183" aria-pressed="false">6M</button><button class="btn" data-range="365" aria-pressed="false">1A</button><button class="btn" data-range="all" aria-pressed="false">MAX</button></div><div class="history-rebuild-controls"><button type="button" class="btn" id="historyBackfill">↻ Recupera prezzi delle transazioni passate</button><span class="sub" id="historyBackfillStatus" role="status">I prezzi retroattivi sono ricostruiti solo se disponibili e verificati.</span></div><div aria-label="Andamento del patrimonio nel tempo" id="historyGraph"></div><div aria-live="polite" class="history-day-detail hidden" id="historyDayDetail"></div><div class="hist-performance" id="historyPerformance"></div><div class="method-picker"><span class="method-label">Metodo di rendimento</span><div aria-label="Metodo di rendimento" class="method-buttons" id="returnMethods" role="group"><button data-method="portfolio" type="button">Patrimonio</button><button data-method="twrr" type="button">TWRR</button></div></div><p aria-live="polite" class="method-help" id="methodHelp"></p><p class="hint">Il filtro categoria permette di isolare uno dei gruppi attivi nella Dashboard. I rendimenti TWRR sono stime fra rilevazioni verificate, con flussi corretti per il loro momento di registrazione. Lo storico segue le categorie attive nella Dashboard. Premi «Recupera prezzi» per tentare la ricostruzione retroattiva dalle transazioni: si usano soltanto prezzi di mercato disponibili; se uno strumento manca, la giornata non viene ricostruita. I periodi senza dati non sono stimati.</p><div class="hist-foot sub" id="historySummary"></div><div class="trade-event-list" id="tradeEventList"></div><div id="transactionTimeline" class="transaction-timeline"></div></section></div><div aria-label="Investimenti e operazioni" class="app-view hidden" id="portfolioView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Investimenti</h2><p>Posizioni, prezzi, acquisti e vendite.</p></div><section class="card"><div class="section-head"><h2>Composizione e rendimenti</h2><button class="btn" id="editToggle">Rettifica dati</button></div><div class="hint" style="margin-bottom:6px">Valori lordi · capitale = quantità × prezzo medio di carico</div><div id="assetList"></div><div class="editor" id="editor"><div class="notice">Usa “Registra acquisto” per aggiungere nuove quote. Questa sezione serve soltanto a correggere dati iniziali o errori di inserimento.</div><div id="editItems"></div><button class="btn primary" id="editDone" style="width:100%;margin-top:12px">Salva e chiudi</button></div></section><section class="card" id="purchaseSection"><h2>Registra un acquisto</h2><p class="hint">Hai comprato, ad esempio, 2 quote VWCE? Inserisci la quantità e il prezzo effettivo di esecuzione. L'app aggiornerà quantità, capitale investito e PMC ponderato soltanto dopo la conferma.</p><div class="field"><label for="buyAsset">Strumento</label><select class="order-select" id="buyAsset"></select></div><div class="investment-entry"><div class="field"><label for="buyDate">Data effettiva dell’acquisto</label><div class="entry-date-row"><input type="date" id="buyDate"/><button type="button" class="btn" data-first-date="buyDate">Prima data app</button></div></div><p class="entry-explain">Predefinita: oggi. Puoi selezionare la prima data registrata nell’app per inserire un investimento già posseduto. La data non crea quotazioni storiche mancanti.</p><label class="sub">Come vuoi registrare l’operazione?</label><div class="entry-choice"><label><input type="radio" name="buyInputMode" value="qty" checked/> Quantità di quote</label><label><input type="radio" name="buyInputMode" value="eur"/> Importo speso in €</label></div><div class="field entry-field-hidden" id="buyAmountWrap"><label for="buyAmount">Importo effettivamente acquistato (€)</label><input id="buyAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Per Bitcoin o altri strumenti frazionabili: scrivi 500 € e calcolerò automaticamente le quote.</p></div></div><div class="editgrid"><div class="field" id="buyQuantityWrap"><label for="buyQuantity">Nuove quote acquistate (frazioni ammesse)</label><input id="buyQuantity" inputmode="decimal" min="0" step="any" type="number" value="2"/></div><div class="field"><label for="buyPrice">Prezzo effettivo di acquisto per quota (nella valuta del titolo)</label><input id="buyPrice" inputmode="decimal" min="0" step="any" type="number"/></div></div><div class="order-preview" id="buyPreview"></div><div class="notice warn hidden" id="buyStale"></div><label class="toggle" style="margin-top:12px"><input id="buyVerify" type="checkbox"/> Confermo data, quantità/importo e prezzo effettivo pagato</label><button class="btn primary buy-confirm" disabled="" id="buyCommit">Registra acquisto e aggiorna PMC</button><p class="foot">Inserisci sempre il prezzo effettivo pagato al broker, non necessariamente la quotazione attuale. Sono ammesse quote frazionate (es. Bitcoin); puoi indicare direttamente l’importo in euro. Commissioni escluse. Un acquisto storico non ricrea i prezzi passati del portafoglio.</p><div class="notice hidden" id="buyStatus"></div></section><section class="card"><button class="btn primary full-btn" id="newAssetOpen">＋ Aggiungi titolo</button><button class="btn full-btn" id="purchaseOpen">＋ Registra acquisto</button><button class="btn full-btn" id="saleOpen">− Registra vendita</button></section><section class="card" id="ingSection"><h2>Conto deposito ING</h2><div class="rowline"><span class="sub">Decorrenza</span><strong>08/08/2026</strong></div><div class="rowline"><span class="sub">Tasso lordo annuo</span><strong id="ingRate">4,00%</strong></div><div class="rowline"><span class="sub">Interessi maturati, stima</span><strong class="gain nums" id="ingInterest">305,67 €</strong></div><div class="rowline"><span class="sub">Capitale + interessi</span><strong id="ingBalance">50.305,67 €</strong></div><p class="foot">Interessi calcolati ogni giorno, partendo dai 305,67 € comunicati il 03/11/2026. Non sono un saldo bancario certificato né interessi già accreditati.</p></section><section class="card"><h2>Valori a scadenza</h2><div id="maturities"></div><p class="foot">Per il BTP il valore include il capitale e tutte le cedole lorde previste, non un unico pagamento finale. I valori a scadenza non si sommano al patrimonio odierno.</p></section><section class="card"><h2>Quotazioni e dati</h2><div class="flex"><label class="toggle"><input checked="" id="auto" type="checkbox"/> Aggiornamento automatico</label><button class="btn primary" id="refresh">↻ Aggiorna</button></div><div class="sub" id="refreshInfo" style="margin-top:8px">Lettura dei prezzi non garantita</div><div class="notice" id="notice">I prezzi non verificati restano salvati con l’ultima fonte e data disponibili. I grafici esterni possono non essere accessibili.</div><p class="foot">Controllo dei prezzi con frequenza regolabile nelle Impostazioni, solo quando l’app è aperta. Le quotazioni dipendono dalle fonti esterne e potrebbero essere ritardate o non disponibili. Preferenze, backup e prova della faccina sono in <strong>Impostazioni</strong>.</p></section></div><section aria-label="Impostazioni Invesquo" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">INVESQUO</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">b.7.7</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">b.7.8</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVER NETLIFY</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span id="netlifyServerDetail" class="sub">Controllo delle funzioni server dell’app.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
- <p class="settings-intro">Personalizza l’esperienza e gestisci le informazioni salvate sul dispositivo. La spia verifica le funzioni Netlify, non la disponibilità delle singole fonti finanziarie.</p><section class="card"><h2>Modalità simulazione</h2><p class="hint">Apri un portafoglio di prova separato: acquisti e vendite non modificano i dati reali.</p><button class="btn primary full-btn" id="simulationToggle">Avvia simulazione</button></section>
+ <p class="settings-intro">Personalizza l’esperienza e gestisci le informazioni salvate sul dispositivo. La spia verifica le funzioni Netlify, non la disponibilità delle singole fonti finanziarie.</p><section class="card"><h2>Mercato di riferimento</h2><p class="hint">La spia in alto indica l’orario normale della borsa selezionata; non è una verifica in tempo reale degli scambi. Festività note incluse; sedute straordinarie o sospensioni non sono garantite.</p><div class="field"><label for="settingMainMarket">Borsa principale</label><select id="settingMainMarket"><option value="MIL">🇮🇹 Milano · Euronext Milan</option><option value="XETRA">🇩🇪 Francoforte · Xetra</option><option value="NYSE">🇺🇸 New York · NYSE / Nasdaq</option><option value="LSE">🇬🇧 Londra · LSE</option><option value="PAR">🇫🇷 Parigi · Euronext</option></select></div></section><section class="card"><h2>Modalità simulazione</h2><p class="hint">Apri un portafoglio di prova separato: acquisti e vendite non modificano i dati reali.</p><button class="btn primary full-btn" id="simulationToggle">Avvia simulazione</button></section>
 <section class="card"><div class="section-head"><h2>Profilo locale</h2><span class="pill">Solo su questo dispositivo</span></div>
 <p class="hint">Utente attivo: <strong id="currentAccountName">—</strong>. Portafogli separati per ciascun profilo. I dati non sono sincronizzati né cifrati.</p>
 <div class="actions"><button class="btn" id="switchLocalAccount" type="button">Cambia profilo / Esci</button><button class="btn" id="openLocalPrivacy" type="button">Privacy e archiviazione</button><button class="btn danger-outline" id="deleteLocalAccount" type="button">Elimina profilo e dati</button></div>
@@ -612,7 +632,7 @@ function save(){try{store.setItem(STORAGE,JSON.stringify(state))}catch(e){notice
 function saveFilters(){try{store.setItem(FILTER_KEY,JSON.stringify(filter))}catch(e){}}
 
 let snapshots=[],trades=[],historyRange='30',buyPriceEdited=false,historySelectedDay=null,historyPointData=[];
-const RETURN_METHOD_KEY='invesquo_return_method_v57';let returnMethod='portfolio';try{const savedMethod=store.getItem(RETURN_METHOD_KEY);if(['portfolio','twrr'].includes(savedMethod))returnMethod=savedMethod}catch(_){}
+const RETURN_METHOD_KEY='invesquo_return_method_v57';let returnMethod='twrr';try{const savedMethod=store.getItem(RETURN_METHOD_KEY);if(['portfolio','twrr'].includes(savedMethod))returnMethod=savedMethod}catch(_){}
 function updateMethodButtons(){document.querySelectorAll('#returnMethods button').forEach(b=>{const active=b.dataset.method===returnMethod;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))})}
 $('returnMethods').onclick=e=>{const b=e.target.closest('button[data-method]');if(!b)return;returnMethod=b.dataset.method;try{store.setItem(RETURN_METHOD_KEY,returnMethod)}catch(_){}renderHistory()};updateMethodButtons();
 try{snapshots=JSON.parse(store.getItem(HISTORY_KEY))||[];if(!Array.isArray(snapshots))snapshots=[]}catch(e){snapshots=[]}
@@ -715,14 +735,24 @@ const svgEscape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':
 // Only the five securities (Obbligazioni, ETF, Azioni) have a supported
 // 3/11 and 4/11 total. Compare the same scope across ALL plotted dates.
 // Other portfolio categories stay untouched in the dashboard.
-let historyComparableScope=null;
-function historyCatIncluded(cat){return filter[cat]===true&&CAT.some(([name])=>name===cat)}
+let historyComparableScope=null,historyCategory='all';
+function historySelectedCats(){return CAT.filter(([cat])=>filter[cat]&&(historyCategory==='all'||historyCategory===cat)).map(([cat])=>cat)}
+function historyCatIncluded(cat){return historySelectedCats().includes(cat)}
+function refreshHistoryCategoryOptions(){
+ const sel=document.getElementById('historyCategory');if(!sel)return;
+ const active=CAT.filter(([cat])=>filter[cat]).map(([cat])=>cat);
+ if(historyCategory!=='all'&&!active.includes(historyCategory))historyCategory='all';
+ const opts=[['all','Tutte le categorie attive'],...active.map(x=>[x,x])];
+ sel.innerHTML='';opts.forEach(([v,label])=>{const o=document.createElement('option');o.value=v;o.textContent=label;sel.appendChild(o)});
+ sel.value=historyCategory;
+}
+$('historyCategory').onchange=e=>{historyCategory=e.target.value;historySelectedDay=null;renderHistory()};
 function trackedValue(s){
  // A valid portfolio-wide observation contains every category (even disabled
  // dashboard categories). Partial legacy totals lack an asset breakdown; they
  // cannot be compared against all categories without misleading returns.
  if(!s?.byCat||typeof s.byCat!=='object')return NaN;
- const selected=CAT.filter(([cat])=>filter[cat]);
+ const selected=CAT.filter(([cat])=>historySelectedCats().includes(cat));
  if(!selected.length)return NaN;
  const values=selected.map(([cat])=>Number(s.byCat?.[cat]?.value));
  if(values.some(v=>!Number.isFinite(v)))return NaN;
@@ -731,7 +761,7 @@ function trackedValue(s){
  if(s.source==='reconstructed'&&selected.some(([cat])=>!s.selectedCategories?.includes(cat)))return NaN;
  return values.reduce((a,v)=>a+v,0);
 }
-function trackedCapital(s){return CAT.filter(([cat])=>filter[cat]).reduce((n,[cat])=>n+Number(s.byCat?.[cat]?.capital||0),0)}
+function trackedCapital(s){return CAT.filter(([cat])=>historySelectedCats().includes(cat)).reduce((n,[cat])=>n+Number(s.byCat?.[cat]?.capital||0),0)}
 function shortDate(date){const m=String(date||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[3]+'/'+m[2]+'/'+m[1].slice(2):String(date||'')}
 function historyInterval(from,to){
  if(!from||!to||days(to.date)<=days(from.date))return null;
@@ -773,16 +803,15 @@ function mwrrForPeriod(first,last){
 function methodResult(series){
  const first=series[0],last=series[series.length-1];
  if(returnMethod==='portfolio'){
-  // Guadagno effettivo del periodo / capitale iniziale piu acquisti netti registrati.
-  // Gli acquisti non sono guadagni, e le vendite vengono detratte dai flussi.
-  const i=historyInterval(first,last),den=trackedValue(first)+(i?.flow||0);
-  return i&&den>0?i.gain/den:null;
+  // Patrimonio is a VALUE chart: deposits/purchases and sales affect the balance.
+  const initial=trackedValue(first),ending=trackedValue(last);
+  return initial>0?(ending-initial)/initial:null;
  }
  return twrrEstimate(series);
 }
 function methodDescription(){
- if(returnMethod==='portfolio')return 'Portafoglio: guadagno rispetto al capitale investito. Nel periodo si sottraggono gli acquisti e le vendite, per non considerarli performance.';
- return 'TWRR: rendimento concatenato delle rilevazioni, per confrontare la resa dei titoli riducendo l’effetto della tempistica degli acquisti. Stima basata su rilevazioni giornaliere.';
+ if(returnMethod==='portfolio')return 'Patrimonio: valore in euro dei titoli selezionati. Gli acquisti fanno salire il valore anche senza un guadagno di mercato; le vendite lo riducono.';
+ return 'TWRR: variazione percentuale depurata da acquisti e vendite, concatenata fra le rilevazioni. Stima con flussi datati (Modified Dietz), non rendimento intraday esatto.';
 }
 function showMethodHelp(maxMode=false,series=null){
  if(maxMode){$('methodHelp').textContent='MAX: dalla prima rilevazione verificabile del portafoglio (non dalla data del primo acquisto). '+methodDescription();return}
@@ -795,11 +824,11 @@ function renderHistoryDay(){
  const d=day.interval,positive=d.gain>=0,cls=positive?'gain':'loss',sgn=positive?'+':'';
  const prev=snapshots.find(s=>s.date===d.from&&Number.isFinite(trackedValue(s))),next=snapshots.find(s=>s.date===d.to&&Number.isFinite(trackedValue(s)));const shownPct=prev&&next?methodResult([prev,next]):d.pct;
  detail.classList.remove('hidden');
- detail.innerHTML='<div class="hist-period">'+(d.days===1?'Performance del '+shortDate(d.to):'Variazione '+shortDate(d.from)+' – '+shortDate(d.to)+' ('+d.days+' giorni)')+'</div><div class="hist-figures"><strong class="'+cls+'">'+sgn+eur(d.gain)+'</strong><strong class="'+cls+'">'+(shownPct===null?'n.d.':(shownPct>=0?'+':'')+pct(shownPct))+'</strong></div><span class="sub">Patrimonio alla rilevazione: '+eur(d.ending)+(d.flow?' · Acquisti registrati: '+eur(d.flow):'')+'</span>';
+ detail.innerHTML='<div class="hist-period">'+(d.days===1?'Performance del '+shortDate(d.to):'Variazione '+shortDate(d.from)+' – '+shortDate(d.to)+' ('+d.days+' giorni)')+'</div><div class="hist-figures"><strong class="'+cls+'">'+sgn+eur(d.gain)+'</strong><strong class="'+cls+'">'+(shownPct===null?'n.d.':(shownPct>=0?'+':'')+pct(shownPct))+'</strong></div><span class="sub">'+(returnMethod==='twrr'?'TWRR cumulato nel periodo: '+(day.twrr===null?'n.d.':(day.twrr>=0?'+':'')+day.twrr.toLocaleString('it-IT',{maximumFractionDigits:2})+'%')+' · ':'')+'Patrimonio alla rilevazione: '+eur(d.ending)+(d.flow?' · Acquisti registrati: '+eur(d.flow):'')+'</span>';
 }
 function renderTradeEvents(){const el=$('tradeEventList');if(!el)return;
- const completed=trades.slice().sort((a,b)=>a.date.localeCompare(b.date));
- el.innerHTML=completed.length?'<div class="eyebrow" style="margin:14px 0 8px">Acquisti e vendite · tutte le transazioni</div>'+completed.slice().reverse().map(t=>{
+ const completed=trades.filter(t=>historyCatIncluded(t.cat)).slice().sort((a,b)=>a.date.localeCompare(b.date));
+ el.innerHTML=completed.length?'<div class="eyebrow" style="margin:14px 0 8px">Acquisti e vendite · categorie visualizzate</div>'+completed.slice().reverse().map(t=>{
   const buy=t.kind==='buy',name=tradeAssetName(t);
   return '<div class="transaction-history-row"><div><strong style="color:'+(buy?'#55d5b0':'#efb76e')+'">'+(buy?'＋ Acquisto':'− Vendita')+'</strong> · '+shortDate(t.date)+' · '+svgEscape(name)+(t.assumedDate?' *':'')+'<div class="sub">'+entryDecimal(Number(t.quantity))+' '+(t.cat==='Obbligazioni'?'€ nominali':'quote')+' · '+eur(Math.abs(Number(t.spent||0)))+(buy?'':' · '+(Number(t.realized)>=0?'+':'')+eur(Number(t.realized||0))+' realizzati')+'</div></div><button type="button" class="btn" data-history-ledger="'+svgEscape(t.asset)+'">Dettagli</button></div>';
  }).join('')+'<p class="hint">* Le posizioni importate senza data sono attribuite al 03/11/2026. Le modifiche ai movimenti non ricreano prezzi di mercato storici che non erano stati rilevati.</p>':'<p class="hint">Ancora nessuna operazione registrata.</p>';
@@ -817,63 +846,68 @@ function renderTransactionTimeline(items){const target=$('transactionTimeline');
 
 function renderHistory(){
  const el=$('historyGraph'),start=$('historyStart'),summary=$('historySummary'),perf=$('historyPerformance'),detail=$('historyDayDetail');
- const maxMode=historyRange==='all';
+ refreshHistoryCategoryOptions();
  historyComparableScope=null;
  const observed=snapshots.filter(s=>Number.isFinite(trackedValue(s))).sort((a,b)=>a.date.localeCompare(b.date));
- updateMethodButtons();showMethodHelp(maxMode);renderTradeEvents();
- if(!observed.length){el.innerHTML='<div class="history-empty">Nessuna rilevazione confrontabile per le categorie attive. Scegli le categorie nella Dashboard o prova «Recupera prezzi» per le transazioni passate.</div>';summary.innerHTML='';perf.innerHTML='';detail.classList.add('hidden');return}
+ const maxMode=historyRange==='all';updateMethodButtons();showMethodHelp(maxMode);renderTradeEvents();
+ if(!observed.length){el.innerHTML='<div class="history-empty">Nessuna rilevazione completa per le categorie scelte. Puoi tentare di recuperare le quotazioni storiche verificate.</div>';summary.innerHTML='';perf.innerHTML='';detail.classList.add('hidden');return}
  start.textContent='Dal '+shortDate(observed[0].date);
- const comparableNote='<p class="hint">Categorie considerate: '+CAT.filter(([cat])=>filter[cat]).map(([cat])=>svgEscape(cat)).join(', ')+' · Rilevazioni complete disponibili: '+observed.length+'.</p>';
- const end=days(today()),selected=observed.filter(s=>(historyRange==='all'||end-days(s.date)<=Number(historyRange))&&Number.isFinite(trackedValue(s)));
- const series=selected.length?selected:[observed[observed.length-1]],first=series[0],last=series[series.length-1];showMethodHelp(maxMode,series);
- if(series.length<2){el.innerHTML=comparableNote+'<div class="history-empty">Per queste categorie è disponibile una sola giornata confrontabile. Prova a recuperare lo storico delle quotazioni o attendi una seconda rilevazione.</div>';
- perf.innerHTML='<div><small>Rendimento periodo (€)</small><strong>—</strong></div><div><small>Rendimento periodo (%)</small><strong>—</strong></div>';
- summary.innerHTML='<span>Rilevazione: '+shortDate(first.date)+'</span>';detail.classList.add('hidden');return}
- const d=historyInterval(first,last),flow=d.flow,startingValue=trackedValue(first),endingValue=trackedValue(last);
- const historicalGain=d.gain,historicalPct=methodResult(series);
- const periodGain=historicalGain,periodPct=historicalPct;
- const sign=periodGain>=0?'+':'',cls=periodGain>=0?'gain':'loss';
- perf.innerHTML='<div><small>'+'Guadagno · periodo'+'</small><strong class="'+cls+'">'+sign+eur(periodGain)+'</strong></div><div><small>'+(returnMethod==='portfolio'?'Rendimento portafoglio · periodo':'TWRR stimato · periodo')+'</small><strong class="'+cls+'">'+(periodPct===null?'n.d.':(periodPct>=0?'+':'')+pct(periodPct))+'</strong></div>';
- const flows=trades.filter(t=>t.date>first.date&&t.date<=last.date&&historyCatIncluded(t.cat)&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0);
- const points=series.map((s,i)=>({date:s.date,value:trackedValue(s),interval:null}));
- // Compare with the immediately preceding stored observation. Never label multi-day gaps as daily returns.
+ const end=days(today()),selected=observed.filter(s=>historyRange==='all'||end-days(s.date)<=Number(historyRange));
+ const series=selected.length?selected:[observed[observed.length-1]];
+ const first=series[0],last=series[series.length-1];showMethodHelp(maxMode,series);
+ const labelCats=historySelectedCats();const comparableNote='<p class="hint">Categorie: '+(historyCategory==='all'?labelCats.map(svgEscape).join(', '):svgEscape(historyCategory))+' · Rilevazioni complete: '+observed.length+'</p>';
+ if(series.length<2){el.innerHTML=comparableNote+'<div class="history-empty">Solo una rilevazione confrontabile in questo periodo.</div>';perf.innerHTML='';summary.innerHTML='<span>Rilevazione: '+shortDate(first.date)+'</span>';detail.classList.add('hidden');return}
+ // Time-weighted performance is a chained return INDEX: it is never the portfolio balance.
+ const points=[];let twFactor=1,twValid=true;
  for(let i=0;i<series.length;i++){
-   const previous=observed.filter(p=>p.date<series[i].date).slice(-1)[0];
-   points[i].interval=previous?historyInterval(previous,series[i]):null;
-   if(points[i].interval&&previous){points[i].interval={...points[i].interval,pct:methodResult([previous,series[i]])}}
+  const snap=series[i],val=trackedValue(snap),previous=series[i-1];
+  const interval=previous?historyInterval(previous,snap):null;
+  if(interval){if(interval.pct===null||interval.pct<=-1){twValid=false}else if(twValid){twFactor*=1+interval.pct}}
+  points.push({date:snap.date,value:val,interval,twrr:twValid?(twFactor-1)*100:null});
  }
  historyPointData=points;
- const allY=points.map(p=>p.value);let lo=Math.min(...allY),hi=Math.max(...allY),spread=hi-lo;
- if(spread<1){lo-=Math.max(10,lo*.002);hi+=Math.max(10,hi*.002)}else{lo-=spread*.2;hi+=spread*.2}
- const W=340,H=235,L=17,R=14,T=34,B=31,x=i=>L+(W-L-R)*i/Math.max(points.length-1,1),y=v=>T+(H-T-B)*(hi-v)/(hi-lo);
- const path=key=>points.map((p,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(p[key]).toFixed(1)).join(' ');
- const ticks=[lo,(lo+hi)/2,hi].map(v=>'<line x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'" stroke="#40516b" stroke-dasharray="3 5"/><text x="'+L+'" y="'+(y(v)-4)+'" fill="#b8c5da" font-size="9">'+Math.round(v).toLocaleString('it-IT')+' €</text>').join('');
- const eligible=points.map((p,i)=>({p,i})).filter(({p})=>p.interval&&p.interval.days===1);
+ const twMode=returnMethod==='twrr';
+ // Avoid a fake connecting line across missing/undefined TWRR intervals.
+ const numbers=points.map(p=>twMode?p.twrr:p.value).filter(Number.isFinite);
+ if(numbers.length<2){el.innerHTML=comparableNote+'<div class="history-empty">Rendimento TWRR non calcolabile: manca un valore iniziale positivo o una rilevazione confrontabile.</div>';perf.innerHTML='';summary.innerHTML='';detail.classList.add('hidden');return}
+ const startVal=points[0].value,endVal=points[points.length-1].value;
+ const netFlows=trades.filter(t=>t.date>first.date&&t.date<=last.date&&historyCatIncluded(t.cat)).reduce((a,t)=>a+Number(t.spent||0),0);
+ const marketGain=endVal-startVal-netFlows;
+ const periodPct=twMode?(points[points.length-1].twrr/100):(startVal>0?(endVal-startVal)/startVal:null);
+ const change=twMode?marketGain:endVal-startVal;
+ const signed=(n,fmt)=>(n>=0?'+':'')+fmt(n);
+ const perfCls=(twMode?periodPct:change)>=0?'gain':'loss';
+ perf.innerHTML=twMode?'<div><small>Guadagno da mercato stimato (€)</small><strong class="'+(marketGain>=0?'gain':'loss')+'">'+signed(marketGain,eur)+'</strong></div><div><small>TWRR · periodo (%)</small><strong class="'+perfCls+'">'+(periodPct===null?'n.d.':signed(periodPct,pct))+'</strong></div>':'<div><small>Variazione patrimonio (€)</small><strong class="'+perfCls+'">'+signed(change,eur)+'</strong></div><div><small>Variazione patrimonio (%)</small><strong class="'+perfCls+'">'+(periodPct===null?'n.d.':signed(periodPct,pct))+'</strong></div>';
+ let lo=Math.min(...numbers),hi=Math.max(...numbers),spread=hi-lo;
+ if(spread<.0001){const pad=twMode?1:Math.max(10,Math.abs(lo)*.002);lo-=pad;hi+=pad}else{lo-=spread*.18;hi+=spread*.18}
+ if(twMode){lo=Math.min(lo,0);hi=Math.max(hi,0)}
+ const W=340,H=225,L=21,R=14,T=30,B=28;
+ const x=i=>L+(W-L-R)*i/Math.max(points.length-1,1),y=v=>T+(H-T-B)*(hi-v)/(hi-lo);
+ const Y=p=>twMode?p.twrr:p.value;
+ let path='',lastValid=false;
+ points.forEach((p,i)=>{const z=Y(p);if(!Number.isFinite(z)){lastValid=false;return}path+=(lastValid?'L':'M')+x(i).toFixed(2)+' '+y(z).toFixed(2)+' ';lastValid=true});
+ const axisFormat=v=>twMode?((v>=0?'+':'')+v.toLocaleString('it-IT',{maximumFractionDigits:1})+'%'):Math.round(v).toLocaleString('it-IT')+' €';
+ const ticks=[lo,(lo+hi)/2,hi].map(v=>'<line x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'" stroke="#40516b" stroke-dasharray="3 5"/><text x="'+L+'" y="'+(y(v)-5)+'" fill="#b8c5da" font-size="9">'+axisFormat(v)+'</text>').join('');
+ const baseline=twMode?'<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(0)+'" y2="'+y(0)+'" stroke="#879ab5" stroke-width="1" stroke-dasharray="3 6"/>':'';
  const isSeven=historyRange==='7';
- let marked;
- if(isSeven){marked=eligible}
- else {marked=eligible.filter(({p,i})=>i===points.length-1||(i>0&&i<points.length-1&&((p.value>=points[i-1].value&&p.value>=points[i+1].value)||(p.value<=points[i-1].value&&p.value<=points[i+1].value))))}
- const chosen=new Set(marked.map(x=>x.i));
- const saleFlags=trades.filter(t=>t.kind==='sale'&&t.date>=first.date&&t.date<=last.date&&historyCatIncluded(t.cat)).map(t=>{const pt=points.find(p=>p.date===t.date);if(!pt)return '';const up=Number(t.realized)>=0;const xx=x(points.indexOf(pt)),yy=y(pt.value)-12;return '<g><path d="M'+xx+' '+yy+' v-17" stroke="'+(up?'#36d8a2':'#fa8090')+'" stroke-width="1.5"/><path d="M'+xx+' '+(yy-17)+' l12 4 l-12 5z" fill="'+(up?'#36d8a2':'#fa8090')+'"/><title>'+(up?'Guadagno':'Perdita')+' realizzata '+svgEscape(eur(t.realized))+'</title></g>'}).join('');
- const operationMarkers=trades.filter(t=>historyCatIncluded(t.cat)&&t.date>=first.date&&t.date<=last.date).map(t=>{
-  const j=points.findIndex(p=>p.date===t.date);if(j<0)return '';const xx=x(j),yy=y(points[j].value);
-  return '<g><circle cx="'+xx+'" cy="'+(yy-22)+'" r="4.5" fill="'+(t.kind==='buy'?'#49d5ac':'#efb469')+'" stroke="#0b182a" stroke-width="1"><title>'+(t.kind==='buy'?'Acquisto':'Vendita')+' '+svgEscape(tradeAssetName(t))+' '+svgEscape(eur(Math.abs(Number(t.spent||0))))+'</title></circle></g>';
- }).join('');
+ const ops=trades.filter(t=>historyCatIncluded(t.cat)&&t.date>=first.date&&t.date<=last.date).map(t=>{const i=points.findIndex(p=>p.date===t.date);if(i<0||!Number.isFinite(Y(points[i])))return '';return '<circle cx="'+x(i)+'" cy="'+(y(Y(points[i]))-11)+'" r="3.2" fill="'+(t.kind==='buy'?'#45dbae':'#efb469')+'"><title>'+(t.kind==='buy'?'Acquisto':'Vendita')+' '+svgEscape(tradeAssetName(t))+'</title></circle>'}).join('');
  const marks=points.map((p,i)=>{
-   const cx=x(i).toFixed(1),cy=y(p.value).toFixed(1),active=historySelectedDay===p.date,interval=p.interval,color=interval?(interval.gain>=0?'#47dba9':'#fa8090'):'#8eabc8';
-   let label='';
-   if(chosen.has(i)&&interval&&interval.pct!==null){
-     const percentText=(interval.pct>=0?'+':'')+(interval.pct*100).toLocaleString('it-IT',{maximumFractionDigits:1,minimumFractionDigits:1})+'%';
-     const anchor=i===0?'start':i===points.length-1?'end':'middle';
-     let ly=y(p.value)-(i%2?15:18);if(ly<12)ly=y(p.value)+23;
-     label='<text x="'+cx+'" y="'+ly.toFixed(1)+'" text-anchor="'+anchor+'" fill="'+color+'">'+percentText+'</text>';
-   }
-   return '<g class="history-point'+(active?' selected':'')+'" data-history-date="'+p.date+'" role="button" tabindex="0" aria-label="'+svgEscape(shortDate(p.date)+(interval?', '+(interval.days===1?'rendimento giornaliero ':'rendimento su '+interval.days+' giorni ')+(interval.pct===null?'non disponibile':pct(interval.pct)):' senza confronto precedente'))+'"><circle cx="'+cx+'" cy="'+cy+'" r="'+(active?6:4.5)+'" fill="'+color+'"/><circle cx="'+cx+'" cy="'+cy+'" r="13" fill="transparent" stroke="none"/>'+label+'</g>';
+  const yy=Y(p);if(!Number.isFinite(yy))return '';
+  const iv=p.interval,chosen=historySelectedDay===p.date;
+  // Color refers to MARKET performance, not changes caused by transactions.
+  const color=iv?(iv.pct>=0?'#45dbae':'#fa8090'):'#8eabc8';
+  let text='';if(isSeven&&iv&&iv.days===1&&iv.pct!==null){
+   const v=iv.pct*100,anchor=i===0?'start':i===points.length-1?'end':'middle';
+   let ly=y(yy)-14;if(ly<14)ly=y(yy)+22;
+   text='<text x="'+x(i)+'" y="'+ly+'" text-anchor="'+anchor+'" font-size="9" fill="'+color+'">'+(v>=0?'+':'')+v.toLocaleString('it-IT',{minimumFractionDigits:1,maximumFractionDigits:1})+'%</text>';
+  }
+  return '<g class="history-point" data-history-date="'+p.date+'" role="button" tabindex="0" aria-label="'+svgEscape(shortDate(p.date)+' · '+axisFormat(yy))+'"><circle cx="'+x(i)+'" cy="'+y(yy)+'" r="'+(chosen?5.3:3.4)+'" fill="'+color+'"'+(chosen?' stroke="#ffffff" stroke-width="1.3"':'')+'/>'+'<circle data-hit-area="1" cx="'+x(i)+'" cy="'+y(yy)+'" r="11" fill="transparent" stroke="none"/>'+text+'</g>';
  }).join('');
- el.innerHTML=comparableNote+'<svg class="history-plot" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Storico dal '+svgEscape(shortDate(first.date))+' al '+svgEscape(shortDate(last.date))+'"><g>'+ticks+'</g><path d="'+path('value')+'" fill="none" stroke="#37c9ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+marks+operationMarkers+'<text x="'+L+'" y="'+(H-6)+'" fill="#b8c5da" font-size="10">'+shortDate(first.date)+'</text><text x="'+(W-R)+'" y="'+(H-6)+'" fill="#b8c5da" text-anchor="end" font-size="10">'+shortDate(last.date)+'</text></svg><p class="history-helper">'+(isSeven?'Percentuali sui punti: rendimento rispetto al giorno precedente.':'Tocca un punto per leggere il rendimento rispetto alla rilevazione precedente.')+' Cerchietti sopra la linea: operazioni (verde acquisti, arancione vendite) sulle date con rilevazione.</p>';
- if(!historySelectedDay||!points.some(p=>p.date===historySelectedDay))historySelectedDay=points[points.length-1].date;
+ const plotLabel=twMode?'TWRR (%)':'Patrimonio (€)';
+ el.innerHTML=comparableNote+'<div class="history-axis-name">'+plotLabel+'</div><svg class="history-plot" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+plotLabel+' dal '+shortDate(first.date)+' al '+shortDate(last.date)+'">'+ticks+baseline+'<path d="'+path+'" fill="none" stroke="#37c9ff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>'+ops+marks+'<text x="'+L+'" y="'+(H-6)+'" fill="#b8c5da" font-size="10">'+shortDate(first.date)+'</text><text x="'+(W-R)+'" y="'+(H-6)+'" fill="#b8c5da" text-anchor="end" font-size="10">'+shortDate(last.date)+'</text></svg><p class="history-helper">'+(isSeven?'Percentuali giornaliere visibili:':'Tocca un punto per dettagli e rendimento.')+' Verde/rosso: rendimento dell’intervallo. Piccoli segni sopra la linea: operazioni registrate.</p>';
+ if(!historySelectedDay||!points.some(p=>p.date===historySelectedDay))historySelectedDay=last.date;
  renderHistoryDay();
- summary.innerHTML='<span><i class="hist-dot" style="background:#37c9ff"></i>Valore dei titoli posseduti</span><span>Storico: <b>'+shortDate(first.date)+' – '+shortDate(last.date)+'</b></span>'+(flow?'<span>Nuovi acquisti: '+eur(flow)+'</span>':'');
+ summary.innerHTML='<span>'+plotLabel+'</span><span>Dal '+shortDate(first.date)+' al '+shortDate(last.date)+'</span>'+(twMode?'<span>Flussi neutralizzati: '+eur(netFlows)+'</span>':'<span>Flussi netti: '+eur(netFlows)+'</span>');
 }
 
 // b.7.7: reconstruct dated positions from the ledger and independent daily market closes.
@@ -1049,7 +1083,7 @@ const VISIT_COUNTER_KEY='my_patrimonio_daily_opens_v1';
 const VISIT_SUPPRESS_KEY='my_patrimonio_visit_alert_disabled_v1';
 
 const PREF_KEY='invesquo_preferences_v50';
-const PREF_DEFAULTS={palette:'classic',mascotStyle:'rounded',glow:true,theme:'dark',motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',showQuoteTime:true,showLogos:true,compact:false,autoOpenSettings:true,colors:{positive:'#22c55e',neutral:'#9fe870',negative:'#ef4444'}};
+const PREF_DEFAULTS={mainMarket:'MIL',palette:'classic',mascotStyle:'rounded',glow:true,theme:'dark',motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',showQuoteTime:true,showLogos:true,compact:false,autoOpenSettings:true,colors:{positive:'#22c55e',neutral:'#9fe870',negative:'#ef4444'}};
 let prefs={...PREF_DEFAULTS,colors:{...PREF_DEFAULTS.colors}};
 try{const x=JSON.parse(store.getItem(PREF_KEY));if(x&&typeof x==='object'){prefs={...prefs,...x,colors:{...PREF_DEFAULTS.colors,...(x.colors||{})}}}}catch(e){}
 // Preserve legacy opt-out, but offer an accessible toggle to re-enable alerts.
@@ -1073,6 +1107,7 @@ $('settingLimit').onchange=e=>{prefs.limit=Number(e.target.value)||4;savePrefere
 $('settingPrivacy').onchange=e=>{prefs.privacy=e.target.checked;savePreferences()};
 $('privacyShortcut').onclick=()=>{prefs.privacy=!prefs.privacy;savePreferences()};
 $('settingRefreshMinutes').onchange=e=>{prefs.refreshMinutes=Number(e.target.value)||1;savePreferences()};
+$('settingMainMarket').onchange=e=>{prefs.mainMarket=e.target.value;savePreferences();updateMarketStatus()};
 $('settingHistoryDefault').onchange=e=>{prefs.historyDefault=e.target.value;historyRange=prefs.historyDefault;document.querySelectorAll('#historyRanges button').forEach(b=>{const active=b.dataset.range===historyRange;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});savePreferences();renderHistory()};$('settingShowQuoteTime').onchange=e=>{prefs.showQuoteTime=e.target.checked;savePreferences()};$('settingShowLogos').onchange=e=>{prefs.showLogos=e.target.checked;savePreferences()};$('settingCompact').onchange=e=>{prefs.compact=e.target.checked;savePreferences()};$('settingAutoOpenSettings').onchange=e=>{prefs.autoOpenSettings=e.target.checked;savePreferences()};
 const MASCOT_PALETTES={classic:['#22c55e','#9fe870','#ef4444'],ocean:['#0ccba6','#91e8f6','#377ed3'],royal:['#346bd2','#9bd8ff','#5e50a6'],forest:['#04b982','#cbf37c','#f16b75']};
 $('settingPalette').onchange=e=>{prefs.palette=e.target.value;const c=MASCOT_PALETTES[prefs.palette]||MASCOT_PALETTES.classic;prefs.colors={positive:c[0],neutral:c[1],negative:c[2]};savePreferences();mascotPlayRender()};
@@ -1984,8 +2019,47 @@ mascotPlayContainer.addEventListener('click',e=>{if(bananaTriggered){e.stopImmed
 
 mascotPlayRender();
 
+
+/* b.7.8: Clock-based indication, not live exchange feed. */
+const MARKET_LIST={
+ MIL:{label:'Milano',tz:'Europe/Rome',start:9*60,end:17*60+30},
+ PAR:{label:'Parigi',tz:'Europe/Paris',start:9*60,end:17*60+30},
+ XETRA:{label:'Xetra',tz:'Europe/Berlin',start:9*60,end:17*60+30},
+ NYSE:{label:'USA',tz:'America/New_York',start:9*60+30,end:16*60},
+ LSE:{label:'Londra',tz:'Europe/London',start:8*60,end:16*60+30}
+};
+function marketLocalParts(tz){
+ const parts=new Intl.DateTimeFormat('en-GB',{timeZone:tz,weekday:'short',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+ return Object.fromEntries(parts.map(p=>[p.type,p.value]));
+}
+function isMarketHoliday(key,p){
+ const md=p.month+'-'+p.day,yr=Number(p.year);
+ // Fixed full-session holidays: conservative for known market calendars.
+ if(['MIL','PAR','XETRA'].includes(key)){
+  if(md==='01-01'||md==='12-25'||md==='12-26')return true;
+  if(key==='MIL'&&yr===2026&&md==='12-24')return true; // Milano 2026 closed
+ }
+ if(key==='NYSE'&&['01-01','07-04','12-25'].includes(md))return true;
+ if(key==='LSE'&&['01-01','12-25','12-26'].includes(md))return true;
+ // Easter (Good Friday and Easter Monday) depending on calendar market; market specific.
+ function easter(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),n=Math.floor((h+l-7*m+114)/31),day=(h+l-7*m+114)%31+1;return Date.UTC(y,n-1,day)}
+ const e=easter(yr),d=Date.UTC(yr,Number(p.month)-1,Number(p.day)),delta=Math.round((d-e)/86400000);
+ return (['MIL','PAR','XETRA','LSE','NYSE'].includes(key)&&delta===-2)||(['MIL','PAR','XETRA','LSE'].includes(key)&&delta===1);
+}
+function updateMarketStatus(){
+ const key=MARKET_LIST[prefs.mainMarket]?prefs.mainMarket:'MIL',m=MARKET_LIST[key],p=marketLocalParts(m.tz);
+ const minute=Number(p.hour)*60+Number(p.minute),businessDay=!['Sat','Sun'].includes(p.weekday);
+ const active=businessDay&&!isMarketHoliday(key,p)&&minute>=m.start&&minute<m.end;
+ const box=$('marketStatus');if(!box)return;
+ box.className='market-status '+(active?'open':'closed');
+ $('marketText').textContent=active?'Mercati aperti':'Mercati chiusi';
+ box.title=m.label+' · '+(active?'negoziazione ordinaria prevista':'fuori dalla negoziazione ordinaria')+' · '+p.hour+':'+p.minute+' (ora locale). Festività straordinarie e sospensioni non verificate.';
+ const select=$('settingMainMarket');if(select&&select.value!==key)select.value=key;
+}
+updateMarketStatus();setInterval(updateMarketStatus,60000);
+
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const INVESQUO_VERSION='b.7.7';
+const INVESQUO_VERSION='b.7.8';
 let invesquoHealthToken=0;
 async function invesquoCheckServer(){
  const token=++invesquoHealthToken,led=document.getElementById('netlifyServerLed'),status=document.getElementById('netlifyServerState'),detail=document.getElementById('netlifyServerDetail');
