@@ -1,0 +1,3 @@
+Invesquo b.7.9 — Storico TWRR per singola categoria, grafico patrimonio disattivabile in Dashboard, stato locale/server separato.
+Importante: salva prima backup JSON da Impostazioni; copia SOLO i file di questo archivio nella cartella app del repository GitHub, senza creare sottocartelle.
+Le serie storiche con periodi senza quotazioni verificate non sono ricostruibili. La stima TWRR neutralizza i flussi registrati.
