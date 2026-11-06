@@ -1,0 +1,7 @@
+INVESQUO b.7.7
+- Storico: le categorie selezionate nella Dashboard determinano TUTTI i valori e i rendimenti, inclusi i flussi di compravendita.
+- Per il recupero retroattivo, nella sezione Storico usare «Recupera prezzi delle transazioni passate». Si tenta una ricostruzione fino a 365 giorni dalla data attuale, soltanto se Yahoo conferma le serie giornaliere di tutti gli strumenti interessati e gli eventuali cambi valuta. I BTP senza storico, conti e libretti non ricevono prezzi inventati; i giorni incompleti sono esclusi.
+- ETF monetari: XEON.MI e XEON.DE, ISIN LU0290358497. Invesco QQQ Trust: QQQ Nasdaq USD, ISIN US46090E1038. Risultati devono essere verificati in fase di inserimento.
+- Prezzi: preferenza funzioni Netlify live-quote/history, poi fallback. La funzione Alphabet 3.6 resta identica.
+- Icone crypto separate BTC, ETH, SOL, XRP, ADA, DOGE; logo esterno solo come best effort, con fallback per strumento.
+- Non si alterano i profili o i backup; è consigliato esportare un JSON prima dell'aggiornamento.
