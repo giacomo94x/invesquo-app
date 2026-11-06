@@ -1,0 +1,1 @@
+Invesquo b.7.8.1: FIX login / creazione profilo. Rimosso il comando che cancellava immediatamente la sessione appena salvata. I profili e i dati precedenti restano invariati. Sostituire i file nella cartella app del repository GitHub, commit/push; non cancellare dati del sito.
