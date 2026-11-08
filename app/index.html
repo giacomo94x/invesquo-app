@@ -641,7 +641,7 @@ body[data-theme="light"] .field input:focus,body[data-theme="light"] .order-sele
 <section aria-label="Impostazioni Invesquo" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">INVESQUO</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">b.7.15</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">b.7.17</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -2365,7 +2365,7 @@ function updateMarketStatus(){
 updateMarketStatus();setInterval(updateMarketStatus,60000);
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const INVESQUO_VERSION='b.7.16';
+const INVESQUO_VERSION='b.7.17';
 let invesquoHealthToken=0;
 async function invesquoCheckServer(){
  const token=++invesquoHealthToken,led=document.getElementById('netlifyServerLed'),status=document.getElementById('netlifyServerState'),detail=document.getElementById('netlifyServerDetail');
