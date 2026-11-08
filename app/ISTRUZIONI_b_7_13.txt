@@ -1,0 +1,14 @@
+Invesquo b.7.13 Beta — istruzioni di pubblicazione
+
+1. Salva un backup JSON prima dell’aggiornamento.
+2. Estrai il contenuto dello ZIP (non trascinare la cartella esterna).
+3. Sostituisci i file nella cartella app del repository GitHub collegato a Netlify, inclusa netlify/functions.
+4. Esegui Commit & Push. Non cambiare le impostazioni Netlify.
+
+Novità: controllo ricostruzioni storiche (Dashboard e Storico); ricerca per area Italia/Europa/USA/Mondo; ricerca ISIN per obbligazioni; Academy approfondita; gioco mascotte aggiornato; programmi PAC; rinomina manuale titolo in Investimenti > Rettifica dati.
+
+PAC: registra soltanto acquisti CONTABILI in Invesquo, nessun ordine verso broker. Le date di sabato e domenica slittano al lunedì, con chiusura giornaliera verificata quando disponibile (non necessariamente prezzo d'asta di chiusura); se non arriva il dato, l'acquisto resta in attesa. Le verifiche avvengono solo quando l'app è aperta e connessa. Le operazioni registrate appaiono nello storico transazioni normale.
+
+Rinominare cambia solo nome visualizzato e le etichette storiche delle operazioni, non simbolo, ISIN o sorgente prezzi.
+
+Limiti: le fonti finanziarie gratuite non garantiscono tutti i titoli, mercati e prezzi storici. Un backup locale non equivale a sincronizzazione fra dispositivi.

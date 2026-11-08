@@ -387,7 +387,7 @@ body.account-unlocked #accountGate{display:none!important}
 .settings-status-refresh{padding:8px!important;min-width:36px;height:36px;align-self:center}
 @media(max-width:520px){.settings-status-panel{grid-template-columns:minmax(0,1fr) auto;gap:12px}.settings-status-info:first-child{grid-column:1/-1;padding-bottom:9px;border-bottom:1px solid var(--border)}.settings-status-refresh{grid-column:2;grid-row:2}}
 
-/* b.7.12: quiet and responsive status/nav area, market LED */
+/* b.7.13: quiet and responsive status/nav area, market LED */
 .top .header-tools{display:grid!important;grid-template-columns:1fr repeat(5,minmax(32px,38px));align-items:center;column-gap:6px!important;row-gap:8px!important;width:100%!important;justify-content:stretch!important}
 .top .header-tools .pill{grid-column:1;grid-row:1;margin:0!important;justify-self:start}
 .top .header-tools .header-state-group{grid-column:2/7;grid-row:1;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:flex-end;min-width:0}
@@ -406,7 +406,7 @@ body.account-unlocked #accountGate{display:none!important}
 @media(max-width:420px){.top .header-tools{grid-template-columns:1fr repeat(5,32px);column-gap:5px!important}.top .header-tools .header-state-group{gap:8px}.market-status{font-size:10px}.top .header-tools .gear-btn{min-width:32px!important;width:32px!important;height:34px!important}}
 .dashboard-wealth-card{margin-top:12px}.wealth-plot{max-height:210px}.dashboard-wealth-card .history-empty{font-size:12px}.history-point circle:not([data-hit-area]){filter:none!important;stroke:none!important}.history-point.selected circle:not([data-hit-area]){stroke:none!important}#wealthGraph{margin-top:4px}#wealthGraph .flex{margin-top:6px;justify-content:space-between}
 
-/* b.7.12 · market ticker, clean history, mascot props */
+/* b.7.13 · market ticker, clean history, mascot props */
 .ticker-wrap{margin:0 0 14px;overflow:hidden;position:relative;border:1px solid var(--border);border-radius:13px;background:var(--panel2);height:42px;max-width:100%;mask-image:linear-gradient(90deg,transparent 0%,black 3%,black 97%,transparent 100%)}
 .ticker-track{width:max-content;min-width:100%;height:100%;display:flex;align-items:center;gap:0;animation:indicesMarquee 35s linear infinite;white-space:nowrap}
 .ticker-wrap:hover .ticker-track{animation-play-state:paused}.ticker-item{padding:0 16px;border-right:1px solid var(--border);font-weight:700;font-size:12px;display:inline-flex;gap:10px;align-items:center}.ticker-item small{font-size:11px;font-weight:700}.ticker-placeholder{padding:12px;color:var(--muted)}
@@ -429,7 +429,7 @@ body.account-unlocked #accountGate{display:none!important}
 .mascot-playground #toyBear{right:9px;bottom:15px}
 .mascot-playground .mascot-market-spot{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);width:calc(100% - 142px);font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
 
-/* b.7.12 Navigation with Educational and Refresh: two compact lines on mobile */
+/* b.7.13 Navigation with Educational and Refresh: two compact lines on mobile */
 .top .header-tools{display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-end!important;gap:5px!important;max-width:min(100%,640px);width:auto!important}
 .top .header-tools .header-state-group{flex:0 0 auto}
 .top .header-tools .pill{flex:0 0 auto}
@@ -461,7 +461,7 @@ body.account-unlocked #accountGate{display:none!important}
 @media(max-width:620px){.learning-grid,.learning-glossary{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.mascot-playground .mascot-toys button,.top .header-tools #homeRefresh svg{transition:none;animation:none!important}}
 
-/* b.7.12 final: seven navigation buttons in ONE orderly row */
+/* b.7.13 final: seven navigation buttons in ONE orderly row */
 .top .header-tools{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:6px!important;width:100%!important;max-width:100%!important;justify-content:stretch!important}
 .top .header-tools .pill{grid-row:1!important;grid-column:1/3!important;justify-self:start!important}
 .top .header-tools .header-state-group{grid-row:1!important;grid-column:3/8!important;justify-content:flex-end!important;gap:8px!important}
@@ -470,7 +470,7 @@ body.account-unlocked #accountGate{display:none!important}
 @media(min-width:980px){.top .header-tools{max-width:430px!important}}
 @media(max-width:380px){.top .header-tools{gap:3px!important}.top .header-tools .gear-btn{height:34px!important}.header-state-group .header-mood-status,.header-state-group .market-status{font-size:10px!important}}
 
-/* b.7.12 */
+/* b.7.13 */
 .instrument-category-glyph{display:inline-flex;align-items:center;justify-content:center;min-width:21px;height:21px;background:rgba(98,149,230,.15);border:1px solid rgba(128,165,215,.25);border-radius:7px;font-size:12px;color:#a9d4ff;font-weight:900;vertical-align:middle;margin-right:4px}
 .category-name{color:var(--text);font-size:11px}
 .dashboard-wealth-caption{font-size:12px;font-weight:700;color:var(--muted);margin:9px 0 5px}
@@ -495,6 +495,12 @@ body.dense-chart-points .history-point circle:not([data-hit-area]){opacity:.4}
 
 .mascot-playground #toyMonkey[data-expression="curiosa"] svg{filter:brightness(1.1) saturate(1.2);transform:rotate(-9deg) translateY(-4px)}
 .mascot-playground #toyMonkey[data-expression="dispettosa"] svg{filter:saturate(1.3);transform:rotate(9deg) translateY(-7px)}
+</style><style>
+.wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
+.pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
+.shoulder-monkey{position:absolute;right:-2%;top:26%;width:33%;max-width:95px;z-index:4;animation:shoulderBop 1.25s ease-in-out infinite alternate;pointer-events:none}.shoulder-monkey svg{width:100%;height:auto;filter:drop-shadow(0 4px 5px #05132588)}@keyframes shoulderBop{from{transform:rotate(-7deg) translateY(0)}to{transform:rotate(6deg) translateY(-8px)}}
+#toyBull.toy-bounce,#toyBear.toy-bounce{animation:toyBounce .55s ease-out}@keyframes toyBounce{0%,100%{transform:scale(1)}35%{transform:scale(1.18) rotate(-8deg)}65%{transform:scale(.94) rotate(5deg)}}
+.academy-node p{line-height:1.6;margin:8px 0}.pac-modal .editgrid{gap:10px}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><div class="eyebrow">INVESQUO · PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Crea un profilo sul dispositivo oppure accedi a un profilo già presente. Nessun account online: i dati restano in questo browser.</p>
@@ -597,14 +603,14 @@ body.dense-chart-points .history-point circle:not([data-hit-area]){opacity:.4}
 
 
 <section class="card"><div class="section-head"><h2>Allocazione</h2><div class="seg"><button class="selected" id="modeNow">Oggi</button><button id="modeCost">Investito</button></div></div><div class="donut" id="donut"><div class="donut-inner"><span class="sub" id="donutLabel">Categorie visibili</span><strong class="nums" id="donutAmount">76.223 €</strong></div></div><div id="legend"></div><p class="hint">I riepiloghi in alto, il grafico e le posizioni considerano solo le categorie attive. Quelle nascoste rimangono salvate e non vengono conteggiate come perdite.</p><div class="eyebrow" style="margin:14px 0 8px">Mostra / nascondi categorie</div><div class="chips" id="filters"></div></section>
-<section class="card dashboard-wealth-card" id="dashboardWealthCard"><div class="section-head"><h2>Andamento del patrimonio</h2><span class="sub">Valore totale nel tempo · €</span></div><div class="dashboard-wealth-caption">Scegli il periodo</div><div class="timeline-range wealth-range-visible" id="wealthRanges"><button class="btn" data-wealth-range="7" type="button">7G</button><button class="btn" data-wealth-range="30" type="button">1M</button><button class="btn" data-wealth-range="183" type="button">6M</button><button class="btn" data-wealth-range="365" type="button">1A</button><button class="btn" data-wealth-range="all" type="button">MAX</button></div><div id="wealthGraph" aria-label="Grafico del valore del patrimonio"></div><p class="hint">Il valore include acquisti e vendite, quindi non rappresenta il rendimento del mercato. Utilizza soltanto rilevazioni complete e comparabili.</p></section>
+<section class="card dashboard-wealth-card" id="dashboardWealthCard"><div class="section-head"><h2>Andamento del patrimonio</h2><span class="sub">Valore totale nel tempo · €</span></div><div class="dashboard-wealth-caption">Scegli il periodo</div><div class="wealth-backfill-row"><button type="button" class="btn" id="wealthBackfill">↻ Recupera prezzi delle transazioni passate</button><span class="sub" id="wealthBackfillStatus">Solo quotazioni storiche verificate; nessun valore inventato.</span></div><div class="timeline-range wealth-range-visible" id="wealthRanges"><button class="btn" data-wealth-range="7" type="button">7G</button><button class="btn" data-wealth-range="30" type="button">1M</button><button class="btn" data-wealth-range="183" type="button">6M</button><button class="btn" data-wealth-range="365" type="button">1A</button><button class="btn" data-wealth-range="all" type="button">MAX</button></div><div id="wealthGraph" aria-label="Grafico del valore del patrimonio"></div><p class="hint">Il valore include acquisti e vendite, quindi non rappresenta il rendimento del mercato. Utilizza soltanto rilevazioni complete e comparabili.</p></section>
 
 
 
 
 
 </div>
-<div aria-label="Storico del patrimonio" class="app-view hidden" id="historyView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Storico del patrimonio</h2><p>Rendimenti della categoria selezionata: TWRR senza effetto dei flussi, oppure MWRR ponderato per capitale e date.</p></div><section class="card" id="historySection"><div class="section-head"><h2>Storico del patrimonio</h2><span class="sub" id="historyStart">Dalla prima rilevazione</span></div><div class="history-scope-row"><label for="historyCategory">Categoria del grafico</label><select id="historyCategory" aria-label="Seleziona la categoria da visualizzare nello storico"></select></div><div class="history-method-switch" role="group" aria-label="Metodo di rendimento"><button type="button" data-history-method="twrr" class="btn selected" aria-pressed="true">TWRR · Mercati</button><button type="button" data-history-method="mwrr" class="btn" aria-pressed="false">MWRR · Investitore</button></div><div class="timeline-range" id="historyRanges"><button class="btn selected" data-range="7" aria-pressed="true">7G</button><button class="btn" data-range="30" aria-pressed="false">1M</button><button class="btn" data-range="183" aria-pressed="false">6M</button><button class="btn" data-range="365" aria-pressed="false">1A</button><button class="btn" data-range="all" aria-pressed="false">MAX</button></div><div class="history-rebuild-controls"><button type="button" class="btn" id="historyBackfill">↻ Recupera prezzi delle transazioni passate</button><span class="sub" id="historyBackfillStatus" role="status">I prezzi retroattivi sono ricostruiti solo se disponibili e verificati.</span></div><div aria-label="Andamento del patrimonio nel tempo" id="historyGraph"></div><div aria-live="polite" class="history-day-detail hidden" id="historyDayDetail"></div><div class="hist-performance" id="historyPerformance"></div><div class="method-picker"><span class="method-label">Metodo: TWRR · rendimento della categoria selezionata</span></div><p aria-live="polite" class="method-help" id="methodHelp"></p><p class="hint">Seleziona una categoria attiva nella Dashboard. Il grafico mostra solo il rendimento TWRR stimato, depurato dagli acquisti e dalle vendite. Lo storico segue le categorie attive nella Dashboard. Premi «Recupera prezzi» per tentare la ricostruzione retroattiva dalle transazioni: si usano soltanto prezzi di mercato disponibili; se uno strumento manca, la giornata non viene ricostruita. I periodi senza dati non sono stimati.</p><div class="hist-foot sub" id="historySummary"></div><div class="trade-event-list" id="tradeEventList"></div><div id="transactionTimeline" class="transaction-timeline"></div></section></div><div aria-label="Investimenti e operazioni" class="app-view hidden" id="portfolioView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Investimenti</h2><p>Posizioni, prezzi, acquisti e vendite.</p></div><section class="card"><div class="section-head"><h2>Composizione e rendimenti</h2><button class="btn" id="editToggle">Rettifica dati</button></div><div id="assetList"></div><div class="editor" id="editor"><div class="notice">Usa “Registra acquisto” per aggiungere nuove quote. Questa sezione serve soltanto a correggere dati iniziali o errori di inserimento.</div><div id="editItems"></div><button class="btn primary" id="editDone" style="width:100%;margin-top:12px">Salva e chiudi</button></div></section><section class="card" id="purchaseSection"><h2>Registra un acquisto</h2><p class="hint">Hai comprato, ad esempio, 2 quote VWCE? Inserisci la quantità e il prezzo effettivo di esecuzione. L'app aggiornerà quantità, capitale investito e PMC ponderato soltanto dopo la conferma.</p><div class="field"><label for="buyAsset">Strumento</label><select class="order-select" id="buyAsset"></select></div><div class="investment-entry"><div class="field"><label for="buyDate">Data effettiva dell’acquisto</label><div class="entry-date-row"><input type="date" id="buyDate"/><button type="button" class="btn" data-first-date="buyDate">Prima data app</button></div></div><p class="entry-explain">Predefinita: oggi. Puoi selezionare la prima data registrata nell’app per inserire un investimento già posseduto. La data non crea quotazioni storiche mancanti.</p><label class="sub">Come vuoi registrare l’operazione?</label><div class="entry-choice"><label><input type="radio" name="buyInputMode" value="qty" checked/> Quantità di quote</label><label><input type="radio" name="buyInputMode" value="eur"/> Importo speso in €</label></div><div class="field entry-field-hidden" id="buyAmountWrap"><label for="buyAmount">Importo effettivamente acquistato (€)</label><input id="buyAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Per Bitcoin o altri strumenti frazionabili: scrivi 500 € e calcolerò automaticamente le quote.</p></div></div><div class="editgrid"><div class="field" id="buyQuantityWrap"><label for="buyQuantity">Nuove quote acquistate (frazioni ammesse)</label><input id="buyQuantity" inputmode="decimal" min="0" step="any" type="number" value="2"/></div><div class="field"><label for="buyPrice">Prezzo effettivo di acquisto per quota (nella valuta del titolo)</label><input id="buyPrice" inputmode="decimal" min="0" step="any" type="number"/></div></div><div class="order-preview" id="buyPreview"></div><div class="notice warn hidden" id="buyStale"></div><label class="toggle" style="margin-top:12px"><input id="buyVerify" type="checkbox"/> Confermo data, quantità/importo e prezzo effettivo pagato</label><button class="btn primary buy-confirm" disabled="" id="buyCommit">Registra acquisto e aggiorna PMC</button><p class="foot">Inserisci sempre il prezzo effettivo pagato al broker, non necessariamente la quotazione attuale. Sono ammesse quote frazionate (es. Bitcoin); puoi indicare direttamente l’importo in euro. Commissioni escluse. Un acquisto storico non ricrea i prezzi passati del portafoglio.</p><div class="notice hidden" id="buyStatus"></div></section><section class="card"><button class="btn primary full-btn" id="newAssetOpen">＋ Aggiungi titolo</button><button class="btn full-btn" id="purchaseOpen">＋ Registra acquisto</button><button class="btn full-btn" id="saleOpen">− Registra vendita</button></section><section class="card" id="ingSection"><h2>Conto deposito ING</h2><div class="rowline"><span class="sub">Decorrenza</span><strong>08/08/2026</strong></div><div class="rowline"><span class="sub">Tasso lordo annuo</span><strong id="ingRate">4,00%</strong></div><div class="rowline"><span class="sub">Interessi maturati, stima</span><strong class="gain nums" id="ingInterest">305,67 €</strong></div><div class="rowline"><span class="sub">Capitale + interessi</span><strong id="ingBalance">50.305,67 €</strong></div><p class="foot">Interessi calcolati ogni giorno, partendo dai 305,67 € comunicati il 03/11/2026. Non sono un saldo bancario certificato né interessi già accreditati.</p></section><section class="card"><h2>Valori a scadenza</h2><div id="maturities"></div><p class="foot">Per il BTP il valore include il capitale e tutte le cedole lorde previste, non un unico pagamento finale. I valori a scadenza non si sommano al patrimonio odierno.</p></section><section class="card"><h2>Quotazioni e dati</h2><div class="flex"><label class="toggle"><input checked="" id="auto" type="checkbox"/> Aggiornamento automatico</label><button class="btn primary" id="refresh">↻ Aggiorna</button></div><div class="sub" id="refreshInfo" style="margin-top:8px">Lettura dei prezzi non garantita</div><div class="notice" id="notice">I prezzi non verificati restano salvati con l’ultima fonte e data disponibili. I grafici esterni possono non essere accessibili.</div><p class="foot">Controllo dei prezzi con frequenza regolabile nelle Impostazioni, solo quando l’app è aperta. Le quotazioni dipendono dalle fonti esterne e potrebbero essere ritardate o non disponibili. Preferenze, backup e prova della faccina sono in <strong>Impostazioni</strong>.</p></section></div><section class="app-view hidden learning-view" id="educationView" aria-label="Educational: conoscere gli investimenti">
+<div aria-label="Storico del patrimonio" class="app-view hidden" id="historyView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Storico del patrimonio</h2><p>Rendimenti della categoria selezionata: TWRR senza effetto dei flussi, oppure MWRR ponderato per capitale e date.</p></div><section class="card" id="historySection"><div class="section-head"><h2>Storico del patrimonio</h2><span class="sub" id="historyStart">Dalla prima rilevazione</span></div><div class="history-scope-row"><label for="historyCategory">Categoria del grafico</label><select id="historyCategory" aria-label="Seleziona la categoria da visualizzare nello storico"></select></div><div class="history-method-switch" role="group" aria-label="Metodo di rendimento"><button type="button" data-history-method="twrr" class="btn selected" aria-pressed="true">TWRR · Mercati</button><button type="button" data-history-method="mwrr" class="btn" aria-pressed="false">MWRR · Investitore</button></div><div class="timeline-range" id="historyRanges"><button class="btn selected" data-range="7" aria-pressed="true">7G</button><button class="btn" data-range="30" aria-pressed="false">1M</button><button class="btn" data-range="183" aria-pressed="false">6M</button><button class="btn" data-range="365" aria-pressed="false">1A</button><button class="btn" data-range="all" aria-pressed="false">MAX</button></div><div class="history-rebuild-controls"><button type="button" class="btn" id="historyBackfill">↻ Recupera prezzi delle transazioni passate</button><span class="sub" id="historyBackfillStatus" role="status">I prezzi retroattivi sono ricostruiti solo se disponibili e verificati.</span></div><div aria-label="Andamento del patrimonio nel tempo" id="historyGraph"></div><div aria-live="polite" class="history-day-detail hidden" id="historyDayDetail"></div><div class="hist-performance" id="historyPerformance"></div><div class="method-picker"><span class="method-label">Metodo: TWRR · rendimento della categoria selezionata</span></div><p aria-live="polite" class="method-help" id="methodHelp"></p><p class="hint">Seleziona una categoria attiva nella Dashboard. Il grafico mostra solo il rendimento TWRR stimato, depurato dagli acquisti e dalle vendite. Lo storico segue le categorie attive nella Dashboard. Premi «Recupera prezzi» per tentare la ricostruzione retroattiva dalle transazioni: si usano soltanto prezzi di mercato disponibili; se uno strumento manca, la giornata non viene ricostruita. I periodi senza dati non sono stimati.</p><div class="hist-foot sub" id="historySummary"></div><div class="trade-event-list" id="tradeEventList"></div><div id="transactionTimeline" class="transaction-timeline"></div></section></div><div aria-label="Investimenti e operazioni" class="app-view hidden" id="portfolioView"><div class="sub-screen-head"><span class="eyebrow">INVESQUO</span><h2>Investimenti</h2><p>Posizioni, prezzi, acquisti e vendite.</p></div><section class="card"><div class="section-head"><h2>Composizione e rendimenti</h2><button class="btn" id="editToggle">Rettifica dati</button></div><div id="assetList"></div><div class="editor" id="editor"><div class="notice">Usa “Registra acquisto” per aggiungere nuove quote. Questa sezione serve soltanto a correggere dati iniziali o errori di inserimento.</div><div id="editItems"></div><button class="btn primary" id="editDone" style="width:100%;margin-top:12px">Salva e chiudi</button></div></section><section class="card" id="purchaseSection"><h2>Registra un acquisto</h2><p class="hint">Hai comprato, ad esempio, 2 quote VWCE? Inserisci la quantità e il prezzo effettivo di esecuzione. L'app aggiornerà quantità, capitale investito e PMC ponderato soltanto dopo la conferma.</p><div class="field"><label for="buyAsset">Strumento</label><select class="order-select" id="buyAsset"></select></div><div class="investment-entry"><div class="field"><label for="buyDate">Data effettiva dell’acquisto</label><div class="entry-date-row"><input type="date" id="buyDate"/><button type="button" class="btn" data-first-date="buyDate">Prima data app</button></div></div><p class="entry-explain">Predefinita: oggi. Puoi selezionare la prima data registrata nell’app per inserire un investimento già posseduto. La data non crea quotazioni storiche mancanti.</p><label class="sub">Come vuoi registrare l’operazione?</label><div class="entry-choice"><label><input type="radio" name="buyInputMode" value="qty" checked/> Quantità di quote</label><label><input type="radio" name="buyInputMode" value="eur"/> Importo speso in €</label></div><div class="field entry-field-hidden" id="buyAmountWrap"><label for="buyAmount">Importo effettivamente acquistato (€)</label><input id="buyAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Per Bitcoin o altri strumenti frazionabili: scrivi 500 € e calcolerò automaticamente le quote.</p></div></div><div class="editgrid"><div class="field" id="buyQuantityWrap"><label for="buyQuantity">Nuove quote acquistate (frazioni ammesse)</label><input id="buyQuantity" inputmode="decimal" min="0" step="any" type="number" value="2"/></div><div class="field"><label for="buyPrice">Prezzo effettivo di acquisto per quota (nella valuta del titolo)</label><input id="buyPrice" inputmode="decimal" min="0" step="any" type="number"/></div></div><div class="order-preview" id="buyPreview"></div><div class="notice warn hidden" id="buyStale"></div><label class="toggle" style="margin-top:12px"><input id="buyVerify" type="checkbox"/> Confermo data, quantità/importo e prezzo effettivo pagato</label><button class="btn primary buy-confirm" disabled="" id="buyCommit">Registra acquisto e aggiorna PMC</button><p class="foot">Inserisci sempre il prezzo effettivo pagato al broker, non necessariamente la quotazione attuale. Sono ammesse quote frazionate (es. Bitcoin); puoi indicare direttamente l’importo in euro. Commissioni escluse. Un acquisto storico non ricrea i prezzi passati del portafoglio.</p><div class="notice hidden" id="buyStatus"></div></section><section class="card"><button class="btn primary full-btn" id="newAssetOpen">＋ Aggiungi titolo</button><button class="btn full-btn" id="purchaseOpen">＋ Registra acquisto</button><button class="btn full-btn" id="saleOpen">− Registra vendita</button><button class="btn full-btn" id="pacPanelOpen" type="button">📅 Il mio PAC</button></section><section class="card" id="ingSection"><h2>Conto deposito ING</h2><div class="rowline"><span class="sub">Decorrenza</span><strong>08/08/2026</strong></div><div class="rowline"><span class="sub">Tasso lordo annuo</span><strong id="ingRate">4,00%</strong></div><div class="rowline"><span class="sub">Interessi maturati, stima</span><strong class="gain nums" id="ingInterest">305,67 €</strong></div><div class="rowline"><span class="sub">Capitale + interessi</span><strong id="ingBalance">50.305,67 €</strong></div><p class="foot">Interessi calcolati ogni giorno, partendo dai 305,67 € comunicati il 03/11/2026. Non sono un saldo bancario certificato né interessi già accreditati.</p></section><section class="card"><h2>Valori a scadenza</h2><div id="maturities"></div><p class="foot">Per il BTP il valore include il capitale e tutte le cedole lorde previste, non un unico pagamento finale. I valori a scadenza non si sommano al patrimonio odierno.</p></section><section class="card"><h2>Quotazioni e dati</h2><div class="flex"><label class="toggle"><input checked="" id="auto" type="checkbox"/> Aggiornamento automatico</label><button class="btn primary" id="refresh">↻ Aggiorna</button></div><div class="sub" id="refreshInfo" style="margin-top:8px">Lettura dei prezzi non garantita</div><div class="notice" id="notice">I prezzi non verificati restano salvati con l’ultima fonte e data disponibili. I grafici esterni possono non essere accessibili.</div><p class="foot">Controllo dei prezzi con frequenza regolabile nelle Impostazioni, solo quando l’app è aperta. Le quotazioni dipendono dalle fonti esterne e potrebbero essere ritardate o non disponibili. Preferenze, backup e prova della faccina sono in <strong>Impostazioni</strong>.</p></section></div><section class="app-view hidden learning-view" id="educationView" aria-label="Educational: conoscere gli investimenti">
 <div class="sub-screen-head"><span class="eyebrow">INVESQUO ACADEMY</span><h2>Impara a investire</h2><p>Una guida pratica per capire strumenti, rendimenti e rischi prima di prendere decisioni.</p></div>
 <section class="card learning-intro"><div class="section-head"><h2>Esplora gli strumenti</h2><span class="sub" id="learningCount">11 argomenti</span></div>
 <div class="learning-filter"><label for="learningSearch">Trova un argomento</label><input id="learningSearch" type="search" placeholder="Cerca: ETF, cedole, oro, volatilità…"/></div>
@@ -616,7 +622,7 @@ body.dense-chart-points .history-point circle:not([data-hit-area]){opacity:.4}
 <section aria-label="Impostazioni Invesquo" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">INVESQUO</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">b.7.12</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">b.7.13</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -624,7 +630,10 @@ body.dense-chart-points .history-point circle:not([data-hit-area]){opacity:.4}
 <section class="card"><div class="section-head"><h2>Profilo locale</h2><span class="pill">Solo su questo dispositivo</span></div>
 <p class="hint">Utente attivo: <strong id="currentAccountName">—</strong>. Portafogli separati per ciascun profilo. I dati non sono sincronizzati né cifrati.</p>
 <div class="actions"><button class="btn" id="switchLocalAccount" type="button">Cambia profilo / Esci</button><button class="btn" id="openLocalPrivacy" type="button">Privacy e archiviazione</button><button class="btn danger-outline" id="deleteLocalAccount" type="button">Elimina profilo e dati</button></div>
-<p class="foot">Per trasferire dati tra profili o dispositivi usa il backup JSON in questa schermata. La password opzionale non protegge i file del browser da chi accede al dispositivo.</p></section><section class="card settings-card" id="settingsSection">
+<p class="foot">Per trasferire dati tra profili o dispositivi usa il backup JSON in questa schermata. La password opzionale non protegge i file del browser da chi accede al dispositivo.</p></section><section class="card settings-card" id="extraSettings713"><h2>Storici e ricerca</h2>
+<label class="toggle"><input id="settingShowReconstructed" type="checkbox" checked> Includi i prezzi storici ricostruiti nei grafici</label>
+<p class="hint">Disattivando questa opzione, i grafici Dashboard e Storico utilizzeranno soltanto le rilevazioni osservate. I dati ricostruiti rimangono nel backup e possono essere riattivati.</p>
+<div class="setting-field"><label for="settingSearchRegion">Borse da cercare per prime</label><select id="settingSearchRegion"><option value="world">Tutto il mondo</option><option value="it">Solo Italia</option><option value="eu">Europa</option><option value="us">Solo USA</option></select><p class="hint">Il filtro riguarda il mercato di quotazione, non la sede dell’emittente. Le obbligazioni si possono cercare anche tramite ISIN.</p></div></section><section class="card settings-card" id="settingsSection">
 <div class="section-head"><h2>Preferenze</h2><span class="sub">Le modifiche si salvano automaticamente</span></div>
 <details class="setting-group" open=""><summary>Aspetto e colori</summary>
 <div class="setting-field"><label for="settingTheme">Tema dell'app</label><select id="settingTheme"><option value="dark">Blu notte (attuale)</option><option value="ocean">Blu oceano</option><option value="light">Chiaro</option><option value="amethyst">Ametista</option><option value="graphite">Grafite</option><option value="pine">Verde petrolio</option><option value="system">Automatico (iPhone)</option></select></div>
@@ -675,6 +684,17 @@ body.dense-chart-points .history-point circle:not([data-hit-area]){opacity:.4}
 </section>
 <section class="card mascot-lab" id="mascotLab"><div class="section-head"><h2>Gioca con la mascotte</h2><span class="sub">Solo per divertimento</span></div><p class="hint">Scopri le reazioni: tocca, trascina lo stoppino, prova le ombre… e tieni premuto a lungo.</p><div aria-describedby="mascotPlayStatus" aria-label="Tocca la mascotte per cambiare espressione" class="mascot-playground" id="mascotPlayground" role="button" tabindex="0"><div class="mascot-toys" aria-label="Oggetti illustrati interattivi della mascotte"><button type="button" id="toyMonkey" aria-label="Tieni premuta la scimmietta per far piovere banane" title="Tieni premuto: pioggia di banane"><svg viewBox="0 0 80 83" aria-hidden="true"><ellipse cx="40" cy="71" rx="32" ry="6" fill="#061c30" opacity=".5"/><path d="M24 54Q8 50 12 32Q14 25 21 28" fill="none" stroke="#8b583e" stroke-width="8" stroke-linecap="round"/><ellipse cx="40" cy="56" rx="23" ry="22" fill="#ae7853" stroke="#10263d" stroke-width="3"/><circle cx="18" cy="30" r="12" fill="#9d6244" stroke="#10263d" stroke-width="3"/><circle cx="62" cy="30" r="12" fill="#9d6244" stroke="#10263d" stroke-width="3"/><circle cx="18" cy="30" r="5" fill="#e8b98e"/><circle cx="62" cy="30" r="5" fill="#e8b98e"/><ellipse cx="40" cy="35" rx="23" ry="25" fill="#b67b56" stroke="#10263d" stroke-width="3"/><ellipse cx="40" cy="43" rx="16" ry="15" fill="#eec49c"/><circle cx="32" cy="34" r="3.2" fill="#10263d"/><circle cx="48" cy="34" r="3.2" fill="#10263d"/><ellipse cx="40" cy="43" rx="5" ry="3" fill="#6e3e32"/><path d="M34 49Q40 55 46 49" fill="none" stroke="#6e3e32" stroke-width="2.3" stroke-linecap="round"/></svg><small>Scimmietta</small></button><button type="button" id="toyHat" aria-label="Metti o togli il cappello IPF" title="Indossa cappello IPF"><svg viewBox="0 0 80 83" aria-hidden="true"><path d="M14 55Q15 25 40 23Q65 25 66 55Z" fill="#274568" stroke="#0d213b" stroke-width="4"/><path d="M16 52Q42 48 67 54" fill="none" stroke="#a3b7d8" stroke-width="5"/><ellipse cx="41" cy="58" rx="37" ry="9" fill="#192e4a" stroke="#0d213b" stroke-width="3"/><text x="40" y="43" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="19" font-style="italic" font-weight="900">IPF</text></svg><small>Cappello</small></button><button type="button" id="toyBull" aria-label="Statuetta del toro, rendimento positivo" title="Bull: patrimonio in guadagno"><svg viewBox="0 0 80 83" aria-hidden="true"><ellipse cx="40" cy="77" rx="34" ry="4" fill="#07192a" opacity=".45"/><path d="M12 45Q13 28 27 26L48 21Q57 20 63 31L67 49L58 63H18Z" fill="#23cc90" stroke="#073e36" stroke-width="3.2"/><path d="M22 31L12 10Q21 13 29 24M53 29L65 9Q68 22 60 34" fill="#c4f3c7" stroke="#073e36" stroke-width="3" stroke-linejoin="round"/><path d="M23 61L20 74M54 60L59 74" stroke="#073e36" stroke-width="7" stroke-linecap="round"/><path d="M48 36Q67 32 72 44Q68 52 57 51L47 50" fill="#35dea3" stroke="#073e36" stroke-width="2.5"/><circle cx="37" cy="34" r="3.3" fill="#063d34"/><path d="M26 42L36 43" stroke="#0a6b4d" stroke-width="2.5" stroke-linecap="round"/><path d="M10 42Q1 39 5 27" fill="none" stroke="#0a6b4d" stroke-width="4" stroke-linecap="round"/></svg><small>Bull</small></button><button type="button" id="toyBear" aria-label="Statuetta dell’orso, rendimento negativo" title="Bear: patrimonio in perdita"><svg viewBox="0 0 80 83" aria-hidden="true"><ellipse cx="40" cy="75" rx="36" ry="5" fill="#051a2c" opacity=".4"/><circle cx="18" cy="27" r="12" fill="#f05e6a" stroke="#893749" stroke-width="3"/><circle cx="62" cy="27" r="12" fill="#f05e6a" stroke="#893749" stroke-width="3"/><ellipse cx="40" cy="45" rx="31" ry="28" fill="#f26373" stroke="#893749" stroke-width="3"/><ellipse cx="40" cy="54" rx="16" ry="12" fill="#ffadb3"/><circle cx="30" cy="40" r="3.3" fill="#45202c"/><circle cx="50" cy="40" r="3.3" fill="#45202c"/><ellipse cx="40" cy="52" rx="5" ry="4" fill="#61313b"/><path d="M34 61Q40 57 46 61" fill="none" stroke="#61313b" stroke-width="2.5" stroke-linecap="round"/></svg><small>Bear</small></button><span class="mascot-market-spot" id="mascotMarketSpot">Stato del portafoglio</span></div><div class="mascot-play-art" id="mascotPlayArt"></div></div><p aria-live="polite" class="mascot-play-status" id="mascotPlayStatus">👆 Tocca · ↕ Trascina · ◉ Tieni premuto</p><div class="mascot-emotions" aria-label="Scegli un’emozione della mascotte"><button type="button" data-toy-emotion="neutral">Neutra</button><button type="button" data-toy-emotion="positive">Felice</button><button type="button" data-toy-emotion="celebrate">Super felice</button><button type="button" data-toy-emotion="angry">Arrabbiata</button><button type="button" data-toy-emotion="crying">Super triste</button></div><div class="mascot-play-actions"><button class="btn" id="mascotPlayReset" type="button">Ricomincia</button><span class="sub" id="mascotTapCount">0 tocchi</span></div></section><button class="btn settings-bottom-back" id="backDashboardBottom" type="button">← Torna alla dashboard</button>
 </section>
+<div class="app-modal hidden" id="pacOverlay" role="dialog" aria-modal="true" aria-label="Il mio PAC"><div class="app-modal-card pac-modal">
+<button class="modal-close" id="pacClose" type="button" aria-label="Chiudi PAC">×</button><h2>Il mio PAC</h2>
+<p class="hint">Programma registrazioni di acquisto, non ordini reali al broker. Le operazioni si registrano soltanto quando apri Invesquo e la chiusura pubblicata della giornata è disponibile e verificabile. La quotazione di chiusura non è necessariamente il prezzo d’asta eseguito dal tuo broker.</p>
+<div class="field"><label for="pacAsset">Strumento già presente nel portafoglio</label><select id="pacAsset"></select></div>
+<div class="editgrid"><div class="field"><label for="pacMode">Tipo importo</label><select id="pacMode"><option value="eur">Euro investiti</option><option value="qty">Quote / nominale</option></select></div><div class="field"><label for="pacAmount">Importo in € o quantità</label><input id="pacAmount" type="number" step="any" min="0" placeholder="Es. 500"></div></div>
+<div class="field"><label for="pacDays">Giorni mensili (1–31), separati da virgola</label><input id="pacDays" value="1, 8, 15, 23" placeholder="1, 8, 15, 23"><p class="hint">Se la data cade sabato o domenica, passa al lunedì successivo. Se il mercato è chiuso, resta in attesa di una chiusura effettiva.</p></div>
+<div class="editgrid"><div class="field"><label for="pacFrom">Data di inizio</label><input id="pacFrom" type="date"></div><div class="field"><label for="pacUntil">Data di fine (facoltativa)</label><input id="pacUntil" type="date"></div></div>
+<button class="btn primary full-btn" id="pacSave">Salva PAC</button><div class="notice hidden" id="pacMessage"></div>
+<h3>Programmi salvati</h3><div id="pacSchedules"></div><h3>Prossime date e operazioni</h3><div id="pacEvents"></div>
+<button class="btn full-btn" id="pacVerify">↻ Verifica scadenze e chiusure disponibili</button><p class="foot">Le operazioni registrate automaticamente sono movimenti contabili dell’app, non conferme di acquisto reale. Verifica gli eseguiti con il broker e correggi il registro se necessario. Nessun processo viene eseguito quando l'app è chiusa.</p>
+</div></div>
 <div class="app-modal hidden" id="purchaseOverlay" role="dialog" aria-modal="true" aria-label="Registra acquisto"><div class="app-modal-card"><button class="modal-close" id="purchaseClose" type="button" aria-label="Chiudi">×</button><div id="purchaseMount"></div></div></div>
 <div class="app-modal hidden" id="addAssetOverlay" role="dialog" aria-modal="true" aria-label="Aggiungi investimento"><div class="app-modal-card"><button class="modal-close" id="addAssetClose" type="button" aria-label="Chiudi">×</button><h2>Aggiungi investimento</h2><div class="field"><label for="assetSearch">Cerca per nome, ticker, ISIN o crypto</label><div class="flex"><input class="order-select" id="assetSearch" placeholder="Es. Amazon, 1AMZN.MI, oro, Bitcoin"/><button class="btn primary" id="assetSearchBtn" type="button">Cerca</button></div></div><div class="hint" id="assetSearchHint">Seleziona la quotazione sulla borsa e nella valuta corretta.</div><div class="search-results" id="assetSearchResults"></div><div class="notice hidden" id="assetSearchError"></div><div id="assetNewFields" class="hidden"><button class="btn" id="assetChooseAnother" type="button">← Scegli un altro titolo</button><h3 id="chosenAssetName"></h3><p class="sub" id="chosenAssetExchange"></p><div class="editgrid"><div class="field"><label>Tipo</label><select id="newAssetType" class="order-select"><option value="Azioni">Azione</option><option value="ETF">ETF</option><option value="ETF monetari">ETF monetario</option><option value="Materie prime">Materie prime</option><option value="Obbligazioni">Obbligazione</option><option value="ETC/ETN">ETC / ETN</option><option value="Oro">Oro / argento</option><option value="Crypto">Criptovaluta</option><option value="Valute">Valuta</option></select></div><div class="field"><label>ISIN (facoltativo)</label><input id="newAssetIsin" placeholder="Se disponibile" maxlength="12"/></div><div class="field"><label>Valuta quotazione</label><select class="order-select" id="newAssetCurrency"><option>EUR</option><option>USD</option><option>GBP</option><option>CHF</option><option>JPY</option><option>CAD</option><option>AUD</option></select></div><div class="field"><label>Cambio in EUR (1 unità valuta = €)</label><input type="number" id="newAssetFx" step="any" min="0" value="1" inputmode="decimal"/></div><div class="investment-entry" style="grid-column:1/-1"><div class="field"><label for="newAssetDate">Data effettiva del primo acquisto</label><div class="entry-date-row"><input type="date" id="newAssetDate"/><button type="button" class="btn" data-first-date="newAssetDate">Prima data app</button></div></div><p class="entry-explain">Oggi è preselezionato. “Prima data app” imposta la prima rilevazione presente nel tuo storico: serve per registrare titoli acquistati in passato, senza inventare prezzi storici.</p><label class="sub">Che dato conosci del tuo investimento?</label><div class="entry-choice"><label><input type="radio" name="newAssetInputMode" value="qty" checked/> Numero quote</label><label><input type="radio" name="newAssetInputMode" value="eur"/> Euro investiti</label></div><div id="newAssetAmountWrap" class="field entry-field-hidden"><label for="newAssetAmount">Importo totale acquistato (€)</label><input id="newAssetAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Anche per Bitcoin e altri strumenti frazionabili. L'app ricava automaticamente le quote usando il prezzo effettivo e il cambio indicato.</p></div></div><div class="field" id="newAssetQuantityWrap"><label for="newAssetQuantity">Quantità di quote (anche frazionate; BTP: nominale in €)</label><input id="newAssetQuantity" type="number" min="0" step="any" inputmode="decimal"/></div><div class="field"><label for="newAssetPmc">Prezzo effettivo pagato per quota (valuta del titolo; BTP: prezzo per 100 € nominali)</label><input id="newAssetPmc" type="number" min="0" step="any" inputmode="decimal"/></div><div id="newAssetEntryPreview" class="entry-computed" aria-live="polite">Seleziona la modalità e inserisci il prezzo pagato.</div></div><button class="btn primary full-btn" id="addAssetCommit">Aggiungi al portafoglio</button><p class="hint">Controlla ticker, borsa, valuta, cambio e prezzo di acquisto effettivo: la quotazione proposta è soltanto indicativa. Quote frazionate supportate. L’inserimento non ricostruisce lo storico passato.</p></div></div></div>
 <div class="app-modal hidden" id="removeAssetOverlay" role="dialog" aria-modal="true" aria-label="Elimina investimento inserito per errore"><div class="app-modal-card"><button class="modal-close" id="removeAssetClose" type="button" aria-label="Chiudi">×</button><h2 id="removeAssetTitle">Elimina investimento inserito per errore</h2><p class="hint">Questa azione corregge un titolo inserito per errore. <strong>Non registra una vendita.</strong> Per vendere utilizza «Registra vendita» sotto il titolo.</p><div class="notice warn">La rimozione cancella le operazioni di questo titolo e riavvia lo storico per non mostrare rendimenti inesatti. Esporta prima un backup.</div><button id="removeAsError" class="btn danger-outline full-btn" type="button">Conferma rimozione per errore</button></div></div>
@@ -970,7 +990,7 @@ function renderHistory(){
  const el=$('historyGraph'),start=$('historyStart'),summary=$('historySummary'),perf=$('historyPerformance'),detail=$('historyDayDetail');
  refreshHistoryCategoryOptions();
  historyComparableScope=null;
- const observed=snapshots.filter(s=>Number.isFinite(trackedValue(s))).sort((a,b)=>a.date.localeCompare(b.date));
+ const observed=snapshots.filter(s=>(prefs.showReconstructed!==false||s.source!=='reconstructed')&&Number.isFinite(trackedValue(s))).sort((a,b)=>a.date.localeCompare(b.date));
  const maxMode=historyRange==='all';updateMethodButtons();showMethodHelp(maxMode);renderTradeEvents();
  if(!historySelectedCats().length){el.innerHTML='<div class="history-empty">Attiva almeno una categoria nella Dashboard.</div>';summary.innerHTML='';perf.innerHTML='';detail.classList.add('hidden');return}
  if(!observed.length){el.innerHTML='<div class="history-empty">Nessuna rilevazione completa per le categorie scelte. Puoi tentare di recuperare le quotazioni storiche verificate.</div>';summary.innerHTML='';perf.innerHTML='';detail.classList.add('hidden');return}
@@ -1054,6 +1074,14 @@ async function historicYahooCloses(symbol,currency){
  if(!result.size)throw Error(symbol+': nessuna chiusura verificata');
  return result;
 }
+async function historicBondCloses(isin){
+ const response=await fetch('/.netlify/functions/bond-history?isin='+encodeURIComponent(isin)+'&range=1y',{cache:'no-store'});
+ if(!response.ok)throw Error('Storico obbligazione '+isin+': HTTP '+response.status);
+ const d=await response.json();
+ if(d.isin!==isin||d.unit!=='percentOfNominal'||!Array.isArray(d.points))throw Error('Dati bond incompatibili');
+ const map=new Map();for(const item of d.points){const t=Number(item.t),price=Number(item.p);if(t>0&&price>40&&price<170)map.set(new Date(t).toISOString().slice(0,10),price)}
+ if(!map.size)throw Error('Nessuna chiusura verificata '+isin);return map;
+}
 function snapshotTradePosition(assetId,date){
  let qty=0,cost=0;
  for(const t of orderAssetTrades(assetId)){
@@ -1077,59 +1105,57 @@ function historicCloseOn(map,date,crypto){
  return null;
 }
 let historyBackfillBusy=false;
-async function backfillTransactionHistory(){
+async function backfillTransactionHistory(categories=null){
  if(historyBackfillBusy)return;
- const b=$('historyBackfill'),label=$('historyBackfillStatus');historyBackfillBusy=true;b.disabled=true;
+ const b=$('historyBackfill'),label=categories?$('wealthBackfillStatus'):$('historyBackfillStatus');historyBackfillBusy=true;b.disabled=true;const previousCategory=historyCategory;const sourceCats=categories||[historyCategory];
  label.textContent='Recupero prezzi verificati in corso…';
  try{
-  const selected=state.assets.filter(a=>historyCatIncluded(a.cat));
-  if(!selected.length)throw Error('Seleziona almeno una categoria nella Dashboard.');
-  const dated=trades.filter(t=>historyCatIncluded(t.cat)&&/^\d{4}-\d{2}-\d{2}$/.test(t.date));
-  if(!dated.length)throw Error('Non ci sono transazioni datate per queste categorie.');
-  // No hypothetical prices for savings accounts or bonds without a history API.
-  const used=selected.filter(a=>dated.some(t=>t.asset===a.id));
-  const missing=used.filter(a=>!a.symbol || !['EUR','USD','GBP','CHF','JPY','CAD','AUD'].includes(currencyOf(a)));
-  if(missing.length)throw Error('Manca una fonte storica giornaliera per: '+missing.map(a=>a.name).join(', ')+'. Le rilevazioni già osservate restano utilizzabili.');
-  const firstDate=dated.reduce((d,t)=>t.date<d?t.date:d,dated[0].date),start=Math.max(days(firstDate),days(today())-365),end=days(today());
-  if(end<=start)throw Error('Non esistono giornate passate da ricostruire.');
-  const historical=new Map();
-  const fxMaps=new Map();
-  for(const a of used){
-   label.textContent='Recupero '+a.name+'…';
-   historical.set(a.id,await historicYahooCloses(a.symbol,currencyOf(a)));
-   const currency=currencyOf(a);
-   if(currency!=='EUR'&&!fxMaps.has(currency))fxMaps.set(currency,await historicYahooCloses('EUR'+currency+'=X',currency));
-  }
-  let added=0,missingDays=0;
-  for(let epoch=start;epoch<end;epoch++){
-   const date=new Date(epoch*86400000).toISOString().slice(0,10);
-   if(snapshots.some(x=>x.date===date&&x.source==='observed'))continue;
-   const byCat={},byAsset={};CAT.forEach(([cat])=>byCat[cat]={value:0,capital:0});
-   let complete=true;
-   for(const a of used){
-    const pos=snapshotTradePosition(a.id,date);if(!pos){complete=false;break}
-    if(pos.q<=0)continue;
-    const price=historicCloseOn(historical.get(a.id),date,a.cat==='Crypto');
-    if(!(price>0)){complete=false;break}
-    const rate=currencyOf(a)==='EUR'?1:(()=>{const x=historicCloseOn(fxMaps.get(currencyOf(a)),date,false);return x>0?1/x:NaN})();
-    if(!(rate>0)){complete=false;break}
-    const value=pos.q*price*rate/(a.cat==='Obbligazioni'?100:1);
-    byAsset[a.id]={cat:a.cat,quantity:pos.q,capital:pos.capital,value,price,currency:currencyOf(a),fxRate:rate};
-    byCat[a.cat].value+=value;byCat[a.cat].capital+=pos.capital;
+  let added=0,missingDays=0;const errors=[];
+  for(const chosenCat of sourceCats){
+   historyCategory=chosenCat;
+   const selected=state.assets.filter(a=>a.cat===chosenCat), dated=trades.filter(t=>t.cat===chosenCat&&/^\d{4}-\d{2}-\d{2}$/.test(t.date));
+   const used=selected.filter(a=>dated.some(t=>t.asset===a.id));
+   if(!used.length)continue;
+   const unsupported=used.filter(a=>(!a.symbol&&!(a.cat==='Obbligazioni'&&a.isin))||!['EUR','USD','GBP','CHF','JPY','CAD','AUD'].includes(currencyOf(a)));
+   if(unsupported.length){errors.push(chosenCat+': nessuna fonte per '+unsupported.map(a=>a.name).join(', '));continue}
+   const firstDate=dated.reduce((d,t)=>t.date<d?t.date:d,dated[0].date),start=Math.max(days(firstDate),days(today())-365),end=days(today());
+   const historical=new Map(),fxMaps=new Map();
+   try{
+    for(const a of used){
+     label.textContent='Recupero '+a.name+' ('+chosenCat+')…';
+     historical.set(a.id,a.cat==='Obbligazioni'&&a.isin?await historicBondCloses(a.isin):await historicYahooCloses(a.symbol,currencyOf(a)));
+     const currency=currencyOf(a);
+     if(currency!=='EUR'&&!fxMaps.has(currency))fxMaps.set(currency,await historicYahooCloses('EUR'+currency+'=X',currency));
+    }
+   }catch(e){errors.push(chosenCat+': '+String(e.message||e));continue}
+   for(let epoch=start;epoch<end;epoch++){
+    const date=new Date(epoch*86400000).toISOString().slice(0,10),byAsset={},entry={value:0,capital:0};
+    const existing=snapshots.find(x=>x.date===date);
+    if(existing?.source==='observed')continue;
+    let complete=true;
+    for(const a of used){
+     const pos=snapshotTradePosition(a.id,date);if(!pos){complete=false;break}if(pos.q<=0)continue;
+     const price=historicCloseOn(historical.get(a.id),date,a.cat==='Crypto');if(!(price>0)){complete=false;break}
+     const rate=currencyOf(a)==='EUR'?1:(()=>{const x=historicCloseOn(fxMaps.get(currencyOf(a)),date,false);return x>0?1/x:NaN})();
+     if(!(rate>0)){complete=false;break}
+     const value=pos.q*price*rate/(a.cat==='Obbligazioni'?100:1);
+     byAsset[a.id]={cat:a.cat,quantity:pos.q,capital:pos.capital,value,price,currency:currencyOf(a),fxRate:rate};entry.value+=value;entry.capital+=pos.capital;
+    }
+    if(!complete){missingDays++;continue}
+    const base=existing&&existing.source==='reconstructed'?existing:null;
+    const byCat=base?{...base.byCat}:{};
+    byCat[chosenCat]=entry;
+    const sn={date,stamp:epoch*86400000,byCat,byAsset:{...(base?.byAsset||{}),...byAsset},source:'reconstructed',coverage:'verified-selected',selectedCategories:[...new Set([...(base?.selectedCategories||[]),chosenCat])]};
+    if(existing){const i=snapshots.indexOf(existing);snapshots[i]=sn}else snapshots.push(sn);
+    added++;
    }
-   if(!complete){missingDays++;continue}
-   const sn={date,stamp:epoch*86400000,byCat,byAsset,source:'reconstructed',coverage:'verified-selected',selectedCategories:[historyCategory]};
-   const i=snapshots.findIndex(x=>x.date===date);
-   if(i>=0){if(snapshots[i].source==='reconstructed'){const old=snapshots[i];sn.byCat={...old.byCat,[historyCategory]:sn.byCat[historyCategory]};sn.byAsset={...old.byAsset,...sn.byAsset};sn.selectedCategories=[...new Set([...(old.selectedCategories||[]),historyCategory])];snapshots[i]=sn}}
-   else snapshots.push(sn);
-   added++;
   }
   snapshots.sort((a,b)=>a.date.localeCompare(b.date));saveTimeline();renderHistory();
-  label.textContent=added+' giornate ricostruite da quotazioni verificate; '+missingDays+' non ricostruibili. Il grafico non inventa prezzi.';
+  label.textContent=added+' categorie/giornate ricostruite, '+missingDays+' mancanti. '+(errors.length?errors.slice(0,2).join(' | '):'')+' I prezzi non disponibili non vengono inventati.';renderWealthGraph();
  }catch(e){label.textContent='Ricostruzione non completata: '+String(e.message||e).slice(0,240)}
- finally{historyBackfillBusy=false;b.disabled=false}
+ finally{historyCategory=previousCategory;historyBackfillBusy=false;b.disabled=false;renderHistory()}
 }
-$('historyBackfill').onclick=()=>void backfillTransactionHistory();
+$('historyBackfill').onclick=()=>void backfillTransactionHistory();document.getElementById('wealthBackfill').onclick=()=>void backfillTransactionHistory(CAT.filter(([c])=>filter[c]).map(([c])=>c));
 
 $('historyGraph').addEventListener('click',e=>{const n=e.target.closest('[data-history-date]');if(!n)return;historySelectedDay=n.dataset.historyDate;renderHistory();});
 $('historyGraph').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const n=e.target.closest('[data-history-date]');if(!n)return;e.preventDefault();historySelectedDay=n.dataset.historyDate;renderHistory()});
@@ -1229,6 +1255,15 @@ function applyPreferences(){
  const visitMascot=$('visitMascot');if(visitMascot)visitMascot.innerHTML=mascotSVG('negative',prefs.colors.negative,true);
  updateVisitStatus();
 }
+// b.7.13 settings for historic reconstruction and quote-market filter
+function updateHistoryAndSearchSettings(){
+ const t=document.getElementById('settingShowReconstructed'),r=document.getElementById('settingSearchRegion');
+ if(t)t.checked=prefs.showReconstructed!==false;
+ if(r)r.value=prefs.searchRegion||'world';
+}
+document.getElementById('settingShowReconstructed').addEventListener('change',e=>{prefs.showReconstructed=e.target.checked;savePreferences();renderHistory();renderWealthGraph()});
+document.getElementById('settingSearchRegion').addEventListener('change',e=>{prefs.searchRegion=e.target.value;savePreferences()});
+updateHistoryAndSearchSettings();
 function savePreferences(){try{store.setItem(PREF_KEY,JSON.stringify(prefs));store.setItem(VISIT_SUPPRESS_KEY,String(!prefs.warnings))}catch(e){}applyPreferences();render();$('settingsSaved').textContent='Preferenze salvate sul dispositivo.'}
 function updateVisitStatus(){let n=0;try{const x=JSON.parse(store.getItem(VISIT_COUNTER_KEY));if(x&&x.date===getVisitDay())n=Number(x.count)||0}catch(e){}$('visitToday').textContent='Ingressi oggi: '+n}
 $('settingTheme').onchange=e=>{prefs.theme=e.target.value;savePreferences()};
@@ -1312,11 +1347,11 @@ function renderWealthGraph(){
  panel.classList.toggle('hidden',prefs.wealthGraph===false);if(prefs.wealthGraph===false)return;
  document.querySelectorAll('#wealthRanges button').forEach(b=>b.classList.toggle('selected',b.dataset.wealthRange===wealthRange));
  const cats=CAT.filter(([cat])=>filter[cat]).map(([cat])=>cat);
- const measured=snapshots.filter(s=>s&&s.byCat&&cats.every(cat=>s.byCat[cat]&&Number.isFinite(Number(s.byCat[cat].value)))&&s.coverage==='all-assets'&&s.source==='observed')
+ const measured=snapshots.filter(s=>s&&s.byCat&&cats.every(cat=>(s.byCat[cat]&&Number.isFinite(Number(s.byCat[cat].value)))||(s.source==='reconstructed'&&!state.assets.some(a=>a.cat===cat)&&!trades.some(t=>t.cat===cat)))&&((s.coverage==='all-assets'&&s.source==='observed')||(prefs.showReconstructed!==false&&s.source==='reconstructed'&&cats.every(c=>s.selectedCategories?.includes(c)||(!state.assets.some(a=>a.cat===c)&&!trades.some(t=>t.cat===c))))))
   .sort((a,b)=>a.date.localeCompare(b.date));
  const end=days(today()),arr=measured.filter(s=>wealthRange==='all'||end-days(s.date)<=Number(wealthRange));
  if(arr.length<2){target.innerHTML='<p class="history-empty">Andamento disponibile dalla prima rilevazione effettiva del portafoglio. Servono almeno due giornate osservate comparabili.</p>';return}
- const vals=arr.map(s=>cats.reduce((n,c)=>n+Number(s.byCat[c].value||0),0)),mn=Math.min(...vals),mx=Math.max(...vals),pad=Math.max((mx-mn)*.15,Math.max(1,mx*.004));
+ const vals=arr.map(s=>cats.reduce((n,c)=>n+Number(s.byCat[c]?.value||0),0)),mn=Math.min(...vals),mx=Math.max(...vals),pad=Math.max((mx-mn)*.15,Math.max(1,mx*.004));
  const lo=mn-pad,hi=mx+pad,W=340,H=145,L=14,R=14,T=13,B=28;
  const x=i=>L+(W-L-R)*i/Math.max(1,arr.length-1),y=v=>T+(H-T-B)*(hi-v)/(hi-lo);
  const path=vals.map((v,i)=>(i?'L':'M')+x(i).toFixed(2)+' '+y(v).toFixed(2)).join(' ');
@@ -1336,8 +1371,8 @@ const visible=groups(),den=visible.reduce((s,x)=>s+(mode==='now'?x.value:x.capit
 const displayed=state.assets.filter(a=>filter[a.cat]&&Number(a.q)>0);$('assetList').innerHTML=displayed.length?displayed.map(a=>{const c=cap(a),v=val(a),g=v-c;return `<div class="asset"><div class="flex"><div class="asset-ident">${prefs.showLogos!==false?issuerIcon(a.id):''}<div class="asset-ident-copy"><div class="asset-name"><button type="button" class="asset-name-button" data-detail-id="${svgEscape(a.id)}" aria-label="Apri grafico di ${svgEscape(a.name)}"><span>${svgEscape(a.name)}</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 3 8-8"/><path d="M15 6h6v6"/></svg></button></div><div class="asset-meta">${categoryGlyph(a.cat)} <strong class="category-name">${svgEscape(a.cat)}</strong> · ${a.id==='btp'?eur(a.q)+' nominali':a.id==='ing'?'Tasso '+pct(a.annualRate/100):number(a.q)+' quote'}${a.id==='goog'?' · GEM Milano EUR':a.id==='btp'?' · MOT EUR':''}${currencyOf(a)!=='EUR'?' · '+currencyOf(a)+' · cambio '+number(assetFx(a))+' EUR':''}${prefs.showQuoteTime&&a.quoteAt?' · Quotazione '+a.quoteAt:''}</div><div class="asset-topstats"><span>Quote: <b>${a.id==='btp'?eur(a.q)+' nominali':number(a.q)}</b></span><span>Peso selezione: <b>${pct(value?v/value:0)}</b></span></div></div></div><strong class="${g>=0?'gain':'loss'} nums">${g>=0?'+':''}${pct(c?g/c:0)}</strong></div><div class="asset-cols"><div class="asset-col"><span>Investito</span><strong>${eur(c)}</strong></div><div class="asset-col"><span>Valore oggi</span><strong>${eur(v)}</strong></div><div class="asset-col"><span>${a.id==='btp'?'PMC (% nominale)':'PMC'}</span><strong>${a.cat==='Obbligazioni'?number(a.pmc)+' / 100':localMoney(a.pmc,currencyOf(a))}</strong></div><div class="asset-col"><span>${a.id==='ing'?'Tasso annuo lordo':a.id==='btp'?'Prezzo oggi / 100 €':a.id==='bfp'?'Quotazione':'Prezzo attuale'}</span><strong>${a.id==='ing'?pct(a.annualRate/100):a.id==='bfp'?'Non quotato':a.cat==='Obbligazioni'?number(a.p)+' / 100':localMoney(a.p,currencyOf(a))}</strong>${currencyOf(a)!=='EUR'?`<span class="currency-help">≈ ${eur(Number(a.p)*assetFx(a))} / unità</span>`:''}</div></div><div class="asset-profit ${g>=0?'gain':'loss'}">${g>=0?'+':''}${eur(g)} lordi</div>${(['ETF','ETF monetari','Materie prime','Azioni','Obbligazioni','ETC/ETN','Oro','Crypto','Valute'].includes(a.cat))?`<div class="asset-actions"><button class="btn" data-buy-id="${a.id}">+ Registra acquisto</button><button class="btn" data-sale-id="${a.id}">− Registra vendita</button><button class="btn" data-transactions-id="${a.id}">◷ Storico transazioni</button><button class="asset-delete" aria-label="Elimina ${svgEscape(a.name)} inserito per errore" data-delete-id="${a.id}">×</button></div>`:`<div class="asset-actions"><button class="btn" data-transactions-id="${a.id}">◷ Storico transazioni</button><button class="asset-delete" data-delete-id="${a.id}" aria-label="Elimina ${svgEscape(a.name)} inserito per errore">×</button></div>`}</div>`}).join(''):'<p class="hint">Nessuna posizione visibile. Riattiva una categoria per mostrarla.</p>';
 const ing=state.assets.find(a=>a.id==='ing');$('ingSection').classList.toggle('hidden',!ing||!filter['Conto deposito']);if(ing){$('ingRate').textContent=pct(ing.annualRate/100);$('ingInterest').textContent=eur(ingInterest(ing));$('ingBalance').textContent=eur(val(ing))} $('maturities').innerHTML=state.assets.filter(a=>a.maturity!=null&&filter[a.cat]).map(a=>`<div class="box"><strong>${a.name}</strong><div class="maturity-grid" style="margin-top:9px"><div><span>Investito</span><strong>${eur(cap(a))}</strong></div><div><span>A scadenza lordo</span><strong>${eur(a.maturity)}</strong></div></div><div class="gain" style="margin-top:7px;font-size:13px;font-weight:700">${a.maturity>=cap(a)?'+':''}${eur(a.maturity-cap(a))} (${pct(cap(a)?(a.maturity-cap(a))/cap(a):0)})</div></div>`).join('');
 if(!editing)$('editor').classList.remove('open');renderHistory();renderWealthGraph();if(typeof updateMascotMarket==='function')updateMascotMarket();}
-function renderEditor(){ $('editor').classList.toggle('open',editing);$('editToggle').textContent=editing?'Chiudi':'Rettifica dati'; if(!editing)return;const list=state.assets.filter(a=>filter[a.cat]);$('editItems').innerHTML=list.map(a=>`<div class="editrow"><strong>${a.name}</strong><div class="editgrid"><div class="field"><label>${a.id==='btp'?'Nominale (€)':'Quantità / unità'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="q" value="${a.q}"></div><div class="field"><label>${a.id==='btp'?'PMC (% del nominale)':'Prezzo medio carico (€)'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="pmc" value="${a.pmc}"></div><div class="field"><label>${a.id==='btp'?'Prezzo attuale (%)':'Prezzo attuale (€)'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="p" value="${a.p}"></div><div class="field"><label>Capitale investito (€)</label><div style="padding-top:10px;font-weight:800" id="computed-${a.id}">${eur(cap(a))}</div></div>${currencyOf(a)!=='EUR'?`<div class="field"><label>Cambio EUR per 1 ${currencyOf(a)}</label><input data-id="${a.id}" data-key="fxRate" type="number" inputmode="decimal" step="any" min="0.000001" value="${assetFx(a)}"/></div>`:''}</div>${a.id==='ing'?`<div class="editgrid"><div class="field"><label>Tasso annuo lordo (%)</label><input data-id="ing" data-key="annualRate" type="number" inputmode="decimal" step="any" min="0" value="${a.annualRate}"></div><div class="field"><label>Interessi di partenza (€)</label><input data-id="ing" data-key="interestBase" type="number" inputmode="decimal" step="any" min="0" value="${a.interestBase}"></div><div class="field"><label>Data riferimento interessi</label><input data-id="ing" data-key="interestAnchor" type="date" value="${a.interestAnchor}"></div></div>`:''}${a.maturity!=null?`<div class="field"><label>Valore lordo a scadenza (€)</label><input data-id="${a.id}" data-key="maturity" type="number" inputmode="decimal" step="any" min="0" value="${a.maturity}"></div>`:''}</div>`).join('');}
-$('editItems').addEventListener('change',function(e){const node=e.target;if(!node.dataset.id)return;const a=state.assets.find(x=>x.id===node.dataset.id);if(!a)return;const k=node.dataset.key;let v=k==='interestAnchor'?node.value:Number(String(node.value).replace(',','.'));if(k!=='interestAnchor'&&(!Number.isFinite(v)||v<0))return;if(k==='interestAnchor'&&!/^\d{4}-\d{2}-\d{2}$/.test(v))return;a[k]=v;if(k==='p'){a.quoteAt=new Date().toLocaleString('it-IT')+' · manuale';a.quoteSource='Prezzo inserito manualmente';a.quoteUpdatedAt=null}save();trackSnapshot();render();renderEditor();if(k==='p'&&buyTarget()?.id===a.id&&!buyPriceEdited)syncBuyPrice()});
+function renderEditor(){ $('editor').classList.toggle('open',editing);$('editToggle').textContent=editing?'Chiudi':'Rettifica dati'; if(!editing)return;const list=state.assets.filter(a=>filter[a.cat]);$('editItems').innerHTML=list.map(a=>`<div class="editrow"><strong>${svgEscape(a.name)}</strong><div class="field" style="margin-top:10px"><label>Nome visualizzato del titolo (personalizzabile)</label><input type="text" maxlength="90" data-id="${svgEscape(a.id)}" data-key="name" value="${svgEscape(a.name)}" placeholder="Es. Il mio ETF globale"/><p class="entry-explain">Modifica solo il nome nell’app, non ticker, ISIN, quotazione o storico transazioni.</p></div><div class="editgrid"><div class="field"><label>${a.id==='btp'?'Nominale (€)':'Quantità / unità'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="q" value="${a.q}"></div><div class="field"><label>${a.id==='btp'?'PMC (% del nominale)':'Prezzo medio carico (€)'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="pmc" value="${a.pmc}"></div><div class="field"><label>${a.id==='btp'?'Prezzo attuale (%)':'Prezzo attuale (€)'}</label><input type="number" inputmode="decimal" step="any" min="0" data-id="${a.id}" data-key="p" value="${a.p}"></div><div class="field"><label>Capitale investito (€)</label><div style="padding-top:10px;font-weight:800" id="computed-${a.id}">${eur(cap(a))}</div></div>${currencyOf(a)!=='EUR'?`<div class="field"><label>Cambio EUR per 1 ${currencyOf(a)}</label><input data-id="${a.id}" data-key="fxRate" type="number" inputmode="decimal" step="any" min="0.000001" value="${assetFx(a)}"/></div>`:''}</div>${a.id==='ing'?`<div class="editgrid"><div class="field"><label>Tasso annuo lordo (%)</label><input data-id="ing" data-key="annualRate" type="number" inputmode="decimal" step="any" min="0" value="${a.annualRate}"></div><div class="field"><label>Interessi di partenza (€)</label><input data-id="ing" data-key="interestBase" type="number" inputmode="decimal" step="any" min="0" value="${a.interestBase}"></div><div class="field"><label>Data riferimento interessi</label><input data-id="ing" data-key="interestAnchor" type="date" value="${a.interestAnchor}"></div></div>`:''}${a.maturity!=null?`<div class="field"><label>Valore lordo a scadenza (€)</label><input data-id="${a.id}" data-key="maturity" type="number" inputmode="decimal" step="any" min="0" value="${a.maturity}"></div>`:''}</div>`).join('');}
+$('editItems').addEventListener('change',function(e){const node=e.target;if(!node.dataset.id)return;const a=state.assets.find(x=>x.id===node.dataset.id);if(!a)return;const k=node.dataset.key;let v=k==='interestAnchor'||k==='name'?node.value:Number(String(node.value).replace(',','.'));if(k==='name'){v=String(v).trim().replace(/\s+/g,' ');if(!v||v.length>90){alert('Inserisci un nome valido (massimo 90 caratteri).');renderEditor();return}}else if(k!=='interestAnchor'&&(!Number.isFinite(v)||v<0))return;if(k==='interestAnchor'&&!/^\d{4}-\d{2}-\d{2}$/.test(v))return;a[k]=v;if(k==='name'){trades.forEach(t=>{if(t.asset===a.id)t.assetName=v});saveTimeline()}if(k==='p'){a.quoteAt=new Date().toLocaleString('it-IT')+' · manuale';a.quoteSource='Prezzo inserito manualmente';a.quoteUpdatedAt=null}save();trackSnapshot();render();renderEditor();if(k==='p'&&buyTarget()?.id===a.id&&!buyPriceEdited)syncBuyPrice()});
 $('modeNow').onclick=()=>{mode='now';render()};$('modeCost').onclick=()=>{mode='cost';render()};$('filters').onclick=e=>{const b=e.target.closest('button[data-filter]');if(!b)return;filter[b.dataset.filter]=!filter[b.dataset.filter];historySelectedDay=null;saveFilters();render();if(editing)renderEditor()};$('editToggle').onclick=()=>{editing=!editing;renderEditor()};$('editDone').onclick=()=>{editing=false;renderEditor()};
 // Universal, portable backup. Store existing quote observations as well as
 // positions, transactions and daily full-portfolio readings.
@@ -1350,7 +1385,7 @@ function makePortableBundle(){
   assets:JSON.parse(JSON.stringify(state.assets)),lastUpdate:state.lastUpdate,
   filters:{...filter},snapshots:JSON.parse(JSON.stringify(snapshots)),
   trades:JSON.parse(JSON.stringify(trades)),preferences:JSON.parse(JSON.stringify(prefs)),
-  quoteHistory:observedPrices,detailQuoteHistory:(()=>{try{return JSON.parse(store.getItem('invesquo_asset_prices_v58')||'{}')}catch(_){return {}}})(),returnMethod,historyRange,
+  pacSchedules:readPacSchedules(),quoteHistory:observedPrices,detailQuoteHistory:(()=>{try{return JSON.parse(store.getItem('invesquo_asset_prices_v58')||'{}')}catch(_){return {}}})(),returnMethod,historyRange,
   note:'Solo rilevazioni effettivamente salvate. Le transazioni retrodatate non generano prezzi storici mancanti.'};
 }
 function applyPortableBundle(json){
@@ -1368,7 +1403,7 @@ function applyPortableBundle(json){
  for(const x of importedSnapshots){if(!x||!/^\d{4}-\d{2}-\d{2}$/.test(x.date))throw Error('Data di una rilevazione non valida.');}
  // validate first, then publish the whole state in the same operation
  state={assets:incoming,lastUpdate:String(json.lastUpdate||'Archivio importato')};
- snapshots=importedSnapshots;trades=importedTrades;
+ snapshots=importedSnapshots;trades=importedTrades;writePacSchedules(Array.isArray(json.pacSchedules)?json.pacSchedules:[]);
  filter={};CAT.forEach(([c])=>{filter[c]=typeof json.filters?.[c]==='boolean'?json.filters[c]:true});
  if(json.preferences&&typeof json.preferences==='object')prefs={...PREF_DEFAULTS,...json.preferences,colors:{...PREF_DEFAULTS.colors,...json.preferences.colors}};
  returnMethod=['portfolio','twrr'].includes(json.returnMethod)?json.returnMethod:'portfolio';
@@ -1385,7 +1420,7 @@ function showResetUndo(){const bar=$('resetUndoBar');if(bar)bar.classList.toggle
 $('reset').onclick=()=>{
  if(!confirm('Azzerare TUTTI i titoli, le transazioni e le rilevazioni del portafoglio? La schermata diventerà vuota. Subito dopo potrai premere «Annulla reset».'))return;
  try{store.setItem(RESET_UNDO_KEY,JSON.stringify(makePortableBundle()))}catch(e){alert('Impossibile salvare una copia di sicurezza per annullare. Reset interrotto.');return}
- state={assets:[],lastUpdate:'Portafoglio vuoto'};snapshots=[];trades=[];historySelectedDay=null;filter={};CAT.forEach(([c])=>filter[c]=true);
+ state={assets:[],lastUpdate:'Portafoglio vuoto'};snapshots=[];trades=[];writePacSchedules([]);historySelectedDay=null;filter={};CAT.forEach(([c])=>filter[c]=true);
  store.removeItem(PRICE_HISTORY_KEY);save();saveTimeline();saveFilters();refreshBuyOptions();render();if(editing)renderEditor();showResetUndo();
  $('settingsSaved').textContent='Portafoglio azzerato. Se è stato un errore, premi «Annulla reset» qui sotto.';
 };
@@ -1500,7 +1535,16 @@ async function quoteAnyCurrency(a){
   return {price:p,source:'Yahoo Finance · '+a.symbol,when:ts?new Date(ts*1000).toLocaleString('it-IT'):'data non disponibile'};
  }catch(e){issues.push(e.message)}}throw Error(issues.slice(-2).join('; '));
 }
-async function quote(a){return a.id==='goog'?investingAlphabetQuote():a.id==='btp'?btpQuote():a.symbol?(currencyOf(a)==='EUR'?yahooQuote(a):quoteAnyCurrency(a)):Promise.reject(Error('Nessuna fonte prezzo automatico per questo strumento'))}
+async function bondQuoteFromHistory(a){
+ if(!a.isin||!isinFormat(a.isin)||currencyOf(a)!=='EUR')throw Error('ISIN e valuta EUR necessari per lo storico MOT');
+ const response=await fetch('/.netlify/functions/bond-history?isin='+encodeURIComponent(a.isin)+'&range=1mo',{cache:'no-store'});
+ if(!response.ok)throw Error('Fonte MOT non disponibile: HTTP '+response.status);
+ const data=await response.json();if(data.isin!==a.isin||data.unit!=='percentOfNominal'||!Array.isArray(data.points))throw Error('ISIN o unità di quotazione non corrispondenti');
+ const prices=data.points.filter(p=>Number(p.t)>0&&Number(p.p)>40&&Number(p.p)<170).sort((x,y)=>x.t-y.t);if(!prices.length)throw Error('Manca il prezzo di mercato');
+ const last=prices.at(-1),date=new Date(Number(last.t));if(Math.abs(Date.now()-date.getTime())>7*86400000)throw Error('Prezzo obbligazione non recente');
+ return{price:Number(last.p),source:data.source||'MOT · Fonte storica',when:date.toLocaleDateString('it-IT')+' · chiusura'};
+}
+async function quote(a){return a.id==='goog'?investingAlphabetQuote():a.id==='btp'?btpQuote():a.cat==='Obbligazioni'&&a.isin?bondQuoteFromHistory(a):a.symbol?(currencyOf(a)==='EUR'?yahooQuote(a):quoteAnyCurrency(a)):Promise.reject(Error('Nessuna fonte prezzo automatico per questo strumento'))}
 // Refresh FX independently from equity quotes: EURUSD=X is USD per EUR, hence invert.
 let lastFxCheck=0;
 async function refreshFxRates(){
@@ -1524,7 +1568,7 @@ async function refreshFxRates(){
 async function refresh(manual){if(busy||(!manual&&(!auto||document.visibilityState==='hidden'||!navigator.onLine||Date.now()-lastAttempt<(Number(prefs.refreshMinutes)||1)*60000)))return;busy=true;lastAttempt=Date.now();$('refresh').disabled=true;$('refresh').textContent='Aggiorno…';const selected=state.assets.filter(a=>a.symbol||a.id==='btp');const results=await Promise.all(selected.map(async a=>{try{return{a,quote:await quote(a)}}catch(e){return{a,error:e.message||'rete non disponibile'}}}));let good=0;const failures=[];for(const r of results){if(r.quote){r.a.p=r.quote.price;r.a.quoteAt=r.quote.when;r.a.quoteSource=r.quote.source;r.a.quoteUpdatedAt=new Date().toISOString();good++}else failures.push(r.a.name+': '+r.error)}if(good){state.lastUpdate=new Date().toLocaleString('it-IT')+' · '+good+'/'+selected.length+' quotazioni';recordDetailPrices();save();trackSnapshot();render();if(editing)renderEditor();if(!buyPriceEdited)syncBuyPrice()}$('refreshInfo').textContent='Ultimo controllo: '+new Date().toLocaleString('it-IT')+' · '+good+'/'+selected.length+' aggiornati';notice(good?good+' quotazioni aggiornate su '+selected.length+'.'+(failures.length?' Non aggiornati: '+failures.join(' | '):' Tutti i dati ricevuti.'):'Nessuna quotazione aggiornata. Prezzi precedenti conservati. '+failures.slice(0,2).join(' | '),good===0||failures.length>0);busy=false;$('refresh').disabled=false;$('refresh').textContent='↻ Aggiorna';void refreshFxRates()}
 
 // New buys: preview does not mutate positions. Confirmation updates quantity and weighted-average cost.
-const tradeables=()=>state.assets.filter(a=>['Azioni','ETF','Obbligazioni','ETC/ETN','Oro','Crypto','Valute'].includes(a.cat));
+const tradeables=()=>state.assets.filter(a=>['Azioni','ETF','ETF monetari','Materie prime','Obbligazioni','ETC/ETN','Oro','Crypto','Valute'].includes(a.cat));
 function buyTarget(){return state.assets.find(a=>a.id===$('buyAsset').value)}
 function refreshBuyOptions(){const prior=$('buyAsset').value;$('buyAsset').innerHTML=tradeables().map(a=>'<option value="'+svgEscape(a.id)+'">'+svgEscape(a.name)+'</option>').join('');if(tradeables().some(a=>a.id===prior))$('buyAsset').value=prior;else $('buyAsset').value=tradeables()[0]?.id||'';syncBuyPrice();if(typeof refreshSaleOptions==='function')refreshSaleOptions()}
 function syncBuyPrice(){const a=buyTarget();if(a&&!buyPriceEdited)$('buyPrice').value=a.p;renderBuy()}
@@ -1955,7 +1999,14 @@ function venueRank(r){const sym=String(r.symbol||'').toUpperCase(),ex=String((r.
 }
 function guessYahooCode(s){return /^[A-Z0-9.\-=^]{1,24}$/i.test(s)&&/\.|=|\^/.test(s)}
 async function yahooSearchTerm(q){const u='https://query1.finance.yahoo.com/v1/finance/search?q='+encodeURIComponent(q)+'&quotesCount=35&newsCount=0';
- const errors=[];for(const url of [u,...relayUrls(u)]){try{const d=JSON.parse(await readUrl(url,5500));return (d.quotes||[]).filter(x=>x.symbol)}catch(e){errors.push(String(e.message))}}throw Error(errors.slice(-1).join(' '));}
+ const errors=[];for(const url of ['/.netlify/functions/search?q='+encodeURIComponent(q),u,...relayUrls(u)]){try{const d=JSON.parse(await readUrl(url,5500));if(!Array.isArray(d.quotes))throw Error('Nessun risultato dal servizio');return d.quotes.filter(x=>x.symbol)}catch(e){errors.push(String(e.message))}}throw Error(errors.slice(-2).join(' '));}
+function invesquoRegion(result){
+ const region=String(prefs.searchRegion||'world');if(region==='world')return true;
+ const flag=exchangeFlag(result),exchange=String(result.exchange||'').toUpperCase(),sym=String(result.symbol||'').toUpperCase();
+ const italy=flag==='🇮🇹'||exchange==='MIL'||/\.MI$/.test(sym),usa=flag==='🇺🇸'||/^(NMS|NYQ|NAS|ASE|NASDAQ|NYSE)$/.test(exchange);
+ const europe=italy||['🇩🇪','🇫🇷','🇬🇧','🇳🇱','🇨🇭','🇪🇸','🇧🇪','🇸🇪','🇩🇰','🇳🇴','🇫🇮','🇦🇹','🇮🇪','🇵🇹'].includes(flag);
+ return region==='it'?italy:region==='us'?usa:europe;
+}
 async function searchYahooQuotes(term){
  const word=term.trim(),t=word.toUpperCase(),isin=isinFormat(t)&&isinChecksum(t);
  const lookups=[word];if(/amazon|amzn/i.test(word))lookups.push('1AMZN.MI','AMZN','Amazon Milano');
@@ -1971,13 +2022,15 @@ async function searchYahooQuotes(term){
  if(/^(xeon|lu0290358497)$/i.test(word))candidates.push({symbol:'XEON.MI',shortname:'Xtrackers II EUR Overnight Rate Swap UCITS ETF 1C',longname:'Xtrackers II EUR Overnight Rate Swap UCITS ETF 1C',exchDisp:'Borsa Italiana · ETF',exchange:'MIL',currency:'EUR',quoteType:'ETF',isin:'LU0290358497'});
  if(/^(qqq|us46090e1038)$/i.test(word))candidates.push({symbol:'QQQ',shortname:'Invesco QQQ Trust Series 1',longname:'Invesco QQQ Trust Series 1',exchDisp:'Nasdaq',exchange:'NMS',currency:'USD',quoteType:'ETF',isin:'US46090E1038'});
  if(/amazon|amzn/i.test(word))candidates.push({symbol:'1AMZN.MI',shortname:'Amazon · quotazione Milano (da verificare)',longname:'Amazon.com · GEM Milano',exchDisp:'Borsa Italiana Milano',exchange:'MIL',currency:'EUR',quoteType:'EQUITY'});
+ if(/^(goog|googl|1goog)$/i.test(word))candidates.push({symbol:'1GOOG.MI',shortname:'Alphabet C · Milano',longname:'Alphabet Inc. Classe C',exchDisp:'GEM Milano',exchange:'MIL',currency:'EUR',quoteType:'EQUITY',isin:'US02079K1079'});
  if(isin){candidates.push({symbol:t,shortname:'Obbligazione · ISIN '+t,longname:'Obbligazione '+t+' (identità e mercato da verificare)',exchDisp:'Obbligazione · mercato da indicare',exchange:'BOND',currency:'EUR',quoteType:'BOND',isin:t,manual:true});}
+ if(/\b(btp|btp valore|obbligazioni|bond|moti|mot)\b/i.test(word)&&!isin)candidates.push({symbol:'',shortname:'Per i BTP inserisci l’ISIN da 12 caratteri',quoteType:'BOND'});
  if(isin){try{const r=await fetch('/.netlify/functions/instruments?isin='+encodeURIComponent(t),{cache:'no-store'});if(r.ok){const d=await r.json();candidates.push(...(d.results||[]).map(x=>({symbol:x.symbol,shortname:x.name,longname:x.name,exchDisp:x.market,exchange:x.exchange,quoteType:x.type,currency:x.currency,isin:t})))}}catch(_){}}
  const found=await Promise.allSettled(lookups.map(q=>yahooSearchTerm(q)));
  found.forEach(r=>{if(r.status==='fulfilled')candidates.push(...r.value)});
  if(guessYahooCode(t)&&!candidates.some(c=>String(c.symbol).toUpperCase()===t))candidates.unshift({symbol:t,shortname:t,longname:t,quoteType:'EQUITY'});
  const map=new Map();for(const c of candidates){if(!c.symbol)continue;const key=String(c.symbol).toUpperCase();if(!map.has(key))map.set(key,c)}
- return [...map.values()].sort((a,b)=>venueRank(a)-venueRank(b)||String(a.symbol).localeCompare(String(b.symbol))).slice(0,45);
+ const all=[...map.values()];const subset=all.filter(x=>invesquoRegion(x)||x.manual&&isin);return subset.sort((a,b)=>venueRank(a)-venueRank(b)||String(a.symbol).localeCompare(String(b.symbol))).slice(0,45);
 }
 
 function exchangeFlag(r){
@@ -2006,7 +2059,7 @@ function searchIssuerLogo(r){
 }
 function formatSearchResult(a){return svgEscape((a.longname||a.shortname||a.symbol)+' · '+a.symbol)}
 $('assetSearchBtn').onclick=async()=>{const q=$('assetSearch').value.trim(),results=$('assetSearchResults'),hint=$('assetSearchHint');if(!q)return;results.innerHTML='<p class="sub">Cerco su Yahoo Finance…</p>';$('assetNewFields').classList.add('hidden');$('assetSearchError').classList.add('hidden');
- try{const data=await searchYahooQuotes(q);results.innerHTML=data.map((a,i)=>'<button type="button" class="search-row" data-choice="'+i+'"><span class="asset-search-main">'+searchIssuerLogo(a)+'<strong>'+formatSearchResult(a)+'</strong></span><small><span class="search-exchange-flag">'+exchangeFlag(a)+'</span>'+svgEscape([a.exchDisp||a.exchange||'Borsa non indicata',a.quoteType,a.currency||'Valuta da verificare'].join(' · '))+'</small></button>').join('')||'<p class="hint">Nessun risultato. Prova il nome o ticker, poi verifica ISIN e borsa.</p>';window.__invesquoSearchResults=data;
+ try{const data=await searchYahooQuotes(q);results.innerHTML=data.map((a,i)=>'<button type="button" class="search-row" data-choice="'+i+'"><span class="asset-search-main">'+searchIssuerLogo(a)+'<strong>'+formatSearchResult(a)+'</strong></span><small><span class="search-exchange-flag">'+exchangeFlag(a)+'</span>'+svgEscape([a.exchDisp||a.exchange||'Borsa non indicata',a.quoteType,a.currency||'Valuta da verificare'].join(' · '))+'</small></button>').join('')||'<p class="hint">Nessun titolo trovato nel mercato selezionato. Prova un ticker diverso, cambia regione nelle Impostazioni oppure usa l’ISIN.</p>';window.__invesquoSearchResults=data;
  if(isinFormat(q.toUpperCase()))hint.textContent='Ricerca ISIN: Yahoo Finance può non riconoscere il codice. Verifica sempre l’ISIN del risultato.';else hint.textContent='Scegli la quotazione esatta; il nome può avere più borse e valute.';
  }catch(e){results.innerHTML='<p class="hint">Ricerca esterna non disponibile. Per un’obbligazione puoi inserire direttamente un ISIN valido, anche senza storico di mercato.</p>';$('assetSearchError').classList.remove('hidden');$('assetSearchError').textContent='La ricerca dipende da un servizio esterno, e non è garantita. Non verranno creati titoli identificati a caso.'}};
 $('assetSearch').addEventListener('keydown',e=>{if(e.key==='Enter')$('assetSearchBtn').click()});
@@ -2133,7 +2186,7 @@ function mascotPlayRender(){
   '<circle id="wickTip" cx="50" cy="'+mascotPlayWick+'" r="6" fill="'+color+'" stroke="#10263c" stroke-width="2"/>'+
   '<rect id="wickHit" x="38" y="-23" width="24" height="39" fill="transparent"/></g>';
  svg=svg.replace('<g class="candle-character">', '<g class="candle-character">'+wickMarkup);
- mascotPlayArt.innerHTML=svg+(typeof mascotHatOn!=='undefined'&&mascotHatOn?'<span class="mascot-hat-overlay">IPF</span>':'');
+ mascotPlayArt.innerHTML=svg+(typeof mascotHatOn!=='undefined'&&mascotHatOn?'<span class="mascot-hat-overlay">IPF</span>':'')+(window.__monkeyShoulder?'<span class="shoulder-monkey">'+(document.querySelector('#toyMonkey svg')?.outerHTML||'')+'</span>':'');
  $('mascotTapCount').textContent=mascotPlayTaps+' '+(mascotPlayTaps===1?'tocco':'tocchi');
 }
 function mascotPlayTap(){
@@ -2182,7 +2235,7 @@ mascotPlayContainer.addEventListener('click',e=>{if(bananaTriggered){e.stopImmed
 mascotPlayRender();
 
 
-/* b.7.12: Clock-based indication, not live exchange feed. */
+/* b.7.13: Clock-based indication, not live exchange feed. */
 const MARKET_LIST={
  MIL:{label:'Milano',tz:'Europe/Rome',start:9*60,end:17*60+30},
  PAR:{label:'Parigi',tz:'Europe/Paris',start:9*60,end:17*60+30},
@@ -2221,7 +2274,7 @@ function updateMarketStatus(){
 updateMarketStatus();setInterval(updateMarketStatus,60000);
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const INVESQUO_VERSION='b.7.12';
+const INVESQUO_VERSION='b.7.13';
 let invesquoHealthToken=0;
 async function invesquoCheckServer(){
  const token=++invesquoHealthToken,led=document.getElementById('netlifyServerLed'),status=document.getElementById('netlifyServerState'),detail=document.getElementById('netlifyServerDetail');
@@ -2243,7 +2296,7 @@ document.getElementById('checkNetlifyServer').addEventListener('click',invesquoC
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!document.getElementById('settingsView').classList.contains('hidden'))invesquoCheckServer()});
 window.addEventListener('online',()=>{if(!document.getElementById('settingsView').classList.contains('hidden'))invesquoCheckServer()});
 
-/* b.7.12: quotes from backend (never sample values). Exchanges are often delayed. */
+/* b.7.13: quotes from backend (never sample values). Exchanges are often delayed. */
 const INDEX_TICKER=[['FTSE MIB','^FTSEMIB','EUR'],['S&P 500','^GSPC','USD'],['NASDAQ','^IXIC','USD'],['DAX','^GDAXI','EUR'],['VWCE','VWCE.MI','EUR'],['BTC','BTC-USD','USD']];
 async function fetchTickerItem(name,symbol,currency){
  try{
@@ -2270,16 +2323,16 @@ async function refreshMarketTicker(){
  }finally{tickerRunning=false}
 }
 // Ticker removed on request: no index polling in Dashboard.
-/* b.7.12: interactive, strictly local mascot props */
+/* b.7.13: interactive, strictly local mascot props */
 document.getElementById('toyHat')?.addEventListener('click',()=>{mascotHatOn=!mascotHatOn;mascotPlayRender();document.getElementById('mascotPlayStatus').textContent=mascotHatOn?'🎩 Cappello IPF indossato':'Cappello riposto'});
 document.getElementById('toyMonkey')?.addEventListener('pointerdown',e=>{clearTimeout(window.__monkeyHold);window.__monkeyHold=setTimeout(()=>bananaRain(),750)});
 for(const eName of ['pointerup','pointercancel','pointerleave'])document.getElementById('toyMonkey')?.addEventListener(eName,()=>clearTimeout(window.__monkeyHold));
 
-let monkeyReaction=0;
-document.getElementById('toyMonkey')?.addEventListener('click',()=>{monkeyReaction=(monkeyReaction+1)%3;const m=document.getElementById('toyMonkey');m.dataset.expression=['allegra','curiosa','dispettosa'][monkeyReaction];document.getElementById('mascotPlayStatus').textContent=['🐒 Scimmietta allegra','🐒 Scimmietta curiosa','🐒 Scimmietta dispettosa'][monkeyReaction];});
+let monkeyReaction=0;window.__monkeyShoulder=false;
+document.getElementById('toyMonkey')?.addEventListener('click',()=>{monkeyReaction=(monkeyReaction+1)%3;window.__monkeyShoulder=!window.__monkeyShoulder;mascotPlayRender();const m=document.getElementById('toyMonkey');m.dataset.expression=['allegra','curiosa','dispettosa'][monkeyReaction];document.getElementById('mascotPlayStatus').textContent=['🐒 Scimmietta allegra','🐒 Scimmietta curiosa','🐒 Scimmietta dispettosa'][monkeyReaction];});
 
-document.getElementById('toyBull')?.addEventListener('click',()=>document.getElementById('mascotPlayStatus').textContent='Toro: si illumina quando il rendimento selezionato nella Dashboard è positivo');
-document.getElementById('toyBear')?.addEventListener('click',()=>document.getElementById('mascotPlayStatus').textContent='Orso: si illumina quando il rendimento selezionato nella Dashboard è negativo');
+document.getElementById('toyBull')?.addEventListener('click',()=>{mascotPlayChosenEmotion='happy';mascotPlayRender();mascotPlayAnimate('is-reacting');const e=document.getElementById('toyBull');e.classList.remove('toy-bounce');void e.offsetWidth;e.classList.add('toy-bounce');document.getElementById('mascotPlayStatus').textContent='🐂 Il toro porta ottimismo alla mascotte!'});
+document.getElementById('toyBear')?.addEventListener('click',()=>{mascotPlayChosenEmotion='sad';mascotPlayRender();mascotPlayAnimate('is-reacting');const e=document.getElementById('toyBear');e.classList.remove('toy-bounce');void e.offsetWidth;e.classList.add('toy-bounce');document.getElementById('mascotPlayStatus').textContent='🐻 Il bear market rende triste la mascotte';});
 function updateMascotMarket(){
  const bull=document.getElementById('toyBull'),bear=document.getElementById('toyBear'),txt=document.getElementById('mascotMarketSpot');if(!bull||!bear||!txt)return;
  bull.classList.remove('spotlight');bear.classList.remove('spotlight');
@@ -2291,7 +2344,7 @@ function updateMascotMarket(){
 }
 updateMascotMarket();
 function showBackupReminder(){const el=document.getElementById('lastBackupReminder');if(!el)return;const raw=store.getItem('invesquo_last_backup_time');if(!raw){el.textContent='Nessun backup esportato da questa versione sul dispositivo. È consigliato salvare periodicamente il file JSON.';return}const days=Math.floor((Date.now()-new Date(raw).getTime())/86400000);el.textContent='Ultimo backup richiesto '+(days===0?'oggi':days+' giorni fa')+(days>=14?' · È consigliabile esportare una nuova copia.':' · Conserva il file in un luogo sicuro.')}
-/* b.7.12: Educational - original inline SVG illustrations, local-only reading preferences */
+/* b.7.13: Educational - original inline SVG illustrations, local-only reading preferences */
 const EDUCATION=[
  {id:'azioni',name:'Azioni',tone:'#52b8ff',shape:'stock',short:'Una piccola quota di proprietà di un’impresa.',long:'Un’azione rappresenta una partecipazione al capitale di un’azienda. Il prezzo varia secondo utili attesi, tassi, domanda e rischio. Alcune società pagano dividendi, senza alcuna garanzia di continuità.',risk:'Alto: il prezzo può scendere molto e non esiste rimborso garantito.',example:'Esempio: acquisti due azioni a 100 €; se il prezzo va a 110 €, il valore sale a 220 € prima di costi e imposte.',terms:'Prezzo, dividendo, capitalizzazione, volatilità'},
  {id:'etf',name:'ETF',tone:'#6ac8a4',shape:'basket',short:'Fondi quotati che replicano indici o strategie.',long:'Un ETF detiene o replica un paniere di strumenti: può investire in azioni, obbligazioni, mercato monetario o altre esposizioni. Diversificare riduce il rischio specifico, ma non elimina quello di mercato. Controlla indice, metodo di replica, TER e dimensione.',risk:'Variabile: un ETF azionario può perdere molto; uno monetario in genere oscilla meno, ma non è un deposito garantito.',example:'Un ETF mondiale offre un’esposizione a molte società con un solo strumento.',terms:'Indice, UCITS, replica, TER, accumulazione, distribuzione'},
@@ -2341,16 +2394,33 @@ const ACADEMY_EXTRA={
  'Risparmio postale':{id:'liquidita',name:'Risparmio postale',short:'Buoni postali e condizioni di riscatto.'}
 };
 let learningSubtopic='';
+const INVESQUO_DEEP={
+ 'Value':'Un approccio value cerca aziende scambiate a multipli relativamente contenuti rispetto a utili, patrimonio o flussi di cassa. Prezzi bassi non significano automaticamente convenienza: debito e qualità del business possono spiegare lo sconto. Confronta P/E, P/B, free cash flow e concentrazione settoriale.',
+ 'Momentum':'Il fattore momentum privilegia titoli che hanno mostrato forza relativa su un periodo, spesso 6–12 mesi, escludendo talvolta l’ultimo mese. Può subire brusche inversioni. Verifica frequenza di ribilanciamento, turnover, costi e rischio di sovrapposizione.',
+ 'Quality':'Seleziona tipicamente aziende con redditività elevata, bilanci solidi e utili più stabili. I criteri cambiano tra gli indici: ROE, indebitamento, variabilità degli utili. La qualità può risultare costosa e non elimina il rischio azionario.',
+ 'Small cap':'Comprende imprese a bassa capitalizzazione rispetto alle grandi quotate. Offre un universo ampio ma spesso con spread maggiori, liquidità inferiore e volatilità più alta. Valuta la copertura geografica e la metodologia dell’indice.',
+ 'S&P 500':'Indice di grandi aziende statunitensi selezionate secondo regole di dimensione, redditività e liquidità. È ponderato per capitalizzazione flottante; i principali titoli possono pesare molto. Non rappresenta l’intero mercato globale.',
+ 'Nasdaq-100':'Indice di grandi società non finanziarie quotate al Nasdaq. Non equivale a tutte le aziende tecnologiche e presenta concentrazioni settoriali e di singoli emittenti. Confronta versione price e total return.',
+ 'MSCI World':'Indice azionario di mercati sviluppati, con ampio peso degli Stati Uniti e senza la maggior parte dei mercati emergenti. Un ETF che lo replica dipende da costi, tracking difference, fiscalità e politica dei dividendi.',
+ 'FTSE All-World':'Indice che include large e mid cap di mercati sviluppati ed emergenti. Rispetto a un indice solo sviluppati cambia l’esposizione ai Paesi emergenti. Controlla classe ad accumulazione/distribuzione e replica.',
+ 'Duration':'Misura la sensibilità indicativa del prezzo di un’obbligazione alle variazioni dei rendimenti. Una duration modificata di 5 implica approssimativamente un -5% di prezzo per +1 punto percentuale nei tassi, a parità delle altre condizioni; convessità e spread modificano la stima.',
+ 'BTP':'Titolo di Stato italiano con cedole e rimborso regolati dalle condizioni di emissione. Quotazioni per 100 di nominale; attenzione a rateo, prezzo tel quel, rendimento a scadenza, rischio emittente e variazioni del prezzo prima della scadenza.'
+};
+function academyDetailText(title,brief){
+ const k=Object.keys(INVESQUO_DEEP).find(x=>title.toLowerCase().includes(x.toLowerCase()));
+ const expanded=INVESQUO_DEEP[k]||'';
+ return '<p>'+svgEscape(brief)+'</p><p>'+(expanded?svgEscape(expanded):'Per valutare questo argomento considera obiettivo, rischio, liquidità, costi diretti e indiretti, orizzonte temporale e condizioni del prodotto. La classificazione non è una raccomandazione di investimento: confronta documentazione ufficiale, benchmark e metodi di calcolo.')+'</p><p><strong>Da verificare:</strong> caratteristiche dello strumento, documenti informativi, qualità della fonte dei dati e differenza tra rendimento storico e futuro.</p>';
+}
 function academyTree(a){
  const levels=EDUCATION_LEVELS[a.id]||[];
- return '<div class="academy-tree"><p class="academy-intro">Esplora gli approfondimenti per argomento:</p>'+levels.map((lv,li)=>'<details class="academy-level"><summary>'+svgEscape(lv[0])+' <span>'+lv[1].length+' voci</span></summary><div class="academy-nodes">'+lv[1].map((item,si)=>'<details class="academy-node"><summary>'+svgEscape(item[0])+'</summary><p>'+svgEscape(item[1])+'</p></details>').join('')+'</div></details>').join('')+'</div>';
+ return '<div class="academy-tree"><p class="academy-intro">Esplora gli approfondimenti per argomento:</p>'+levels.map((lv,li)=>'<details class="academy-level"><summary>'+svgEscape(lv[0])+' <span>'+lv[1].length+' voci</span></summary><div class="academy-nodes">'+lv[1].map((item,si)=>'<details class="academy-node"><summary>'+svgEscape(item[0])+'</summary>'+academyDetailText(item[0],item[1])+'</details>').join('')+'</div></details>').join('')+'</div>';
 }
 
 let learningExpanded=new Set();
 function renderEducation(){
  const grid=document.getElementById('learningGrid');if(!grid)return;
  const term=(document.getElementById('learningSearch')?.value||'').trim().toLocaleLowerCase('it');
- const shown=EDUCATION.filter(a=>(a.name+' '+a.short+' '+a.long+' '+a.terms).toLocaleLowerCase('it').includes(term));
+ const shown=EDUCATION.filter(a=>{const levels=EDUCATION_LEVELS[a.id]||[];const nested=levels.map(lv=>lv[0]+' '+lv[1].map(it=>it.join(' ')).join(' ')).join(' ');return (a.name+' '+a.short+' '+a.long+' '+a.terms+' '+nested).toLocaleLowerCase('it').includes(term)});
  document.getElementById('learningCount').textContent=shown.length+' argomenti';
  grid.innerHTML=shown.map(a=>'<article class="education-card"><button type="button" class="education-toggle" data-edu="'+a.id+'" aria-expanded="'+learningExpanded.has(a.id)+'">'+educationIcon(a.shape,a.tone)+'<span class="edu-heading"><strong>'+a.name+'</strong><small>'+a.short+'</small></span><span class="edu-chevron">'+(learningExpanded.has(a.id)?'−':'+')+'</span></button>'+(learningExpanded.has(a.id)?'<div class="education-body"><p>'+a.long+'</p>'+(prefs.educationDetails!==false?'<p><strong>Rischi:</strong> '+a.risk+'</p><p><strong>In pratica:</strong> '+a.example+'</p><p class="edu-terms">Parole chiave: '+a.terms+'</p>':'')+academyTree(a)+'</div>':'')+'</article>').join('')||'<p class="hint">Nessun argomento trovato.</p>';
 }
@@ -2359,7 +2429,7 @@ document.getElementById('learningSearch')?.addEventListener('input',renderEducat
 document.querySelectorAll('[data-quiz]').forEach(b=>b.addEventListener('click',()=>{document.getElementById('learningQuizFeedback').textContent=b.dataset.quiz==='0'?'Esatto! I 500 € aggiunti non costituiscono rendimento di mercato.':'Non proprio: l’aumento viene dall’acquisto, non dal mercato. Il TWRR è 0%.'}));
 renderEducation();
 
-/* b.7.12: honest local recovery backups. These are not background jobs. */
+/* b.7.13: honest local recovery backups. These are not background jobs. */
 let backupDirectoryHandle=null,backupInProgress=false;
 const AUTOBACKUP_KEY='invesquo_auto_recovery_b712';
 function selectedBackupHours(){return Number(prefs.backupHours)||0}
@@ -2406,4 +2476,104 @@ $('settingTextScale').onchange=e=>{prefs.textScale=e.target.value;savePreference
 updateBackupControls();
 setInterval(()=>{if(document.visibilityState==='visible')void makeLocalRecoveryCopy()},60000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')void makeLocalRecoveryCopy()});
+
+/* Invesquo b.7.13 — PAC ledger schedules, not broker orders. */
+const PAC_STORAGE_KEY='invesquo_pac_schedules_b713';
+function readPacSchedules(){try{const v=JSON.parse(store.getItem(PAC_STORAGE_KEY)||'[]');return Array.isArray(v)?v.filter(x=>x&&typeof x.id==='string').slice(0,200):[]}catch(_){return []}}
+function writePacSchedules(list){try{store.setItem(PAC_STORAGE_KEY,JSON.stringify(list))}catch(e){const status=document.getElementById('pacMessage');if(status){status.classList.remove('hidden');status.textContent='Impossibile salvare il PAC: '+e.message}}}
+function pacDayList(raw){const a=[...new Set(String(raw).split(/[,; ]+/).map(Number))].sort((x,y)=>x-y);return a.length&&a.length<=20&&a.every(n=>Number.isInteger(n)&&n>=1&&n<=31)?a:null}
+function pacRollWeekend(ymd){const d=new Date(ymd+'T12:00:00Z');if(!Number.isFinite(d.getTime()))return null;while([0,6].includes(d.getUTCDay()))d.setUTCDate(d.getUTCDate()+1);return d.toISOString().slice(0,10)}
+function pacDueDates(program,limit=today()){
+ const out=[],start=String(program.from||''),end=String(program.until||'')||limit;
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(start))return out;
+ const d=new Date(start+'T12:00:00Z'),last=new Date((end<limit?end:limit)+'T12:00:00Z');
+ if(!(d<=last))return out;
+ d.setUTCDate(1);
+ // Avoid long scans after malformed or artificially ancient dates
+ let count=0;
+ while(d<=last&&count++<144){
+  for(const day of program.days){
+   const date=new Date(d);date.setUTCDate(day);
+   if(date.getUTCMonth()!==d.getUTCMonth())continue;const raw=date.toISOString().slice(0,10),effective=pacRollWeekend(raw);
+   if(raw>=start&&effective<=end&&effective<=limit)out.push({scheduled:raw,date:effective});
+  }
+  d.setUTCMonth(d.getUTCMonth()+1);
+ }
+ return out.sort((a,b)=>a.date.localeCompare(b.date)||a.scheduled.localeCompare(b.scheduled));
+}
+function pacRefreshLists(){
+ const select=$('pacAsset');if(!select)return;
+ const current=select.value;
+ const eligible=state.assets.filter(a=>a.symbol&&Number(a.q)>=0&&a.cat!=='Conto deposito'&&a.cat!=='Risparmio postale'&&a.cat!=='Obbligazioni');
+ select.innerHTML=eligible.map(a=>'<option value="'+svgEscape(a.id)+'">'+svgEscape(a.name)+' · '+svgEscape(a.symbol)+' · '+svgEscape(a.cat)+'</option>').join('');
+ if(eligible.some(a=>a.id===current))select.value=current;
+ const programs=readPacSchedules();
+ $('pacSchedules').innerHTML=programs.length?programs.map(p=>'<div class="pac-event"><span><strong>'+svgEscape(state.assets.find(a=>a.id===p.asset)?.name||p.asset)+'</strong><small>'+p.days.join(', ')+' del mese · '+(p.mode==='eur'?eur(p.amount):entryDecimal(p.amount)+' quote')+' · dal '+shortDate(p.from)+(p.until?' al '+shortDate(p.until):'')+'</small></span><button type="button" class="btn" data-pac-remove="'+svgEscape(p.id)+'">Elimina</button></div>').join(''):'<p class="hint">Nessun PAC programmato.</p>';
+ const upcoming=[];const horizon=new Date();horizon.setDate(horizon.getDate()+70);const dateLimit=horizon.toISOString().slice(0,10);
+ for(const p of programs){
+  const monthEvents=[];let d=new Date(p.from+'T12:00:00Z');d.setUTCDate(1);
+  for(let m=0;m<24&&d.toISOString().slice(0,10)<=dateLimit;m++,d.setUTCMonth(d.getUTCMonth()+1))for(const day of p.days){
+   const dt=new Date(d);dt.setUTCDate(day);if(dt.getUTCMonth()!==d.getUTCMonth())continue;const raw=dt.toISOString().slice(0,10),when=pacRollWeekend(raw);
+   if(raw>=p.from&&when>=today()&&when<=dateLimit&&(!p.until||when<=p.until))monthEvents.push({date:when,label:state.assets.find(a=>a.id===p.asset)?.name||p.asset,mode:p.mode,amount:p.amount});
+  }
+  upcoming.push(...monthEvents);
+ }
+ upcoming.sort((a,b)=>a.date.localeCompare(b.date));
+ $('pacEvents').innerHTML=upcoming.slice(0,12).map(x=>'<div class="pac-event"><span>'+shortDate(x.date)+' · '+svgEscape(x.label)+'<small>'+(x.mode==='eur'?eur(x.amount):entryDecimal(x.amount)+' quote')+'</small></span></div>').join('')||'<p class="hint">Nessuna prossima scadenza nei 70 giorni.</p>';
+}
+$('pacPanelOpen').onclick=()=>{pacRefreshLists();$('pacFrom').value=today();$('pacOverlay').classList.remove('hidden')};
+$('pacClose').onclick=()=>{$('pacOverlay').classList.add('hidden')};
+$('pacOverlay').addEventListener('click',e=>{if(e.target.id==='pacOverlay')$('pacOverlay').classList.add('hidden')});
+$('pacSchedules').onclick=e=>{const b=e.target.closest('[data-pac-remove]');if(!b)return;if(!confirm('Eliminare questo programma PAC? Le transazioni già registrate rimangono.'))return;writePacSchedules(readPacSchedules().filter(p=>p.id!==b.dataset.pacRemove));pacRefreshLists()};
+$('pacSave').onclick=()=>{
+ const asset=state.assets.find(a=>a.id===$('pacAsset').value),mode=$('pacMode').value,amount=Number($('pacAmount').value),from=$('pacFrom').value,until=$('pacUntil').value,days=pacDayList($('pacDays').value);
+ if(!asset||!asset.symbol||!['eur','qty'].includes(mode)||!(amount>0)||!Number.isFinite(amount)||!days||!/^\d{4}-\d{2}-\d{2}$/.test(from)||(until&&until<from)){alert('Controlla titolo, giorni (1–31), importo e date del PAC.');return}
+ if(from<today()&&!confirm('Stai inserendo una data passata. Le vecchie operazioni verranno registrate solo se sono disponibili chiusure giornaliere verificate. Continuare?'))return;
+ const list=readPacSchedules();list.push({id:'pac-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),asset:asset.id,mode,amount,days,from,until,createdAt:new Date().toISOString(),status:'active'});writePacSchedules(list);pacRefreshLists();$('pacMessage').classList.remove('hidden');$('pacMessage').textContent='PAC salvato. Quando apri Invesquo, verranno verificate le scadenze; nessun ordine reale verrà inviato.';
+};
+let pacCheckBusy=false,pacCheckLast=0;
+async function pacCheckDue(showMessage=false){
+ if(pacCheckBusy||!ACCOUNT_ID||!readPacSchedules().length)return;
+ if(!showMessage&&Date.now()-pacCheckLast<300000)return;
+ pacCheckLast=Date.now();pacCheckBusy=true;let done=0,pending=0;const errors=[];
+ try{
+  const programs=readPacSchedules(),quotes=new Map(),fxmaps=new Map();
+  const now=new Date(),milanParts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Rome',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(now),milanHour=Number(milanParts.find(v=>v.type==='hour')?.value||0),milanMinute=Number(milanParts.find(v=>v.type==='minute')?.value||0);
+  for(const p of programs){
+   const asset=state.assets.find(a=>a.id===p.asset);if(!asset||!asset.symbol){errors.push('Titolo '+p.asset+' non più presente');continue}
+   const due=pacDueDates(p).slice(-72);
+   const unfinished=due.filter(v=>!trades.some(t=>t.pacId===p.id&&t.pacScheduled===v.scheduled));
+   if(!unfinished.length)continue;
+   // Trading-day close, fetched from verified historical chart only. No guessed quote.
+   if(!quotes.has(asset.id))try{quotes.set(asset.id,await historicYahooCloses(asset.symbol,currencyOf(asset)))}catch(e){errors.push(asset.symbol+': '+e.message);pending+=unfinished.length;continue}
+   if(currencyOf(asset)!=='EUR'&&!fxmaps.has(currencyOf(asset)))try{fxmaps.set(currencyOf(asset),await historicYahooCloses('EUR'+currencyOf(asset)+'=X',currencyOf(asset)))}catch(e){errors.push('Cambio '+currencyOf(asset)+' non disponibile');pending+=unfinished.length;continue}
+   for(const occurrence of unfinished){
+    const when=occurrence.date;
+    // Same date: wait until after European/US session close, as applicable.
+    if(when===today()){const m=/(\.MI$|\.DE$|\.PA$|\.AS$|\.L$)/i.test(asset.symbol||'');const waitUntil=m?18*60:23*60;if(milanHour*60+milanMinute<waitUntil){pending++;continue}}
+    const closing=quotes.get(asset.id).get(when);
+    if(!(closing>0)){pending++;continue}
+    const fx=currencyOf(asset)==='EUR'?1:(()=>{const x=historicCloseOn(fxmaps.get(currencyOf(asset)),when,false);return x>0?1/x:NaN})();
+    if(!(fx>0)){pending++;continue}
+    const factor=asset.cat==='Obbligazioni'?100:1,qty=p.mode==='eur'?p.amount*factor/(closing*fx):p.amount;
+    if(!(qty>0&&Number.isFinite(qty))){pending++;continue}
+    const euro=qty*closing*fx/factor;
+    const latest=state.assets.find(a=>a.id===p.asset);
+    if(!latest){pending++;continue}
+    // Trading ledger only. Reconcile chronologically, preserving later sales and cost basis.
+    const operation={id:'pac-exec-'+p.id+'-'+occurrence.scheduled,kind:'buy',date:when,asset:latest.id,assetName:latest.name,cat:latest.cat,spent:euro,quantity:qty,price:closing,fxExecution:fx,pacId:p.id,pacScheduled:occurrence.scheduled,pacRecordedAt:new Date().toISOString(),pacPriceSource:'Yahoo Finance · chiusura giornaliera disponibile (può differire dal prezzo d’asta; NON eseguito broker)'};
+    const validation=computeLedger(latest.id,[...trades,operation]);
+    if(validation.error){pending++;errors.push(validation.error);continue}
+    const failure=commitLedger(latest.id,[...trades,operation]);
+    if(failure){pending++;errors.push(failure);continue}
+    done++;
+   }
+  }
+  if(done){save();saveTimeline();refreshBuyOptions();render()}
+  if(showMessage){const status=$('pacMessage');status.classList.remove('hidden');status.textContent=done+' acquisti contabili registrati, '+pending+' scadenze in attesa del prezzo di chiusura. '+errors.slice(0,2).join(' · ')}
+  pacRefreshLists();
+ }finally{pacCheckBusy=false}
+}
+$('pacVerify').onclick=()=>void pacCheckDue(true);
+if(ACCOUNT_ID){setTimeout(()=>void pacCheckDue(),6000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')void pacCheckDue()});setInterval(()=>{if(document.visibilityState==='visible')void pacCheckDue()},900000)}
 </script></body></html>
