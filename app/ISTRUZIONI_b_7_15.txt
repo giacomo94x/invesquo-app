@@ -1,0 +1,9 @@
+Invesquo b.7.15 — Aggiornamento
+- Icone delle tipologie identiche alle illustrazioni SVG di Academy.
+- Nuovo ROI semplice dello Storico: non considera i tempi di impiego del capitale; distinto da TWRR/MWRR.
+- Rilevazioni del patrimonio leggibili per data cliccando o toccando i punti; giorni senza quotazioni non inventati.
+- Report settimanale e mensile PDF con valori e flussi delle categorie attive in Dashboard, scaricato localmente nel browser.
+- Il PDF descrive le rilevazioni disponibili (non e' un estratto conto né rendiconto fiscale).
+- Funzioni Netlify e particolare recupero Alphabet preservate byte per byte.
+
+Installazione: sostituire i file dentro app/ nel repository GitHub. Conservare un backup JSON prima dell'aggiornamento.

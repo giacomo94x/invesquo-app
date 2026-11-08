@@ -1,0 +1,1 @@
+Invesquo b.7.17 - inserire il CONTENUTO dello ZIP nella cartella app del repository GitHub. Prima esportare backup JSON. Verificare su Safari iPhone. Tema scuro invariato. Le scadenze non sono ricalcolate automaticamente; inserire date e valori da documenti ufficiali.
