@@ -1,0 +1,9 @@
+Invesquo b.7.12 — aggiornamento GitHub + Netlify
+- Conservare la cartella app; sostituire i file estratti, effettuare commit.
+- Prima esportare backup JSON dal profilo esistente.
+- Modulo titoli: ricerca, selezione e inserimento guidato senza tornare al fondo della pagina.
+- Obbligazioni: per ISIN formalmente valido è possibile inserire un titolo manualmente anche senza mercato/prezzo storico verificato. Non è garantito un grafico esterno per ogni obbligazione.
+- Storico: intervalli con date reali e testo sulle lacune; si possono ricostruire solo prezzi verificati disponibili.
+- Academy: percorsi di approfondimento a due livelli.
+- Backup programmato: copie di recupero in memoria del browser durante l'uso; cartella esterna solo quando il browser permette e autorizza File System Access. Safari iOS NON lo supporta. Esportare manualmente il JSON per sicurezza.
+- Le funzioni di quotazione Alphabet sono inalterate.

@@ -2,7 +2,7 @@
 // Endpoint documented in open-source Euronext R EN_HistData (cran/Euronext).
 // This public-facing historical endpoint is not a guaranteed licensed feed.
 const PERIOD_DAYS={'1d':7,'5d':14,'1mo':38,'6mo':195,'1y':375,'max':730};
-const ALLOWED=new Set(['IT0005735227']); // whitelist: validate market/ISIN before adding others
+const ISIN_RE=/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/; // Formal validation; historical prices still require a source
 function send(statusCode,obj){return{statusCode,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'public,max-age=900'},body:JSON.stringify(obj)}}
 function n(raw){let v=String(raw||'').replace(/\s/g,'').replace(/[^0-9.,-]/g,'');if(!v)return NaN;if(v.includes(',')&&v.includes('.'))v=v.replace(/\./g,'').replace(',','.');else if(v.includes(','))v=v.replace(',','.');return Number(v)}
 function clean(t){return String(t).replace(/<[^>]+>/g,' ').replace(/&nbsp;|&#160;/gi,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim()}
@@ -58,7 +58,7 @@ async function publicCsv(isin){
 }
 exports.handler=async event=>{
  const p=event.queryStringParameters||{},isin=String(p.isin||'').toUpperCase(),range=String(p.range||'1mo');
- if(!ALLOWED.has(isin)||!PERIOD_DAYS[range])return send(400,{error:'ISIN o periodo non supportato'});
+ if(!ISIN_RE.test(isin)||!PERIOD_DAYS[range])return send(400,{error:'ISIN o periodo non supportato'});
  const days=PERIOD_DAYS[range],today=new Date(),from=new Date(Date.now()-days*86400000);
  const fmt=d=>d.toISOString().slice(0,10);
  const form=new URLSearchParams({adjusted:'Y',startdate:fmt(from),enddate:fmt(today),nbSession:'10'});
