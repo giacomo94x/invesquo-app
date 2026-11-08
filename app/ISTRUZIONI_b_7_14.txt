@@ -1,0 +1,10 @@
+INVESQUO b.7.14 · GitHub + Netlify
+
+Correzioni:
+- PAC: «Cerca un nuovo titolo per il PAC» permette di registrare una posizione senza acquisto iniziale; la prima chiusura verificata crea una normale transazione. Non sono ordini presso un broker.
+- Ricerca obbligazioni: catalogo MOT per nome o ISIN (oltre a Yahoo); titoli senza prezzo storico possono essere inseriti, ma nessun grafico fittizio viene disegnato. Prezzi e grafici per tutti gli ISIN non possono essere garantiti con feed gratuiti.
+- Mascotte: toro e orso ridisegnati come statuette; espressioni positive e negative con bocca sempre visibile; scimmietta sulla spalla.
+- Ricostruzione patrimonio: usa lo stesso motore delle categorie Storico; tutte le categorie attive devono disporre di prezzi completi per il giorno ricostruito.
+- Si preservano funzione Alphabet, autenticazione locale e backup JSON.
+
+INSTALLAZIONE: estrarre e caricare i file nella cartella «app» del repository GitHub esistente; commit/push. Verificare deploy Netlify Published. Prima esportare backup.
