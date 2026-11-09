@@ -1,0 +1,6 @@
+Finholdra Beta 8.1
+- Marchio SVG nella Home ingrandito a circa 2,5 volte la dimensione precedente.
+- Header distribuito su due righe per mantenere Finn centrato e indicatori a destra senza sovrapposizioni su iPhone.
+- Messaggio di Finn nascosto automaticamente 2 secondi dopo il tocco.
+- Cache PWA aggiornata.
+- Funzioni Netlify e dati dei profili non modificati.
