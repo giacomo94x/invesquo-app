@@ -1,0 +1,9 @@
+Finholdra Beta 8
+- Nuovo logo SVG chiaro/scuro e marchio in Home e accesso.
+- Saluto Finn sulla mascotte.
+- Titoli preferiti aprono dettaglio anche se non posseduti.
+- Corretto overflow titoli preferiti.
+- Scelta Italiano/English al primo accesso e nelle Impostazioni.
+- La traduzione inglese copre i principali controlli dell’interfaccia; parte dei testi dinamici e dell’Academy rimane in italiano e richiede localizzazione.
+- Chiavi e dati dei profili precedenti preservati.
+- Funzioni Netlify inalterate.

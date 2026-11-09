@@ -1,1 +1,22 @@
-{"name": "Invesquo", "short_name": "Invesquo", "description": "Monitoraggio del portafoglio personale", "start_url": "./index.html", "scope": "./", "display": "standalone", "background_color": "#0a1221", "theme_color": "#0e192e", "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png"}, {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}]}
+{
+  "name": "Finholdra",
+  "short_name": "Finholdra",
+  "description": "Every investments you hold. One view.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a1221",
+  "theme_color": "#0e192e",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
