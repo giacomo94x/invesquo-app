@@ -1,0 +1,11 @@
+Invesquo b.7.22 — Interfaccia Home, tema chiaro, controllo Recupera prezzi, titoli preferiti.
+
+Modifiche:
+- Layout logo/mascotte/stato/mercati e navigazione riorganizzati.
+- Rimosso testo superfluo nello Storico.
+- Rimossa traccia blu attorno ai valori dello Storico in tema chiaro.
+- Impostazione per mostrare o nascondere il recupero storico.
+- Fino a tre titoli preferiti, anche non posseduti, con ricerca e grafico intraday (1G), quando disponibile.
+- Funzioni Netlify non modificate.
+
+I preferiti richiedono accesso alle fonti e potrebbero non disporre di grafici intraday per tutti i mercati.
