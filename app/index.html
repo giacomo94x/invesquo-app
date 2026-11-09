@@ -561,11 +561,12 @@ html,body{overscroll-behavior-y:contain}
 #assetDetailPmcHistory{margin-top:14px;padding:14px;border-radius:14px;min-width:0}
 
 /* Finholdra Beta 8.8 — larger header logo and tappable PMC points */
-.top .new-header-main{grid-template-columns:minmax(0,1.28fr) 84px minmax(104px,.92fr)!important;gap:8px!important}
+.top .new-header-main{grid-template-columns:minmax(0,1.45fr) 84px minmax(102px,.84fr)!important;gap:8px!important}
 .top .finholdra-wordmark{max-width:none!important}
-.top .finholdra-wordmark img{width:clamp(158px,49vw,230px)!important;max-width:100%!important;max-height:92px!important}
-@media(max-width:420px){.top .new-header-main{grid-template-columns:minmax(0,1.24fr) 76px minmax(96px,.92fr)!important;gap:6px!important}.top .finholdra-wordmark img{width:clamp(150px,48vw,205px)!important;max-height:86px!important}}
-@media(max-width:350px){.top .new-header-main{grid-template-columns:minmax(0,1.2fr) 67px minmax(88px,.9fr)!important;gap:4px!important}.top .finholdra-wordmark img{width:clamp(132px,47vw,180px)!important;max-height:76px!important}}
+.top .finholdra-wordmark{overflow:visible!important}
+.top .finholdra-wordmark img{width:clamp(218px,66vw,338px)!important;max-width:none!important;max-height:112px!important}
+@media(max-width:420px){.top .new-header-main{grid-template-columns:minmax(0,1.38fr) 76px minmax(92px,.82fr)!important;gap:6px!important}.top .finholdra-wordmark img{width:clamp(198px,62vw,292px)!important;max-height:102px!important}}
+@media(max-width:350px){.top .new-header-main{grid-template-columns:minmax(0,1.3fr) 67px minmax(84px,.82fr)!important;gap:4px!important}.top .finholdra-wordmark img{width:clamp(176px,59vw,240px)!important;max-height:88px!important}}
 .pmc-history-tooltip{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 0;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:rgba(120,168,255,.08);font-size:12px;line-height:1.35}
 .pmc-history-tooltip.hidden{display:none!important}
 .pmc-history-tooltip strong{font-size:13px;font-variant-numeric:tabular-nums}
@@ -576,6 +577,18 @@ body[data-theme="light"] .pmc-history-dot.is-active{stroke:#08264B}
 
 .pmc-history-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:7px}
 .pmc-history-top h3{margin:0;font-size:16px}
+.pmc-history-toolbar{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:8px 0 12px}
+.pmc-history-ranges{margin:0;flex:1 1 210px}
+.pmc-history-ranges .btn{min-width:56px}
+.pmc-year-wrap{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted);min-width:116px;flex:0 0 116px}
+.pmc-year-wrap .order-select{padding:10px 12px;font-size:14px}
+.pmc-history-empty{padding:26px 8px;text-align:center;color:var(--muted)}
+.pmc-segment-label{paint-order:stroke;stroke:rgba(8,20,35,.5);stroke-width:3px;stroke-linejoin:round}
+.pmc-segment-date{paint-order:stroke;stroke:rgba(8,20,35,.45);stroke-width:2.5px;stroke-linejoin:round}
+body[data-theme="light"] .pmc-history-plot{background:#f7f9fc}
+body[data-theme="light"] .pmc-segment-label{stroke:rgba(255,255,255,.92)}
+body[data-theme="light"] .pmc-segment-date{stroke:rgba(255,255,255,.95)}
+@media(max-width:520px){.pmc-history-toolbar{align-items:stretch}.pmc-year-wrap{flex:1 1 100%;min-width:0}}
 .pmc-history-info{font-size:11px;color:var(--muted);margin:0 0 12px}
 .pmc-history-chart{width:100%;height:auto;display:block;max-height:195px}
 .pmc-history-plot{background:rgba(100,130,175,.06);border:1px solid var(--border);border-radius:10px;padding:8px 6px;margin:9px 0}
@@ -876,6 +889,7 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
 <section class="box" id="assetDetailPmcHistory" aria-label="Storico del prezzo medio di carico">
 <div class="pmc-history-top"><h3>Storico PMC</h3><strong id="pmcHistoryLatest">—</strong></div>
 <p class="pmc-history-info" id="pmcHistoryInfo"></p>
+<div class="pmc-history-toolbar"><div class="timeline-range pmc-history-ranges" id="pmcHistoryRanges" role="group" aria-label="Periodo storico PMC"><button class="btn selected" data-pmc-range="week" type="button" aria-pressed="true">1S</button><button class="btn" data-pmc-range="month" type="button" aria-pressed="false">1M</button><button class="btn" data-pmc-range="year" type="button" aria-pressed="false">1A</button></div><label class="pmc-year-wrap hidden" id="pmcHistoryYearWrap">Anno<select class="order-select" id="pmcHistoryYear" aria-label="Seleziona l'anno del grafico PMC"></select></label></div>
 <div id="pmcHistoryGraph"></div><div class="pmc-history-rows" id="pmcHistoryRows"></div>
 </section>
 <div class="box hidden" id="assetDetailMaturityEditor" style="margin:12px 0;padding:14px;border-radius:12px">
@@ -1859,7 +1873,7 @@ const DETAIL_RANGES={
  'max':{range:'max',interval:'1mo'}
 };
 const MARKET_LABELS={goog:'GEM · Milano',vwce:'Borsa Italiana · Milano',xdev:'Borsa Italiana · Milano',rbot:'Borsa Italiana · Milano',btp:'MOT · Borsa Italiana'};
-let assetDetailScrollY=0;let assetDetailId=null,assetDetailRange='1d',assetDetailRequest=0,assetDetailPoints=[],assetDetailMeta=null,assetDetailPreviousFocus=null;
+let assetDetailScrollY=0;let assetDetailId=null,assetDetailRange='1d',assetDetailRequest=0,assetDetailPoints=[],assetDetailMeta=null,assetDetailPreviousFocus=null;let pmcHistoryRange='week',pmcHistoryYear='';
 let detailBaseSeries=null, detailLiveInterval=null, detailLiveBusy=false;
 const detailCache=new Map();
 function detailDate(epoch,intraday=false){return new Date(epoch).toLocaleString('it-IT',intraday?{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}:{day:'2-digit',month:'2-digit',year:'2-digit'})}
@@ -1909,23 +1923,34 @@ function assetPmcEvents(a){
  return events;
 }
 function formatPmcHistoryValue(n,a){return a.cat==='Obbligazioni'?number(n)+' / 100 '+currencyOf(a):localMoney(n,currencyOf(a));}
-function pmcHistoryChart(events,a){
- const points=events.filter(e=>e.pmc!==null);
- if(points.length<2)return '';
- const W=320,H=146,L=12,R=10,T=14,B=31;
- const nums=points.map(e=>e.pmc),lo=Math.min(...nums),hi=Math.max(...nums),flat=Math.abs(hi-lo)<1e-9;
+function pmcEventYears(events){return Array.from(new Set(events.map(e=>String(e.date||'').slice(0,4)).filter(Boolean))).sort((a,b)=>Number(b)-Number(a));}
+function isoAddDays(iso,days){const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+days);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
+function pmcRangeBounds(range,year,events){const t=today();if(range==='year'){const years=pmcEventYears(events);const y=String(year||years[0]||t.slice(0,4));return {start:y+'-01-01',end:y+'-12-31',label:y,year:y};}if(range==='month')return {start:isoAddDays(t,-29),end:t,label:'Ultimi 30 giorni',year:t.slice(0,4)};return {start:isoAddDays(t,-6),end:t,label:'Ultimi 7 giorni',year:t.slice(0,4)};}
+function pmcChangeEvents(events){const out=[];let prev=null;for(const e of events){if(e.pmc===null){prev=null;continue;}if(prev===null||Math.abs(e.pmc-prev)>1e-8)out.push(e);prev=e.pmc;}return out;}
+function pmcRangeData(events,range,year){const changes=pmcChangeEvents(events);if(!changes.length)return null;const bounds=pmcRangeBounds(range,year,changes);let current=null;for(const e of changes){if(e.date<=bounds.start)current=e;else break;}const within=changes.filter(e=>e.date>=bounds.start&&e.date<=bounds.end);
+ let active=current?{date:bounds.start,anchorDate:current.date,pmc:current.pmc,carried:true,kind:current.kind}:null;
+ const segments=[];const labels=[];
+ const pushLabel=(seg,index,show)=>{if(!show)return;labels.push({xKey:seg.from,yVal:seg.pmc,value:seg.pmc,date:seg.anchorDate||seg.from,index});};
+ for(const e of within){if(active&&e.date>active.date){const seg={from:active.date,to:e.date,pmc:active.pmc,anchorDate:active.anchorDate||active.date,carried:!!active.carried};segments.push(seg);pushLabel(seg,segments.length-1,!seg.carried||within.length===0);} active={date:e.date,anchorDate:e.date,pmc:e.pmc,carried:false,kind:e.kind};}
+ if(active){const seg={from:active.date,to:bounds.end,pmc:active.pmc,anchorDate:active.anchorDate||active.date,carried:!!active.carried};segments.push(seg);pushLabel(seg,segments.length-1,!seg.carried||within.length===0);} 
+ const visibleRows=within.slice().reverse();
+ return {bounds,segments,labels,rows:visibleRows,changeCount:within.length};}
+function pmcHistoryChart(data,a){if(!data||!data.segments.length)return '<div class="pmc-history-empty">Nessuna variazione del PMC nel periodo selezionato.</div>';
+ const segments=data.segments,W=332,H=170,L=14,R=14,T=18,B=30;
+ const vals=segments.map(s=>s.pmc),lo=Math.min(...vals),hi=Math.max(...vals),flat=Math.abs(hi-lo)<1e-9;
  const y=v=>flat?(T+H-B)/2:(T+(hi-v)/(hi-lo)*(H-T-B));
- const x=i=>L+i*(W-L-R)/(points.length-1);
- let d='M '+x(0).toFixed(2)+' '+y(points[0].pmc).toFixed(2);
- for(let i=1;i<points.length;i++){
-  const priorIndex=events.indexOf(points[i-1]),nextIndex=events.indexOf(points[i]);
-  const reopened=events.slice(priorIndex+1,nextIndex).some(e=>e.pmc===null);
-  d+=(reopened?' M '+x(i).toFixed(2)+' '+y(points[i].pmc).toFixed(2):' H '+x(i).toFixed(2)+' V '+y(points[i].pmc).toFixed(2));
- }
- const circles=points.map((e,i)=>'<circle class="pmc-history-dot" tabindex="0" role="button" aria-label="PMC '+svgEscape(shortDate(e.date))+' '+svgEscape(formatPmcHistoryValue(e.pmc,a))+'" data-index="'+i+'" data-date="'+svgEscape(shortDate(e.date))+'" data-pmc="'+svgEscape(formatPmcHistoryValue(e.pmc,a))+'" cx="'+x(i).toFixed(2)+'" cy="'+y(e.pmc).toFixed(2)+'" r="4.2" fill="'+(e.kind==='buy'?'#47dba9':'#f0ba75')+'"/>' ).join('');
- const labels='<text x="'+L+'" y="'+(H-7)+'" fill="var(--muted)" font-size="10">'+svgEscape(shortDate(points[0].date))+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="var(--muted)" font-size="10">'+svgEscape(shortDate(points[points.length-1].date))+'</text>';
- return '<div class="pmc-history-plot"><svg class="pmc-history-chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Andamento del prezzo medio di carico dopo le operazioni registrate"><path d="'+d+'" fill="none" stroke="#78a8ff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>'+circles+labels+'</svg><div class="pmc-history-tooltip hidden" id="pmcHistoryTooltip"><span id="pmcHistoryTooltipDate">—</span><strong id="pmcHistoryTooltipValue">—</strong></div></div>';
-}
+ const daysBetween=(a,b)=>Math.max(0,Math.round((new Date(b+'T12:00:00')-new Date(a+'T12:00:00'))/86400000));
+ const totalDays=Math.max(1,daysBetween(data.bounds.start,data.bounds.end)||1);
+ const x=iso=>L+(daysBetween(data.bounds.start,iso)/totalDays)*(W-L-R);
+ let grid='';
+ for(let i=0;i<3;i++){const yy=T+i*((H-T-B)/2);grid+='<line x1="'+L+'" y1="'+yy.toFixed(2)+'" x2="'+(W-R)+'" y2="'+yy.toFixed(2)+'" stroke="rgba(140,164,194,.22)" stroke-dasharray="4 6"/>';}
+ let lines='';
+ segments.forEach((seg,idx)=>{const x1=x(seg.from),x2=x(seg.to),yy=y(seg.pmc);lines+='<line x1="'+x1.toFixed(2)+'" y1="'+yy.toFixed(2)+'" x2="'+x2.toFixed(2)+'" y2="'+yy.toFixed(2)+'" stroke="#78a8ff" stroke-width="3" stroke-linecap="round"/>';if(idx<segments.length-1){const next=segments[idx+1];lines+='<line x1="'+x2.toFixed(2)+'" y1="'+yy.toFixed(2)+'" x2="'+x2.toFixed(2)+'" y2="'+y(next.pmc).toFixed(2)+'" stroke="rgba(120,168,255,.68)" stroke-width="2" stroke-linecap="round"/>';}lines+='<circle cx="'+x1.toFixed(2)+'" cy="'+yy.toFixed(2)+'" r="4.1" fill="#47dba9"/>';});
+ let labels='';
+ data.labels.forEach((lab,i)=>{const xx=x(lab.xKey),yy=y(lab.value),side=i%2===0?-10:14,textY=yy+side, dateY=textY+10; const textX=Math.min(Math.max(xx+6,L+2),W-88); labels+='<text class="pmc-segment-label" x="'+textX.toFixed(2)+'" y="'+textY.toFixed(2)+'" fill="#e8f0ff" font-size="11" font-weight="700">'+svgEscape(formatPmcHistoryValue(lab.value,a))+'</text><text class="pmc-segment-date" x="'+textX.toFixed(2)+'" y="'+dateY.toFixed(2)+'" fill="#a9b9ce" font-size="9">'+svgEscape(shortDate(lab.date))+'</text>';});
+ const axis='<text x="'+L+'" y="'+(H-8)+'" fill="var(--muted)" font-size="10">'+svgEscape(shortDate(data.bounds.start))+'</text><text x="'+(W-R)+'" y="'+(H-8)+'" text-anchor="end" fill="var(--muted)" font-size="10">'+svgEscape(shortDate(data.bounds.end))+'</text>';
+ return '<div class="pmc-history-plot"><svg class="pmc-history-chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Storico del PMC nel periodo selezionato">'+grid+lines+labels+axis+'</svg></div>';}
+function refreshPmcRangeControls(events){const wrap=$('pmcHistoryYearWrap'),select=$('pmcHistoryYear');if(!wrap||!select)return;const years=pmcEventYears(events);if(!pmcHistoryYear||!years.includes(String(pmcHistoryYear)))pmcHistoryYear=years[0]||today().slice(0,4);select.innerHTML=years.map(y=>'<option value="'+y+'"'+(String(y)===String(pmcHistoryYear)?' selected':'')+'>'+y+'</option>').join('');wrap.classList.toggle('hidden',pmcHistoryRange!=='year'||years.length<1);document.querySelectorAll('#pmcHistoryRanges [data-pmc-range]').forEach(b=>{const on=b.dataset.pmcRange===pmcHistoryRange;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on));});}
 function renderAssetPmcHistory(a){
  const panel=$('assetDetailPmcHistory');if(!panel)return;
  const info=$('pmcHistoryInfo'),graph=$('pmcHistoryGraph'),rows=$('pmcHistoryRows'),latest=$('pmcHistoryLatest');
@@ -1934,33 +1959,28 @@ function renderAssetPmcHistory(a){
  const validCats=['Azioni','ETF','ETF monetari','Materie prime','Obbligazioni','ETC/ETN','Oro','Crypto','Valute'];
  if(!validCats.includes(a.cat)){
   latest.textContent=Number(a.pmc)>0?formatPmcHistoryValue(Number(a.pmc),a):'—';
-  info.textContent='Valore di carico attuale';graph.innerHTML='';rows.innerHTML='';return;
+  info.textContent='Valore di carico attuale';graph.innerHTML='';rows.innerHTML='';$('pmcHistoryYearWrap')?.classList.add('hidden');return;
  }
  const events=assetPmcEvents(a);
- if(!events.length){latest.textContent=Number(a.pmc)>0?formatPmcHistoryValue(Number(a.pmc),a):'—';info.textContent='Nessuna operazione datata registrata.';graph.innerHTML='';rows.innerHTML='';return}
+ if(!events.length){latest.textContent=Number(a.pmc)>0?formatPmcHistoryValue(Number(a.pmc),a):'—';info.textContent='Nessuna operazione datata registrata.';graph.innerHTML='';rows.innerHTML='';$('pmcHistoryYearWrap')?.classList.add('hidden');return}
  const last=events[events.length-1];
  latest.textContent=last.pmc===null?'Posizione chiusa':formatPmcHistoryValue(last.pmc,a);
- info.textContent='PMC dopo ogni acquisto o vendita · '+events.length+' operazion'+(events.length===1?'e':'i');
- graph.innerHTML=pmcHistoryChart(events,a);
- const dots=graph.querySelectorAll('.pmc-history-dot');
- const tooltip=$('pmcHistoryTooltip');
- const tooltipDate=$('pmcHistoryTooltipDate');
- const tooltipValue=$('pmcHistoryTooltipValue');
- const showPmcPoint=(dot)=>{if(!dot||!tooltip||!tooltipDate||!tooltipValue)return;dots.forEach(d=>d.classList.remove('is-active'));dot.classList.add('is-active');tooltip.classList.remove('hidden');tooltipDate.textContent=dot.dataset.date||'—';tooltipValue.textContent=dot.dataset.pmc||'—';};
- dots.forEach((dot,idx)=>{dot.addEventListener('click',()=>showPmcPoint(dot));dot.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();showPmcPoint(dot)}});if(idx===dots.length-1)showPmcPoint(dot)});
- rows.innerHTML=events.slice().reverse().map(e=>{
-  const suffix=e.assumed?' · data da verificare':'';
-  const transaction=(e.kind==='buy'?'Acquisto':'Vendita')+' · '+number(e.quantity)+(a.cat==='Obbligazioni'?' nominali':' quote');
-  const pmc=e.pmc===null?'Posizione chiusa':formatPmcHistoryValue(e.pmc,a);
-  return '<div class="pmc-history-row"><div><b>'+shortDate(e.date)+'</b><small>'+svgEscape(transaction+suffix)+'</small></div><strong>'+svgEscape(pmc)+'</strong></div>';
- }).join('');
+ refreshPmcRangeControls(events);
+ const rangeData=pmcRangeData(events,pmcHistoryRange,pmcHistoryYear);
+ if(!rangeData){info.textContent='Nessun PMC disponibile nel periodo selezionato.';graph.innerHTML='<div class="pmc-history-empty">Nessun dato nel periodo selezionato.</div>';rows.innerHTML='';return;}
+ info.textContent=(pmcHistoryRange==='week'?'Base settimanale':pmcHistoryRange==='month'?'Base mensile':'Base annuale · '+rangeData.bounds.year)+' · '+rangeData.changeCount+' variazioni PMC';
+ graph.innerHTML=pmcHistoryChart(rangeData,a);
+ const sourceRows=rangeData.rows.length?rangeData.rows:[];
+ rows.innerHTML=sourceRows.length?sourceRows.map(e=>{const suffix=e.assumed?' · data da verificare':'';const transaction=(e.kind==='buy'?'Acquisto':'Vendita')+' · '+number(e.quantity)+(a.cat==='Obbligazioni'?' nominali':' quote');const pmc=e.pmc===null?'Posizione chiusa':formatPmcHistoryValue(e.pmc,a);return '<div class="pmc-history-row"><div><b>'+shortDate(e.date)+'</b><small>'+svgEscape(transaction+suffix)+'</small></div><strong>'+svgEscape(pmc)+'</strong></div>';}).join(''):'<div class="pmc-history-row"><div><b>'+svgEscape(shortDate(rangeData.bounds.start))+'</b><small>Nessuna variazione PMC nel periodo selezionato</small></div><strong>'+svgEscape(latest.textContent)+'</strong></div>';
 }
-function getDetailAssetById(id){return state.assets.find(x=>x.id===id)||(window.finholdraPreviewAsset&&window.finholdraPreviewAsset.id===id?window.finholdraPreviewAsset:null)} function openAssetDetail(id){const a=getDetailAssetById(id);if(!a)return;const external=$('assetDetailExternal');external.classList.toggle('hidden',!(detailIsMarketAsset(a)||a.id==='btp'));if(a.cat!=='Obbligazioni'&&detailIsMarketAsset(a)&&a.symbol&&/^[A-Za-z0-9.^=\-]{1,22}$/.test(a.symbol)){external.href='https://it.finance.yahoo.com/quote/'+encodeURIComponent(a.symbol)+'/chart/';external.textContent='Apri grafico Yahoo Finance ↗'}else if(a.cat==='Obbligazioni'&&a.isin){external.href='https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/scheda/'+encodeURIComponent(a.isin)+'-MOTX.html';external.textContent='Consulta strumento su Borsa Italiana ↗'}else{external.classList.add('hidden')}if(detailLiveInterval){clearInterval(detailLiveInterval);detailLiveInterval=null}detailBaseSeries=null;assetDetailPreviousFocus=document.activeElement;assetDetailScrollY=window.scrollY||0;assetDetailId=id;assetDetailRange=(a.cat==='Azioni'?'1mo':'1d');$('assetDetailProvider').innerHTML=a.id==='btp'?'<option value="mot">Euronext · MOT</option>':a.cat==='Obbligazioni'?'<option value="yahoo">Yahoo Finance</option>': '<option value="yahoo">Yahoo Finance · dati verificati</option>';$('assetDetailOverlay').classList.remove('hidden');document.body.classList.add('asset-detail-open');$('assetDetailSheet').scrollTop=0;const matPanel=$('assetDetailMaturityEditor');const matAvailable=a.cat==='Obbligazioni'||a.cat==='Risparmio postale'||a.cat==='Conto deposito';matPanel.classList.toggle('hidden',!matAvailable);if(matAvailable){$('assetDetailMaturityDate').value=a.maturityDate||'';$('assetDetailMaturityValue').value=a.maturity??'';$('assetDetailMaturityFeedback').textContent='';} $('assetDetailTitle').textContent=a.name;$('assetDetailSub').textContent=[a.symbol||a.cat,a.isin||'',detailMarketLabel(a),a.cat==='Obbligazioni'?currencyOf(a)+' / 100 nominali':currencyOf(a)].filter(Boolean).join(' · ');$('assetDetailPmc').textContent=a.finholdraWatchOnly?'—':a.cat==='Obbligazioni'?number(a.pmc)+' / 100 '+currencyOf(a):localMoney(a.pmc,currencyOf(a));renderAssetPmcHistory(a);$('assetDetailQty').textContent=a.finholdraWatchOnly?'Non posseduto':a.id==='btp'?eur(a.q)+' nominali':a.cat==='Conto deposito'||a.id==='bfp'?'1 posizione':number(a.q)+' quote';$('assetDetailInvested').textContent=a.finholdraWatchOnly?'—':eur(cap(a));$('assetDetailValue').textContent=a.finholdraWatchOnly?'—':eur(val(a));$('assetDetailPrice').textContent=a.cat==='Obbligazioni'?number(a.p)+' / 100 '+currencyOf(a):a.id==='bfp'?'Non quotato':a.cat==='Conto deposito'?eur(val(a)):localMoney(a.p,currencyOf(a));$('assetDetailPriceLabel').textContent=a.finholdraWatchOnly?'Prezzo di mercato':a.cat==='Conto deposito'?'Valore stimato':a.id==='bfp'?'Valore nominale':'Ultimo prezzo salvato';$('assetDetailSource').textContent=a.quoteAt?'Ultima quotazione: '+a.quoteAt:'Ultima quotazione: non verificata';detailRangeChange();$('assetDetailClose').focus();loadAssetDetail();detailLiveInterval=setInterval(()=>{if(assetDetailId&&document.visibilityState!=='hidden'&&navigator.onLine)void updateDetailLiveQuote(assetDetailRequest)},60000);}
+function getDetailAssetById(id){return state.assets.find(x=>x.id===id)||(window.finholdraPreviewAsset&&window.finholdraPreviewAsset.id===id?window.finholdraPreviewAsset:null)} function openAssetDetail(id){const a=getDetailAssetById(id);if(!a)return;const external=$('assetDetailExternal');external.classList.toggle('hidden',!(detailIsMarketAsset(a)||a.id==='btp'));if(a.cat!=='Obbligazioni'&&detailIsMarketAsset(a)&&a.symbol&&/^[A-Za-z0-9.^=\-]{1,22}$/.test(a.symbol)){external.href='https://it.finance.yahoo.com/quote/'+encodeURIComponent(a.symbol)+'/chart/';external.textContent='Apri grafico Yahoo Finance ↗'}else if(a.cat==='Obbligazioni'&&a.isin){external.href='https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/scheda/'+encodeURIComponent(a.isin)+'-MOTX.html';external.textContent='Consulta strumento su Borsa Italiana ↗'}else{external.classList.add('hidden')}if(detailLiveInterval){clearInterval(detailLiveInterval);detailLiveInterval=null}detailBaseSeries=null;assetDetailPreviousFocus=document.activeElement;assetDetailScrollY=window.scrollY||0;assetDetailId=id;assetDetailRange=(a.cat==='Azioni'?'1mo':'1d');pmcHistoryRange='week';pmcHistoryYear='';$('assetDetailProvider').innerHTML=a.id==='btp'?'<option value="mot">Euronext · MOT</option>':a.cat==='Obbligazioni'?'<option value="yahoo">Yahoo Finance</option>': '<option value="yahoo">Yahoo Finance · dati verificati</option>';$('assetDetailOverlay').classList.remove('hidden');document.body.classList.add('asset-detail-open');$('assetDetailSheet').scrollTop=0;const matPanel=$('assetDetailMaturityEditor');const matAvailable=a.cat==='Obbligazioni'||a.cat==='Risparmio postale'||a.cat==='Conto deposito';matPanel.classList.toggle('hidden',!matAvailable);if(matAvailable){$('assetDetailMaturityDate').value=a.maturityDate||'';$('assetDetailMaturityValue').value=a.maturity??'';$('assetDetailMaturityFeedback').textContent='';} $('assetDetailTitle').textContent=a.name;$('assetDetailSub').textContent=[a.symbol||a.cat,a.isin||'',detailMarketLabel(a),a.cat==='Obbligazioni'?currencyOf(a)+' / 100 nominali':currencyOf(a)].filter(Boolean).join(' · ');$('assetDetailPmc').textContent=a.finholdraWatchOnly?'—':a.cat==='Obbligazioni'?number(a.pmc)+' / 100 '+currencyOf(a):localMoney(a.pmc,currencyOf(a));renderAssetPmcHistory(a);$('assetDetailQty').textContent=a.finholdraWatchOnly?'Non posseduto':a.id==='btp'?eur(a.q)+' nominali':a.cat==='Conto deposito'||a.id==='bfp'?'1 posizione':number(a.q)+' quote';$('assetDetailInvested').textContent=a.finholdraWatchOnly?'—':eur(cap(a));$('assetDetailValue').textContent=a.finholdraWatchOnly?'—':eur(val(a));$('assetDetailPrice').textContent=a.cat==='Obbligazioni'?number(a.p)+' / 100 '+currencyOf(a):a.id==='bfp'?'Non quotato':a.cat==='Conto deposito'?eur(val(a)):localMoney(a.p,currencyOf(a));$('assetDetailPriceLabel').textContent=a.finholdraWatchOnly?'Prezzo di mercato':a.cat==='Conto deposito'?'Valore stimato':a.id==='bfp'?'Valore nominale':'Ultimo prezzo salvato';$('assetDetailSource').textContent=a.quoteAt?'Ultima quotazione: '+a.quoteAt:'Ultima quotazione: non verificata';detailRangeChange();$('assetDetailClose').focus();loadAssetDetail();detailLiveInterval=setInterval(()=>{if(assetDetailId&&document.visibilityState!=='hidden'&&navigator.onLine)void updateDetailLiveQuote(assetDetailRequest)},60000);}
 function closeAssetDetail(){window.finholdraPreviewAsset=null;if(detailLiveInterval){clearInterval(detailLiveInterval);detailLiveInterval=null}detailBaseSeries=null;assetDetailRequest++;assetDetailId=null;$('assetDetailOverlay').classList.add('hidden');document.body.classList.remove('asset-detail-open');window.scrollTo(0,assetDetailScrollY);assetDetailPoints=[];if(assetDetailPreviousFocus&&assetDetailPreviousFocus.isConnected)assetDetailPreviousFocus.focus()}
 $('assetDetailMaturitySave').onclick=()=>{const a=getDetailAsset();if(!a||!['Obbligazioni','Risparmio postale','Conto deposito'].includes(a.cat))return;const d=$('assetDetailMaturityDate').value;const v=$('assetDetailMaturityValue').value.trim();if(d&&!/^\d{4}-\d{2}-\d{2}$/.test(d)){alert('Data di scadenza non valida.');return}if(v&&(!Number.isFinite(Number(v))||Number(v)<0)){alert('Valore previsto non valido.');return}a.maturityDate=d;a.maturity=v?Number(v):null;save();trackSnapshot();render();if(editing)renderEditor();$('assetDetailMaturityFeedback').textContent='Scadenza salvata nel portafoglio.';};
 $('assetDetailClose').onclick=closeAssetDetail;$('assetDetailProvider').onchange=()=>loadAssetDetail();
 $('assetDetailOverlay').addEventListener('click',e=>{if(e.target===$('assetDetailOverlay'))closeAssetDetail()});
 $('assetDetailRanges').addEventListener('click',e=>{const b=e.target.closest('[data-asset-range]');if(!b||!assetDetailId||b.disabled||b.hidden)return;assetDetailRange=b.dataset.assetRange;detailRangeChange();loadAssetDetail()});
+$('pmcHistoryRanges').addEventListener('click',e=>{const b=e.target.closest('[data-pmc-range]');if(!b||!assetDetailId)return;pmcHistoryRange=b.dataset.pmcRange;const a=getDetailAsset();if(a)renderAssetPmcHistory(a)});
+$('pmcHistoryYear').addEventListener('change',e=>{pmcHistoryYear=e.target.value;const a=getDetailAsset();if(a)renderAssetPmcHistory(a)});
 document.addEventListener('keydown',e=>{if($('assetDetailOverlay').classList.contains('hidden'))return;if(e.key==='Escape'){e.preventDefault();closeAssetDetail()}if(e.key==='Tab'){const fs=Array.from($('assetDetailSheet').querySelectorAll('button:not([disabled]),[tabindex="0"]'));if(!fs.length)return;const first=fs[0],last=fs[fs.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 function parseHistoryPayload(data,symbol){
  // No silent fallback to another exchange, another currency or another class of shares.
