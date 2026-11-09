@@ -1,0 +1,7 @@
+Invesquo b.7.24 – correzione Home e ricerca preferiti
+- CSS correttamente incluso, nessuna regola CSS visibile come testo.
+- Logo a sinistra, mascotte centrata, stati a destra; navigazione in riga.
+- Numeri dei rendimenti senza contorno nel tema chiaro.
+- Ricerca preferiti identica a quella degli Investimenti: stesso motore, priorità mercato, ticker/ISIN, visualizzazione loghi e bandiere.
+- Massimo tre preferiti, anche non posseduti.
+- Invariati i servizi Netlify e il motore Alphabet.

@@ -1,0 +1,7 @@
+Invesquo b.7.23 – correzione interfaccia
+- Corretto CSS della b.7.22 stampato come testo nella Home.
+- Header: logo a sinistra, Candelotta al centro, tre indicatori a destra in colonna.
+- Pulsanti di navigazione nuovamente orizzontali.
+- Contorno scuro rimosso dalle percentuali sul grafico dello Storico solo per tema chiaro.
+- Impostazioni e preferiti della b.7.22 preservati.
+- Cache PWA aggiornata.
