@@ -1,0 +1,1 @@
+Finholdra Beta 9.1 — PMC 6M e integrazione quotazioni recenti verificate nelle viste storiche. Carica il contenuto nella cartella app/ del branch beta; non modificare main. Funzione Alphabet non modificata.

@@ -913,7 +913,7 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
 <section class="box" id="assetDetailPmcHistory" aria-label="Storico del prezzo medio di carico">
 <div class="pmc-history-top"><h3>Prezzo e acquisti</h3><strong id="pmcHistoryLatest">—</strong></div>
 <p class="pmc-history-info" id="pmcHistoryInfo"></p>
-<div class="pmc-history-toolbar"><div class="timeline-range pmc-history-ranges" id="pmcHistoryRanges" role="group" aria-label="Periodo storico PMC"><button class="btn selected" data-pmc-range="week" type="button" aria-pressed="true">1S</button><button class="btn" data-pmc-range="month" type="button" aria-pressed="false">1M</button><button class="btn" data-pmc-range="year" type="button" aria-pressed="false">1A</button></div><label class="pmc-year-wrap hidden" id="pmcHistoryYearWrap">Anno<select class="order-select" id="pmcHistoryYear" aria-label="Seleziona l'anno del grafico PMC"></select></label></div>
+<div class="pmc-history-toolbar"><div class="timeline-range pmc-history-ranges" id="pmcHistoryRanges" role="group" aria-label="Periodo storico PMC"><button class="btn selected" data-pmc-range="week" type="button" aria-pressed="true">1S</button><button class="btn" data-pmc-range="month" type="button" aria-pressed="false">1M</button><button class="btn" data-pmc-range="sixmonths" type="button" aria-pressed="false">6M</button><button class="btn" data-pmc-range="year" type="button" aria-pressed="false">1A</button></div><label class="pmc-year-wrap hidden" id="pmcHistoryYearWrap">Anno<select class="order-select" id="pmcHistoryYear" aria-label="Seleziona l'anno del grafico PMC"></select></label></div>
 <div id="pmcHistoryGraph"></div><div class="pmc-history-rows" id="pmcHistoryRows"></div>
 </section>
 <div class="box hidden" id="assetDetailMaturityEditor" style="margin:12px 0;padding:14px;border-radius:12px">
@@ -1950,7 +1950,7 @@ function formatPmcHistoryValue(n,a){return a.cat==='Obbligazioni'?number(n)+' / 
 function pmcEventYears(events){return Array.from(new Set(events.map(e=>String(e.date||'').slice(0,4)).filter(Boolean))).sort((a,b)=>Number(b)-Number(a));}
 function pmcIsoDate(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');}
 function pmcChangeEvents(events){const changed=[];let previous=null;for(const e of events){if(e.pmc===null){previous=null;continue}if(previous===null||Math.abs(previous-e.pmc)>1e-8)changed.push(e);previous=e.pmc;}return changed;}
-function pmcPeriodBounds(){const now=new Date(),end=pmcIsoDate(now);if(pmcHistoryRange==='year'){const year=Number(pmcHistoryYear||now.getFullYear());return {start:year+'-01-01',end:year+'-12-31',title:String(year)};}if(pmcHistoryRange==='month'){return {start:now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-01',end,title:'Mese corrente'};}const dow=(now.getDay()+6)%7,monday=new Date(now.getFullYear(),now.getMonth(),now.getDate()-dow),sunday=new Date(monday.getFullYear(),monday.getMonth(),monday.getDate()+6);return {start:pmcIsoDate(monday),end:pmcIsoDate(sunday),title:'Settimana corrente'};}
+function pmcPeriodBounds(){const now=new Date(),end=pmcIsoDate(now);if(pmcHistoryRange==='sixmonths'){const start=new Date(now.getFullYear(),now.getMonth()-6,now.getDate());return {start:pmcIsoDate(start),end,title:'Ultimi 6 mesi'};}if(pmcHistoryRange==='year'){const year=Number(pmcHistoryYear||now.getFullYear());return {start:year+'-01-01',end:year+'-12-31',title:String(year)};}if(pmcHistoryRange==='month'){return {start:now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-01',end,title:'Mese corrente'};}const dow=(now.getDay()+6)%7,monday=new Date(now.getFullYear(),now.getMonth(),now.getDate()-dow),sunday=new Date(monday.getFullYear(),monday.getMonth(),monday.getDate()+6);return {start:pmcIsoDate(monday),end:pmcIsoDate(sunday),title:'Settimana corrente'};}
 function pmcSetRangeControls(events){const years=pmcEventYears(events),curr=String(new Date().getFullYear());if(!years.includes(curr))years.unshift(curr);const el=$('pmcHistoryYear'),wrap=$('pmcHistoryYearWrap');if(!pmcHistoryYear||!years.includes(pmcHistoryYear))pmcHistoryYear=years[0];if(el){el.innerHTML=years.map(y=>'<option value="'+y+'"'+(y===pmcHistoryYear?' selected':'')+'>'+y+'</option>').join('');}wrap?.classList.toggle('hidden',pmcHistoryRange!=='year');document.querySelectorAll('#pmcHistoryRanges [data-pmc-range]').forEach(b=>{const on=b.dataset.pmcRange===pmcHistoryRange;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on))});}
 function pmcDateOffset(date){return Date.parse(date+'T12:00:00')}
 function pmcGraphWithMarket(prices,events,a){const box=$('pmcHistoryGraph');if(!box)return;
@@ -1975,7 +1975,18 @@ async function renderAssetPmcHistory(a){const panel=$('assetDetailPmcHistory');i
  const request=++pmcCompareRequest;const bounds=pmcPeriodBounds();const inPeriod=changes.filter(e=>e.date>=bounds.start&&e.date<=bounds.end);
  info.textContent=bounds.title+' · '+inPeriod.length+' '+(inPeriod.length===1?'variazione':'variazioni')+' del PMC';graph.innerHTML='<div class="pmc-history-empty">Caricamento prezzi…</div>';
  let prices=[];
- try{if(a.symbol&&detailIsMarketAsset(a)){const range=pmcHistoryRange==='week'?'5d':pmcHistoryRange==='month'?'1mo':'max';const feed=await fetchDetailHistory(a,range);prices=feed.points||[];}else prices=localDetailSeries(a);}catch(_){prices=localDetailSeries(a);}
+ try{
+  if(a.symbol&&detailIsMarketAsset(a)){
+   const range=pmcHistoryRange==='week'?'5d':pmcHistoryRange==='month'?'1mo':pmcHistoryRange==='sixmonths'?'6mo':'1y';
+   const feed=await fetchDetailHistory(a,range);prices=feed.points||[];
+   if(range!=='5d'&&pmcPeriodBounds().end>=today()){
+    try{const recent=await fetchDetailHistory(a,'5d');prices=mergeRecentVerifiedHistory(prices,recent.points);}catch(_){}
+   }
+   if(pmcPeriodBounds().end>=today()){
+    try{const current=await fetchDetailLiveQuote(a);prices=mergeRecentVerifiedHistory(prices,[current]);}catch(_){}
+   }
+  }else prices=localDetailSeries(a);
+ }catch(_){prices=localDetailSeries(a);}
  if(request!==pmcCompareRequest||assetDetailId!==a.id)return;
  pmcGraphWithMarket(prices,events,a);
 }
@@ -2020,6 +2031,36 @@ async function fetchDetailHistory(a,range){
  const points=observed.filter(pt=>pt.t>=Date.now()-days*86400000);
  if(points.length)return {points,source:'Quotazioni verificate salvate sul dispositivo',previousClose:null,local:true};
  throw Error('Dati del periodo non disponibili: '+failures.slice(0,2).join(' · '));
+}
+// Integrate observed short-range prices with older charts, keeping one verified observation per day.
+// Never fabricate timestamps, prices, or update the asset's saved quote.
+function mergeRecentVerifiedHistory(base,recent){
+ const combined=new Map();
+ for(const point of [...(base||[]),...(recent||[])]){
+  const t=Number(point?.t),p=Number(point?.p);
+  if(!(t>0&&p>0&&Number.isFinite(t)&&Number.isFinite(p))||t>Date.now()+3600000)continue;
+  const date=new Date(t).toISOString().slice(0,10),old=combined.get(date);
+  if(!old||t>old.t)combined.set(date,{t,p});
+ }
+ return [...combined.values()].sort((x,y)=>x.t-y.t);
+}
+async function refreshDetailRecentHistory(request){
+ const a=getDetailAsset(),base=detailBaseSeries;
+ if(!a||!base||request!==assetDetailRequest||!['1mo','6mo','1y','max'].includes(assetDetailRange))return;
+ try{
+  const short=await fetchDetailHistory(a,'5d');
+  if(request!==assetDetailRequest||assetDetailId!==a.id||detailBaseSeries!==base)return;
+  const combined=mergeRecentVerifiedHistory(base.points,short.points);
+  const prior=base.points[base.points.length-1]?.t||0;
+  const newest=combined[combined.length-1]?.t||0;
+  if(newest>prior+60000){
+   detailBaseSeries={points:combined,previousClose:base.previousClose,source:base.source+' + rilevazioni recenti'};
+   plotAssetDetail(combined,a,{previousClose:base.previousClose});
+   $('assetDetailSource').textContent=detailBaseSeries.source+' · '+currencyOf(a);
+   $('assetDetailNote').textContent='Storico integrato con l’ultima rilevazione verificata del periodo breve ('+detailDate(newest)+'). Nessun prezzo ricostruito.';
+  }
+ }catch(_){/* An older range remains valid if shorter history is unavailable. */}
+ if(request===assetDetailRequest&&assetDetailId===a.id)void updateDetailLiveQuote(request);
 }
 function localDetailSeries(a){
  // A BTP without an authenticated historical feed can use only future local observations.
@@ -2177,7 +2218,7 @@ async function loadAssetDetail(){
   const pts=data.points;
   if(!pts.length){detailEmpty('Nessuna quotazione disponibile in questo periodo.');$('assetDetailSource').textContent=data.source;return}
   detailBaseSeries={points:pts,previousClose:data.previousClose,source:data.source};
-  plotAssetDetail(pts,a,{previousClose:data.previousClose});void updateDetailLiveQuote(request);
+  plotAssetDetail(pts,a,{previousClose:data.previousClose});if(['1mo','6mo','1y','max'].includes(range))void refreshDetailRecentHistory(request);else void updateDetailLiveQuote(request);
   $('assetDetailSource').textContent=data.source+' · '+currencyOf(a)+' · '+detailMarketLabel(a);if(data.alternativeRange)$('assetDetailNote').textContent='I dati intraday non sono disponibili per questo titolo: viene mostrato lo storico reale di 1 mese. Tocca la curva per data e prezzo. Il prezzo del portafoglio resta indipendente.';
  }catch(e){if(request!==assetDetailRequest)return;
   // Intraday can be unavailable on Yahoo GEM. Show a verified, timestamped quote as
