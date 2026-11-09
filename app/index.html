@@ -559,6 +559,21 @@ html,body{overscroll-behavior-y:contain}
 
 /* Finholdra Beta 8.7 — PMC cronologico */
 #assetDetailPmcHistory{margin-top:14px;padding:14px;border-radius:14px;min-width:0}
+
+/* Finholdra Beta 8.8 — larger header logo and tappable PMC points */
+.top .new-header-main{grid-template-columns:minmax(0,1.28fr) 84px minmax(104px,.92fr)!important;gap:8px!important}
+.top .finholdra-wordmark{max-width:none!important}
+.top .finholdra-wordmark img{width:clamp(158px,49vw,230px)!important;max-width:100%!important;max-height:92px!important}
+@media(max-width:420px){.top .new-header-main{grid-template-columns:minmax(0,1.24fr) 76px minmax(96px,.92fr)!important;gap:6px!important}.top .finholdra-wordmark img{width:clamp(150px,48vw,205px)!important;max-height:86px!important}}
+@media(max-width:350px){.top .new-header-main{grid-template-columns:minmax(0,1.2fr) 67px minmax(88px,.9fr)!important;gap:4px!important}.top .finholdra-wordmark img{width:clamp(132px,47vw,180px)!important;max-height:76px!important}}
+.pmc-history-tooltip{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 0;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:rgba(120,168,255,.08);font-size:12px;line-height:1.35}
+.pmc-history-tooltip.hidden{display:none!important}
+.pmc-history-tooltip strong{font-size:13px;font-variant-numeric:tabular-nums}
+.pmc-history-dot{cursor:pointer;transition:transform .12s ease,filter .12s ease}
+.pmc-history-dot:hover,.pmc-history-dot:focus-visible{transform:scale(1.18);filter:brightness(1.08)}
+.pmc-history-dot.is-active{stroke:#fff;stroke-width:2.2px}
+body[data-theme="light"] .pmc-history-dot.is-active{stroke:#08264B}
+
 .pmc-history-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:7px}
 .pmc-history-top h3{margin:0;font-size:16px}
 .pmc-history-info{font-size:11px;color:var(--muted);margin:0 0 12px}
@@ -1907,9 +1922,9 @@ function pmcHistoryChart(events,a){
   const reopened=events.slice(priorIndex+1,nextIndex).some(e=>e.pmc===null);
   d+=(reopened?' M '+x(i).toFixed(2)+' '+y(points[i].pmc).toFixed(2):' H '+x(i).toFixed(2)+' V '+y(points[i].pmc).toFixed(2));
  }
- const circles=points.map((e,i)=>'<circle cx="'+x(i).toFixed(2)+'" cy="'+y(e.pmc).toFixed(2)+'" r="3.5" fill="'+(e.kind==='buy'?'#47dba9':'#f0ba75')+'"/>').join('');
+ const circles=points.map((e,i)=>'<circle class="pmc-history-dot" tabindex="0" role="button" aria-label="PMC '+svgEscape(shortDate(e.date))+' '+svgEscape(formatPmcHistoryValue(e.pmc,a))+'" data-index="'+i+'" data-date="'+svgEscape(shortDate(e.date))+'" data-pmc="'+svgEscape(formatPmcHistoryValue(e.pmc,a))+'" cx="'+x(i).toFixed(2)+'" cy="'+y(e.pmc).toFixed(2)+'" r="4.2" fill="'+(e.kind==='buy'?'#47dba9':'#f0ba75')+'"/>' ).join('');
  const labels='<text x="'+L+'" y="'+(H-7)+'" fill="var(--muted)" font-size="10">'+svgEscape(shortDate(points[0].date))+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="var(--muted)" font-size="10">'+svgEscape(shortDate(points[points.length-1].date))+'</text>';
- return '<div class="pmc-history-plot"><svg class="pmc-history-chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Andamento del prezzo medio di carico dopo le operazioni registrate"><path d="'+d+'" fill="none" stroke="#78a8ff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>'+circles+labels+'</svg></div>';
+ return '<div class="pmc-history-plot"><svg class="pmc-history-chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Andamento del prezzo medio di carico dopo le operazioni registrate"><path d="'+d+'" fill="none" stroke="#78a8ff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>'+circles+labels+'</svg><div class="pmc-history-tooltip hidden" id="pmcHistoryTooltip"><span id="pmcHistoryTooltipDate">—</span><strong id="pmcHistoryTooltipValue">—</strong></div></div>';
 }
 function renderAssetPmcHistory(a){
  const panel=$('assetDetailPmcHistory');if(!panel)return;
@@ -1927,6 +1942,12 @@ function renderAssetPmcHistory(a){
  latest.textContent=last.pmc===null?'Posizione chiusa':formatPmcHistoryValue(last.pmc,a);
  info.textContent='PMC dopo ogni acquisto o vendita · '+events.length+' operazion'+(events.length===1?'e':'i');
  graph.innerHTML=pmcHistoryChart(events,a);
+ const dots=graph.querySelectorAll('.pmc-history-dot');
+ const tooltip=$('pmcHistoryTooltip');
+ const tooltipDate=$('pmcHistoryTooltipDate');
+ const tooltipValue=$('pmcHistoryTooltipValue');
+ const showPmcPoint=(dot)=>{if(!dot||!tooltip||!tooltipDate||!tooltipValue)return;dots.forEach(d=>d.classList.remove('is-active'));dot.classList.add('is-active');tooltip.classList.remove('hidden');tooltipDate.textContent=dot.dataset.date||'—';tooltipValue.textContent=dot.dataset.pmc||'—';};
+ dots.forEach((dot,idx)=>{dot.addEventListener('click',()=>showPmcPoint(dot));dot.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();showPmcPoint(dot)}});if(idx===dots.length-1)showPmcPoint(dot)});
  rows.innerHTML=events.slice().reverse().map(e=>{
   const suffix=e.assumed?' · data da verificare':'';
   const transaction=(e.kind==='buy'?'Acquisto':'Vendita')+' · '+number(e.quantity)+(a.cat==='Obbligazioni'?' nominali':' quote');
