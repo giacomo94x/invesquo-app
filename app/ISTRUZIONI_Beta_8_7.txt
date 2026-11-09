@@ -1,0 +1,3 @@
+Finholdra Beta 8.7 — Storico PMC
+La scheda dettaglio di ogni titolo mostra l’evoluzione cronologica del prezzo medio di carico (PMC) in base alle operazioni registrate. Acquisti: media ponderata. Vendite: PMC invariato sulle quote residue. Date di apertura migrate segnalate come da verificare. Per depositi e risparmio postale appare solo il valore di carico corrente, se disponibile.
+Caricare il contenuto direttamente nella cartella app/ del repository GitHub.

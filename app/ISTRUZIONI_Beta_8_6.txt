@@ -1,0 +1,8 @@
+Finholdra Beta 8.6 – Ricalcolo ING lordi
+
+- ING: maturazione giornaliera lorda al 4% dai versamenti del 19 agosto (19.150 EUR) e 20 agosto 2026 (15.925+14.924 EUR).
+- Al 09/11/2026: 445,93 EUR lordi, circa 329,99 EUR netti al 26%.
+- Il saldo 50.000 EUR e preservato. La differenza di 1 EUR rispetto ai movimenti visibili non viene attribuita arbitrariamente a una data di valuta.
+- Il valore mostrato nella sezione Conti deposito e lordo.
+- Migrazione una tantum; conti deposito aggiunti manualmente invariati.
+- Funzioni Netlify e aggiornamento Alphabet invariati.

@@ -1,0 +1,4 @@
+Finholdra Beta 8.3
+- Pulsante TWRR/MWRR/ROI attivo evidenziato in bianco nello Storico (testo scuro); tema chiaro con bordo blu.
+- Nessuna modifica ai calcoli, al portafoglio e alle funzioni Netlify.
+- Cache PWA aggiornata.

@@ -1,0 +1,1 @@
+Finholdra Beta 8.5 — Loghi SVG aggiornati; conto ING: inizio 08/08/2026 e riferimento interessi lordi 329,99 € al 09/11/2026 (una sola migrazione); aggiunta manuale conti deposito con capitale, tasso annuo lordo, decorrenza, interessi al riferimento, scadenza e riepilogo giornaliero/mensile/annuale. Nessuna modifica alle funzioni Netlify.
