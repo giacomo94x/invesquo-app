@@ -1,0 +1,8 @@
+Invesquo b.7.21 — revisione microtesti e intestazione
+
+• Eliminati/accorciati testi operativi ridondanti nella Dashboard, negli Investimenti, nelle Impostazioni e nelle schermate di gestione.
+• Conservati approfondimenti Academy e avvisi indispensabili per la sicurezza dei dati.
+• Mascotte centrata nell’intestazione, logo a sinistra e conteggio strumenti a destra.
+• Navigazione mantenuta nella seconda riga.
+• Versione e cache aggiornate a b.7.21.
+• Funzioni Netlify inalterate.

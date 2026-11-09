@@ -1,0 +1,5 @@
+Invesquo b.7.18
+- Academy: rimossa l'avvertenza generica ripetuta; aggiunte spiegazioni specifiche ed esempi per ogni sottovoce già presente, conservando gli approfondimenti dei fattori ETF.
+- BTP e buoni postali: data e valore lordo a scadenza modificabili direttamente nel dettaglio del singolo investimento, oltre che in Rettifica dati e durante l'inserimento.
+- Salvataggio locale e aggiornamento immediato della sezione Valori a scadenza.
+- Nessuna modifica alle funzioni Netlify, al recupero Alphabet o ai calcoli delle quote.

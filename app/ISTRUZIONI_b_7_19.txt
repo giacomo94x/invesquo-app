@@ -1,0 +1,10 @@
+Invesquo b.7.19 · Aggiornamento Home e swipe
+
+- In Dashboard l'ora dell'ultimo aggiornamento riuscito è visibile accanto al rendimento. Un fallimento della rete non sovrascrive l'ultimo orario valido.
+- All'avvio con profilo aperto e al ritorno nell'app dal background (iPhone/PWA inclusi) viene effettuato un controllo aggiornato delle quotazioni.
+- Trascinando verso il basso dalla sommità della Dashboard (soglia circa 76 px) si avvia l'aggiornamento senza ricaricare la pagina. Il gesto è ignorato in altre sezioni, su elementi interattivi e durante un aggiornamento già in corso.
+- Rimosso il pulsante refresh dalla barra di navigazione in alto, ora con sei icone. Il pulsante manuale nella sezione Quotazioni e dati resta disponibile.
+- Nessuna modifica alle funzioni Netlify né alla logica Alphabet 1GOOG Milano.
+- Aggiornato cache service worker a b.7.19.
+
+Installazione: copiare il contenuto dello ZIP nella directory app/ del repository, non la cartella ZIP stessa. La disponibilità delle quotazioni dipende dalla corretta pubblicazione delle funzioni Netlify.

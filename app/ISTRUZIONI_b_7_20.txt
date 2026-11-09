@@ -1,0 +1,2 @@
+Invesquo b.7.20 — Report calendario e icone
+Report settimanale (lun–dom) e mensile sotto il grafico Dashboard. Selezione periodi con rilevazioni, PDF multipagina con patrimonio, categorie, titoli, flussi/acquisti, quote, ROI e PMC quando attendibile. I periodi incompleti e i dati mancanti sono dichiarati; nessun rendimento simulato. Icone: fallback immediato, caricamento eager e visualizzazione al completamento. Funzioni Netlify e Alphabet invariate.
