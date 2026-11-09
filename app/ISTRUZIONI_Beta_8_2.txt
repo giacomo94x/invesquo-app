@@ -1,0 +1,6 @@
+Finholdra Beta 8.2
+- Logo nella Home ampliato, tre colonne sulla stessa riga: marchio sinistra, Finn centro, stato destra.
+- SVG dedicati alla Home con trasparenze ritagliate; loghi originali invariati.
+- Saluto di Finn: durata 2 secondi.
+- Navigazione orizzontale invariata.
+- Modificati: index.html, sw.js; aggiunti: due SVG e istruzioni.

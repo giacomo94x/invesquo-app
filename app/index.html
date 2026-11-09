@@ -532,7 +532,16 @@ html,body{overscroll-behavior-y:contain}
 .top .header-tools .gear-btn{flex:0 0 39px}
 @media(max-width:420px){.top .brand-row{grid-template-columns:minmax(0,1fr) 76px minmax(0,1fr);column-gap:3px;height:80px;min-height:80px}.top .brand-row h1{font-size:clamp(20px,5.9vw,25px)!important;letter-spacing:-.9px}.top .brand-row .face-button,.top .brand-row .performance-face{width:76px;height:76px;min-width:76px;min-height:76px;flex-basis:76px}.top .brand-row .performance-face svg{width:76px;height:76px}.top .brand-count .pill{font-size:9px;padding:5px 6px}}
 @media(max-width:355px){.top .brand-row h1{font-size:19px!important}.top .brand-count .pill{font-size:9px;padding:5px 4px}.top .header-tools{gap:4px}.top .header-tools .gear-btn{width:35px;height:35px;flex-basis:35px}}
- .finholdra-settings-payoff{font-size:12px;font-weight:600;letter-spacing:.015em;color:var(--muted);margin:0 0 16px 0;text-align:center} </style><style>
+ .finholdra-settings-payoff{font-size:12px;font-weight:600;letter-spacing:.015em;color:var(--muted);margin:0 0 16px 0;text-align:center} 
+/* Beta 8.2 — wordmark enlarged without changing the 3-column header */
+.top .new-header-main{display:grid!important;grid-template-columns:minmax(0,1fr) 76px minmax(0,1fr)!important;grid-template-rows:auto!important;align-items:center!important;gap:5px!important;min-height:104px!important;width:100%!important}
+.top .new-header-brand{grid-column:1!important;grid-row:1!important;align-items:center!important;justify-content:flex-start!important;min-width:0!important;overflow:visible!important}
+.top .finholdra-wordmark{display:block!important;width:100%!important;max-width:none!important;min-width:0!important;overflow:visible!important}
+.top .finholdra-wordmark img{display:block!important;width:clamp(115px,38vw,164px)!important;max-width:none!important;max-height:none!important;height:auto!important;object-fit:contain!important;object-position:left center!important}
+.top #faceButton{grid-column:2!important;grid-row:1!important;justify-self:center!important;align-self:center!important}
+.top .new-header-status{grid-column:3!important;grid-row:1!important;justify-self:stretch!important;align-items:flex-end!important;text-align:right!important;min-width:0!important;gap:6px!important}
+@media(max-width:350px){.top .new-header-main{grid-template-columns:minmax(0,1fr) 67px minmax(0,1fr)!important;gap:3px!important}.top .finholdra-wordmark img{width:clamp(103px,37vw,132px)!important}}
+</style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
 .pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
 .shoulder-monkey{position:absolute;right:-2%;top:26%;width:33%;max-width:95px;z-index:4;animation:shoulderBop 1.25s ease-in-out infinite alternate;pointer-events:none}.shoulder-monkey svg{width:100%;height:auto;filter:drop-shadow(0 4px 5px #05132588)}@keyframes shoulderBop{from{transform:rotate(-7deg) translateY(0)}to{transform:rotate(6deg) translateY(-8px)}}
@@ -589,63 +598,6 @@ body[data-theme="light"] .history-point text.history-return-label,body[data-them
 .favorite-row:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .finn-greeting{position:fixed;top:calc(env(safe-area-inset-top,0px) + 15px);left:50%;transform:translateX(-50%);z-index:9999;border:1px solid var(--border);background:var(--panel);color:var(--text);padding:12px 17px;border-radius:16px;box-shadow:0 8px 27px #0005;font:700 14px Montserrat,sans-serif;pointer-events:none;white-space:nowrap}
 body[data-theme=light] .finholdra-payoff{color:#08264B}
-
-/* Beta 8.1 — increased wordmark and balanced responsive header */
-.top .new-header-main{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) 84px minmax(0,1fr)!important;
-  grid-template-rows:auto auto!important;
-  align-items:center!important;
-  column-gap:7px!important;
-  row-gap:1px!important;
-  min-height:0!important;
-  width:100%!important;
-}
-.top .new-header-brand{
-  grid-column:1 / -1!important;
-  grid-row:1!important;
-  width:100%!important;
-  min-width:0!important;
-  display:flex!important;
-  justify-content:flex-start!important;
-  align-items:center!important;
-  overflow:hidden!important;
-}
-.top .finholdra-wordmark{
-  width:min(76vw,430px)!important;
-  max-width:none!important;
-  min-width:0!important;
-  flex:0 0 auto!important;
-}
-.top .finholdra-wordmark img{
-  display:block!important;
-  width:100%!important;
-  height:auto!important;
-  max-width:none!important;
-  max-height:none!important;
-  object-fit:contain!important;
-  object-position:left center!important;
-}
-.top .new-header-main #faceButton{
-  grid-column:2!important;
-  grid-row:2!important;
-  justify-self:center!important;
-  align-self:center!important;
-}
-.top .new-header-status{
-  grid-column:3!important;
-  grid-row:2!important;
-  align-items:flex-end!important;
-  text-align:right!important;
-}
-@media(max-width:420px){
-  .top .new-header-main{grid-template-columns:minmax(0,1fr) 76px minmax(0,1fr)!important;gap:1px 5px!important}
-  .top .finholdra-wordmark{width:min(76vw,340px)!important}
-}
-@media(max-width:350px){
-  .top .new-header-main{grid-template-columns:minmax(0,1fr) 67px minmax(0,1fr)!important;gap:1px 3px!important}
-  .top .finholdra-wordmark{width:min(76vw,280px)!important}
-}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-bianco.svg" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -740,7 +692,7 @@ body[data-theme=light] .finholdra-payoff{color:#08264B}
 <button class="btn primary" id="visitClose" type="button">Ricevuto, a dopo</button>
 </div>
 </div>
-<header class="top"><div class="new-header-main"><div class="new-header-brand"><picture class="finholdra-wordmark"><img id="finholdraLogo" src="./finholdra-bianco.svg" alt="Finholdra" loading="eager"></picture></div><button aria-expanded="false" aria-label="Apri analisi performance" class="face-button" id="faceButton" type="button"><span aria-label="Performance stabile" class="performance-face" id="performanceFace" role="img"></span></button><div class="new-header-status"><span class="pill" id="count">7 strumenti</span><span aria-live="off" class="header-mood-status" id="headerMoodStatus"><i class="mood-dot"></i><span id="headerMoodText">Stabile</span></span><span class="market-status" id="marketStatus" title="Orari della borsa selezionata"><i class="market-led" id="marketLed"></i><span id="marketText">Mercati · …</span></span></div></div><div class="new-header-nav"><button aria-current="page" aria-label="Dashboard" class="gear-btn nav-tool active" id="navDashboard" title="Dashboard" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button id="navHistory" class="gear-btn nav-tool" type="button" aria-label="Storico" title="Storico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M7 15l5-5 4 3 5-7"/></svg></button><button aria-label="Investimenti" class="gear-btn nav-tool" id="navPortfolio" title="Investimenti" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M8 15h4"></path></svg></button><button aria-label="Educational" class="gear-btn nav-tool" id="navEducation" title="Impara" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C6.5 4 9.5 4 12 6v14c-2.5-2-5.5-2-9-.5V5.5Zm18 0c-3.5-1.5-6.5-1.5-9 .5v14c2.5-2 5.5-2 9-.5V5.5Z"/></svg></button><button aria-label="Nascondi importi" class="gear-btn" id="privacyShortcut" title="Mostra / nascondi importi">◉</button><button aria-label="Apri impostazioni" class="gear-btn" id="settingsShortcut" title="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3v2.1m0 13.2v2.1M3.3 12h2.1m13.2 0h2.1M5.85 5.85l1.5 1.5m9.3 9.3 1.5 1.5m0-12.3-1.5 1.5m-9.3 9.3-1.5 1.5"/><circle cx="12" cy="12" r="4.1"/></svg></button></div></header><div id="pullRefreshIndicator" class="pull-refresh-indicator" role="status" aria-live="polite" aria-hidden="true"><span class="pull-refresh-spinner">↻</span><span id="pullRefreshLabel">Trascina per aggiornare</span></div><div class="app-view" id="dashboardView"><section id="favoriteBanner" class="favorite-banner hidden" aria-label="Titoli preferiti"></section>
+<header class="top"><div class="new-header-main"><div class="new-header-brand"><picture class="finholdra-wordmark"><img id="finholdraLogo" src="./finholdra-header-bianco.svg" alt="Finholdra" loading="eager"></picture></div><button aria-expanded="false" aria-label="Apri analisi performance" class="face-button" id="faceButton" type="button"><span aria-label="Performance stabile" class="performance-face" id="performanceFace" role="img"></span></button><div class="new-header-status"><span class="pill" id="count">7 strumenti</span><span aria-live="off" class="header-mood-status" id="headerMoodStatus"><i class="mood-dot"></i><span id="headerMoodText">Stabile</span></span><span class="market-status" id="marketStatus" title="Orari della borsa selezionata"><i class="market-led" id="marketLed"></i><span id="marketText">Mercati · …</span></span></div></div><div class="new-header-nav"><button aria-current="page" aria-label="Dashboard" class="gear-btn nav-tool active" id="navDashboard" title="Dashboard" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button id="navHistory" class="gear-btn nav-tool" type="button" aria-label="Storico" title="Storico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M7 15l5-5 4 3 5-7"/></svg></button><button aria-label="Investimenti" class="gear-btn nav-tool" id="navPortfolio" title="Investimenti" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M8 15h4"></path></svg></button><button aria-label="Educational" class="gear-btn nav-tool" id="navEducation" title="Impara" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C6.5 4 9.5 4 12 6v14c-2.5-2-5.5-2-9-.5V5.5Zm18 0c-3.5-1.5-6.5-1.5-9 .5v14c2.5-2 5.5-2 9-.5V5.5Z"/></svg></button><button aria-label="Nascondi importi" class="gear-btn" id="privacyShortcut" title="Mostra / nascondi importi">◉</button><button aria-label="Apri impostazioni" class="gear-btn" id="settingsShortcut" title="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3v2.1m0 13.2v2.1M3.3 12h2.1m13.2 0h2.1M5.85 5.85l1.5 1.5m9.3 9.3 1.5 1.5m0-12.3-1.5 1.5m-9.3 9.3-1.5 1.5"/><circle cx="12" cy="12" r="4.1"/></svg></button></div></header><div id="pullRefreshIndicator" class="pull-refresh-indicator" role="status" aria-live="polite" aria-hidden="true"><span class="pull-refresh-spinner">↻</span><span id="pullRefreshLabel">Trascina per aggiornare</span></div><div class="app-view" id="dashboardView"><section id="favoriteBanner" class="favorite-banner hidden" aria-label="Titoli preferiti"></section>
 
 <div aria-live="polite" class="card face-analysis hidden" id="faceAnalysis"></div>
 <section class="card hero"><div class="eyebrow">Patrimonio delle categorie selezionate</div><div class="big nums" id="total">76.223,36 €</div><div class="flex"><strong class="gain nums" id="profit">+411,40 € (+0,54%)</strong><span class="sub" id="stamp" aria-live="polite">Ultimo aggiornamento: non disponibile</span></div></section>
@@ -3145,7 +3097,7 @@ reportPopulatePeriods();
  document.querySelectorAll('select[id^="finholdraLanguage"]').forEach(el=>el.addEventListener('change',e=>setLanguage(e.target.value)));
  updateLanguage();obs.observe(document.body,{subtree:true,childList:true,characterData:true});
  function updateLogo(){let t=document.body.dataset.theme||'dark';let logo=(t==='light')?'./finholdra-blu.svg':'./finholdra-bianco.svg';
-  const header=$('finholdraLogo'),gate=document.querySelector('.finholdra-gate-logo');if(header&&header.getAttribute('src')!==logo)header.src=logo;if(gate&&gate.getAttribute('src')!==logo)gate.src=logo;
+  const header=$('finholdraLogo'),gate=document.querySelector('.finholdra-gate-logo');const headerLogo=(t==='light')?'./finholdra-header-blu.svg':'./finholdra-header-bianco.svg';if(header&&header.getAttribute('src')!==headerLogo)header.src=headerLogo;if(gate&&gate.getAttribute('src')!==logo)gate.src=logo;
  }
  updateLogo();new MutationObserver(updateLogo).observe(document.body,{attributes:true,attributeFilter:['data-theme']});
  document.addEventListener('click',e=>{const el=e.target.closest('[data-fav-open]');if(!el)return;openFavorite(el.dataset.favOpen)});

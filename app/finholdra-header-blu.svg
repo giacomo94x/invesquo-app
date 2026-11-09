@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="790" height="250" viewBox="15 48 790 250" role="img" aria-label="Finholdra">
+  <title>Finholdra</title>
+  <desc>Montserrat ExtraBold, candela verde sottile e squadrata al posto della i.</desc>
+  <g fill="#08264B" font-family="Montserrat, sans-serif" font-weight="800" font-size="150" letter-spacing="-6">
+    <text x="52" y="222">F</text>
+    <text x="201" y="222">n</text>
+    <text x="303" y="222">holdra</text>
+  </g>
+  <g fill="#19C76D">
+    <rect x="165" y="83" width="8" height="40"/>
+    <rect x="153" y="123" width="32" height="94"/>
+    <rect x="165" y="217" width="8" height="30"/>
+  </g>
+</svg>
