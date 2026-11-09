@@ -4,7 +4,7 @@
   <g fill="#FFFFFF" font-family="Montserrat, sans-serif" font-weight="800" font-size="150" letter-spacing="-6">
     <text x="42" y="222">F</text>
     <text x="209" y="222">n</text>
-    <text x="311" y="222">holdra</text>
+    <text x="311" y="222" fill="#B9F2D6">holdra</text>
   </g>
   <g fill="#19C76D">
     <rect x="165" y="83" width="8" height="40"/>

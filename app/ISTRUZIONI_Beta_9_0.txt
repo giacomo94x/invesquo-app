@@ -1,0 +1,1 @@
+Finholdra Beta 9.0: logo 1.4x rispetto alla Beta 8.8, HOLDRA verde tenue nei due temi; storico PMC sotto il grafico prezzo con marcatori degli acquisti e info al tocco, periodi settimana/mese/anno; campo ricerca Academy senza zoom iPhone; facce Bull (toro) e Bear (orso) ridisegnate. Le funzioni Netlify non sono state modificate.
