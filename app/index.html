@@ -687,6 +687,19 @@ body.privacy-on #allocationDetail{filter:blur(10px);pointer-events:none;user-sel
 .performance-face.finn-scene-prayer,.mascot-play-art.finn-scene-prayer{animation:finnPrayer .88s ease-in-out 4!important}
 @media(prefers-reduced-motion:reduce){.performance-face.finn-scene,.mascot-play-art.finn-scene{animation:none!important}}
 body.motion-off .performance-face.finn-scene,body.motion-off .mascot-play-art.finn-scene{animation:none!important}
+
+/* Beta 9.9.9: isolated mascot market-animation previews in Settings. */
+.mascot-scene-preview{margin:14px 0 8px;min-width:0}
+.mascot-scene-preview>p{margin:0 0 9px;font-weight:650}
+.mascot-scene-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.mascot-scene-buttons .btn{min-width:0;white-space:normal;font-size:12px;line-height:1.25;padding:10px 5px}
+.mascot-scene-buttons .btn.selected{background:#3265b5;border-color:#7ca9f8;color:#fff}
+@media(max-width:480px){.mascot-scene-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Beta 9.9.9: Finn greets only outside Home; accessible short wave on tap. */
+@keyframes finnWaveHello{0%,100%{transform:rotate(0) scale(1)}20%{transform:rotate(-8deg) scale(1.04)}45%{transform:rotate(8deg) scale(1.04)}70%{transform:rotate(-5deg) scale(1.02)}}
+.face-button.finn-waving .performance-face{animation:finnWaveHello .85s ease-in-out both}
+@media(prefers-reduced-motion:reduce){.face-button.finn-waving .performance-face{animation:none}}
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
 .pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
@@ -820,6 +833,16 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
 .performance-face.sleeping,.performance-face.sleeping .candle-core,
 .performance-face.sleeping .eye-blink{animation:none!important}
 </style><style>
+
+
+/* Finholdra Beta 9.9.9 — three individually animated Zs when Finn sleeps. */
+.finn-zzz .finn-z{opacity:0;transform-box:fill-box;transform-origin:center;animation:finnZFloat 2.7s ease-in-out infinite;pointer-events:none}
+.finn-zzz .finn-z-one{animation-delay:0s}
+.finn-zzz .finn-z-two{animation-delay:.9s}
+.finn-zzz .finn-z-three{animation-delay:1.8s}
+@keyframes finnZFloat{0%{opacity:0;transform:translate(0,5px) scale(.85)}20%{opacity:.95}65%{opacity:.85}100%{opacity:0;transform:translate(4px,-8px) scale(1.12)}}
+body.motion-off .finn-zzz .finn-z{animation:none;opacity:.85;transform:none}
+@media(prefers-reduced-motion:reduce){.finn-zzz .finn-z{animation:none;opacity:.85;transform:none}}
 
 /* Finholdra Beta 9.9.7 — user-selectable surface style. Purely cosmetic; native iOS picker remains native. */
 body[data-appearance="glass"]{
@@ -1051,7 +1074,7 @@ body[data-appearance="glass"] :is(.btn.primary,.nav-tool.active,.timeline-range 
 </details>
 <p aria-live="polite" class="sub" id="settingsSaved" role="status">Le preferenze vengono salvate su questo dispositivo.</p>
 </section>
-<section class="card mascot-lab" id="mascotLab"><div class="section-head"><h2>Gioca con la mascotte</h2><span class="sub">Solo per divertimento</span></div><p class="hint">Tocca o trascina Finn.</p><div aria-describedby="mascotPlayStatus" aria-label="Tocca la mascotte per cambiare espressione" class="mascot-playground" id="mascotPlayground" role="button" tabindex="0"><div class="mascot-toys" aria-label="Oggetti illustrati interattivi della mascotte"><button type="button" id="toyMonkey" aria-label="Tieni premuta la scimmietta per far piovere banane" title="Tieni premuto: pioggia di banane"><svg viewBox="0 0 80 83" aria-hidden="true"><ellipse cx="40" cy="71" rx="32" ry="6" fill="#061c30" opacity=".5"/><path d="M24 54Q8 50 12 32Q14 25 21 28" fill="none" stroke="#8b583e" stroke-width="8" stroke-linecap="round"/><ellipse cx="40" cy="56" rx="23" ry="22" fill="#ae7853" stroke="#10263d" stroke-width="3"/><circle cx="18" cy="30" r="12" fill="#9d6244" stroke="#10263d" stroke-width="3"/><circle cx="62" cy="30" r="12" fill="#9d6244" stroke="#10263d" stroke-width="3"/><circle cx="18" cy="30" r="5" fill="#e8b98e"/><circle cx="62" cy="30" r="5" fill="#e8b98e"/><ellipse cx="40" cy="35" rx="23" ry="25" fill="#b67b56" stroke="#10263d" stroke-width="3"/><ellipse cx="40" cy="43" rx="16" ry="15" fill="#eec49c"/><circle cx="32" cy="34" r="3.2" fill="#10263d"/><circle cx="48" cy="34" r="3.2" fill="#10263d"/><ellipse cx="40" cy="43" rx="5" ry="3" fill="#6e3e32"/><path d="M34 49Q40 55 46 49" fill="none" stroke="#6e3e32" stroke-width="2.3" stroke-linecap="round"/></svg><small>Scimmietta</small></button><button type="button" id="toyHat" aria-label="Metti o togli il cappello IPF" title="Indossa cappello IPF"><svg viewBox="0 0 80 83" aria-hidden="true"><path d="M14 55Q15 25 40 23Q65 25 66 55Z" fill="#274568" stroke="#0d213b" stroke-width="4"/><path d="M16 52Q42 48 67 54" fill="none" stroke="#a3b7d8" stroke-width="5"/><ellipse cx="41" cy="58" rx="37" ry="9" fill="#192e4a" stroke="#0d213b" stroke-width="3"/><text x="40" y="43" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="19" font-style="italic" font-weight="900">IPF</text></svg><small>Cappello</small></button><button type="button" id="toyBull" aria-label="Statuetta toro rialzista" title="Bull: portafoglio positivo"><svg viewBox="0 0 100 105" aria-hidden="true"><ellipse cx="50" cy="97" rx="36" ry="5" fill="#071423" opacity=".48"/><path d="M17 81H83L88 91H12Z" fill="#145c47" stroke="#a5f5cc" stroke-width="2"/><path d="M30 34Q15 35 10 15Q23 26 33 22L39 34M70 34Q85 35 90 15Q77 26 67 22L61 34" fill="#b9f2d6" stroke="#155e48" stroke-width="3" stroke-linejoin="round"/><path d="M28 40Q13 30 10 45Q13 57 26 55M72 40Q87 30 90 45Q87 57 74 55" fill="#3bc58b" stroke="#155e48" stroke-width="3"/><path d="M26 38Q27 23 50 24Q73 23 74 38L78 57Q80 75 64 82H36Q20 75 22 57Z" fill="#4cdca1" stroke="#155e48" stroke-width="3.5"/><path d="M29 43Q36 37 42 44M58 44Q64 37 71 43" fill="none" stroke="#0a4937" stroke-width="3.5" stroke-linecap="round"/><circle cx="38" cy="46" r="3.7" fill="#092d27"/><circle cx="62" cy="46" r="3.7" fill="#092d27"/><ellipse cx="50" cy="64" rx="20" ry="15" fill="#b1efd4" stroke="#155e48" stroke-width="2.5"/><ellipse cx="42" cy="65" rx="3.3" ry="4" fill="#155e48"/><ellipse cx="58" cy="65" rx="3.3" ry="4" fill="#155e48"/><path d="M41 72Q50 78 59 72" fill="none" stroke="#165444" stroke-width="2.5" stroke-linecap="round"/><path d="M46 75Q50 82 54 75" fill="none" stroke="#e2bb58" stroke-width="3" stroke-linecap="round"/></svg><small>Bull</small></button><button type="button" id="toyBear" aria-label="Statuetta orso ribassista" title="Bear: portafoglio negativo"><svg viewBox="0 0 100 105" aria-hidden="true"><ellipse cx="50" cy="97" rx="36" ry="5" fill="#071423" opacity=".48"/><path d="M17 81H83L88 91H12Z" fill="#793348" stroke="#f0b1bc" stroke-width="2"/><circle cx="25" cy="31" r="15" fill="#bc4d64" stroke="#70283f" stroke-width="3"/><circle cx="75" cy="31" r="15" fill="#bc4d64" stroke="#70283f" stroke-width="3"/><circle cx="25" cy="31" r="7" fill="#f4a6b5"/><circle cx="75" cy="31" r="7" fill="#f4a6b5"/><path d="M20 48Q17 21 50 21Q83 21 80 48L81 64Q77 83 50 85Q23 83 19 64Z" fill="#da6277" stroke="#782840" stroke-width="3.5"/><path d="M27 42Q34 37 41 44M59 44Q66 37 73 42" fill="none" stroke="#6d223c" stroke-width="3.5" stroke-linecap="round"/><circle cx="37" cy="48" r="4" fill="#451d2e"/><circle cx="63" cy="48" r="4" fill="#451d2e"/><ellipse cx="50" cy="66" rx="21" ry="16" fill="#ffbac6" stroke="#873149" stroke-width="2.5"/><path d="M41 59Q50 56 59 59L55 67Q50 71 45 67Z" fill="#5d2936"/><path d="M50 69V73M50 73Q43 78 38 73M50 73Q57 78 62 73" fill="none" stroke="#7e3247" stroke-width="2.5" stroke-linecap="round"/></svg><small>Bear</small></button><span class="mascot-market-spot" id="mascotMarketSpot">Stato del portafoglio</span></div><div class="mascot-play-art" id="mascotPlayArt"></div></div><p aria-live="polite" class="mascot-play-status" id="mascotPlayStatus">👆 Tocca · ↕ Trascina · ◉ Tieni premuto</p><div class="mascot-emotions" aria-label="Scegli un’emozione della mascotte"><button type="button" data-toy-emotion="neutral">Neutra</button><button type="button" data-toy-emotion="positive">Felice</button><button type="button" data-toy-emotion="celebrate">Super felice</button><button type="button" data-toy-emotion="angry">Arrabbiata</button><button type="button" data-toy-emotion="crying">Super triste</button></div><div class="mascot-play-actions"><button class="btn" id="mascotPlayReset" type="button">Ricomincia</button><span class="sub" id="mascotTapCount">0 tocchi</span></div></section><button class="btn settings-bottom-back" id="backDashboardBottom" type="button">← Torna alla dashboard</button>
+<section class="card mascot-lab" id="mascotLab"><div class="section-head"><h2>Gioca con la mascotte</h2><span class="sub">Solo per divertimento</span></div><p class="hint">Tocca o trascina Finn.</p><div aria-describedby="mascotPlayStatus" aria-label="Tocca la mascotte per cambiare espressione" class="mascot-playground" id="mascotPlayground" role="button" tabindex="0"><div class="mascot-toys" aria-label="Oggetti illustrati interattivi della mascotte"><button type="button" id="toyMonkey" aria-label="Tieni premuta la scimmietta per far piovere banane" title="Tieni premuto: pioggia di banane"><svg viewBox="0 0 80 83" aria-hidden="true"><ellipse cx="40" cy="71" rx="32" ry="6" fill="#061c30" opacity=".5"/><path d="M24 54Q8 50 12 32Q14 25 21 28" fill="none" stroke="#8b583e" stroke-width="8" stroke-linecap="round"/><ellipse cx="40" cy="56" rx="23" ry="22" fill="#ae7853" stroke="#10263d" stroke-width="3"/><circle cx="18" cy="30" r="12" fill="#9d6244" stroke="#10263d" stroke-width="3"/><circle cx="62" cy="30" r="12" fill="#9d6244" stroke="#10263d" stroke-width="3"/><circle cx="18" cy="30" r="5" fill="#e8b98e"/><circle cx="62" cy="30" r="5" fill="#e8b98e"/><ellipse cx="40" cy="35" rx="23" ry="25" fill="#b67b56" stroke="#10263d" stroke-width="3"/><ellipse cx="40" cy="43" rx="16" ry="15" fill="#eec49c"/><circle cx="32" cy="34" r="3.2" fill="#10263d"/><circle cx="48" cy="34" r="3.2" fill="#10263d"/><ellipse cx="40" cy="43" rx="5" ry="3" fill="#6e3e32"/><path d="M34 49Q40 55 46 49" fill="none" stroke="#6e3e32" stroke-width="2.3" stroke-linecap="round"/></svg><small>Scimmietta</small></button><button type="button" id="toyHat" aria-label="Metti o togli il cappello IPF" title="Indossa cappello IPF"><svg viewBox="0 0 80 83" aria-hidden="true"><path d="M14 55Q15 25 40 23Q65 25 66 55Z" fill="#274568" stroke="#0d213b" stroke-width="4"/><path d="M16 52Q42 48 67 54" fill="none" stroke="#a3b7d8" stroke-width="5"/><ellipse cx="41" cy="58" rx="37" ry="9" fill="#192e4a" stroke="#0d213b" stroke-width="3"/><text x="40" y="43" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="19" font-style="italic" font-weight="900">IPF</text></svg><small>Cappello</small></button><button type="button" id="toyBull" aria-label="Statuetta toro rialzista" title="Bull: portafoglio positivo"><svg viewBox="0 0 100 105" aria-hidden="true"><ellipse cx="50" cy="97" rx="36" ry="5" fill="#071423" opacity=".48"/><path d="M17 81H83L88 91H12Z" fill="#145c47" stroke="#a5f5cc" stroke-width="2"/><path d="M30 34Q15 35 10 15Q23 26 33 22L39 34M70 34Q85 35 90 15Q77 26 67 22L61 34" fill="#b9f2d6" stroke="#155e48" stroke-width="3" stroke-linejoin="round"/><path d="M28 40Q13 30 10 45Q13 57 26 55M72 40Q87 30 90 45Q87 57 74 55" fill="#3bc58b" stroke="#155e48" stroke-width="3"/><path d="M26 38Q27 23 50 24Q73 23 74 38L78 57Q80 75 64 82H36Q20 75 22 57Z" fill="#4cdca1" stroke="#155e48" stroke-width="3.5"/><path d="M29 43Q36 37 42 44M58 44Q64 37 71 43" fill="none" stroke="#0a4937" stroke-width="3.5" stroke-linecap="round"/><circle cx="38" cy="46" r="3.7" fill="#092d27"/><circle cx="62" cy="46" r="3.7" fill="#092d27"/><ellipse cx="50" cy="64" rx="20" ry="15" fill="#b1efd4" stroke="#155e48" stroke-width="2.5"/><ellipse cx="42" cy="65" rx="3.3" ry="4" fill="#155e48"/><ellipse cx="58" cy="65" rx="3.3" ry="4" fill="#155e48"/><path d="M41 72Q50 78 59 72" fill="none" stroke="#165444" stroke-width="2.5" stroke-linecap="round"/><path d="M46 75Q50 82 54 75" fill="none" stroke="#e2bb58" stroke-width="3" stroke-linecap="round"/></svg><small>Bull</small></button><button type="button" id="toyBear" aria-label="Statuetta orso ribassista" title="Bear: portafoglio negativo"><svg viewBox="0 0 100 105" aria-hidden="true"><ellipse cx="50" cy="97" rx="36" ry="5" fill="#071423" opacity=".48"/><path d="M17 81H83L88 91H12Z" fill="#793348" stroke="#f0b1bc" stroke-width="2"/><circle cx="25" cy="31" r="15" fill="#bc4d64" stroke="#70283f" stroke-width="3"/><circle cx="75" cy="31" r="15" fill="#bc4d64" stroke="#70283f" stroke-width="3"/><circle cx="25" cy="31" r="7" fill="#f4a6b5"/><circle cx="75" cy="31" r="7" fill="#f4a6b5"/><path d="M20 48Q17 21 50 21Q83 21 80 48L81 64Q77 83 50 85Q23 83 19 64Z" fill="#da6277" stroke="#782840" stroke-width="3.5"/><path d="M27 42Q34 37 41 44M59 44Q66 37 73 42" fill="none" stroke="#6d223c" stroke-width="3.5" stroke-linecap="round"/><circle cx="37" cy="48" r="4" fill="#451d2e"/><circle cx="63" cy="48" r="4" fill="#451d2e"/><ellipse cx="50" cy="66" rx="21" ry="16" fill="#ffbac6" stroke="#873149" stroke-width="2.5"/><path d="M41 59Q50 56 59 59L55 67Q50 71 45 67Z" fill="#5d2936"/><path d="M50 69V73M50 73Q43 78 38 73M50 73Q57 78 62 73" fill="none" stroke="#7e3247" stroke-width="2.5" stroke-linecap="round"/></svg><small>Bear</small></button><span class="mascot-market-spot" id="mascotMarketSpot">Stato del portafoglio</span></div><div class="mascot-play-art" id="mascotPlayArt"></div></div><p aria-live="polite" class="mascot-play-status" id="mascotPlayStatus">👆 Tocca · ↕ Trascina · ◉ Tieni premuto</p><div class="mascot-emotions" aria-label="Scegli un’emozione della mascotte"><button type="button" data-toy-emotion="neutral">Neutra</button><button type="button" data-toy-emotion="positive">Felice</button><button type="button" data-toy-emotion="celebrate">Super felice</button><button type="button" data-toy-emotion="angry">Arrabbiata</button><button type="button" data-toy-emotion="crying">Super triste</button></div><div class="mascot-scene-preview" aria-label="Prova le animazioni dei mercati"><p class="sub">Animazioni dei mercati · prova quando vuoi</p><div class="mascot-scene-buttons"><button class="btn" type="button" data-finn-preview="awake">☀️ Risveglio</button><button class="btn" type="button" data-finn-preview="prayer">🙏 Wall Street</button><button class="btn" type="button" data-finn-preview="party">🎉 Festa</button><button class="btn" type="button" data-finn-preview="tears">💧 Pianto</button><button class="btn" type="button" data-finn-preview="doze">🌙 Si addormenta</button><button class="btn" type="button" data-finn-preview="sleep">💤 Tre Z</button></div></div><div class="mascot-play-actions"><button class="btn" id="mascotPlayReset" type="button">Ricomincia</button><span class="sub" id="mascotTapCount">0 tocchi</span></div></section><button class="btn settings-bottom-back" id="backDashboardBottom" type="button">← Torna alla dashboard</button>
 </section>
 <div class="app-modal hidden" id="pacOverlay" role="dialog" aria-modal="true" aria-label="Il mio PAC"><div class="app-modal-card pac-modal">
 <button class="modal-close" id="pacClose" type="button" aria-label="Chiudi PAC">×</button><h2>Il mio PAC</h2>
@@ -1654,7 +1677,22 @@ $('donut').addEventListener('click',e=>{
 
 let facePanelOpen=false;
 function renderFacePanel(){const box=$('faceAnalysis');if(!facePanelOpen){box.classList.add('hidden');$('faceButton').setAttribute('aria-expanded','false');return}const c=totalCapital(),v=totalValue(),gain=v-c,ratio=c?gain/c:0;const g=groups().sort((a,b)=>(b.value-b.capital)-(a.value-a.capital));const status=ratio>0.02?'Positiva':ratio<-.02?'Negativa':'Stabile';box.classList.remove('hidden');$('faceButton').setAttribute('aria-expanded','true');box.innerHTML='<h3>Performance '+status.toLowerCase()+'</h3><p class="hint">Il colore deriva dal rendimento lordo del patrimonio selezionato, non da un segnale di acquisto o vendita.</p><div class="face-line"><span>Rendimento totale</span><strong class="'+(gain>=0?'gain':'loss')+'">'+(gain>=0?'+':'')+eur(gain)+' · '+(ratio>=0?'+':'')+pct(ratio)+'</strong></div>'+g.map(x=>'<div class="face-line"><span>'+x.name+'</span><strong class="'+(x.value>=x.capital?'gain':'loss')+'">'+(x.value>=x.capital?'+':'')+eur(x.value-x.capital)+'</strong></div>').join('');}
-$('faceButton').onclick=()=>{showFinnGreeting();facePanelOpen=!facePanelOpen;const face=$('faceButton');face.classList.remove('touch');void face.offsetWidth;face.classList.add('touch');renderFacePanel()};
+$('faceButton').onclick=()=>{
+ const face=$('faceButton');
+ face.classList.remove('touch','finn-waving');void face.offsetWidth;
+ if(invesquoActiveView==='dashboard'){
+  // In Home Finn opens only the existing performance panel: no greeting toast.
+  facePanelOpen=!facePanelOpen;
+  face.classList.add('touch');
+  renderFacePanel();
+ }else{
+  // In other app sections Finn greets the user without opening the performance panel.
+  facePanelOpen=false;
+  renderFacePanel();
+  face.classList.add('finn-waving');
+  showFinnGreeting();
+ }
+};
 const MASCOT_EXPRESSIONS={neutral:['thinking','neutral','calm'],positive:['satisfied','positive','celebrate'],negative:['angry','sad','crying']};
 const MASCOT_LABELS={thinking:'pensierosa',neutral:'neutra',calm:'tranquilla',satisfied:'soddisfatta',positive:'positiva',celebrate:'festeggia',angry:'arrabbiata',sad:'triste',crying:'piange',sleeping:'addormentato',waking:'si sveglia',dozing:'si addormenta',praying:'prega per Wall Street'};
 let mascotMood=null,mascotIndex=0;
@@ -1674,8 +1712,8 @@ function finnUpdateFigure(){
  face.title=face.getAttribute('aria-label');
  const playground=$('mascotPlayArt');
  // Mirror the scene in the interactive mascot area without interfering with its local controls.
- if(playground&&finnScene){const chosen=mascotPlayChosenEmotion;mascotPlayChosenEmotion=emotion;mascotPlayRender();mascotPlayChosenEmotion=chosen;playground.classList.add('finn-scene','finn-scene-'+finnScene.type)}
- else if(playground){playground.classList.remove('finn-scene','finn-scene-awake','finn-scene-doze','finn-scene-party','finn-scene-tears','finn-scene-prayer');mascotPlayRender()}
+ if(playground&&finnScene&&!mascotPreviewScene){const chosen=mascotPlayChosenEmotion;mascotPlayChosenEmotion=emotion;mascotPlayRender();mascotPlayChosenEmotion=chosen;playground.classList.add('finn-scene','finn-scene-'+finnScene.type)}
+ else if(playground){if(!mascotPreviewScene)playground.classList.remove('finn-scene','finn-scene-awake','finn-scene-doze','finn-scene-party','finn-scene-tears','finn-scene-prayer');mascotPlayRender()}
 }
 function finnSceneStart(type,emotion,ms,followUp){
  if(prefs.motion==='off'||window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches){if(followUp)followUp();else{finnScene=null;finnUpdateFigure()}return;}
@@ -1708,7 +1746,7 @@ function mascotSVG(mood,color,alertMode=false,emotionOverride){
   eyeA='<path d="M37 48 Q42 53 47 48 M53 48 Q58 53 63 48" fill="none" stroke="'+dark+'" stroke-width="3.2" stroke-linecap="round"/>';
   eyebrows='<path d="M37 38 Q42 40 47 38 M53 38 Q58 40 63 38"/>';
   mouth='<path d="M45 63 Q50 67 55 63"/>';
-  extras='<g fill="none" stroke="#c8eaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M75 29h8l-8 9h8M84 17h6l-6 7h6"/></g>';
+  extras='<g class="finn-zzz" fill="#c8eaff" font-family="Montserrat,system-ui,sans-serif" font-weight="800" text-anchor="middle"><text class="finn-z finn-z-one" x="78" y="37" font-size="12">Z</text><text class="finn-z finn-z-two" x="85" y="27" font-size="10">Z</text><text class="finn-z finn-z-three" x="91" y="17" font-size="8">Z</text></g>';
  }else if(emotion==='thinking'){
   eyebrows='<path d="M37 37 Q42 35 47 37"/><path d="M53 37 Q58 35 63 37"/>';
   mouth='<path d="M44 62q6 -2 12 1"/>';
@@ -3111,6 +3149,7 @@ function invesquoShowView(name){
  if(!['dashboard','history','portfolio','settings','education'].includes(name))return;
  invesquoSavedScroll[invesquoActiveView]=window.scrollY||0;
  invesquoActiveView=name;
+ if(name!=='dashboard'&&facePanelOpen){facePanelOpen=false;renderFacePanel();}
  const nodes={dashboard:'dashboardView',history:'historyView',portfolio:'portfolioView',settings:'settingsView',education:'educationView'};
  for(const [key,id] of Object.entries(nodes))$(id).classList.toggle('hidden',key!==name);
  for(const [key,id] of Object.entries({dashboard:'navDashboard',history:'navHistory',portfolio:'navPortfolio',settings:'settingsShortcut',education:'navEducation'})){
@@ -3169,6 +3208,7 @@ $('assetList').addEventListener('click',e=>{if(e.target.closest('[data-buy-id]')
 
 // Mascot workshop: a purely local toy. It never changes prices, categories, or returns.
 let mascotHatOn=false,mascotPlayChosenEmotion=null;let mascotPlayTaps=0,mascotPlayWick=-5,mascotPlayDragging=false,mascotPlayMoved=false;
+let mascotPreviewScene=null,mascotPreviewTimer=null;
 const mascotPlayContainer=$('mascotPlayground'),mascotPlayArt=$('mascotPlayArt');
 function mascotPlayMood(){return mascotPlayTaps>=8?'negative':mascotPlayTaps>=4?'neutral':'positive'}
 function mascotPlayEmotion(){const m=mascotPlayMood();return m==='negative'?'concerned':m==='neutral'?'thinking':mascotPlayTaps%3===0?'celebrate':'positive'}
@@ -3178,7 +3218,7 @@ function mascotPlayAnimate(name){
  if(prefs.motion!=='off')mascotPlayArt.classList.add(['is-reacting','is-overloaded'].includes(name)?(['is-reacting','is-dancing','is-spin','is-wiggle','is-flip'][mascotPlayTaps%5]):name);
 }
 function mascotPlayRender(){
- const chosen=mascotPlayChosenEmotion;const mood=['crying','angry','sad','concerned'].includes(chosen)?'negative':chosen==='neutral'?'neutral':chosen?'positive':mascotPlayMood();const color=prefs.colors[mood]||PREF_DEFAULTS.colors[mood];
+ const chosen=mascotPreviewScene?mascotPreviewScene.emotion:mascotPlayChosenEmotion;const mood=['crying','angry','sad','concerned','praying'].includes(chosen)?'negative':chosen==='neutral'?'neutral':chosen?'positive':mascotPlayMood();const color=prefs.colors[mood]||PREF_DEFAULTS.colors[mood];
  let svg=mascotSVG(mood,color,false,chosen||mascotPlayEmotion());
  // A separate movable wick overlays the normal, fixed candlestick. Keep the body unchanged.
  svg=svg.replace('viewBox="0 0 100 112"','viewBox="0 -23 100 143"')
@@ -3190,10 +3230,12 @@ function mascotPlayRender(){
   '<rect id="wickHit" x="38" y="-23" width="24" height="39" fill="transparent"/></g>';
  svg=svg.replace('<g class="candle-character">', '<g class="candle-character">'+wickMarkup);
  mascotPlayArt.innerHTML=svg+(typeof mascotHatOn!=='undefined'&&mascotHatOn?'<span class="mascot-hat-overlay">IPF</span>':'')+(window.__monkeyShoulder?'<span class="shoulder-monkey">'+(document.querySelector('#toyMonkey svg')?.outerHTML||'')+'</span>':'');
+ if(mascotPreviewScene){mascotPlayArt.classList.remove('finn-scene','finn-scene-awake','finn-scene-doze','finn-scene-party','finn-scene-tears','finn-scene-prayer');mascotPlayArt.classList.add('finn-scene','finn-scene-'+mascotPreviewScene.type);}
+ document.querySelectorAll('[data-finn-preview]').forEach(b=>{const on=mascotPreviewScene?.key===b.dataset.finnPreview;b.classList.toggle('selected',!!on);b.setAttribute('aria-pressed',String(!!on));});
  $('mascotTapCount').textContent=mascotPlayTaps+' '+(mascotPlayTaps===1?'tocco':'tocchi');
 }
 function mascotPlayTap(){
- mascotPlayTaps++;mascotPlayChosenEmotion=null;
+ mascotPreviewStop();mascotPlayTaps++;mascotPlayChosenEmotion=null;
  mascotPlayRender();
  if(mascotPlayTaps>=8){mascotPlayAnimate('is-overloaded');$('mascotPlayStatus').textContent='😵‍💫 ◉ ◉ ◉'}
  else if(mascotPlayTaps>=4){mascotPlayAnimate('is-reacting');$('mascotPlayStatus').textContent='🌿 ✨'}
@@ -3225,8 +3267,20 @@ mascotPlayContainer.addEventListener('pointerup',mascotPlayEnd);
 mascotPlayContainer.addEventListener('pointercancel',mascotPlayEnd);
 mascotPlayContainer.addEventListener('click',e=>{if(e.target.closest('.mascot-toys'))return;if(mascotPlayMoved){mascotPlayMoved=false;return}mascotPlayTap()});
 mascotPlayContainer.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();mascotPlayTap()}});
-document.querySelectorAll('[data-toy-emotion]').forEach(b=>b.addEventListener('click',()=>{mascotPlayChosenEmotion=b.dataset.toyEmotion;mascotPlayRender();document.getElementById('mascotPlayStatus').textContent='Espressione: '+b.textContent}));
-$('mascotPlayReset').onclick=()=>{mascotPlayChosenEmotion=null;mascotPlayTaps=0;mascotPlayWick=-5;mascotPlayRender();$('mascotPlayStatus').textContent='👆 Tocca · ↕ Stoppino · ◉ Premi'};
+function mascotPreviewStop(){clearTimeout(mascotPreviewTimer);mascotPreviewTimer=null;mascotPreviewScene=null;mascotPlayArt.classList.remove('finn-scene','finn-scene-awake','finn-scene-doze','finn-scene-party','finn-scene-tears','finn-scene-prayer');}
+function mascotPreviewRun(key){
+ mascotPreviewStop();
+ const variants={awake:{type:'awake',emotion:'waking',text:'☀️ Finn si sveglia'},prayer:{type:'prayer',emotion:'praying',text:'🙏 Apertura Wall Street: Finn prega'},party:{type:'party',emotion:'celebrate',text:'🎉 Chiusura positiva: Finn festeggia'},tears:{type:'tears',emotion:'crying',text:'💧 Chiusura negativa: Finn piange'},doze:{type:'doze',emotion:'dozing',text:'🌙 Finn si addormenta'},sleep:{type:'sleep',emotion:'sleeping',text:'💤 Finn dorme con tre Z animate'}};
+ const config=variants[key];if(!config)return;
+ mascotPreviewScene={key,...config};mascotPlayRender();
+ // Restart CSS animation even when the same action is requested twice.
+ void mascotPlayArt.offsetWidth;
+ $('mascotPlayStatus').textContent=config.text+' · anteprima';
+ if(key!=='sleep')mascotPreviewTimer=setTimeout(()=>{if(!mascotPreviewScene||mascotPreviewScene.key!==key)return;if(key==='party'||key==='tears'||key==='doze'){mascotPreviewScene={key:'sleep',type:'sleep',emotion:'sleeping'};mascotPlayRender();$('mascotPlayStatus').textContent='💤 Finn dorme dopo la chiusura · anteprima';}else{mascotPreviewStop();mascotPlayRender();}},key==='prayer'?3500:key==='awake'?2200:3100);
+}
+document.querySelectorAll('[data-finn-preview]').forEach(b=>b.addEventListener('click',()=>mascotPreviewRun(b.dataset.finnPreview)));
+document.querySelectorAll('[data-toy-emotion]').forEach(b=>b.addEventListener('click',()=>{mascotPreviewStop();mascotPlayChosenEmotion=b.dataset.toyEmotion;mascotPlayRender();document.getElementById('mascotPlayStatus').textContent='Espressione: '+b.textContent}));
+$('mascotPlayReset').onclick=()=>{mascotPreviewStop();mascotPlayChosenEmotion=null;mascotPlayTaps=0;mascotPlayWick=-5;mascotPlayRender();$('mascotPlayStatus').textContent='👆 Tocca · ↕ Stoppino · ◉ Premi'};
 
 let bananaHold=null,bananaTriggered=false,bananaStart=null;
 function bananaRain(){bananaTriggered=true;for(let i=0;i<24;i++){const b=document.createElement('span');b.className='banana';b.textContent='🍌';b.style.setProperty('--x',(5+Math.random()*88)+'%');b.style.setProperty('--d',(1.4+Math.random()*1.1)+'s');b.style.setProperty('--dx',(-65+Math.random()*130)+'px');mascotPlayContainer.appendChild(b);setTimeout(()=>b.remove(),2900)}mascotPlayAnimate('is-dancing');$('mascotPlayStatus').textContent='🍌 🍌 🍌'}
@@ -3361,7 +3415,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 9.9.7';
+const FINHOLDRA_VERSION_FALLBACK='Beta 9.9.9';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
