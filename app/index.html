@@ -673,6 +673,20 @@ body[data-theme="light"] .pmc-event-dot circle:first-child{stroke:#ffffff}
 .allocation-detail-fields strong{font-size:12px;display:block;overflow-wrap:anywhere}
 @media(max-width:355px){.allocation-detail{padding:9px}.allocation-detail-fields{gap:5px}}
 body.privacy-on #allocationDetail{filter:blur(10px);pointer-events:none;user-select:none}
+
+/* Finholdra Beta 9.9.5: Finn's clock-aware short scenes (only while app is visible). */
+@keyframes finnAwake{0%{transform:scale(.93) translateY(4px) rotate(-5deg)}42%{transform:scale(1.09) translateY(-6px) rotate(5deg)}74%{transform:scale(.98) rotate(-3deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes finnDoze{0%{transform:rotate(0deg) translateY(0)}50%{transform:rotate(6deg) translateY(3px)}100%{transform:rotate(-5deg) translateY(5px)}}
+@keyframes finnParty{0%,100%{transform:translateY(0) rotate(0)}20%,60%{transform:translateY(-9px) rotate(9deg)}40%,80%{transform:translateY(-5px) rotate(-9deg)}}
+@keyframes finnTears{0%,100%{transform:translateY(0) rotate(0)}33%{transform:translateY(3px) rotate(-5deg)}66%{transform:translateY(3px) rotate(5deg)}}
+@keyframes finnPrayer{0%,100%{transform:rotate(-2deg) scale(1)}28%{transform:rotate(5deg) scale(1.07)}60%{transform:rotate(-4deg) scale(1.02)}}
+.performance-face.finn-scene-awake,.mascot-play-art.finn-scene-awake{animation:finnAwake 1.05s ease-in-out 2!important}
+.performance-face.finn-scene-doze,.mascot-play-art.finn-scene-doze{animation:finnDoze 1.1s ease-in-out 2!important}
+.performance-face.finn-scene-party,.mascot-play-art.finn-scene-party{animation:finnParty .85s ease-in-out 4!important}
+.performance-face.finn-scene-tears,.mascot-play-art.finn-scene-tears{animation:finnTears 1s ease-in-out 3!important}
+.performance-face.finn-scene-prayer,.mascot-play-art.finn-scene-prayer{animation:finnPrayer .88s ease-in-out 4!important}
+@media(prefers-reduced-motion:reduce){.performance-face.finn-scene,.mascot-play-art.finn-scene{animation:none!important}}
+body.motion-off .performance-face.finn-scene,body.motion-off .mascot-play-art.finn-scene{animation:none!important}
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
 .pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
@@ -792,7 +806,67 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
  #favoriteBanner .favorite-numbers{font-size:12px!important}
  #favoriteBanner .favorite-numbers small{font-size:11px!important;margin-top:3px!important}
 }
-</style></head><body><section id="accountGate" aria-labelledby="accountTitle">
+</style><style>
+/* Beta 9.9.4: iPhone native dropdowns and sleeping Finn. */
+@supports (-webkit-touch-callout:none) {
+  select:not([multiple]){
+    -webkit-appearance:menulist!important;
+    appearance:auto!important;
+    font-size:16px!important;
+    touch-action:manipulation;
+    cursor:pointer;
+  }
+}
+.performance-face.sleeping,.performance-face.sleeping .candle-core,
+.performance-face.sleeping .eye-blink{animation:none!important}
+</style><style>
+
+/* Finholdra Beta 9.9.7 — user-selectable surface style. Purely cosmetic; native iOS picker remains native. */
+body[data-appearance="glass"]{
+ --fh-glass-fill:rgba(54,82,120,.30);
+ --fh-glass-stroke:rgba(190,223,255,.22);
+ --fh-glass-shadow:0 12px 30px rgba(1,8,23,.15),inset 0 1px 0 rgba(255,255,255,.10);
+}
+body[data-appearance="glass"][data-theme="light"]{
+ --fh-glass-fill:rgba(255,255,255,.68);
+ --fh-glass-stroke:rgba(89,132,185,.27);
+ --fh-glass-shadow:0 10px 28px rgba(28,62,110,.10),inset 0 1px 0 rgba(255,255,255,.78);
+}
+body[data-appearance="glass"] :is(.card,.box,.setting-group,.favorite-row,.search-results,.account-panel,.app-modal-card,.asset-detail-sheet,.pmc-history-plot,.browse-categories){
+ background:var(--fh-glass-fill)!important;
+ border:1px solid var(--fh-glass-stroke)!important;
+ box-shadow:var(--fh-glass-shadow)!important;
+ -webkit-backdrop-filter:blur(19px) saturate(145%);
+ backdrop-filter:blur(19px) saturate(145%);
+}
+body[data-appearance="glass"] :is(.btn,.gear-btn,.nav-tool,.chip,.browse-tab,.browse-category,.seg button,.timeline-range button,.asset-detail-ranges button){
+ border-color:var(--fh-glass-stroke)!important;
+ background-color:rgba(130,163,207,.13);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 3px 9px rgba(2,13,31,.09)!important;
+ -webkit-backdrop-filter:blur(12px) saturate(130%);
+ backdrop-filter:blur(12px) saturate(130%);
+ transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+body[data-appearance="glass"] :is(select,.order-select,input:not([type="checkbox"]):not([type="radio"]),textarea){
+ border-color:var(--fh-glass-stroke)!important;
+ background-color:rgba(96,132,176,.13)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.11)!important;
+ -webkit-backdrop-filter:blur(13px) saturate(130%);
+ backdrop-filter:blur(13px) saturate(130%);
+}
+body[data-appearance="glass"][data-theme="light"] :is(select,.order-select,input:not([type="checkbox"]):not([type="radio"]),textarea){background-color:rgba(255,255,255,.56)!important}
+/* Restore primary / selected states so accessibility and active navigation remain obvious. */
+body[data-appearance="glass"] :is(.btn.primary,.nav-tool.active,.timeline-range button.selected,.asset-detail-ranges button.selected,.seg button.selected){
+ background-color:rgba(65,117,207,.70)!important;
+ border-color:rgba(152,189,255,.6)!important;
+ color:#fff!important;
+}
+/* Flat option intentionally leaves the established CSS untouched. */
+@media(prefers-reduced-transparency:reduce){body[data-appearance="glass"] :is(.card,.box,.setting-group,.favorite-row,.search-results,.account-panel,.app-modal-card,.asset-detail-sheet,.pmc-history-plot,.browse-categories){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)!important}}
+@media(prefers-reduced-motion:reduce){body[data-appearance="glass"] :is(.btn,.gear-btn,.nav-tool,.chip){transition:none!important}}
+
+</style>
+</head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-bianco.svg" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
 <div class="finholdra-language-gate"><label for="finholdraLanguageWelcome">Lingua / Language</label><select id="finholdraLanguageWelcome"><option value="it">Italiano</option><option value="en">English</option></select></div><div class="account-tabs"><button type="button" id="accountTabCreate" class="selected">Nuovo profilo</button><button type="button" id="accountTabLogin">Accedi</button></div>
@@ -934,6 +1008,7 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
 <div class="section-head"><h2>Preferenze</h2><span class="sub">Le modifiche si salvano automaticamente</span></div>
 <details class="setting-group" open=""><summary>Aspetto e colori</summary><div class="setting-field"><label for="finholdraLanguageSetting">Lingua / Language</label><select id="finholdraLanguageSetting"><option value="it">Italiano</option><option value="en">English</option></select></div>
 <div class="setting-field"><label for="settingTheme">Tema dell'app</label><select id="settingTheme"><option value="dark">Blu notte (attuale)</option><option value="ocean">Blu oceano</option><option value="light">Chiaro</option><option value="amethyst">Ametista</option><option value="graphite">Grafite</option><option value="pine">Verde petrolio</option><option value="system">Automatico (iPhone)</option></select></div>
+<div class="setting-field"><label for="settingAppearanceMode">Stile dell'interfaccia e dei menu</label><select id="settingAppearanceMode" aria-label="Stile dell'interfaccia"><option value="flat">Flat · essenziale</option><option value="glass">Liquid Glass · vetro e trasparenze</option></select><p class="hint">Flat mantiene la grafica classica. Liquid Glass aggiunge vetro satinato, sfocature e profondità a schede, pulsanti e menu. I menu aperti su iPhone restano gestiti da iOS.</p></div>
 <div class="setting-field"><label for="settingPalette">Palette mascotte</label><select id="settingPalette"><option value="classic">Classica · verde / menta / rosso</option><option value="ocean">Oceano · turchese / azzurro / blu</option><option value="royal">Royal · blu / celeste / indaco</option><option value="forest">Bosco · smeraldo / lime / corallo</option></select></div><div class="mood-settings"><strong>Soglie emotive sul rendimento lordo (%)</strong><p class="hint">Soglie di reazione della mascotte.</p><div class="mood-setting-grid"><label>Zona neutra ± %<input id="settingMoodNeutral" type="number" min="0" max="50" step="0.1" value="1"/></label><label>Felice/arrabbiata ± %<input id="settingMoodPositive" type="number" min="0.1" max="100" step="0.1" value="2"/></label><label>Super felice/triste ± %<input id="settingMoodExtreme" type="number" min="0.2" max="200" step="0.1" value="5"/></label></div></div><div class="setting-field"><label for="settingMascotStyle">Modello mascotte</label><select id="settingMascotStyle"><option value="rounded">Candela classica</option><option value="slim">Candela sottile</option><option value="square">Candela geometrica</option></select></div><label class="toggle setting-toggle"><input id="settingGlow" type="checkbox" checked> Alone luminoso intorno alla mascotte</label><div class="setting-field"><label for="settingMotion">Movimento mascotte</label><select id="settingMotion"><option value="lively">Vivace</option><option value="normal">Normale</option><option value="off">Disattivato</option></select></div>
 </details>
 <details class="setting-group"><summary>Privacy e visualizzazione</summary>
@@ -1581,16 +1656,60 @@ let facePanelOpen=false;
 function renderFacePanel(){const box=$('faceAnalysis');if(!facePanelOpen){box.classList.add('hidden');$('faceButton').setAttribute('aria-expanded','false');return}const c=totalCapital(),v=totalValue(),gain=v-c,ratio=c?gain/c:0;const g=groups().sort((a,b)=>(b.value-b.capital)-(a.value-a.capital));const status=ratio>0.02?'Positiva':ratio<-.02?'Negativa':'Stabile';box.classList.remove('hidden');$('faceButton').setAttribute('aria-expanded','true');box.innerHTML='<h3>Performance '+status.toLowerCase()+'</h3><p class="hint">Il colore deriva dal rendimento lordo del patrimonio selezionato, non da un segnale di acquisto o vendita.</p><div class="face-line"><span>Rendimento totale</span><strong class="'+(gain>=0?'gain':'loss')+'">'+(gain>=0?'+':'')+eur(gain)+' · '+(ratio>=0?'+':'')+pct(ratio)+'</strong></div>'+g.map(x=>'<div class="face-line"><span>'+x.name+'</span><strong class="'+(x.value>=x.capital?'gain':'loss')+'">'+(x.value>=x.capital?'+':'')+eur(x.value-x.capital)+'</strong></div>').join('');}
 $('faceButton').onclick=()=>{showFinnGreeting();facePanelOpen=!facePanelOpen;const face=$('faceButton');face.classList.remove('touch');void face.offsetWidth;face.classList.add('touch');renderFacePanel()};
 const MASCOT_EXPRESSIONS={neutral:['thinking','neutral','calm'],positive:['satisfied','positive','celebrate'],negative:['angry','sad','crying']};
-const MASCOT_LABELS={thinking:'pensierosa',neutral:'neutra',calm:'tranquilla',satisfied:'soddisfatta',positive:'positiva',celebrate:'festeggia',angry:'arrabbiata',sad:'triste',crying:'piange'};
+const MASCOT_LABELS={thinking:'pensierosa',neutral:'neutra',calm:'tranquilla',satisfied:'soddisfatta',positive:'positiva',celebrate:'festeggia',angry:'arrabbiata',sad:'triste',crying:'piange',sleeping:'addormentato',waking:'si sveglia',dozing:'si addormenta',praying:'prega per Wall Street'};
 let mascotMood=null,mascotIndex=0;
+let finnMarketClosed=false;
 function currentMascotEmotion(mood){return MASCOT_EXPRESSIONS[mood][mascotIndex%3]}
+let finnScene=null,finnSceneTimer=null,finnSceneTick=null,finnSceneToken=0;
+let finnMarketSample=null,finnAppWasVisible=(document.visibilityState==='visible');
+let finnUSSample=null,finnScenePlayed=new Set();
+function finnCurrentEmotion(mood,fallback){return finnScene?finnScene.emotion:(finnMarketClosed?'sleeping':fallback)}
+function finnSceneClass(){return finnScene?' finn-scene finn-scene-'+finnScene.type:''}
+function finnUpdateFigure(){
+ const face=$('performanceFace');if(!face)return;
+ const mood=mascotMood||'neutral',emotion=finnCurrentEmotion(mood,currentMascotEmotion(mood));
+ face.innerHTML=mascotSVG(mood,prefs.colors[mood]||PREF_DEFAULTS.colors[mood],false,emotion);
+ face.className='performance-face '+mood+(emotion==='sleeping'?' sleeping':'')+' expression-'+emotion+finnSceneClass();
+ face.setAttribute('aria-label','Finn: '+(MASCOT_LABELS[emotion]||emotion));
+ face.title=face.getAttribute('aria-label');
+ const playground=$('mascotPlayArt');
+ // Mirror the scene in the interactive mascot area without interfering with its local controls.
+ if(playground&&finnScene){const chosen=mascotPlayChosenEmotion;mascotPlayChosenEmotion=emotion;mascotPlayRender();mascotPlayChosenEmotion=chosen;playground.classList.add('finn-scene','finn-scene-'+finnScene.type)}
+ else if(playground){playground.classList.remove('finn-scene','finn-scene-awake','finn-scene-doze','finn-scene-party','finn-scene-tears','finn-scene-prayer');mascotPlayRender()}
+}
+function finnSceneStart(type,emotion,ms,followUp){
+ if(prefs.motion==='off'||window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches){if(followUp)followUp();else{finnScene=null;finnUpdateFigure()}return;}
+ clearTimeout(finnSceneTimer);const token=++finnSceneToken;
+ finnScene={type,emotion};finnUpdateFigure();
+ finnSceneTimer=setTimeout(()=>{if(token!==finnSceneToken)return;finnScene=null;finnUpdateFigure();if(followUp)followUp()},ms);
+}
 function mascotSVG(mood,color,alertMode=false,emotionOverride){
  const emotion=emotionOverride||(alertMode?'concerned':currentMascotEmotion(mood));
  const safe=/^#[0-9a-fA-F]{6}$/.test(color||'')?color:(mood==='negative'?'#ef4444':mood==='neutral'?'#a7f3d0':'#22c55e');
  const dark='#10263c',white='#f5fcff';
  let eyeA='<ellipse class="eye-blink" cx="42" cy="47" rx="4" ry="5.3" fill="'+dark+'"/><ellipse class="eye-blink" cx="58" cy="47" rx="4" ry="5.3" fill="'+dark+'"/>';
  let eyebrows='',mouth='',extras='',rightArm='',leftArm='';
- if(emotion==='thinking'){
+ if(emotion==='waking'){
+  eyeA='<path d="M37 47 Q42 53 47 47 M53 47 Q58 53 63 47" fill="none" stroke="'+dark+'" stroke-width="3.2" stroke-linecap="round"/>';
+  eyebrows='<path d="M37 37 Q42 35 47 37 M53 37 Q58 35 63 37"/>';
+  mouth='<ellipse cx="50" cy="65" rx="4" ry="5.5" fill="'+dark+'" stroke="none"/>';
+  extras='<path d="M78 18l6 -6M80 27h8" fill="none" stroke="#f8d779" stroke-width="3" stroke-linecap="round"/>';
+ }else if(emotion==='dozing'){
+  eyeA='<path d="M37 48q5 5 10 0M53 48q5 5 10 0" fill="none" stroke="'+dark+'" stroke-width="3" stroke-linecap="round"/>';
+  eyebrows='<path d="M37 39h10 M53 39h10"/>';
+  mouth='<path d="M46 63q4 3 8 0"/>';
+  extras='<path d="M78 20h7l-7 8h7" fill="none" stroke="#c8eaff" stroke-width="2" stroke-linecap="round"/>';
+ }else if(emotion==='praying'){
+  eyebrows='<path d="M37 37 Q41 32 47 38 M53 38 Q59 32 63 37"/>';
+  eyeA='<ellipse cx="42" cy="47" rx="4" ry="5.3" fill="'+dark+'"/><ellipse cx="58" cy="47" rx="4" ry="5.3" fill="'+dark+'"/>';
+  mouth='<path d="M44 66 Q50 59 56 66"/>';
+  extras='<path d="M76 28q8 -13 8 1q-1 5 -6 7" fill="none" stroke="#86cfff" stroke-width="3" stroke-linecap="round"/><path d="M79 17q4 -4 8 0" fill="none" stroke="#f8d779" stroke-width="2.5" stroke-linecap="round"/>';
+ }else if(emotion==='sleeping'){
+  eyeA='<path d="M37 48 Q42 53 47 48 M53 48 Q58 53 63 48" fill="none" stroke="'+dark+'" stroke-width="3.2" stroke-linecap="round"/>';
+  eyebrows='<path d="M37 38 Q42 40 47 38 M53 38 Q58 40 63 38"/>';
+  mouth='<path d="M45 63 Q50 67 55 63"/>';
+  extras='<g fill="none" stroke="#c8eaff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M75 29h8l-8 9h8M84 17h6l-6 7h6"/></g>';
+ }else if(emotion==='thinking'){
   eyebrows='<path d="M37 37 Q42 35 47 37"/><path d="M53 37 Q58 35 63 37"/>';
   mouth='<path d="M44 62q6 -2 12 1"/>';
   // Keep decorative thought marks away from the forehead: the old circle at (68,23)
@@ -1634,6 +1753,7 @@ function mascotSVG(mood,color,alertMode=false,emotionOverride){
  const cheer=emotion==='celebrate';
  leftArm=cheer?'<path d="M30 58Q13 51 16 32"/><circle cx="16" cy="31" r="5.2" fill="'+white+'"/>':'<path d="M30 60Q13 58 16 76"/><circle cx="16" cy="76" r="5.2" fill="'+white+'"/>';
  rightArm=cheer?'<path d="M70 58Q87 45 84 27"/><circle cx="84" cy="27" r="5.2" fill="'+white+'"/>':'<path d="M70 60Q87 58 84 76"/><circle cx="84" cy="76" r="5.2" fill="'+white+'"/>';
+ if(emotion==='praying'){leftArm='<path d="M30 62Q37 66 47 67"/><circle cx="47" cy="67" r="5" fill="'+white+'"/>';rightArm='<path d="M70 62Q63 66 53 67"/><circle cx="53" cy="67" r="5" fill="'+white+'"/>'; }
  return `<svg viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g class="candle-character"><ellipse cx="50" cy="103" rx="29" ry="4" fill="#041428" opacity=".16"/><g fill="none" stroke="${dark}" stroke-width="4.2" stroke-linecap="round">${leftArm}${rightArm}</g><path d="M50 12V5M50 91v10" stroke="${dark}" stroke-width="8" stroke-linecap="round"/><path d="M50 12V5M50 91v10" stroke="${safe}" stroke-width="4.6" stroke-linecap="round"/><rect x="29" y="13" width="42" height="78" rx="14" fill="${safe}" stroke="${dark}" stroke-width="4"/><path d="M35 27q3 -8 10 -8" stroke="#fff" stroke-opacity=".38" stroke-width="5" stroke-linecap="round" fill="none"/><g class="mascot-brows" stroke="${dark}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">${eyebrows}</g><g class="mascot-mouth" stroke="${dark}" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none">${mouth}</g>${eyeA}${extras}</g></svg>`;
 }
 
@@ -1641,7 +1761,7 @@ const VISIT_COUNTER_KEY='my_patrimonio_daily_opens_v1';
 const VISIT_SUPPRESS_KEY='my_patrimonio_visit_alert_disabled_v1';
 
 const PREF_KEY='invesquo_preferences_v50';
-const PREF_DEFAULTS={moodNeutral:1,moodPositive:2,moodExtreme:5,mainMarket:'MIL',palette:'classic',mascotStyle:'rounded',glow:true,theme:'dark',motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',educationDetails:true,showQuoteTime:true,showLogos:true,showBackfill:true,favoriteEnabled:false,favoriteAssets:[],compact:false,autoOpenSettings:true,colors:{positive:'#22c55e',neutral:'#9fe870',negative:'#ef4444'}};
+const PREF_DEFAULTS={moodNeutral:1,moodPositive:2,moodExtreme:5,mainMarket:'MIL',palette:'classic',mascotStyle:'rounded',glow:true,theme:'dark',appearanceMode:'flat',motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',educationDetails:true,showQuoteTime:true,showLogos:true,showBackfill:true,favoriteEnabled:false,favoriteAssets:[],compact:false,autoOpenSettings:true,colors:{positive:'#22c55e',neutral:'#9fe870',negative:'#ef4444'}};
 let prefs={...PREF_DEFAULTS,colors:{...PREF_DEFAULTS.colors}};
 try{const x=JSON.parse(store.getItem(PREF_KEY));if(x&&typeof x==='object'){prefs={...prefs,...x,colors:{...PREF_DEFAULTS.colors,...(x.colors||{})}}}}catch(e){}
 // Preserve legacy opt-out, but offer an accessible toggle to re-enable alerts.
@@ -1649,7 +1769,7 @@ try{if(store.getItem(VISIT_SUPPRESS_KEY)==='true')prefs.warnings=false}catch(e){
 const validColor=v=>/^#[0-9a-fA-F]{6}$/.test(v);
 function effectiveTheme(){return prefs.theme==='system'?(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):prefs.theme}
 function applyPreferences(){
- document.body.dataset.theme=effectiveTheme();document.body.classList.toggle('mascot-glow',prefs.glow!==false);document.body.dataset.mascotStyle=prefs.mascotStyle||'rounded';document.body.classList.toggle('motion-normal',prefs.motion==='normal');document.body.classList.toggle('motion-off',prefs.motion==='off');document.body.classList.toggle('privacy-on',!!prefs.privacy);document.body.classList.toggle('compact-cards',!!prefs.compact);$('privacyShortcut').textContent=prefs.privacy?'◉':'◎';$('privacyShortcut').setAttribute('aria-label',prefs.privacy?'Mostra importi':'Nascondi importi');
+ document.body.dataset.theme=effectiveTheme();document.body.dataset.appearance=prefs.appearanceMode==='glass'?'glass':'flat';const appearanceControl=$('settingAppearanceMode');if(appearanceControl)appearanceControl.value=document.body.dataset.appearance;document.body.classList.toggle('mascot-glow',prefs.glow!==false);document.body.dataset.mascotStyle=prefs.mascotStyle||'rounded';document.body.classList.toggle('motion-normal',prefs.motion==='normal');document.body.classList.toggle('motion-off',prefs.motion==='off');document.body.classList.toggle('privacy-on',!!prefs.privacy);document.body.classList.toggle('compact-cards',!!prefs.compact);$('privacyShortcut').textContent=prefs.privacy?'◉':'◎';$('privacyShortcut').setAttribute('aria-label',prefs.privacy?'Mostra importi':'Nascondi importi');
  document.querySelector('meta[name="theme-color"]').content=effectiveTheme()==='light'?'#edf2f8':effectiveTheme()==='ocean'?'#091b2a':'#0b1426';
  $(`settingTheme`).value=prefs.theme;$(`settingMotion`).value=prefs.motion;$(`settingWarnings`).checked=prefs.warnings;$(`settingLimit`).value=String([4,6,10].includes(Number(prefs.limit))?prefs.limit:4);$(`settingPrivacy`).checked=!!prefs.privacy;$(`settingRefreshMinutes`).value=String([1,5,15,30].includes(Number(prefs.refreshMinutes))?prefs.refreshMinutes:1);$(`settingHistoryDefault`).value=prefs.historyDefault||'30';$(`settingShowQuoteTime`).checked=!!prefs.showQuoteTime;$(`settingWealthGraph`).checked=prefs.wealthGraph!==false;$(`settingShowLogos`).checked=prefs.showLogos!==false;$(`settingCompact`).checked=!!prefs.compact;$(`settingAutoOpenSettings`).checked=prefs.autoOpenSettings!==false;
  for(const [id,key] of [['settingMoodNeutral','moodNeutral'],['settingMoodPositive','moodPositive'],['settingMoodExtreme','moodExtreme']]){const field=$(id);if(field)field.value=String(prefs[key]??PREF_DEFAULTS[key]);} $('settingPalette').value=prefs.palette||'classic';$('settingMascotStyle').value=prefs.mascotStyle||'rounded';$('settingGlow').checked=prefs.glow!==false;
@@ -1671,6 +1791,7 @@ updateHistoryAndSearchSettings();syncBackfillVisibility();
 function savePreferences(){try{store.setItem(PREF_KEY,JSON.stringify(prefs));store.setItem(VISIT_SUPPRESS_KEY,String(!prefs.warnings))}catch(e){}applyPreferences();render();$('settingsSaved').textContent='Preferenze salvate sul dispositivo.'}
 function updateVisitStatus(){let n=0;try{const x=JSON.parse(store.getItem(VISIT_COUNTER_KEY));if(x&&x.date===getVisitDay())n=Number(x.count)||0}catch(e){}$('visitToday').textContent='Ingressi oggi: '+n}
 $('settingTheme').onchange=e=>{prefs.theme=e.target.value;savePreferences()};
+$('settingAppearanceMode').onchange=e=>{prefs.appearanceMode=e.target.value==='glass'?'glass':'flat';savePreferences()};
 $('settingMotion').onchange=e=>{prefs.motion=e.target.value;savePreferences()};
 $('settingWarnings').onchange=e=>{prefs.warnings=e.target.checked;savePreferences()};
 $('settingLimit').onchange=e=>{prefs.limit=Number(e.target.value)||4;savePreferences()};
@@ -1791,9 +1912,9 @@ function render(){const capital=totalCapital(),value=totalValue(),unrealized=val
 $('total').textContent=eur(value);$('invested').textContent=eur(capital);$('profit').textContent=(profit>=0?'+':'')+eur(profit)+' ('+(profit>=0?'+':'')+pct(performanceRatio)+')';$('profit').className=profit>=0?'gain nums':'loss nums';$('returnPct').textContent=(profit>=0?'+':'')+pct(performanceRatio);$('returnPct').className='num nums '+(profit>=0?'gain':'loss');$('stamp').textContent=invesquoLastPriceUpdateLabel();$('count').textContent=activeAssets().length+' / '+state.assets.length+' strumenti';const neutralBand=Math.max(0,Number(prefs.moodNeutral??1))/100;const positiveBand=Math.max(neutralBand+.001,Number(prefs.moodPositive??2)/100);const extremeBand=Math.max(positiveBand+.001,Number(prefs.moodExtreme??5)/100);const faceMood=performanceRatio>neutralBand?'positive':performanceRatio< -neutralBand?'negative':'neutral';const moodStatus=$('headerMoodStatus');moodStatus.className='header-mood-status '+faceMood;$('headerMoodText').textContent=faceMood==='positive'?'Positivo':faceMood==='negative'?'Negativo':'Stabile';moodStatus.title='Rendimento lordo del patrimonio selezionato: '+pct(performanceRatio);
 const face=$('performanceFace');
 if(mascotMood!==faceMood){mascotMood=faceMood;mascotIndex=0}
-const faceColor=prefs.colors[faceMood]||PREF_DEFAULTS.colors[faceMood];const emotion=performanceRatio>=extremeBand?'celebrate':performanceRatio<=-extremeBand?'crying':performanceRatio>=positiveBand?'positive':performanceRatio<=-positiveBand?'angry':faceMood==='positive'?'satisfied':faceMood==='negative'?'sad':'neutral';
+const faceColor=prefs.colors[faceMood]||PREF_DEFAULTS.colors[faceMood];const emotion=finnCurrentEmotion(faceMood,performanceRatio>=extremeBand?'celebrate':performanceRatio<=-extremeBand?'crying':performanceRatio>=positiveBand?'positive':performanceRatio<=-positiveBand?'angry':faceMood==='positive'?'satisfied':faceMood==='negative'?'sad':'neutral');
 face.innerHTML=mascotSVG(faceMood,faceColor,false,emotion);
-face.className='performance-face '+faceMood+' expression-'+emotion+(!$('visitAlert').classList.contains('hidden')?' overchecking':'');
+face.className='performance-face '+faceMood+(emotion==='sleeping'?' sleeping':'')+' expression-'+emotion+finnSceneClass()+(!$('visitAlert').classList.contains('hidden')?' overchecking':'');
 if(facePanelOpen)renderFacePanel();
 face.setAttribute('aria-label','Mascotte '+MASCOT_LABELS[emotion]+'. Performance lorda '+pct(performanceRatio));face.title=face.getAttribute('aria-label');
 const visible=groups(),den=visible.reduce((s,x)=>s+(mode==='now'?x.value:x.capital),0);let offset=0;const parts=visible.filter(g=>(mode==='now'?g.value:g.capital)>0).map(g=>{let from=offset;offset+=den?(mode==='now'?g.value:g.capital)/den*100:0;return `${g.color} ${from}% ${offset}%`});$('donut').style.background=parts.length?'conic-gradient('+parts.join(',')+')':'#354258';$('donutLabel').textContent=mode==='now'?'Patrimonio oggi':'Patrimonio investito';$('donutAmount').textContent=eur(den);$('legend').innerHTML=visible.length?visible.map(g=>`<button type="button" class="legend-row" data-allocation-category="${svgEscape(g.name)}" aria-expanded="${allocationSelectedCategory===g.name}" aria-label="Apri dettagli ${svgEscape(g.name)}"><span class="swatch" style="background:${g.color}"></span><div><div class="legend-title">${g.name}</div><div class="legend-label">${eur(mode==='now'?g.value:g.capital)}</div></div><div class="legend-col"><span class="legend-label">Peso</span><strong>${pct(den?(mode==='now'?g.value:g.capital)/den:0)}</strong></div><div class="legend-col"><span class="legend-label">Rend. lordo</span><strong class="${g.ret>=0?'gain':'loss'}">${g.ret>=0?'+':''}${pct(g.ret)}</strong><strong class="legend-euro ${g.value-g.capital>=0?'gain':'loss'}">${g.value-g.capital>=0?'+':''}${eur(g.value-g.capital)}</strong></div></button>`).join(''):'<p class="hint">Nessuna categoria selezionata.</p>';$('modeNow').classList.toggle('selected',mode==='now');$('modeCost').classList.toggle('selected',mode==='cost');$('filters').innerHTML=CAT.map(([cat,color])=>`<button class="chip ${filter[cat]?'':'off'}" data-filter="${cat}" aria-pressed="${filter[cat]}"><i class="dot" style="background:${color}"></i>${cat} ${filter[cat]?'✓':'+'}</button>`).join('');updateAllocationSelection();
@@ -2401,10 +2522,10 @@ setInterval(()=>{
  const ratio=totalCapital()?(totalValue()-totalCapital())/totalCapital():0;
  const mood=ratio>.02?'positive':ratio<-.02?'negative':'neutral';
  if(mood!==mascotMood){mascotMood=mood;mascotIndex=0}
- const emotion=currentMascotEmotion(mood),face=$('performanceFace');
+ const emotion=finnCurrentEmotion(mood,currentMascotEmotion(mood)),face=$('performanceFace');
  if(!face)return;
  face.innerHTML=mascotSVG(mood,prefs.colors[mood]||PREF_DEFAULTS.colors[mood],false,emotion);
- face.className='performance-face '+mood+' expression-'+emotion+(!$('visitAlert').classList.contains('hidden')?' overchecking':'');
+ face.className='performance-face '+mood+(emotion==='sleeping'?' sleeping':'')+' expression-'+emotion+finnSceneClass()+(!$('visitAlert').classList.contains('hidden')?' overchecking':'');
  face.setAttribute('aria-label','Mascotte '+MASCOT_LABELS[emotion]+'. '+face.getAttribute('aria-label').replace(/^Mascotte [^.]+\. /,''));
  face.title=face.getAttribute('aria-label');
 },6000);
@@ -3180,20 +3301,67 @@ function isMarketHoliday(key,p){
  const e=easter(yr),d=Date.UTC(yr,Number(p.month)-1,Number(p.day)),delta=Math.round((d-e)/86400000);
  return (['MIL','PAR','XETRA','LSE','NYSE'].includes(key)&&delta===-2)||(['MIL','PAR','XETRA','LSE'].includes(key)&&delta===1);
 }
+function finnFirstFavoriteDailyChange(){
+ try{const preferred=favoriteAssets();if(!prefs.favoriteEnabled||!preferred.length)return null;
+  const data=favoriteCache.get(preferred[0].symbol);
+  return data&&Number.isFinite(data.change)?Number(data.change):null;
+ }catch(_){return null}
+}
+function finnMinuteKey(prefix,parts){return prefix+':'+parts.year+'-'+parts.month+'-'+parts.day}
+function finnSceneOnce(key,fn){if(finnScenePlayed.has(key))return;finnScenePlayed.add(key);fn();}
+function finnOnMarketTransition(nowActive,previousActive,parts,key){
+ if(previousActive===null||previousActive===nowActive)return;
+ const day=finnMinuteKey('market:'+key,parts);
+ if(nowActive){finnSceneOnce(day+':open',()=>finnSceneStart('awake','waking',2200));}
+ else{
+  const delta=finnFirstFavoriteDailyChange();const kind=delta!==null&&delta>0.000001?'party':delta!==null&&delta< -0.000001?'tears':null;
+  finnSceneOnce(day+':close',()=>{
+   if(kind)finnSceneStart(kind,kind==='party'?'celebrate':'crying',3100,()=>finnSceneStart('doze','dozing',1800));
+   else finnSceneStart('doze','dozing',1800);
+  });
+ }
+}
+function finnCheckUSOpen(){
+ const p=marketLocalParts('America/New_York'),minute=Number(p.hour)*60+Number(p.minute),businessDay=!['Sat','Sun'].includes(p.weekday),open=businessDay&&!isMarketHoliday('NYSE',p)&&minute>=570&&minute<960;
+ const previous=finnUSSample;finnUSSample=open;
+ if(previous===false&&open&&minute>=570&&minute<=572){
+  finnSceneOnce(finnMinuteKey('us-prayer',p),()=>finnSceneStart('prayer','praying',3500));
+ }
+}
 function updateMarketStatus(){
  const key=MARKET_LIST[prefs.mainMarket]?prefs.mainMarket:'MIL',m=MARKET_LIST[key],p=marketLocalParts(m.tz);
  const minute=Number(p.hour)*60+Number(p.minute),businessDay=!['Sat','Sun'].includes(p.weekday);
  const active=businessDay&&!isMarketHoliday(key,p)&&minute>=m.start&&minute<m.end;
+ const previous=finnMarketSample;
+ finnMarketClosed=!active;
+ finnMarketSample=active;
  const box=$('marketStatus');if(!box)return;
+ if(document.visibilityState==='visible'){
+  if(previous!==null&&previous!==active){
+   const boundary=active?m.start:m.end;
+   // Only animate actual session boundaries, not a manual market switch or a late tab wake-up.
+   if(minute>=boundary&&minute<=boundary+2)finnOnMarketTransition(active,previous,p,key);
+   else if(!finnScene)finnUpdateFigure();
+  }else if(previous===null&&!finnScene){finnUpdateFigure();}
+  finnCheckUSOpen();
+ }
  box.className='market-status '+(active?'open':'closed');
  $('marketText').textContent=active?'Mercati aperti':'Mercati chiusi';
  box.title=m.label+' · '+(active?'negoziazione ordinaria prevista':'fuori dalla negoziazione ordinaria')+' · '+p.hour+':'+p.minute+' (ora locale). Festività straordinarie e sospensioni non verificate.';
  const select=$('settingMainMarket');if(select&&select.value!==key)select.value=key;
 }
-updateMarketStatus();setInterval(updateMarketStatus,60000);
+updateMarketStatus();setInterval(()=>{if(document.visibilityState==='visible')updateMarketStatus()},15000);
+document.addEventListener('visibilitychange',()=>{
+ if(document.visibilityState==='hidden'){
+  finnMarketSample=null;finnUSSample=null;
+  ++finnSceneToken;clearTimeout(finnSceneTimer);finnScene=null;
+ }else{
+  finnMarketSample=null;finnUSSample=null;updateMarketStatus();
+ }
+});
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 9.9.2';
+const FINHOLDRA_VERSION_FALLBACK='Beta 9.9.7';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
