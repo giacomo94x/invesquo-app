@@ -622,6 +622,12 @@ body[data-theme="light"] .pmc-event-dot circle:first-child{stroke:#ffffff}
 .top .finholdra-wordmark img{width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important}
 @media(max-width:420px){.top .new-header-main{grid-template-columns:minmax(0,1.35fr) 76px minmax(90px,.82fr)!important}}
 @media(max-width:350px){.top .new-header-main{grid-template-columns:minmax(0,1.35fr) 67px minmax(83px,.82fr)!important}}
+
+/* Finholdra Beta 9.2 — desktop only: compact header logo and native-style wheel movement */
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+ .top .finholdra-wordmark img { width: 91% !important; max-width: 91% !important; }
+ html, body { overscroll-behavior-y: auto; }
+}
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
 .pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
@@ -2600,6 +2606,40 @@ $('addAssetCommit').onclick=()=>{const a=pendingQuote;if(!a)return;
 
 if(ACCOUNT_ID){try{if(depositMigrationDirty)save();normalizeLegacyTrades();initInvestmentDates();trackSnapshot();render();renderEditor();renderBuy();countPortfolioVisit()}catch(e){notice('Errore nel cruscotto: '+e.message,true)}if(!SIM_MODE)refresh(true);}if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
+
+
+// Finholdra Beta 9.2: mouse-wheel scrolling on desktop without affecting touch devices.
+(function setupDesktopWheelScroll(){
+ const desktop=window.matchMedia('(min-width: 768px) and (hover: hover) and (pointer: fine)');
+ document.addEventListener('wheel',function(ev){
+  if(!desktop.matches||ev.ctrlKey||ev.metaKey||ev.shiftKey||ev.defaultPrevented)return;
+  // Do not interfere with select menus or independently scrollable controls.
+  if(ev.target.closest('select,textarea,[contenteditable="true"]'))return;
+  const delta=ev.deltaY*(ev.deltaMode===1?16:ev.deltaMode===2?window.innerHeight:1);
+  if(!delta)return;
+  let scroller=null;
+  const detail=document.getElementById('assetDetailOverlay');
+  if(detail&&!detail.classList.contains('hidden')){
+   scroller=detail.querySelector('.asset-detail-sheet');
+  }else{
+   const activeModal=Array.from(document.querySelectorAll('.app-modal:not(.hidden)')).find(el=>getComputedStyle(el).display!=='none');
+   if(activeModal)scroller=activeModal.querySelector('.app-modal-card')||activeModal;
+  }
+  if(!scroller){
+   let el=ev.target;
+   while(el&&el!==document.body){
+    if(el instanceof HTMLElement&&el.scrollHeight>el.clientHeight+1&&getComputedStyle(el).overflowY.match(/auto|scroll/)){
+     scroller=el;break;
+    }
+    el=el.parentElement;
+   }
+  }
+  if(!scroller)scroller=document.scrollingElement||document.documentElement;
+  if(scroller.scrollHeight<=scroller.clientHeight+1)return;
+  ev.preventDefault();
+  scroller.scrollTop+=delta;
+ },{passive:false});
+})();
 
 // Finholdra v5.9: independent views, sharing the same portfolio state.
 let invesquoActiveView='dashboard';
