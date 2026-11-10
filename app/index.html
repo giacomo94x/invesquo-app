@@ -702,6 +702,38 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
   color: #193b71 !important;
   box-shadow: inset 0 0 0 1px #89a6d0 !important;
 }
+
+/* Finholdra Beta 9.3 — navigazione a sei pulsanti, larghezza distribuita */
+.top .new-header-nav{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  justify-content:stretch!important;
+  align-items:stretch!important;
+  gap:8px!important;
+  width:100%!important;
+}
+.top .new-header-nav > button.gear-btn{
+  box-sizing:border-box!important;
+  display:flex!important;
+  position:static!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:45px!important;
+  min-height:45px!important;
+  flex:none!important;
+  margin:0!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+@media(max-width:600px){
+  .top .new-header-nav{gap:5px!important}
+  .top .new-header-nav > button.gear-btn{height:43px!important;min-height:43px!important}
+}
+@media(max-width:350px){
+  .top .new-header-nav{gap:3px!important}
+  .top .new-header-nav > button.gear-btn{height:40px!important;min-height:40px!important}
+}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-bianco.svg" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -823,7 +855,7 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 9.0</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 9.4</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -834,7 +866,12 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
 <p class="foot">Per trasferire dati tra profili o dispositivi usa il backup JSON in questa schermata. La password opzionale non protegge i file del browser da chi accede al dispositivo.</p></section><section class="card settings-card" id="extraSettings713"><h2>Storici e ricerca</h2>
 <label class="toggle"><input id="settingShowReconstructed" type="checkbox" checked> Includi i prezzi storici ricostruiti nei grafici</label><label class="toggle"><input id="settingShowBackfill" type="checkbox" checked> Mostra «Recupera prezzi» nei grafici</label>
 <p class="hint">Mostra solo rilevazioni osservate nei grafici.</p>
-<div class="setting-field"><label for="settingSearchRegion">Borse da cercare per prime</label><select id="settingSearchRegion"><option value="world">Tutto il mondo</option><option value="it">Solo Italia</option><option value="eu">Europa</option><option value="us">Solo USA</option></select><p class="hint">Filtra per mercato di quotazione. Cerca obbligazioni anche per ISIN.</p></div></section><section class="card settings-card" id="favoriteSettings"><h2>Titoli preferiti</h2><label class="toggle"><input type="checkbox" id="favoriteEnabled"> Mostra preferiti nella Home</label><div id="favoriteSettingsBody"><div class="field"><label for="favoriteQuery">Cerca per nome, ticker o ISIN</label><div class="flex"><input id="favoriteQuery" class="order-select" placeholder="Cerca un titolo"><button type="button" class="btn" id="favoriteSearch">Cerca</button></div></div><div class="search-results" id="favoriteSearchResults"></div><div id="favoriteSelected" class="favorites-selected"></div><p class="sub">Massimo 3 titoli, anche non posseduti.</p></div></section><section class="card settings-card" id="settingsSection">
+<div class="setting-field"><label for="settingSearchRegion">Borse da cercare per prime</label><select id="settingSearchRegion"><option value="world">Tutto il mondo</option><option value="it">Solo Italia</option><option value="eu">Europa</option><option value="us">Solo USA</option></select><p class="hint">Filtra per mercato di quotazione. Cerca obbligazioni anche per ISIN.</p></div></section><section class="card settings-card" id="favoriteSettings"><h2>Titoli preferiti</h2><label class="toggle"><input type="checkbox" id="favoriteEnabled"> Mostra preferiti nella Home</label><div id="favoriteSettingsBody"><div class="field"><label for="favoriteQuery">Cerca per nome, ticker o ISIN</label><div class="flex"><input id="favoriteQuery" class="order-select" placeholder="Cerca un titolo"><button type="button" class="btn" id="favoriteSearch">Cerca</button></div></div><div class="search-results" id="favoriteSearchResults"></div><div id="favoriteSelected" class="favorites-selected"></div><p class="sub">Massimo 3 titoli, anche non posseduti.</p></div></section><section class="card settings-card" id="jsonBackupSettings"><div class="section-head"><h2>Esporta e importa dati JSON</h2></div>
+<p class="hint">Scarica una copia completa del portafoglio, delle operazioni e dello storico, oppure ripristina un backup precedente.</p>
+<div class="actions"><button class="btn primary" id="backup" type="button">↓ Scarica backup JSON</button><button class="btn" id="import" type="button">↑ Carica backup JSON</button></div>
+<input accept="application/json,.json" class="hidden" id="fileInput" type="file"/>
+<p class="foot">Il caricamento sostituisce i dati del profilo corrente dopo la tua conferma. I backup Invesquo precedenti restano compatibili.</p></section>
+<section class="card settings-card" id="settingsSection">
 <div class="section-head"><h2>Preferenze</h2><span class="sub">Le modifiche si salvano automaticamente</span></div>
 <details class="setting-group" open=""><summary>Aspetto e colori</summary><div class="setting-field"><label for="finholdraLanguageSetting">Lingua / Language</label><select id="finholdraLanguageSetting"><option value="it">Italiano</option><option value="en">English</option></select></div>
 <div class="setting-field"><label for="settingTheme">Tema dell'app</label><select id="settingTheme"><option value="dark">Blu notte (attuale)</option><option value="ocean">Blu oceano</option><option value="light">Chiaro</option><option value="amethyst">Ametista</option><option value="graphite">Grafite</option><option value="pine">Verde petrolio</option><option value="system">Automatico (iPhone)</option></select></div>
@@ -872,11 +909,8 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
 <label class="toggle setting-toggle"><input type="checkbox" id="settingDenseCharts">Punti grafico discreti nei periodi lunghi</label>
 <div class="setting-field"><label for="settingTextScale">Dimensione dei testi</label><select id="settingTextScale"><option value="normal">Standard</option><option value="large">Più grandi</option></select></div>
 </details>
-<details class="setting-group" open><summary>Dati, transazioni e sicurezza</summary>
-<p class="hint">Esporta o importa il portafoglio completo in JSON.</p>
-<div class="actions"><button class="btn primary" id="backup" type="button">↓ Scarica tutti i dati (.json)</button><button class="btn" id="import" type="button">↑ Carica dati (.json)</button></div>
-<input accept="application/json,.json" class="hidden" id="fileInput" type="file"/>
-<p class="foot">Il caricamento sostituisce il portafoglio e lo storico locali dopo conferma. Non caricare file provenienti da sconosciuti.</p>
+<details class="setting-group"><summary>Azzeramento dati e sicurezza</summary>
+<p class="hint">Operazioni irreversibili: prima salva una copia JSON dalla sezione Esporta e importa dati.</p>
 <button class="btn danger-outline full-btn" id="reset" type="button">Azzera portafoglio e cronologia</button>
 <div class="notice hidden" id="resetUndoBar" role="status" aria-live="polite"><strong>Portafoglio azzerato.</strong> Puoi ripristinare immediatamente lo stato precedente. <button type="button" class="btn primary" id="undoReset">↶ Annulla reset</button></div>
 <p class="foot">Il reset lascia l'app completamente vuota. La copia di annullamento resta disponibile sullo stesso dispositivo fino alla successiva importazione o reset (salvo cancellazione dei dati del browser).</p>
@@ -1725,7 +1759,7 @@ $('undoReset').onclick=()=>{
 };
 $('backup').onclick=()=>{
  try{const bundle=makePortableBundle(),blob=new Blob([JSON.stringify(bundle,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
- link.href=url;link.download='invesquo-dati-'+today()+'.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);store.setItem('invesquo_last_backup_time',new Date().toISOString());showBackupReminder();
+ link.href=url;link.download='finholdra-dati-'+today()+'.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);store.setItem('invesquo_last_backup_time',new Date().toISOString());showBackupReminder();
  $('settingsSaved').textContent='Archivio completo esportato: posizioni, transazioni, storico e quotazioni osservate.';
  }catch(e){alert('Esportazione non riuscita: '+e.message)}
 };
@@ -2851,7 +2885,7 @@ function updateMarketStatus(){
 updateMarketStatus();setInterval(updateMarketStatus,60000);
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const INVESQUO_VERSION='Beta 9.0';
+const INVESQUO_VERSION='Beta 9.4';
 let invesquoHealthToken=0;
 async function invesquoCheckServer(){
  const token=++invesquoHealthToken,led=document.getElementById('netlifyServerLed'),status=document.getElementById('netlifyServerState'),detail=document.getElementById('netlifyServerDetail');
@@ -3040,7 +3074,7 @@ async function writeBackupFolder(bundle){
  try{
   const status=await backupDirectoryHandle.queryPermission({mode:'readwrite'});
   if(status!=='granted')return false;
-  const name='invesquo-backup-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';
+  const name='finholdra-backup-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';
   const file=await backupDirectoryHandle.getFileHandle(name,{create:true}),w=await file.createWritable();
   await w.write(JSON.stringify(bundle,null,2));await w.close();return true;
  }catch(e){return false}
@@ -3062,7 +3096,7 @@ $('chooseBackupFolder').onclick=async()=>{
  try{backupDirectoryHandle=await window.showDirectoryPicker({mode:'readwrite'});await makeLocalRecoveryCopy(true)}catch(e){if(e.name!=='AbortError')alert('Cartella non autorizzata: '+e.message)}updateBackupControls();
 };
 $('backupNowFolder').onclick=()=>{void makeLocalRecoveryCopy(true)};
-$('downloadRecoveryCopy').onclick=()=>{try{const v=JSON.parse(store.getItem(AUTOBACKUP_KEY)||'null');if(!v?.bundle)throw Error('Non esiste una copia locale');const blob=new Blob([JSON.stringify(v.bundle,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='invesquo-recupero-'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),4000)}catch(e){alert(e.message)}};
+$('downloadRecoveryCopy').onclick=()=>{try{const v=JSON.parse(store.getItem(AUTOBACKUP_KEY)||'null');if(!v?.bundle)throw Error('Non esiste una copia locale');const blob=new Blob([JSON.stringify(v.bundle,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='finholdra-recupero-'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),4000)}catch(e){alert(e.message)}};
 for(const [id,key] of [['settingReduceChartMotion','reduceChartMotion'],['settingDenseCharts','denseCharts']])$(id).onchange=e=>{prefs[key]=e.target.checked;savePreferences();updateBackupControls()};
 $('settingTextScale').onchange=e=>{prefs.textScale=e.target.value;savePreferences();updateBackupControls()};
 updateBackupControls();
