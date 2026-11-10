@@ -547,6 +547,15 @@ html,body{overscroll-behavior-y:contain}
 .top .new-header-status{grid-column:3!important;grid-row:1!important;justify-self:stretch!important;align-items:flex-end!important;text-align:right!important;min-width:0!important;gap:6px!important}
 @media(max-width:350px){.top .new-header-main{grid-template-columns:minmax(0,1fr) 67px minmax(0,1fr)!important;gap:3px!important}.top .finholdra-wordmark img{width:clamp(103px,37vw,132px)!important}}
 
+/* Beta 9.6: catalogo Buoni Fruttiferi Postali */
+.postal-presets{border:1px solid var(--border);border-radius:12px;padding:12px;margin:12px 0;background:rgba(88,134,193,.045)}
+.postal-presets>label{display:block;font-size:12px;font-weight:700;margin-bottom:8px}
+.postal-preset-row{display:flex;align-items:stretch;gap:8px;min-width:0}
+.postal-preset-row select{min-width:0;flex:1}
+.postal-preset-row button{flex:0 0 auto}
+.postal-presets .entry-explain{margin:7px 0 0}
+@media(max-width:400px){.postal-preset-row{flex-direction:column}.postal-preset-row button{width:100%}}
+
 /* Finholdra Beta 8.6: deposit fields fit the iPhone viewport */
 .deposit-form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
 #depositAddOverlay .field{min-width:0}
@@ -628,6 +637,21 @@ body[data-theme="light"] .pmc-event-dot circle:first-child{stroke:#ffffff}
  .top .finholdra-wordmark img { width: 91% !important; max-width: 91% !important; }
  html, body { overscroll-behavior-y: auto; }
 }
+
+/* Finholdra Beta 9.7 — navigazione titoli e PMC per transazione */
+.browse-categories{margin:13px 0 14px;padding:12px;border:1px solid var(--border);border-radius:13px;background:var(--panel);min-width:0}
+.browse-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.browse-head strong{font-size:13px}.browse-head .sub{font-size:10px}
+.browse-tabs{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:0 0 8px;-webkit-overflow-scrolling:touch}
+.browse-tab{flex:0 0 auto;font-size:11px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-weight:650;cursor:pointer}
+.browse-tab.active{border-color:#598fc6;background:rgba(89,143,198,.2);color:var(--text)}
+.browse-list{display:grid;gap:6px;max-height:260px;overflow-y:auto;overscroll-behavior:contain}
+.browse-item{display:flex;align-items:center;justify-content:space-between;text-align:left;width:100%;gap:8px;padding:10px 11px;border:1px solid var(--border);border-radius:10px;background:var(--panel2);color:var(--text);cursor:pointer}
+.browse-item span{min-width:0}.browse-item strong{font-size:12px;display:block}.browse-item small{font-size:10px;color:var(--muted);display:block;margin-top:3px}
+.browse-item .browse-symbol{font-variant-numeric:tabular-nums;font-size:11px;white-space:nowrap;color:var(--muted)}
+.trade-pmc-tag{display:inline-block;margin:4px 0 4px 8px;font-size:11px;color:var(--text);background:rgba(79,170,148,.14);border:1px solid rgba(79,170,148,.28);border-radius:7px;padding:3px 7px;white-space:normal}
+.trade-pmc-tag strong{color:var(--green)}
+@media(max-width:530px){.browse-categories{padding:10px}.browse-head{gap:3px}.trade-pmc-tag{display:block;margin:5px 0}}
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
 .pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
@@ -866,7 +890,7 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
 <p class="foot">Per trasferire dati tra profili o dispositivi usa il backup JSON in questa schermata. La password opzionale non protegge i file del browser da chi accede al dispositivo.</p></section><section class="card settings-card" id="extraSettings713"><h2>Storici e ricerca</h2>
 <label class="toggle"><input id="settingShowReconstructed" type="checkbox" checked> Includi i prezzi storici ricostruiti nei grafici</label><label class="toggle"><input id="settingShowBackfill" type="checkbox" checked> Mostra «Recupera prezzi» nei grafici</label>
 <p class="hint">Mostra solo rilevazioni osservate nei grafici.</p>
-<div class="setting-field"><label for="settingSearchRegion">Borse da cercare per prime</label><select id="settingSearchRegion"><option value="world">Tutto il mondo</option><option value="it">Solo Italia</option><option value="eu">Europa</option><option value="us">Solo USA</option></select><p class="hint">Filtra per mercato di quotazione. Cerca obbligazioni anche per ISIN.</p></div></section><section class="card settings-card" id="favoriteSettings"><h2>Titoli preferiti</h2><label class="toggle"><input type="checkbox" id="favoriteEnabled"> Mostra preferiti nella Home</label><div id="favoriteSettingsBody"><div class="field"><label for="favoriteQuery">Cerca per nome, ticker o ISIN</label><div class="flex"><input id="favoriteQuery" class="order-select" placeholder="Cerca un titolo"><button type="button" class="btn" id="favoriteSearch">Cerca</button></div></div><div class="search-results" id="favoriteSearchResults"></div><div id="favoriteSelected" class="favorites-selected"></div><p class="sub">Massimo 3 titoli, anche non posseduti.</p></div></section><section class="card settings-card" id="jsonBackupSettings"><div class="section-head"><h2>Esporta e importa dati JSON</h2></div>
+<div class="setting-field"><label for="settingSearchRegion">Borse da cercare per prime</label><select id="settingSearchRegion"><option value="world">Tutto il mondo</option><option value="it">Solo Italia</option><option value="eu">Europa</option><option value="us">Solo USA</option></select><p class="hint">Filtra per mercato di quotazione. Cerca obbligazioni anche per ISIN.</p></div></section><section class="card settings-card" id="favoriteSettings"><h2>Titoli preferiti</h2><label class="toggle"><input type="checkbox" id="favoriteEnabled"> Mostra preferiti nella Home</label><div id="favoriteSettingsBody"><div class="field"><label for="favoriteQuery">Cerca per nome, ticker, ISIN o futures</label><div class="flex"><input id="favoriteQuery" class="order-select" placeholder="Es. VWCE, ES=F, oro, Nasdaq futures"><button type="button" class="btn" id="favoriteSearch">Cerca</button></div></div><section class="browse-categories" id="favoriteBrowse" aria-label="Esplora preferiti per categoria"><div class="browse-head"><strong>Esplora per categoria</strong><span class="sub">Seleziona un titolo e verifica mercato e valuta</span></div><div class="browse-tabs" id="favoriteBrowseTabs" role="group" aria-label="Categorie titoli preferiti"></div><div class="browse-list" id="favoriteBrowseList" aria-live="polite"></div></section><div class="search-results" id="favoriteSearchResults"></div><div id="favoriteSelected" class="favorites-selected"></div><p class="sub">Massimo 3 titoli, anche non posseduti. Futures: la quotazione è indicativa della serie continua e non rappresenta un contratto specifico.</p></div></section><section class="card settings-card" id="jsonBackupSettings"><div class="section-head"><h2>Esporta e importa dati JSON</h2></div>
 <p class="hint">Scarica una copia completa del portafoglio, delle operazioni e dello storico, oppure ripristina un backup precedente.</p>
 <div class="actions"><button class="btn primary" id="backup" type="button">↓ Scarica backup JSON</button><button class="btn" id="import" type="button">↑ Carica backup JSON</button></div>
 <input accept="application/json,.json" class="hidden" id="fileInput" type="file"/>
@@ -938,7 +962,7 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
 <div class="field"><label for="depositAccrued">Interessi lordi già maturati (€)</label><input id="depositAccrued" type="number" inputmode="decimal" min="0" step="any" value="0"/></div><div class="field"><label for="depositAnchor">Data riferimento interessi</label><input id="depositAnchor" type="date"/></div>
 <div class="field"><label for="depositFrequency">Riepilogo interessi</label><select class="order-select" id="depositFrequency"><option value="daily">Giornaliero</option><option value="monthly">Mensile</option><option value="yearly">Annuale</option></select></div></div>
 <p class="hint" id="depositPreview">Tasso annuo lordo, maturazione giornaliera su base 365.</p><button class="btn primary full-btn" id="depositAddCommit" type="button">Salva conto deposito</button><p class="sub" id="depositAddError" role="status"></p></div></div>
-<div class="app-modal hidden" id="addAssetOverlay" role="dialog" aria-modal="true" aria-label="Aggiungi investimento"><div class="app-modal-card"><button class="modal-close" id="addAssetClose" type="button" aria-label="Chiudi">×</button><h2>Aggiungi investimento</h2><div class="field"><label for="assetSearch">Cerca per nome, ticker, ISIN o crypto</label><div class="flex"><input class="order-select" id="assetSearch" placeholder="Es. Amazon, 1AMZN.MI, oro, Bitcoin"/><button class="btn primary" id="assetSearchBtn" type="button">Cerca</button></div></div><div class="hint" id="assetSearchHint">Seleziona la quotazione sulla borsa e nella valuta corretta.</div><div class="search-results" id="assetSearchResults"></div><div class="notice hidden" id="assetSearchError"></div><div id="assetNewFields" class="hidden"><button class="btn" id="assetChooseAnother" type="button">← Scegli un altro titolo</button><h3 id="chosenAssetName"></h3><p class="sub" id="chosenAssetExchange"></p><div class="editgrid"><div class="field"><label>Tipo</label><select id="newAssetType" class="order-select"><option value="Azioni">Azione</option><option value="ETF">ETF</option><option value="ETF monetari">ETF monetario</option><option value="Materie prime">Materie prime</option><option value="Obbligazioni">Obbligazione</option><option value="Risparmio postale">Buono / risparmio postale</option><option value="ETC/ETN">ETC / ETN</option><option value="Oro">Oro / argento</option><option value="Crypto">Criptovaluta</option><option value="Valute">Valuta</option></select></div><div class="field"><label>ISIN (facoltativo)</label><input id="newAssetIsin" placeholder="Se disponibile" maxlength="12"/></div><div class="field"><label>Valuta quotazione</label><select class="order-select" id="newAssetCurrency"><option>EUR</option><option>USD</option><option>GBP</option><option>CHF</option><option>JPY</option><option>CAD</option><option>AUD</option></select></div><div class="field"><label>Cambio in EUR (1 unità valuta = €)</label><input type="number" id="newAssetFx" step="any" min="0" value="1" inputmode="decimal"/></div><div class="investment-entry" style="grid-column:1/-1"><div class="field"><label for="newAssetDate">Data effettiva del primo acquisto</label><div class="entry-date-row"><input type="date" id="newAssetDate"/><button type="button" class="btn" data-first-date="newAssetDate">Prima data app</button></div></div><p class="entry-explain">Oggi è preselezionato. “Prima data app” imposta la prima rilevazione presente nel tuo storico: serve per registrare titoli acquistati in passato, senza inventare prezzi storici.</p><label class="sub">Che dato conosci del tuo investimento?</label><div class="entry-choice"><label><input type="radio" name="newAssetInputMode" value="qty" checked/> Numero quote</label><label><input type="radio" name="newAssetInputMode" value="eur"/> Euro investiti</label></div><div id="newAssetAmountWrap" class="field entry-field-hidden"><label for="newAssetAmount">Importo totale acquistato (€)</label><input id="newAssetAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Anche per Bitcoin e altri strumenti frazionabili. L'app ricava automaticamente le quote usando il prezzo effettivo e il cambio indicato.</p></div></div><div class="field hidden" id="newAssetMaturityFields" style="grid-column:1/-1"><label for="newAssetMaturityDate">Data di scadenza / rimborso (facoltativa)</label><input id="newAssetMaturityDate" type="date"/><p class="entry-explain">Per obbligazioni e risparmio postale. La data è distinta dal valore previsto e non genera automaticamente rendimenti o cedole.</p><label for="newAssetMaturityValue">Valore lordo complessivo previsto (€), se noto</label><input id="newAssetMaturityValue" type="number" min="0" step="any" inputmode="decimal" placeholder="Lascia vuoto se non noto"/></div><div class="field" id="newAssetQuantityWrap"><label for="newAssetQuantity">Quantità di quote (anche frazionate; BTP: nominale in €)</label><input id="newAssetQuantity" type="number" min="0" step="any" inputmode="decimal"/></div><div class="field"><label for="newAssetPmc">Prezzo effettivo pagato per quota (valuta del titolo; BTP: prezzo per 100 € nominali)</label><input id="newAssetPmc" type="number" min="0" step="any" inputmode="decimal"/></div><div id="newAssetEntryPreview" class="entry-computed" aria-live="polite">Seleziona la modalità e inserisci il prezzo pagato.</div></div><button class="btn primary full-btn" id="addAssetCommit">Aggiungi al portafoglio</button><button type="button" class="btn full-btn hidden" id="addToPacOnly">Aggiungi al PAC senza acquistare ora</button><p class="hint">Verifica ticker, borsa, valuta e prezzo di esecuzione.</p></div></div></div>
+<div class="app-modal hidden" id="addAssetOverlay" role="dialog" aria-modal="true" aria-label="Aggiungi investimento"><div class="app-modal-card"><button class="modal-close" id="addAssetClose" type="button" aria-label="Chiudi">×</button><h2>Aggiungi investimento</h2><div class="field"><label for="assetSearch">Cerca per nome, ticker, ISIN, crypto o futures</label><div class="flex"><input class="order-select" id="assetSearch" placeholder="Es. Amazon, ES=F, Nasdaq futures, petrolio"/><button class="btn primary" id="assetSearchBtn" type="button">Cerca</button></div></div><section class="browse-categories" id="assetBrowse" aria-label="Esplora investimenti per categoria"><div class="browse-head"><strong>Esplora per categoria</strong><span class="sub">Suggerimenti, non classifica dei volumi in tempo reale</span></div><div class="browse-tabs" id="assetBrowseTabs" role="group" aria-label="Categorie investimenti"></div><div class="browse-list" id="assetBrowseList" aria-live="polite"></div></section><div class="postal-presets"><label for="postalPreset">Buoni Fruttiferi Postali · seleziona una tipologia</label><div class="postal-preset-row"><select class="order-select" id="postalPreset" aria-label="Tipologia Buono Fruttifero Postale"><option value="">Scegli un Buono...</option></select><button class="btn" type="button" id="postalPresetChoose">Seleziona</button></div><p class="entry-explain">Catalogo per registrare un buono già sottoscritto: i rendimenti dipendono dalla serie e dalla data di emissione. Nessuna quotazione di Borsa.</p></div><div class="hint" id="assetSearchHint">Seleziona la quotazione sulla borsa e nella valuta corretta.</div><div class="search-results" id="assetSearchResults"></div><div class="notice hidden" id="assetSearchError"></div><div id="assetNewFields" class="hidden"><button class="btn" id="assetChooseAnother" type="button">← Scegli un altro titolo</button><h3 id="chosenAssetName"></h3><p class="sub" id="chosenAssetExchange"></p><div class="notice hidden" id="postalTrackNotice">Buono postale: inserisci il capitale nominale in euro, la data effettiva di sottoscrizione e, se conosciuto, il valore lordo a scadenza secondo la tua serie. Finholdra non calcola automaticamente gli interessi e non recupera un prezzo di mercato.</div><div id="futureTrackNotice" class="notice warn hidden">Futures: puoi cercare le quotazioni e aggiungerle ai Preferiti. Non registriamo contratti nel patrimonio finché non sono disponibili moltiplicatore, margini, regolamento e scadenza; il prezzo della serie continua non equivale a un contratto negoziabile.</div><div class="editgrid"><div class="field"><label>Tipo</label><select id="newAssetType" class="order-select"><option value="Azioni">Azione</option><option value="ETF">ETF</option><option value="ETF monetari">ETF monetario</option><option value="Materie prime">Materie prime</option><option value="Obbligazioni">Obbligazione</option><option value="Risparmio postale">Buono / risparmio postale</option><option value="ETC/ETN">ETC / ETN</option><option value="Oro">Oro / argento</option><option value="Crypto">Criptovaluta</option><option value="Valute">Valuta</option><option value="Futures">Futures (monitoraggio)</option></select></div><div class="field"><label>ISIN (facoltativo)</label><input id="newAssetIsin" placeholder="Se disponibile" maxlength="12"/></div><div class="field"><label>Valuta quotazione</label><select class="order-select" id="newAssetCurrency"><option>EUR</option><option>USD</option><option>GBP</option><option>CHF</option><option>JPY</option><option>CAD</option><option>AUD</option></select></div><div class="field"><label>Cambio in EUR (1 unità valuta = €)</label><input type="number" id="newAssetFx" step="any" min="0" value="1" inputmode="decimal"/></div><div class="investment-entry" style="grid-column:1/-1"><div class="field"><label for="newAssetDate">Data effettiva del primo acquisto</label><div class="entry-date-row"><input type="date" id="newAssetDate"/><button type="button" class="btn" data-first-date="newAssetDate">Prima data app</button></div></div><p class="entry-explain">Oggi è preselezionato. “Prima data app” imposta la prima rilevazione presente nel tuo storico: serve per registrare titoli acquistati in passato, senza inventare prezzi storici.</p><label class="sub">Che dato conosci del tuo investimento?</label><div class="entry-choice"><label><input type="radio" name="newAssetInputMode" value="qty" checked/> Numero quote</label><label><input type="radio" name="newAssetInputMode" value="eur"/> Euro investiti</label></div><div id="newAssetAmountWrap" class="field entry-field-hidden"><label for="newAssetAmount">Importo totale acquistato (€)</label><input id="newAssetAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Anche per Bitcoin e altri strumenti frazionabili. L'app ricava automaticamente le quote usando il prezzo effettivo e il cambio indicato.</p></div></div><div class="field hidden" id="newAssetMaturityFields" style="grid-column:1/-1"><label for="newAssetMaturityDate">Data di scadenza / rimborso (facoltativa)</label><input id="newAssetMaturityDate" type="date"/><p class="entry-explain">Per obbligazioni e risparmio postale. La data è distinta dal valore previsto e non genera automaticamente rendimenti o cedole.</p><label for="newAssetMaturityValue">Valore lordo complessivo previsto (€), se noto</label><input id="newAssetMaturityValue" type="number" min="0" step="any" inputmode="decimal" placeholder="Lascia vuoto se non noto"/></div><div class="field" id="newAssetQuantityWrap"><label for="newAssetQuantity">Quantità di quote (anche frazionate; BTP: nominale in €)</label><input id="newAssetQuantity" type="number" min="0" step="any" inputmode="decimal"/></div><div class="field"><label for="newAssetPmc">Prezzo effettivo pagato per quota (valuta del titolo; BTP: prezzo per 100 € nominali)</label><input id="newAssetPmc" type="number" min="0" step="any" inputmode="decimal"/></div><div id="newAssetEntryPreview" class="entry-computed" aria-live="polite">Seleziona la modalità e inserisci il prezzo pagato.</div></div><button class="btn primary full-btn" id="addAssetCommit">Aggiungi al portafoglio</button><button type="button" class="btn full-btn hidden" id="addToPacOnly">Aggiungi al PAC senza acquistare ora</button><p class="hint">Verifica ticker, borsa, valuta e prezzo di esecuzione.</p></div></div></div>
 <div class="app-modal hidden" id="removeAssetOverlay" role="dialog" aria-modal="true" aria-label="Elimina investimento inserito per errore"><div class="app-modal-card"><button class="modal-close" id="removeAssetClose" type="button" aria-label="Chiudi">×</button><h2 id="removeAssetTitle">Elimina investimento inserito per errore</h2><p class="hint">Questa azione corregge un titolo inserito per errore. <strong>Non registra una vendita.</strong> Per vendere utilizza «Registra vendita» sotto il titolo.</p><div class="notice warn">La rimozione cancella le operazioni di questo titolo e riavvia lo storico per non mostrare rendimenti inesatti. Esporta prima un backup.</div><button id="removeAsError" class="btn danger-outline full-btn" type="button">Conferma rimozione per errore</button></div></div>
 <div class="app-modal hidden" id="tradeOverlay" role="dialog" aria-modal="true" aria-label="Storico transazioni del titolo"><div class="app-modal-card"><button type="button" class="modal-close" id="tradeClose" aria-label="Chiudi">×</button><h2 id="tradeTitle">Storico transazioni</h2><p class="hint">Acquisti e vendite registrati.</p><div id="tradeRows" class="transaction-rows"></div><div id="tradeEditPanel" class="transaction-edit hidden"><h3 id="tradeEditTitle">Modifica operazione</h3><div class="editgrid"><div class="field"><label for="tradeEditDate">Data operazione</label><input id="tradeEditDate" type="date"/></div><div class="field"><label for="tradeEditPrice">Prezzo effettivo per quota (BTP per 100 nominali)</label><input id="tradeEditPrice" type="number" min="0" step="any" inputmode="decimal"/></div></div><label class="sub">Come vuoi modificare l'operazione?</label><div class="entry-choice"><label><input type="radio" name="tradeEditMode" value="qty" checked/> Quantità</label><label><input type="radio" name="tradeEditMode" value="eur"/> Importo in euro</label></div><div class="field" id="tradeEditQtyWrap"><label for="tradeEditQty">Quantità (anche frazionata; BTP nominale)</label><input id="tradeEditQty" type="number" min="0" step="any" inputmode="decimal"/></div><div class="field entry-field-hidden" id="tradeEditAmountWrap"><label for="tradeEditAmount">Importo totale (€), commissioni escluse</label><input id="tradeEditAmount" type="number" min="0" step="any" inputmode="decimal"/></div><div class="order-preview" id="tradeEditPreview"></div><button type="button" class="btn primary full-btn" id="tradeEditSave">Salva modifica</button><button type="button" class="btn full-btn" id="tradeEditCancel">Annulla</button></div><p class="foot">Dopo una modifica si ricalcolano quote residue, PMC e utili realizzati in ordine cronologico. Le rilevazioni precedenti restano invariate.</p></div></div>
 <div class="app-modal hidden" id="saleOverlay" role="dialog" aria-modal="true" aria-label="Registra vendita"><div class="app-modal-card"><button class="modal-close" id="saleClose" type="button" aria-label="Chiudi">×</button><h2>Registra una vendita</h2><p class="hint">Inserisci quote vendute o importo incassato e prezzo di esecuzione.</p><div class="field"><label for="saleAsset">Strumento venduto</label><select class="order-select" id="saleAsset"></select></div><div class="investment-entry"><div class="field"><label for="saleDate">Data effettiva della vendita</label><div class="entry-date-row"><input type="date" id="saleDate"/><button type="button" class="btn" data-first-date="saleDate">Prima data app</button></div></div><p class="entry-explain">Predefinita: oggi. Le date passate sono registrate nell'elenco delle operazioni, ma non generano quotazioni storiche inesistenti.</p><label class="sub">Come vuoi indicare la vendita?</label><div class="entry-choice"><label><input type="radio" name="saleInputMode" value="qty" checked/> Quantità venduta</label><label><input type="radio" name="saleInputMode" value="eur"/> Importo incassato in €</label></div><div class="field entry-field-hidden" id="saleAmountWrap"><label for="saleAmount">Importo totale incassato (€)</label><input id="saleAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Le quote vengono calcolate automaticamente dal prezzo effettivo e dal cambio del titolo.</p></div></div><div class="editgrid"><div class="field" id="saleQtyWrap"><label for="saleQty">Quantità venduta (frazioni ammesse; BTP: nominale in €)</label><input type="number" min="0" step="any" inputmode="decimal" id="saleQty"/></div><div class="field"><label for="salePrice">Prezzo effettivo per quota (valuta del titolo; BTP: per 100 € nominali)</label><input type="number" min="0" step="any" inputmode="decimal" id="salePrice"/></div></div><div class="order-preview" id="salePreview" aria-live="polite"></div><label class="toggle" style="margin-top:12px"><input id="saleVerify" type="checkbox"/> Confermo data, importo/quantità e prezzo effettivo di vendita</label><button id="saleCommit" class="btn primary full-btn" disabled type="button">Registra vendita</button><p class="foot">La vendita parziale riduce le quote ma mantiene il PMC delle rimanenti. La plus/minusvalenza realizzata è calcolata sul costo attribuito alle quote vendute, al lordo di commissioni e imposte. Se vendi tutte le quote, la posizione scompare dall'elenco, ma l'operazione rimane nello storico.</p><div class="notice hidden" id="saleStatus"></div></div></div>
@@ -1009,7 +1033,7 @@ function issuerIcon(id){const a=state.assets.find(x=>x.id===id);let b=ISSUER_ICO
  if(!b&&a){const n=(a.name||'').toLowerCase(),vendors=[[/\b(vanguard)\b/,'vanguard.com'],[/\b(ishares|blackrock)\b/,'ishares.com'],[/\b(xtrackers|dws)\b/,'etf.dws.com'],[/\b(google|alphabet)\b/,'google.com'],[/\b(microsoft)\b/,'microsoft.com'],[/\b(apple inc)\b/,'apple.com'],[/\b(amundi)\b/,'amundietf.com'],[/\b(spdr|state street)\b/,'ssga.com'],[/\b(invesco)\b/,'invesco.com'],[/\b(amazon|amazon.com)\b/,'amazon.com'],[/\b(nvidia)\b/,'nvidia.com'],[/\b(tesla)\b/,'tesla.com'],[/\b(meta platforms|facebook)\b/,'meta.com'],[/\b(berkshire hathaway)\b/,'berkshirehathaway.com'],[/\b(nestl[eé])\b/,'nestle.com'],[/\b(coca.cola)\b/,'coca-cola.com'],[/\b(samsung)\b/,'samsung.com'],[/\b(lvmh)\b/,'lvmh.com'],[/\b(asml)\b/,'asml.com'],[/\b(intel)\b/,'intel.com'],[/\b(visa inc)\b/,'visa.com'],[/\b(mastercard)\b/,'mastercard.com']];const domain=vendors.find(([pattern])=>pattern.test(n))?.[1];const initial=a.cat==='Crypto'?String(a.symbol||'CR').split('-')[0].slice(0,4):a.cat==='Oro'?'Au':a.cat==='Valute'?'FX':a.cat==='ETC/ETN'?'ETN':String(a.symbol||a.name||'•').slice(0,2).toUpperCase();b={src:domain?'https://www.google.com/s2/favicons?domain='+domain+'&sz=128':'',short:initial,alt:'Simbolo '+a.name};}
  b=b||{src:'',short:'✦',alt:'Simbolo titolo'};if(!b.src)return '<span class="asset-logo"><span class="asset-logo-fallback">'+svgEscape(b.short)+'</span></span>';return '<span class="asset-logo" data-asset="'+id+'" role="img" aria-label="'+b.alt+'"><span class="asset-logo-fallback">'+b.short+'</span><img src="'+b.src+'" alt="" loading="eager" decoding="async" onload="this.style.opacity=1" onerror="this.remove()"></span>'}
 
-const CAT=[['Conto deposito','#00B8D9'],['Risparmio postale','#F0B83D'],['Obbligazioni','#8E6EF0'],['ETF','#23C884'],['ETF monetari','#79cba5'],['Materie prime','#d99764'],['ETC/ETN','#4197cf'],['Oro','#e7bd4d'],['Crypto','#e5a467'],['Valute','#56bace'],['Azioni','#EF687B']];
+const CAT=[['Conto deposito','#00B8D9'],['Risparmio postale','#F0B83D'],['Obbligazioni','#8E6EF0'],['ETF','#23C884'],['ETF monetari','#79cba5'],['Materie prime','#d99764'],['ETC/ETN','#4197cf'],['Oro','#e7bd4d'],['Crypto','#e5a467'],['Valute','#56bace'],['Futures','#b68df4'],['Azioni','#EF687B']];
 const $=id=>document.getElementById(id);
 const eur=n=>new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(n);
 const currencyOf=a=>String(a.currency||'EUR').toUpperCase();
@@ -1897,7 +1921,7 @@ async function refresh(manual){
  busy=true;lastAttempt=Date.now();$('refresh').disabled=true;$('refresh').textContent='Aggiorno…';
  invesquoUpdateStamp('Aggiornamento in corso…');
  try{
-  const selected=state.assets.filter(a=>a.symbol||a.id==='btp');
+  const selected=state.assets.filter(a=>(a.symbol||a.id==='btp')&&a.cat!=='Risparmio postale'&&a.cat!=='Conto deposito'&&!a.postalKind);
   const results=await Promise.all(selected.map(async a=>{try{return{a,quote:await quote(a)}}catch(e){return{a,error:e.message||'rete non disponibile'}}}));
   let good=0;const failures=[];const checkedAt=new Date();
   for(const r of results){if(r.quote){r.a.p=r.quote.price;r.a.quoteAt=r.quote.when;r.a.quoteSource=r.quote.source;r.a.quoteUpdatedAt=checkedAt.toISOString();good++}else failures.push(r.a.name+': '+r.error)}
@@ -1941,7 +1965,7 @@ let assetDetailScrollY=0;let assetDetailId=null,assetDetailRange='1d',assetDetai
 let detailBaseSeries=null, detailLiveInterval=null, detailLiveBusy=false;
 const detailCache=new Map();
 function detailDate(epoch,intraday=false){return new Date(epoch).toLocaleString('it-IT',intraday?{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}:{day:'2-digit',month:'2-digit',year:'2-digit'})}
-function detailIsMarketAsset(a){return ['ETF','ETF monetari','Materie prime','Azioni','ETC/ETN','Oro','Crypto','Valute'].includes(a.cat)||(a.cat==='Obbligazioni'&&!!a.symbol)}
+function detailIsMarketAsset(a){return ['ETF','ETF monetari','Materie prime','Azioni','ETC/ETN','Oro','Crypto','Valute','Futures'].includes(a.cat)||(a.cat==='Obbligazioni'&&!!a.symbol)}
 function safePrice(v){return Number.isFinite(Number(v))&&Number(v)>0?Number(v):null}
 function detailMarketLabel(a){return MARKET_LABELS[a.id]||(a.symbol?.endsWith('.MI')?'Borsa Italiana · Milano':a.exchange||'Mercato da verificare')}
 function detailRangeChange(){
@@ -2030,7 +2054,7 @@ async function renderAssetPmcHistory(a){const panel=$('assetDetailPmcHistory');i
  if(request!==pmcCompareRequest||assetDetailId!==a.id)return;
  pmcGraphWithMarket(prices,events,a);
 }
-function getDetailAssetById(id){return state.assets.find(x=>x.id===id)||(window.finholdraPreviewAsset&&window.finholdraPreviewAsset.id===id?window.finholdraPreviewAsset:null)} function openAssetDetail(id){const a=getDetailAssetById(id);if(!a)return;const external=$('assetDetailExternal');external.classList.toggle('hidden',!(detailIsMarketAsset(a)||a.id==='btp'));if(a.cat!=='Obbligazioni'&&detailIsMarketAsset(a)&&a.symbol&&/^[A-Za-z0-9.^=\-]{1,22}$/.test(a.symbol)){external.href='https://it.finance.yahoo.com/quote/'+encodeURIComponent(a.symbol)+'/chart/';external.textContent='Apri grafico Yahoo Finance ↗'}else if(a.cat==='Obbligazioni'&&a.isin){external.href='https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/scheda/'+encodeURIComponent(a.isin)+'-MOTX.html';external.textContent='Consulta strumento su Borsa Italiana ↗'}else{external.classList.add('hidden')}if(detailLiveInterval){clearInterval(detailLiveInterval);detailLiveInterval=null}detailBaseSeries=null;assetDetailPreviousFocus=document.activeElement;assetDetailScrollY=window.scrollY||0;assetDetailId=id;assetDetailRange=(a.cat==='Azioni'?'1mo':'1d');pmcHistoryRange='week';pmcHistoryYear='';$('assetDetailProvider').innerHTML=a.id==='btp'?'<option value="mot">Euronext · MOT</option>':a.cat==='Obbligazioni'?'<option value="yahoo">Yahoo Finance</option>': '<option value="yahoo">Yahoo Finance · dati verificati</option>';$('assetDetailOverlay').classList.remove('hidden');document.body.classList.add('asset-detail-open');$('assetDetailSheet').scrollTop=0;const matPanel=$('assetDetailMaturityEditor');const matAvailable=a.cat==='Obbligazioni'||a.cat==='Risparmio postale'||a.cat==='Conto deposito';matPanel.classList.toggle('hidden',!matAvailable);if(matAvailable){$('assetDetailMaturityDate').value=a.maturityDate||'';$('assetDetailMaturityValue').value=a.maturity??'';$('assetDetailMaturityFeedback').textContent='';} $('assetDetailTitle').textContent=a.name;$('assetDetailSub').textContent=[a.symbol||a.cat,a.isin||'',detailMarketLabel(a),a.cat==='Obbligazioni'?currencyOf(a)+' / 100 nominali':currencyOf(a)].filter(Boolean).join(' · ');$('assetDetailPmc').textContent=a.finholdraWatchOnly?'—':a.cat==='Obbligazioni'?number(a.pmc)+' / 100 '+currencyOf(a):localMoney(a.pmc,currencyOf(a));renderAssetPmcHistory(a);$('assetDetailQty').textContent=a.finholdraWatchOnly?'Non posseduto':a.id==='btp'?eur(a.q)+' nominali':a.cat==='Conto deposito'||a.id==='bfp'?'1 posizione':number(a.q)+' quote';$('assetDetailInvested').textContent=a.finholdraWatchOnly?'—':eur(cap(a));$('assetDetailValue').textContent=a.finholdraWatchOnly?'—':eur(val(a));$('assetDetailPrice').textContent=a.cat==='Obbligazioni'?number(a.p)+' / 100 '+currencyOf(a):a.id==='bfp'?'Non quotato':a.cat==='Conto deposito'?eur(val(a)):localMoney(a.p,currencyOf(a));$('assetDetailPriceLabel').textContent=a.finholdraWatchOnly?'Prezzo di mercato':a.cat==='Conto deposito'?'Valore stimato':a.id==='bfp'?'Valore nominale':'Ultimo prezzo salvato';$('assetDetailSource').textContent=a.quoteAt?'Ultima quotazione: '+a.quoteAt:'Ultima quotazione: non verificata';detailRangeChange();$('assetDetailClose').focus();loadAssetDetail();detailLiveInterval=setInterval(()=>{if(assetDetailId&&document.visibilityState!=='hidden'&&navigator.onLine)void updateDetailLiveQuote(assetDetailRequest)},60000);}
+function getDetailAssetById(id){return state.assets.find(x=>x.id===id)||(window.finholdraPreviewAsset&&window.finholdraPreviewAsset.id===id?window.finholdraPreviewAsset:null)} function openAssetDetail(id){const a=getDetailAssetById(id);if(!a)return;const external=$('assetDetailExternal');external.classList.toggle('hidden',!(detailIsMarketAsset(a)||a.id==='btp'));if(a.cat!=='Obbligazioni'&&detailIsMarketAsset(a)&&a.symbol&&/^[A-Za-z0-9.^=\-]{1,22}$/.test(a.symbol)){external.href='https://it.finance.yahoo.com/quote/'+encodeURIComponent(a.symbol)+'/chart/';external.textContent='Apri grafico Yahoo Finance ↗'}else if(a.cat==='Obbligazioni'&&a.isin){external.href='https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/scheda/'+encodeURIComponent(a.isin)+'-MOTX.html';external.textContent='Consulta strumento su Borsa Italiana ↗'}else{external.classList.add('hidden')}if(detailLiveInterval){clearInterval(detailLiveInterval);detailLiveInterval=null}detailBaseSeries=null;assetDetailPreviousFocus=document.activeElement;assetDetailScrollY=window.scrollY||0;assetDetailId=id;assetDetailRange=(a.cat==='Azioni'?'1mo':'1d');pmcHistoryRange='week';pmcHistoryYear='';$('assetDetailProvider').innerHTML=a.id==='btp'?'<option value="mot">Euronext · MOT</option>':a.cat==='Obbligazioni'?'<option value="yahoo">Yahoo Finance</option>': '<option value="yahoo">Yahoo Finance · dati verificati</option>';$('assetDetailOverlay').classList.remove('hidden');document.body.classList.add('asset-detail-open');$('assetDetailSheet').scrollTop=0;const matPanel=$('assetDetailMaturityEditor');const matAvailable=a.cat==='Obbligazioni'||a.cat==='Risparmio postale'||a.cat==='Conto deposito';matPanel.classList.toggle('hidden',!matAvailable);if(matAvailable){$('assetDetailMaturityDate').value=a.maturityDate||'';$('assetDetailMaturityValue').value=a.maturity??'';$('assetDetailMaturityFeedback').textContent='';} $('assetDetailTitle').textContent=a.name;$('assetDetailSub').textContent=[a.symbol||a.cat,a.isin||'',detailMarketLabel(a),a.cat==='Obbligazioni'?currencyOf(a)+' / 100 nominali':currencyOf(a)].filter(Boolean).join(' · ');$('assetDetailPmc').textContent=a.finholdraWatchOnly?'—':a.cat==='Obbligazioni'?number(a.pmc)+' / 100 '+currencyOf(a):localMoney(a.pmc,currencyOf(a));renderAssetPmcHistory(a);$('assetDetailQty').textContent=a.finholdraWatchOnly?'Non posseduto':a.id==='btp'?eur(a.q)+' nominali':a.cat==='Conto deposito'||a.id==='bfp'?'1 posizione':a.cat==='Risparmio postale'&&a.postalKind?eur(a.q)+' nominali':number(a.q)+' quote';$('assetDetailInvested').textContent=a.finholdraWatchOnly?'—':eur(cap(a));$('assetDetailValue').textContent=a.finholdraWatchOnly?'—':eur(val(a));$('assetDetailPrice').textContent=a.cat==='Obbligazioni'?number(a.p)+' / 100 '+currencyOf(a):a.id==='bfp'||a.postalKind?'Non quotato':a.cat==='Conto deposito'?eur(val(a)):localMoney(a.p,currencyOf(a));$('assetDetailPriceLabel').textContent=a.finholdraWatchOnly?'Prezzo di mercato':a.cat==='Conto deposito'?'Valore stimato':a.id==='bfp'||a.postalKind?'Valore nominale':'Ultimo prezzo salvato';$('assetDetailSource').textContent=a.postalKind?'Buono postale non quotato · importo di rimborso da verificare':a.quoteAt?'Ultima quotazione: '+a.quoteAt:'Ultima quotazione: non verificata';detailRangeChange();$('assetDetailClose').focus();loadAssetDetail();detailLiveInterval=setInterval(()=>{if(assetDetailId&&document.visibilityState!=='hidden'&&navigator.onLine)void updateDetailLiveQuote(assetDetailRequest)},60000);}
 function closeAssetDetail(){window.finholdraPreviewAsset=null;if(detailLiveInterval){clearInterval(detailLiveInterval);detailLiveInterval=null}detailBaseSeries=null;assetDetailRequest++;assetDetailId=null;$('assetDetailOverlay').classList.add('hidden');document.body.classList.remove('asset-detail-open');window.scrollTo(0,assetDetailScrollY);assetDetailPoints=[];if(assetDetailPreviousFocus&&assetDetailPreviousFocus.isConnected)assetDetailPreviousFocus.focus()}
 $('assetDetailMaturitySave').onclick=()=>{const a=getDetailAsset();if(!a||!['Obbligazioni','Risparmio postale','Conto deposito'].includes(a.cat))return;const d=$('assetDetailMaturityDate').value;const v=$('assetDetailMaturityValue').value.trim();if(d&&!/^\d{4}-\d{2}-\d{2}$/.test(d)){alert('Data di scadenza non valida.');return}if(v&&(!Number.isFinite(Number(v))||Number(v)<0)){alert('Valore previsto non valido.');return}a.maturityDate=d;a.maturity=v?Number(v):null;save();trackSnapshot();render();if(editing)renderEditor();$('assetDetailMaturityFeedback').textContent='Scadenza salvata nel portafoglio.';};
 $('assetDetailClose').onclick=closeAssetDetail;$('assetDetailProvider').onchange=()=>loadAssetDetail();
@@ -2337,10 +2361,31 @@ function openTradeHistory(id){transactionAssetId=id;transactionEditId=null;const
  $('tradeTitle').textContent='Storico transazioni · '+(asset?.name||sample?.assetName||id);
  $('tradeEditPanel').classList.add('hidden');renderTradeRows();$('tradeOverlay').classList.remove('hidden');
 }
-function renderTradeRows(){const items=orderAssetTrades(transactionAssetId);
+function historicPmcPerPurchase(assetId){
+ const a=state.assets.find(v=>v.id===assetId);
+ if(!a)return new Map();
+ let qty=0,base=0;const pmcById=new Map();
+ for(const t of orderAssetTrades(assetId)){
+  const q=Number(t.quantity),p=Number(t.price);
+  if(!(q>0)||!(p>0))continue;
+  if(t.kind==='buy'){
+   base+=q*p;qty+=q;
+   if(qty>0)pmcById.set(String(t.id),base/qty);
+  }else if(t.kind==='sale'&&q<=qty+1e-7){
+   base-=qty>0?base*q/qty:0;qty-=q;
+   if(qty<1e-8){qty=0;base=0;}
+  }
+ }
+ return pmcById;
+}
+function renderTradeRows(){
+ const chronological=orderAssetTrades(transactionAssetId),pmcs=historicPmcPerPurchase(transactionAssetId);
+ const items=chronological.slice().reverse();
  $('tradeRows').innerHTML=items.length?items.map(t=>{
   const buy=t.kind==='buy',a=state.assets.find(x=>x.id===t.asset),unit=a?.cat==='Obbligazioni'?' € nominali':' quote';
-  return '<div class="transaction-row"><div class="transaction-info"><strong style="color:'+(buy?'#56d6b3':'#f0ba75')+'">'+(buy?'Acquisto':'Vendita')+'</strong> · '+shortDate(t.date)+(t.assumedDate?' <small>Data assegnata: 03/11/2026 (da verificare)</small>':'')+'<small>'+entryDecimal(Number(t.quantity)) +unit+' · '+localMoney(t.price,currencyOf(a||{currency:'EUR'}))+' / quota · '+eur(Math.abs(Number(t.spent||0)))+'</small>'+(buy?'': '<small>Utile/perdita realizzato: '+(Number(t.realized)>=0?'+':'')+eur(Number(t.realized||0))+'</small>')+'</div><div class="transaction-controls"><button type="button" class="btn" data-edit-trade="'+svgEscape(t.id)+'">Modifica</button><button type="button" class="btn danger-outline" data-delete-trade="'+svgEscape(t.id)+'">Elimina</button></div></div>';
+  const pmc=pmcs.get(String(t.id));
+  const pmcCaption=buy&&Number.isFinite(pmc)?'<span class="trade-pmc-tag">PMC dopo acquisto: <strong>'+svgEscape(formatPmcHistoryValue(pmc,a))+'</strong></span>':'';
+  return '<div class="transaction-row"><div class="transaction-info"><strong style="color:'+(buy?'#56d6b3':'#f0ba75')+'">'+(buy?'Acquisto':'Vendita')+'</strong> · '+shortDate(t.date)+(t.assumedDate?' <small>Data assegnata: 03/11/2026 (da verificare)</small>':'')+pmcCaption+'<small>'+entryDecimal(Number(t.quantity)) +unit+' · '+localMoney(t.price,currencyOf(a||{currency:'EUR'}))+' / quota · '+eur(Math.abs(Number(t.spent||0)))+'</small>'+(buy?'': '<small>Utile/perdita realizzato: '+(Number(t.realized)>=0?'+':'')+eur(Number(t.realized||0))+'</small>')+'</div><div class="transaction-controls"><button type="button" class="btn" data-edit-trade="'+svgEscape(t.id)+'">Modifica</button><button type="button" class="btn danger-outline" data-delete-trade="'+svgEscape(t.id)+'">Elimina</button></div></div>';
  }).join(''):'<p class="hint">Nessuna transazione registrata.</p>';
 }
 function editTransaction(id){const t=trades.find(v=>v.id===id&&v.asset===transactionAssetId);if(!t)return;
@@ -2423,6 +2468,41 @@ $('removeAsError').onclick=()=>{const a=state.assets.find(v=>v.id===removeTarget
  state.assets=state.assets.filter(x=>x.id!==a.id);trades=trades.filter(t=>t.asset!==a.id);
  snapshots=[];save();saveTimeline();trackSnapshot();refreshBuyOptions();render();closeRemoveModal();alert('Strumento rimosso. Storico riavviato senza valori ricostruiti artificialmente.');};
 
+// Catalogo non quotato; solo identificazione del prodotto, senza stima automatica dei rendimenti.
+// Le tipologie storiche servono a registrare buoni già detenuti, non sono un'offerta di vendita.
+const POSTAL_BONDS=[
+ {id:'minori',name:'Buono dedicato ai minori',years:null,group:'Tipologie principali'},
+ {id:'ordinario',name:'Buono Ordinario',years:20,group:'Tipologie principali'},
+ {id:'4plus',name:'Buono 4 anni Plus',years:4,group:'Tipologie principali'},
+ {id:'3x4-premio',name:'Buono 3x4 con Premio',years:12,group:'Tipologie principali'},
+ {id:'rinnova-3x4-premio',name:'Buono Rinnova 3x4 con Premio',years:12,group:'Tipologie principali'},
+ {id:'rinnova-prima-3x4',name:'Buono Rinnova Prima 3x4 Premio',years:12,group:'Tipologie principali'},
+ {id:'risparmiosemplice',name:'Buono 4 anni risparmiosemplice',years:4,group:'Tipologie principali'},
+ {id:'3x4',name:'Buono 3x4 (serie storica)',years:12,group:'Buoni storici / non più in emissione'},
+ {id:'3x2',name:'Buono 3x2 (serie storica)',years:6,group:'Buoni storici / non più in emissione'},
+ {id:'4x4',name:'Buono 4x4 (serie storica)',years:16,group:'Buoni storici / non più in emissione'},
+ {id:'5x5',name:'Buono 5x5 (serie storica)',years:25,group:'Buoni storici / non più in emissione'},
+ {id:'2plus',name:'Buono 2 anni Plus (serie storica)',years:2,group:'Buoni storici / non più in emissione'},
+ {id:'3plus',name:'Buono 3 anni Plus (serie storica)',years:3,group:'Buoni storici / non più in emissione'},
+ {id:'rinnova4',name:'Buono Rinnova 4 anni (serie storica)',years:4,group:'Buoni storici / non più in emissione'},
+ {id:'inflazione',name:'Buono indicizzato all’inflazione italiana (serie storica)',years:null,group:'Buoni storici / non più in emissione'},
+ {id:'cedola',name:'Buono a cedola (serie storica)',years:null,group:'Buoni storici / non più in emissione'},
+ {id:'altro',name:'Altro Buono Fruttifero Postale / serie da verificare',years:null,group:'Altro'}
+];
+function initPostalBonds(){const sel=$('postalPreset');if(!sel)return;const groups=[...new Set(POSTAL_BONDS.map(b=>b.group))];sel.innerHTML='<option value="">Scegli un Buono...</option>'+groups.map(g=>'<optgroup label="'+svgEscape(g)+'">'+POSTAL_BONDS.filter(b=>b.group===g).map(b=>'<option value="'+b.id+'">'+svgEscape(b.name)+'</option>').join('')+'</optgroup>').join('');}
+function choosePostalBond(){const id=$('postalPreset').value;const b=POSTAL_BONDS.find(x=>x.id===id);if(!b){alert('Seleziona una tipologia di Buono.');return;}
+ const date=today();
+ pendingQuote={symbol:'BFP-'+b.id.toUpperCase()+'-'+Date.now(),name:b.name,market:'Poste Italiane · Cassa Depositi e Prestiti',exchange:'POSTE',price:null,isin:'',currency:'EUR',kind:'POSTAL',verifiedPrice:false,postalKind:b.id,postalYears:b.years};
+ $('chosenAssetName').textContent=b.name;$('chosenAssetExchange').textContent='Risparmio postale · EUR · non quotato';
+ $('newAssetType').value='Risparmio postale';$('newAssetIsin').value='';$('newAssetCurrency').value='EUR';$('newAssetFx').value='1';$('newAssetDate').value=date;
+ document.querySelector('input[name="newAssetInputMode"][value="eur"]').checked=true;
+ $('newAssetAmount').value='';$('newAssetQuantity').value='';$('newAssetPmc').value='1';$('newAssetQuantityWrap').querySelector('label').textContent='Capitale nominale in €';$('newAssetPmc').closest('.field').classList.add('hidden');
+ $('newAssetMaturityValue').value='';$('newAssetMaturityDate').value='';
+ $('assetNewFields').classList.remove('hidden');$('assetSearchResults').classList.add('hidden');$('assetSearchHint').classList.add('hidden');$('assetSearch').closest('.field').classList.add('hidden');
+ syncNewAssetMaturity();updateNewAssetEntryPreview();$('addAssetOverlay').querySelector('.app-modal-card').scrollTop=0;}
+initPostalBonds();$('postalPresetChoose').addEventListener('click',choosePostalBond);
+$('postalPreset').addEventListener('change',e=>{if(e.target.value)choosePostalBond();});
+
 // Search for a quote; search results can be ambiguous and must be checked against the selected exchange and EUR currency.
 let pendingQuote=null;
 function closeAddAsset(){window.__pacAddingInstrument=false;$('addToPacOnly').classList.add('hidden');$('addAssetOverlay').classList.add('hidden');$('assetSearchResults').classList.remove('hidden');$('assetSearchHint').classList.remove('hidden');$('assetSearch').closest('.field').classList.remove('hidden')}
@@ -2446,7 +2526,7 @@ $('depositAddCommit').onclick=()=>{
  const a={id:'deposit_'+Date.now(),name,cat:'Conto deposito',q:1,p:capital,pmc:capital,costEur:capital,annualRate:rate,interestBase:base,interestAnchor:anchor,depositStart:start,accrualFrequency:freq,maturityDate:end,maturity:null,currency:'EUR',fxRate:1,symbol:'',quoteSource:'Calcolo interessi lordo',quoteAt:'Non quotato'};
  trackSnapshot();state.assets.push(a);trades.push({id:Date.now()+'-deposit',kind:'buy',date:start,asset:a.id,assetName:a.name,cat:a.cat,spent:capital,quantity:1,price:capital,fxExecution:1});save();saveTimeline();trackSnapshot();refreshBuyOptions();render();if(editing)renderEditor();closeDepositAdd();
 };
-$('newAssetOpen').onclick=()=>{window.__pacAddingInstrument=false;$('addToPacOnly').classList.add('hidden');$('newAssetDate').value=today();$('assetSearchResults').classList.remove('hidden');$('assetSearchHint').classList.remove('hidden');$('assetSearch').closest('.field').classList.remove('hidden');$('assetNewFields').classList.add('hidden');$('addAssetOverlay').classList.remove('hidden');$('assetSearch').focus()};
+$('newAssetOpen').onclick=()=>{$('postalPreset').value='';$('newAssetQuantityWrap').querySelector('label').textContent='Quantità di quote (anche frazionate; BTP: nominale in €)';$('newAssetPmc').closest('.field').classList.remove('hidden');window.__pacAddingInstrument=false;$('addToPacOnly').classList.add('hidden');$('newAssetDate').value=today();$('assetSearchResults').classList.remove('hidden');$('assetSearchHint').classList.remove('hidden');$('assetSearch').closest('.field').classList.remove('hidden');$('assetNewFields').classList.add('hidden');$('addAssetOverlay').classList.remove('hidden');$('assetSearch').focus()};
 $('addAssetClose').onclick=closeAddAsset;
 const isinFormat=s=>/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(s);
 function isinChecksum(isin){const digits=isin.toUpperCase().split('').map(c=>/[A-Z]/.test(c)?String(c.charCodeAt(0)-55):c).join('');let sum=0,twice=false;for(let i=digits.length-1;i>=0;i--){let n=Number(digits[i]);if(twice){n*=2;if(n>9)n-=9}sum+=n;twice=!twice}return sum%10===0}
@@ -2454,7 +2534,7 @@ function isinChecksum(isin){const digits=isin.toUpperCase().split('').map(c=>/[A
 function venueRank(r){const sym=String(r.symbol||'').toUpperCase(),ex=String((r.exchDisp||'')+' '+(r.exchange||'')).toUpperCase();
  if(sym.endsWith('.MI')||sym.endsWith('.BIT')||/MILAN|MILANO|BORSA ITALIANA|MOT|ETFP|GEM/.test(ex))return 0;
  if(sym.endsWith('.DE')||/XETRA|GERMAN|FRANKFURT|DEUTSCHE/.test(ex))return 1;
- if(/NASDAQ|NYSE|NMS|NYQ|USA|AMERICAN/.test(ex)||/^[A-Z]{1,5}$/.test(sym))return 2;
+ if(/NASDAQ|NYSE|NMS|NYQ|USA|AMERICAN|CME|CBOT|COMEX|NYMEX/.test(ex)||/^[A-Z]{1,5}$/.test(sym))return 2;
  return 3;
 }
 function guessYahooCode(s){return /^[A-Z0-9.\-=^]{1,24}$/i.test(s)&&/\.|=|\^/.test(s)}
@@ -2463,7 +2543,7 @@ async function yahooSearchTerm(q){const u='https://query1.finance.yahoo.com/v1/f
 function invesquoRegion(result){
  const region=String(prefs.searchRegion||'world');if(region==='world')return true;
  const flag=exchangeFlag(result),exchange=String(result.exchange||'').toUpperCase(),sym=String(result.symbol||'').toUpperCase();
- const italy=flag==='🇮🇹'||exchange==='MIL'||/\.MI$/.test(sym),usa=flag==='🇺🇸'||/^(NMS|NYQ|NAS|ASE|NASDAQ|NYSE)$/.test(exchange);
+ const italy=flag==='🇮🇹'||exchange==='MIL'||/\.MI$/.test(sym),usa=flag==='🇺🇸'||/^(NMS|NYQ|NAS|ASE|NASDAQ|NYSE|CME|CBOT|COMEX|NYMEX)$/.test(exchange);
  const europe=italy||['🇩🇪','🇫🇷','🇬🇧','🇳🇱','🇨🇭','🇪🇸','🇧🇪','🇸🇪','🇩🇰','🇳🇴','🇫🇮','🇦🇹','🇮🇪','🇵🇹'].includes(flag);
  return region==='it'?italy:region==='us'?usa:europe;
 }
@@ -2486,9 +2566,37 @@ function knownIssuerMatches(term){const q=String(term||'').toLowerCase().trim();
   for(const [symbol,exchange,exchDisp,currency] of issuer.listings)results.push({symbol,longname:issuer.name,shortname:issuer.name,isin:issuer.isin,exchange,exchDisp,currency,quoteType:'EQUITY',referenceOnly:true});
  }return results;
 }
+// Finholdra Beta 9.5: aliases for Yahoo Finance continuous futures indicators.
+// =F identifies Yahoo's rolling/front-month chart, NOT a specific tradeable expiry.
+const FUTURES_SEARCH_INDEX=[
+ {s:'ES=F',name:'E-mini S&P 500 futures',keywords:['s&p futures','sp500 futures','s&p 500 future','es futures','future sp500','future s&p','futures sp500','futures s&p','e-mini s&p'] ,venue:'CME'},
+ {s:'NQ=F',name:'E-mini Nasdaq-100 futures',keywords:['nasdaq futures','nasdaq 100 futures','future nasdaq','futures nasdaq','e-mini nasdaq','nq futures'],venue:'CME'},
+ {s:'YM=F',name:'Mini Dow Jones futures',keywords:['dow futures','dow jones futures','future dow','futures dow','ym futures'],venue:'CBOT'},
+ {s:'RTY=F',name:'E-mini Russell 2000 futures',keywords:['russell futures','russell 2000 futures','future russell','rty futures'],venue:'CME'},
+ {s:'CL=F',name:'WTI crude oil futures',keywords:['petrolio futures','future petrolio','futures petrolio','wti future','wti futures','crude oil futures','cl futures'],venue:'NYMEX'},
+ {s:'BZ=F',name:'Brent crude oil futures',keywords:['brent futures','brent future','future brent','futures brent'],venue:'NYMEX'},
+ {s:'GC=F',name:'Gold futures',keywords:['oro futures','future oro','futures oro','gold futures','gold future','gc futures'],venue:'COMEX'},
+ {s:'SI=F',name:'Silver futures',keywords:['argento futures','future argento','futures argento','silver futures','si futures'],venue:'COMEX'},
+ {s:'HG=F',name:'Copper futures',keywords:['rame futures','future rame','futures rame','copper futures','hg futures'],venue:'COMEX'},
+ {s:'NG=F',name:'Natural gas futures',keywords:['gas naturale futures','future gas naturale','natural gas futures','ng futures'],venue:'NYMEX'},
+ {s:'ZC=F',name:'Corn futures',keywords:['mais futures','future mais','futures mais','corn futures','zc futures'],venue:'CBOT'},
+ {s:'ZW=F',name:'Wheat futures',keywords:['grano futures','frumento futures','wheat futures','zw futures'],venue:'CBOT'},
+ {s:'ZS=F',name:'Soybean futures',keywords:['soia futures','future soia','soybean futures','zs futures'],venue:'CBOT'},
+ {s:'ZN=F',name:'10-Year US Treasury Note futures',keywords:['treasury 10 futures','treasury note futures','10 year treasury futures','zn futures'],venue:'CBOT'},
+ {s:'ZB=F',name:'US Treasury Bond futures',keywords:['bond futures','treasury bond futures','zb futures'],venue:'CBOT'}
+];
+function futuresSearchCandidates(term){
+ const q=String(term||'').trim().toLowerCase().replace(/\s+/g,' ');
+ if(!q)return [];
+ const direct=/^[a-z0-9]{1,8}=f$/i.test(q);
+ return FUTURES_SEARCH_INDEX.filter(f=>f.s.toLowerCase()===q||(!direct&&f.keywords.some(k=>k===q||q.length>=5&&k.includes(q)&&/future|futures/.test(q))))
+ .map(f=>({symbol:f.s,longname:f.name,shortname:f.name,quoteType:'FUTURE',currency:'USD',exchange:f.venue,exchDisp:f.venue+' · futures (serie continua)',referenceOnly:true,futuresContinuous:true}));
+}
+function futuresType(r){return String(r?.quoteType||'').toUpperCase().includes('FUTURE')||/^[A-Z0-9]{1,8}=F$/i.test(String(r?.symbol||''));}
+function futuresResultLabel(r){return futuresType(r)?'Futures · serie continua, non contratto a scadenza specifica':String(r.quoteType||'');}
 async function searchYahooQuotes(term){
  const word=term.trim(),t=word.toUpperCase(),isin=isinFormat(t)&&isinChecksum(t);
- const lookups=[word];if(/amazon|amzn/i.test(word))lookups.push('1AMZN.MI','AMZN','Amazon Milano');
+ const lookups=[word];const futureAliases=futuresSearchCandidates(word);for(const f of futureAliases)if(f.symbol.toLowerCase()!==word.toLowerCase())lookups.push(f.symbol);if(/amazon|amzn/i.test(word))lookups.push('1AMZN.MI','AMZN','Amazon Milano');
  if(/google|alphabet|goog/i.test(word))lookups.push('1GOOG.MI');
  if(/bitcoin|btc/i.test(word))lookups.push('BTC-EUR','BTC-USD');
  if(/ethereum|ether|eth/i.test(word))lookups.push('ETH-EUR','ETH-USD');
@@ -2496,7 +2604,7 @@ async function searchYahooQuotes(term){
  if(/^(qqq|us46090e1038)$/i.test(word)||/invesco qqq/i.test(word))lookups.push('QQQ','Invesco QQQ Trust');
  if(/gold|oro|gld/i.test(word))lookups.push('gold ETC Milan','GLD');
  if(/silver|argento/i.test(word))lookups.push('silver ETC Milan');
- let candidates=knownIssuerMatches(word);
+ let candidates=[...knownIssuerMatches(word),...futureAliases];
  // Hint sourced from the user's explicitly supplied Milan ticker. This is only a search candidate, NOT a verified price.
  if(/^(xeon|lu0290358497)$/i.test(word))candidates.push({symbol:'XEON.MI',shortname:'Xtrackers II EUR Overnight Rate Swap UCITS ETF 1C',longname:'Xtrackers II EUR Overnight Rate Swap UCITS ETF 1C',exchDisp:'Borsa Italiana · ETF',exchange:'MIL',currency:'EUR',quoteType:'ETF',isin:'LU0290358497'});
  if(/^(qqq|us46090e1038)$/i.test(word))candidates.push({symbol:'QQQ',shortname:'Invesco QQQ Trust Series 1',longname:'Invesco QQQ Trust Series 1',exchDisp:'Nasdaq',exchange:'NMS',currency:'USD',quoteType:'ETF',isin:'US46090E1038'});
@@ -2511,12 +2619,12 @@ async function searchYahooQuotes(term){
  }
  const found=await Promise.allSettled(lookups.map(q=>yahooSearchTerm(q)));
  found.forEach(r=>{if(r.status==='fulfilled')candidates.push(...r.value)});
- if(guessYahooCode(t)&&!candidates.some(c=>String(c.symbol).toUpperCase()===t))candidates.unshift({symbol:t,shortname:t,longname:t,quoteType:'EQUITY'});
- const map=new Map();for(const c of candidates){if(!c.symbol)continue;const key=String(c.symbol).toUpperCase();if(!map.has(key))map.set(key,c)}
+ if(guessYahooCode(t)&&!candidates.some(c=>String(c.symbol).toUpperCase()===t))candidates.unshift({symbol:t,shortname:t,longname:t,quoteType:/=F$/i.test(t)?'FUTURE':'EQUITY'});
+ const map=new Map();for(const c of candidates){if(!c.symbol)continue;const key=String(c.symbol).toUpperCase();if(!map.has(key)||futuresType(c)&&!futuresType(map.get(key)))map.set(key,c)}
  const all=[...map.values()];const subset=all.filter(x=>invesquoRegion(x)||(x.manual&&(isin||prefs.searchRegion==='world'||prefs.searchRegion==='it')));
  // Explicitly show the region filter effect only if no in-region candidate is returned.
  window.__invesquoOffRegionCount=all.length-subset.length;
- return subset.sort((a,b)=>venueRank(a)-venueRank(b)||String(a.symbol).localeCompare(String(b.symbol))).slice(0,45);
+ const priorityFutures=futureAliases.length>0||/=F$/i.test(word)||/\bfutures?\b/i.test(word);return subset.sort((a,b)=>priorityFutures?(Number(futuresType(b))-Number(futuresType(a))||venueRank(a)-venueRank(b)):venueRank(a)-venueRank(b)||String(a.symbol).localeCompare(String(b.symbol))).slice(0,45);
 }
 
 function exchangeFlag(r){
@@ -2526,7 +2634,7 @@ function exchangeFlag(r){
  if(flags[suffix])return flags[suffix];
  if(/MILAN|MILANO|BORSA ITALIANA|MOT|ETFP|GEM/.test(ex))return '🇮🇹';
  if(/XETRA|FRANKFURT|GERMAN/.test(ex))return '🇩🇪';
- if(/NASDAQ|NYSE|NMS|NYQ|USA|AMERICAN|NEW YORK/.test(ex))return '🇺🇸';
+ if(/NASDAQ|NYSE|NMS|NYQ|USA|AMERICAN|NEW YORK|CME|CBOT|COMEX|NYMEX/.test(ex))return '🇺🇸';
  if(/LONDON|LSE/.test(ex))return '🇬🇧';
  if(/PARIS|EURONEXT PARIS/.test(ex))return '🇫🇷';
  if(/AMSTERDAM/.test(ex))return '🇳🇱';
@@ -2540,37 +2648,74 @@ function searchIssuerLogo(r){
  const crypto=/CRYPTO|-(EUR|USD)$/.test(String(r.quoteType||'')+' '+String(r.symbol||''));if(crypto){const ico=cryptoIcon(r.symbol,r.longname||r.shortname);return '<span class="asset-search-logo">'+svgEscape(ico.short)+(ico.src?'<img alt="" loading="lazy" src="'+ico.src+'" onerror="this.remove()">':'')+'</span>';}
  const n=String((r.longname||'')+' '+(r.shortname||'')+' '+(r.symbol||'')).toLowerCase();
  const brands=[[/alphabet|google|1goog/, 'google.com'],[/amazon|1amzn|amzn/, 'amazon.com'],[/microsoft|msft/, 'microsoft.com'],[/apple inc|aapl/, 'apple.com'],[/nvidia|nvda/, 'nvidia.com'],[/tesla|tsla/, 'tesla.com'],[/meta platforms|facebook|meta\b/, 'meta.com'],[/vanguard|vwce/, 'vanguard.com'],[/ishares|blackrock|rbot/, 'ishares.com'],[/xtrackers|dws|xdev/, 'etf.dws.com'],[/amundi/, 'amundietf.com'],[/invesco/, 'invesco.com'],[/spdr|state street/, 'ssga.com'],[/intel|intc/, 'intel.com'],[/asml/, 'asml.com'],[/netflix|nflx/, 'netflix.com'],[/disney|dis\b/, 'disney.com'],[/coca.cola/, 'coca-cola.com'],[/visa inc/, 'visa.com'],[/mastercard/, 'mastercard.com']];
- const brand=brands.find(x=>x[0].test(n));const initials=String(r.symbol||'•').replace(/[^A-Z0-9]/gi,'').slice(0,2).toUpperCase()||'•';
+ const brand=futuresType(r)?null:brands.find(x=>x[0].test(n));const initials=String(r.symbol||'•').replace(/[^A-Z0-9]/gi,'').slice(0,2).toUpperCase()||'•';
  return '<span class="asset-search-logo">'+svgEscape(initials)+(brand?'<img alt="" loading="lazy" src="https://www.google.com/s2/favicons?domain='+brand[1]+'&sz=128" onerror="this.remove()">':'')+'</span>';
 }
 function formatSearchResult(a){return svgEscape((a.longname||a.shortname||a.symbol)+' · '+a.symbol)}
+/* Beta 9.7 — curated instruments as discoverable search suggestions; no invented volume ranking. */
+const FINHOLDRA_BROWSE_CATALOG={
+ 'Azioni':[['NVIDIA','NVDA','Nasdaq · USA'],['Apple','AAPL','Nasdaq · USA'],['Microsoft','MSFT','Nasdaq · USA'],['Amazon','AMZN','Nasdaq · USA'],['Alphabet C','GOOG','Nasdaq · USA'],['Tesla','TSLA','Nasdaq · USA'],['Meta Platforms','META','Nasdaq · USA'],['Intesa Sanpaolo','ISP.MI','Milano · Italia'],['Enel','ENEL.MI','Milano · Italia'],['Ferrari','RACE.MI','Milano · Italia']],
+ 'ETF':[['Vanguard FTSE All-World','VWCE.MI','Borsa Italiana'],['iShares Core MSCI World','SWDA.MI','Borsa Italiana'],['iShares Core S&P 500','CSSPX.MI','Borsa Italiana'],['Vanguard S&P 500','VUAA.MI','Borsa Italiana'],['Xtrackers MSCI World','XDWD.DE','Xetra'],['Invesco Nasdaq 100','EQQQ.MI','Borsa Italiana']],
+ 'ETF monetari':[['Xtrackers EUR Overnight Rate','XEON.MI','Borsa Italiana'],['Amundi Smart Overnight Return','CSH2.PA','Euronext Parigi'],['iShares EUR Ultrashort Bond','ERNE.MI','Borsa Italiana']],
+ 'Obbligazioni':[['BTP Valore','BTP Valore ISIN','Titoli di Stato italiani · cerca ISIN'],['BTP Italia','BTP Italia','Titoli indicizzati · cerca ISIN'],['BTP ordinari','BTP','Titoli di Stato italiani'],['Bund tedeschi','Bund','Titoli di Stato Germania'],['Treasury USA','US Treasury Bond','Titoli di Stato USA'],['Obbligazioni societarie','corporate bond','Emittenti privati']],
+ 'Risparmio postale':[['Buono dedicato ai Minori','Buono Minori','Poste Italiane'],['Buono Ordinario','Buono Ordinario','Poste Italiane'],['Buono 4 anni Plus','Buono 4 anni Plus','Poste Italiane'],['Buono 3x4','Buono 3x4','Poste Italiane'],['Altri Buoni Fruttiferi Postali','buoni postali','Scegli dal menu dedicato']],
+ 'Conto deposito':[['Conto deposito libero','conto deposito libero','Tasso e saldo manuali'],['Conto deposito vincolato','conto deposito vincolato','Tasso e scadenza manuali']],
+ 'Materie prime':[['Oro','GC=F','Future di riferimento'],['Petrolio WTI','CL=F','Future di riferimento'],['Gas naturale','NG=F','Future di riferimento'],['Rame','HG=F','Future di riferimento']],
+ 'ETC/ETN':[['WisdomTree Physical Gold','PHAU.MI','ETC · Borsa Italiana'],['iShares Physical Gold','SGLN.L','ETC · Londra'],['WisdomTree Physical Silver','PHAG.MI','ETC · Borsa Italiana']],
+ 'Oro':[['Oro in EUR','XAUEUR=X','Cambio spot indicativo'],['Oro spot','XAUUSD=X','Spot · USD'],['Argento spot','XAGUSD=X','Spot · USD']],
+ 'Crypto':[['Bitcoin','BTC-EUR','EUR'],['Ethereum','ETH-EUR','EUR'],['Solana','SOL-EUR','EUR'],['XRP','XRP-EUR','EUR'],['Cardano','ADA-EUR','EUR']],
+ 'Valute':[['Euro / Dollaro USA','EURUSD=X','Forex'],['Euro / Franco svizzero','EURCHF=X','Forex'],['Euro / Sterlina','EURGBP=X','Forex'],['Euro / Yen','EURJPY=X','Forex']],
+ 'Futures':[['E-mini S&P 500','ES=F','CME · serie continua'],['E-mini Nasdaq 100','NQ=F','CME · serie continua'],['Mini Dow Jones','YM=F','CBOT · serie continua'],['Oro','GC=F','COMEX · serie continua'],['Petrolio WTI','CL=F','NYMEX · serie continua'],['Gas naturale','NG=F','NYMEX · serie continua']]
+};
+function setupBrowseCategories(prefix,inputId,buttonId){
+ const tabs=$(prefix+'BrowseTabs'),items=$(prefix+'BrowseList');if(!tabs||!items)return;
+ const categories=CAT.map(x=>x[0]).filter(cat=>FINHOLDRA_BROWSE_CATALOG[cat]);
+ let chosen='Azioni';
+ function render(){tabs.innerHTML=categories.map(cat=>'<button type="button" class="browse-tab'+(cat===chosen?' active':'')+'" data-browse-category="'+svgEscape(cat)+'" aria-pressed="'+(cat===chosen)+'">'+svgEscape(cat)+'</button>').join('');
+ items.innerHTML=(FINHOLDRA_BROWSE_CATALOG[chosen]||[]).map(([name,term,detail])=>'<button class="browse-item" type="button" data-browse-term="'+svgEscape(term)+'"><span><strong>'+svgEscape(name)+'</strong><small>'+svgEscape(detail)+'</small></span><span class="browse-symbol">'+svgEscape(term)+'</span></button>').join('');}
+ tabs.addEventListener('click',e=>{const b=e.target.closest('[data-browse-category]');if(!b)return;chosen=b.dataset.browseCategory;render();});
+ items.addEventListener('click',e=>{const b=e.target.closest('[data-browse-term]');if(!b)return;
+  const term=b.dataset.browseTerm;
+  if(chosen==='Conto deposito'&&prefix==='asset'){$('addAssetOverlay').classList.add('hidden');$('depositAddOpen').click();return;}
+  if(chosen==='Risparmio postale'&&prefix==='asset'){
+   const select=$('postalPreset');const opts=Array.from(select?.options||[]);
+   const matching=opts.find(o=>String(o.textContent).toLowerCase().includes(term.toLowerCase()));
+   if(matching){select.value=matching.value;$('postalPresetChoose').click();return;}
+  }
+  $(inputId).value=term;$(buttonId).click();
+  if(prefix==='asset')$('assetSearchResults')?.scrollIntoView({block:'nearest'});
+ });
+ render();
+}
+setupBrowseCategories('asset','assetSearch','assetSearchBtn');
+setupBrowseCategories('favorite','favoriteQuery','favoriteSearch');
 $('assetSearchBtn').onclick=async()=>{const q=$('assetSearch').value.trim(),results=$('assetSearchResults'),hint=$('assetSearchHint');if(!q)return;results.innerHTML='<p class="sub">Cerco nei mercati e nel catalogo obbligazioni MOT…</p>';$('assetNewFields').classList.add('hidden');$('assetSearchError').classList.add('hidden');
- try{const data=await searchYahooQuotes(q);results.innerHTML=data.map((a,i)=>'<button type="button" class="search-row" data-choice="'+i+'"><span class="asset-search-main">'+searchIssuerLogo(a)+'<strong>'+formatSearchResult(a)+'</strong></span><small><span class="search-exchange-flag">'+exchangeFlag(a)+'</span>'+svgEscape([a.exchDisp||a.exchange||'Borsa non indicata',a.quoteType,a.currency||'Valuta da verificare'].join(' · '))+'</small></button>').join('')||'<p class="hint">Nessun titolo trovato nel mercato selezionato. Prova un ticker diverso, cambia regione nelle Impostazioni oppure usa l’ISIN.</p>';window.__invesquoSearchResults=data;
+ try{const data=await searchYahooQuotes(q);results.innerHTML=data.map((a,i)=>'<button type="button" class="search-row" data-choice="'+i+'"><span class="asset-search-main">'+searchIssuerLogo(a)+'<strong>'+formatSearchResult(a)+'</strong></span><small><span class="search-exchange-flag">'+exchangeFlag(a)+'</span>'+svgEscape([a.exchDisp||a.exchange||'Borsa non indicata',futuresResultLabel(a),a.currency||'Valuta da verificare'].join(' · '))+'</small></button>').join('')||'<p class="hint">Nessun titolo trovato nel mercato selezionato. Prova un ticker diverso, cambia regione nelle Impostazioni oppure usa l’ISIN.</p>';window.__invesquoSearchResults=data;
  if(isinFormat(q.toUpperCase()))hint.textContent='Ricerca ISIN: Yahoo Finance può non riconoscere il codice. Verifica sempre l’ISIN del risultato.';else hint.textContent='Ricerca per nome, ticker e ISIN. Scegli borsa e valuta corrette. ';
  }catch(e){results.innerHTML='<p class="hint">Ricerca esterna non disponibile. Per un’obbligazione puoi inserire direttamente un ISIN valido, anche senza storico di mercato.</p>';$('assetSearchError').classList.remove('hidden');$('assetSearchError').textContent='La ricerca dipende da un servizio esterno, e non è garantita. '}};
 $('assetSearch').addEventListener('keydown',e=>{if(e.key==='Enter')$('assetSearchBtn').click()});
-$('assetChooseAnother').onclick=()=>{pendingQuote=null;$('assetNewFields').classList.add('hidden');$('assetSearchResults').classList.remove('hidden');$('assetSearchHint').classList.remove('hidden');$('assetSearch').closest('.field').classList.remove('hidden');$('assetSearch').focus();};
-$('assetSearchResults').onclick=async e=>{const b=e.target.closest('[data-choice]');if(!b)return;
+$('assetChooseAnother').onclick=()=>{$('newAssetQuantityWrap').querySelector('label').textContent='Quantità di quote (anche frazionate; BTP: nominale in €)';$('newAssetPmc').closest('.field').classList.remove('hidden');pendingQuote=null;$('assetNewFields').classList.add('hidden');$('assetSearchResults').classList.remove('hidden');$('assetSearchHint').classList.remove('hidden');$('assetSearch').closest('.field').classList.remove('hidden');$('assetSearch').focus();};
+$('assetSearchResults').onclick=async e=>{ $('newAssetQuantityWrap').querySelector('label').textContent='Quantità di quote (anche frazionate; BTP: nominale in €)';$('newAssetPmc').closest('.field').classList.remove('hidden'); const b=e.target.closest('[data-choice]');if(!b)return;
  const r=(window.__invesquoSearchResults||[])[Number(b.dataset.choice)];if(!r)return;
  const code=String(r.symbol||''),rawCurrency=String(r.currency||'EUR').toUpperCase();
  const known=['EUR','USD','GBP','CHF','JPY','CAD','AUD'];
  const cur=known.includes(rawCurrency)?rawCurrency:'EUR';
  pendingQuote={symbol:code,name:r.longname||r.shortname||code,market:r.exchDisp||r.exchange||'Borsa da verificare',exchange:r.exchange,price:null,isin:r.isin||'',currency:cur,kind:r.quoteType||'',verifiedPrice:false};
  $('chosenAssetName').textContent=pendingQuote.name;
- $('chosenAssetExchange').textContent=exchangeFlag(r)+' '+code+' · '+pendingQuote.market+' · '+cur+' · verifica prima di aggiungere'+(String(r.quoteType||'').toUpperCase()==='BOND'?' · grafico solo se disponibile storico verificato':'');
+ $('chosenAssetExchange').textContent=exchangeFlag(r)+' '+code+' · '+pendingQuote.market+' · '+cur+(futuresType(r)?' · SERIE CONTINUA: solo monitoraggio, non un contratto negoziabile':' · verifica prima di aggiungere')+(String(r.quoteType||'').toUpperCase()==='BOND'?' · grafico solo se disponibile storico verificato':'');
  $('newAssetIsin').value=pendingQuote.isin;
  $('newAssetCurrency').value=cur;
  const ty=String(r.quoteType||'').toUpperCase(),nm=pendingQuote.name.toLowerCase();
  const gold=/\b(gold|gld|oro|silver|argento|physical gold|physical silver)\b/i.test(nm+' '+code);
- $('newAssetType').value=ty==='CRYPTOCURRENCY'||/-(EUR|USD)$/.test(code)&&/BTC|ETH|SOL|XRP|ADA/.test(code)?'Crypto':gold&&ty!=='EQUITY'?'Oro':(ty==='ETF'||/^(XEON\.|QQQ$)/i.test(code)||/\b(ETF|UCITS)\b/i.test(nm))?(/^(XEON\.)/i.test(code)||/overnight|monetary|monetari|\bstr\b|\bestr\b/i.test(nm)?'ETF monetari':'ETF'):ty==='ETN'?'ETC/ETN':ty==='BOND'?'Obbligazioni':ty==='CURRENCY'?'Valute':'Azioni';
- $('newAssetQuantity').value='1';$('newAssetMaturityDate').value='';$('newAssetMaturityValue').value='';syncNewAssetMaturity();$('newAssetPmc').value='';$('newAssetDate').value=today();$('newAssetAmount').value='';updateNewAssetEntryPreview();
+ $('newAssetType').value=ty==='CRYPTOCURRENCY'||/-(EUR|USD)$/.test(code)&&/BTC|ETH|SOL|XRP|ADA/.test(code)?'Crypto':gold&&ty!=='EQUITY'&&!futuresType(r)?'Oro':(ty==='ETF'||/^(XEON\.|QQQ$)/i.test(code)||/\b(ETF|UCITS)\b/i.test(nm))?(/^(XEON\.)/i.test(code)||/overnight|monetary|monetari|\bstr\b|\bestr\b/i.test(nm)?'ETF monetari':'ETF'):ty==='ETN'?'ETC/ETN':futuresType(r)?'Futures':ty==='BOND'?'Obbligazioni':ty==='CURRENCY'?'Valute':'Azioni';
+ $('assetSearchHint').textContent=futuresType(r)?'Futures: prezzo della serie continua a fini informativi. Margini, moltiplicatori, scadenza e P/L non sono gestiti: aggiungilo ai Preferiti per seguirlo.':'Inserisci il prezzo di acquisto. Verifica ticker, borsa e valuta.';syncNewAssetMaturity();$('newAssetQuantity').value='1';$('newAssetMaturityDate').value='';$('newAssetMaturityValue').value='';syncNewAssetMaturity();$('newAssetPmc').value='';$('newAssetDate').value=today();$('newAssetAmount').value='';updateNewAssetEntryPreview();
  $('newAssetFx').value=cur==='EUR'?'1':'';
  $('assetNewFields').classList.remove('hidden');
  $('assetSearchResults').classList.add('hidden');$('assetSearchHint').classList.add('hidden');
  $('assetSearch').closest('.field').classList.add('hidden');
  $('addAssetOverlay').querySelector('.app-modal-card').scrollTop=0;
  $('assetNewFields').scrollIntoView({block:'nearest',behavior:'instant'});
- $('assetSearchHint').textContent='Inserisci il prezzo di acquisto. Verifica ticker, borsa e valuta; ISIN facoltativo.';
+ if(!futuresType(r))$('assetSearchHint').textContent='Inserisci il prezzo di acquisto. Verifica ticker, borsa e valuta; ISIN facoltativo.';
  if(cur!=='EUR')$('newAssetCurrency').dispatchEvent(new Event('change'));
  // Non bloccare la selezione per timeout/CORS della quotazione: ricerca e verifica sono separate.
  (async()=>{if(r.manual||ty==='BOND')return;try{const u='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(code)+'?range=5d&interval=1d';
@@ -2605,13 +2750,14 @@ function updateNewAssetEntryPreview(){const amtMode=entryMode('newAssetInputMode
  const spent=qty*price*fx/(bond?100:1),valid=qty>0&&price>0&&fx>0&&Number.isFinite(spent)&&validEntryDate('newAssetDate');
  $('newAssetEntryPreview').innerHTML=valid?'<strong>Anteprima acquisto</strong> · '+shortDate($('newAssetDate').value)+'<div>Quantità calcolata: <strong>'+entryDecimal(qty)+(bond?' € nominali':' quote')+'</strong></div><div>Prezzo di acquisto: <strong>'+localMoney(price,cur)+(bond?' / 100 nominali':' / quota')+'</strong></div><div>Capitale investito: <strong>'+eur(spent)+'</strong></div><div class="entry-explain">I valori sono lordi; commissioni escluse. Il prezzo corrente del titolo resta indipendente dal prezzo di acquisto.</div>':'Inserisci un prezzo effettivo, '+(amtMode?'l’importo in €':'la quantità')+' e una data valida per vedere il calcolo prima della conferma.';
 }
-function syncNewAssetMaturity(){const active=['Obbligazioni','Risparmio postale'].includes($('newAssetType').value);$('newAssetMaturityFields').classList.toggle('hidden',!active)}
+function syncNewAssetMaturity(){const typ=$('newAssetType').value;const active=['Obbligazioni','Risparmio postale'].includes(typ);$('newAssetMaturityFields').classList.toggle('hidden',!active);const futures=typ==='Futures';$('postalTrackNotice').classList.toggle('hidden',!(pendingQuote?.postalKind&&typ==='Risparmio postale'));$('futureTrackNotice').classList.toggle('hidden',!futures);$('addAssetCommit').disabled=futures;$('addToPacOnly').disabled=futures;}
 $('newAssetType').addEventListener('change',syncNewAssetMaturity);
 for(const id of ['newAssetQuantity','newAssetAmount','newAssetPmc','newAssetFx','newAssetDate','newAssetType'])$(id).addEventListener('input',updateNewAssetEntryPreview);
 for(const id of ['newAssetCurrency','newAssetType'])$(id).addEventListener('change',updateNewAssetEntryPreview);
 document.querySelectorAll('input[name="newAssetInputMode"]').forEach(r=>r.addEventListener('change',updateNewAssetEntryPreview));
 $('addToPacOnly').onclick=()=>{
  const a=pendingQuote;if(!a)return;
+ if($('newAssetType').value==='Futures'){alert('I futures possono essere monitorati nei Preferiti. I PAC su contratti futures non sono supportati.');return;}
  const isin=String($('newAssetIsin').value||'').trim().toUpperCase(),currency=$('newAssetCurrency').value,cat=$('newAssetType').value;
  if(isin&&(!isinFormat(isin)||!isinChecksum(isin))){alert('Controlla il codice ISIN.');return}
  if(!a.symbol&&!isin){alert('Per il PAC è necessario ticker o ISIN.');return}
@@ -2625,6 +2771,7 @@ $('addToPacOnly').onclick=()=>{
  $('pacMessage').classList.remove('hidden');$('pacMessage').textContent='Titolo selezionato per il PAC. Nessun acquisto iniziale è stato registrato.';
 };
 $('addAssetCommit').onclick=()=>{const a=pendingQuote;if(!a)return;
+ if($('newAssetType').value==='Futures'){alert('I futures sono disponibili per ricerca, grafici e preferiti. La registrazione di posizioni futures richiede gestione di margini, moltiplicatori e regolamento: non è ancora supportata per evitare un patrimonio inesatto.');return;}
  const isin=$('newAssetIsin').value.trim().toUpperCase(),qty=newAssetEnteredQty(),pmc=Number($('newAssetPmc').value),cat=$('newAssetType').value,currency=$('newAssetCurrency').value,fx=Number($('newAssetFx').value),purchaseDate=validEntryDate('newAssetDate');
  if(isin&&(!isinFormat(isin)||!isinChecksum(isin))){alert('Se inserisci un ISIN, deve essere formalmente valido. Puoi anche lasciarlo vuoto.');return}
  if(!(qty>0&&pmc>0&&Number.isFinite(qty))){alert('Inserisci importo o quantità e prezzo di acquisto validi.');return}if(!purchaseDate){alert('Indica una data di acquisto valida, non futura.');return}
@@ -2634,7 +2781,7 @@ $('addAssetCommit').onclick=()=>{const a=pendingQuote;if(!a)return;
  const enteredMaturityDate=$('newAssetMaturityDate').value;const enteredMaturityValue=$('newAssetMaturityValue').value.trim();
  if(['Obbligazioni','Risparmio postale'].includes(cat)&&enteredMaturityDate&&!/^\d{4}-\d{2}-\d{2}$/.test(enteredMaturityDate)){alert('Data di scadenza non valida');return}
  if(['Obbligazioni','Risparmio postale'].includes(cat)&&enteredMaturityValue&&(!(Number(enteredMaturityValue)>0))){alert('Valore previsto a scadenza non valido');return}
- const newAsset={id:'custom_'+Date.now(),name:a.name,cat,q:qty,pmc,maturityDate:['Obbligazioni','Risparmio postale'].includes(cat)?enteredMaturityDate:'',maturity:['Obbligazioni','Risparmio postale'].includes(cat)&&enteredMaturityValue?Number(enteredMaturityValue):null,p:a.price||pmc,currency,fxRate:fx,costEur:qty*pmc/(cat==='Obbligazioni'?100:1)*fx,symbol:a.symbol,isin,exchange:a.market,quoteSource:a.verifiedPrice?'Yahoo Finance · '+a.market:'Prezzo iniziale inserito manualmente',quoteAt:a.verifiedPrice?'Ricerca '+new Date().toLocaleString('it-IT'):'Prezzo manuale',quoteUpdatedAt:a.verifiedPrice?new Date().toISOString():null};
+ const newAsset={id:'custom_'+Date.now(),name:a.name,cat,q:qty,pmc,postalKind:a.postalKind||null,postalSeriesUnverified:!!a.postalKind,maturityDate:['Obbligazioni','Risparmio postale'].includes(cat)?enteredMaturityDate:'',maturity:['Obbligazioni','Risparmio postale'].includes(cat)&&enteredMaturityValue?Number(enteredMaturityValue):null,p:a.price||pmc,currency,fxRate:fx,costEur:qty*pmc/(cat==='Obbligazioni'?100:1)*fx,symbol:a.symbol,isin,exchange:a.market,quoteSource:a.postalKind?'Capitale nominale · il valore di rimborso va verificato presso Poste':a.verifiedPrice?'Yahoo Finance · '+a.market:'Prezzo iniziale inserito manualmente',quoteAt:a.postalKind?'Valore nominale, non quotazione':a.verifiedPrice?'Ricerca '+new Date().toLocaleString('it-IT'):'Prezzo manuale',quoteUpdatedAt:a.verifiedPrice?new Date().toISOString():null};
  trackSnapshot();state.assets.push(newAsset);trades.push({id:Date.now()+'-add',kind:'buy',date:purchaseDate,asset:newAsset.id,assetName:newAsset.name,cat:newAsset.cat,spent:newAsset.costEur,quantity:qty,price:pmc,fxExecution:fx});
  save();saveTimeline();trackSnapshot();refreshBuyOptions();render();closeAddAsset();};
 
@@ -2828,7 +2975,7 @@ $('favoriteSearch').addEventListener('click',async()=>{
  box.innerHTML='<p class="sub">Ricerca in corso…</p>';
  try{
   favoriteResults=await searchYahooQuotes(term);
-  box.innerHTML=favoriteResults.length?favoriteResults.map((a,i)=>'<button type="button" class="search-row" data-fav-choice="'+i+'"><span class="asset-search-main">'+searchIssuerLogo(a)+'<strong>'+formatSearchResult(a)+'</strong></span><small><span class="search-exchange-flag">'+exchangeFlag(a)+'</span>'+svgEscape([a.exchDisp||a.exchange||'Borsa non indicata',a.quoteType,a.currency||'Valuta da verificare'].join(' · '))+'</small></button>').join(''):'<p class="hint">Nessun titolo trovato. Prova nome, ticker o ISIN.</p>';
+  box.innerHTML=favoriteResults.length?favoriteResults.map((a,i)=>'<button type="button" class="search-row" data-fav-choice="'+i+'"><span class="asset-search-main">'+searchIssuerLogo(a)+'<strong>'+formatSearchResult(a)+'</strong></span><small><span class="search-exchange-flag">'+exchangeFlag(a)+'</span>'+svgEscape([a.exchDisp||a.exchange||'Borsa non indicata',futuresResultLabel(a),a.currency||'Valuta da verificare'].join(' · '))+'</small></button>').join(''):'<p class="hint">Nessun titolo trovato. Prova nome, ticker o ISIN.</p>';
  }catch(e){favoriteResults=[];box.innerHTML='<p class="sub">Ricerca non disponibile.</p>'}
 });
 $('favoriteSearchResults').addEventListener('click',e=>{
@@ -2837,7 +2984,7 @@ $('favoriteSearchResults').addEventListener('click',e=>{
  if(!a||!a.symbol)return;
  if(xs.some(x=>x.symbol.toUpperCase()===String(a.symbol).toUpperCase())){box.innerHTML='<p class="sub">Titolo già presente nei preferiti.</p>';return}
  if(xs.length>=FAVORITES_MAX){box.innerHTML='<p class="sub">Massimo 3 titoli. Rimuovine uno.</p>';return}
- prefs.favoriteAssets=[...xs,{symbol:a.symbol,name:a.longname||a.shortname||a.symbol,currency:a.currency||'EUR',quoteType:a.quoteType||'',exchange:a.exchange||'',isin:a.isin||''}];
+ prefs.favoriteAssets=[...xs,{symbol:a.symbol,name:a.longname||a.shortname||a.symbol,currency:a.currency||'EUR',quoteType:futuresType(a)?'FUTURE':a.quoteType||'',cat:futuresType(a)?'Futures':undefined,exchange:a.exchange||'',isin:a.isin||''}];
  savePreferences();renderFavoriteSettings();renderFavoriteBanner();box.innerHTML='';$('favoriteQuery').value='';void refreshFavoriteQuotes(true);
 });
 $('favoriteQuery').addEventListener('keydown',e=>{if(e.key==='Enter')$('favoriteSearch').click()});
@@ -3441,7 +3588,7 @@ reportPopulatePeriods();
   if(held){window.finholdraPreviewAsset=null;openAssetDetail(held.id);return}
   const price=(typeof favoriteCache!=='undefined'&&favoriteCache.get(a.symbol)?.price)||0;
   window.finholdraPreviewAsset={id:'finholdra-watch-'+a.symbol,symbol:a.symbol,name:a.name||a.symbol,
-   cat:a.quoteType==='ETF'?'ETF':a.quoteType==='CRYPTOCURRENCY'?'Crypto':a.cat||'Azioni',isin:a.isin||'',currency:a.currency||'EUR',exchange:a.exchange||'',
+   cat:futuresType(a)?'Futures':a.quoteType==='ETF'?'ETF':a.quoteType==='CRYPTOCURRENCY'?'Crypto':a.cat||'Azioni',isin:a.isin||'',currency:a.currency||'EUR',exchange:a.exchange||'',
    q:0,pmc:0,p:price,invested:0,finholdraWatchOnly:true};
   openAssetDetail(window.finholdraPreviewAsset.id);
  }
