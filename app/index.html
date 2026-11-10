@@ -780,16 +780,17 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
   .top .new-header-nav > button.gear-btn{height:40px!important;min-height:40px!important}
 }
 </style><style>
-/* Beta 9.8 — desktop-only favorites: clearer, larger charts; mobile untouched. */
+/* Beta 9.9.2 — desktop favorites: compact, undistorted sparklines; mobile unchanged. */
 @media (min-width:768px) and (hover:hover){
- #favoriteBanner{gap:9px!important;margin-top:16px!important}
- #favoriteBanner .favorite-row{grid-template-columns:minmax(185px,1.05fr) minmax(240px,2.25fr) minmax(145px,.85fr)!important;column-gap:20px!important;padding:14px 19px!important;min-height:92px!important}
- #favoriteBanner .favorite-name{font-size:14px!important;gap:11px!important}
- #favoriteBanner .favorite-logo{width:37px!important;height:37px!important}
- #favoriteBanner .favorite-logo img{width:32px!important;height:32px!important}
- #favoriteBanner .favorite-spark{height:61px!important;min-height:61px!important;width:100%!important}
- #favoriteBanner .favorite-numbers{font-size:16px!important}
- #favoriteBanner .favorite-numbers small{font-size:13px!important;margin-top:6px!important}
+ #favoriteBanner{gap:6px!important;margin-top:10px!important}
+ #favoriteBanner .favorite-row{grid-template-columns:minmax(160px,1fr) minmax(135px,1.1fr) minmax(130px,.9fr)!important;column-gap:12px!important;padding:10px 11px!important;min-height:58px!important}
+ #favoriteBanner .favorite-name{font-size:12px!important;gap:8px!important}
+ #favoriteBanner .favorite-logo{width:29px!important;height:29px!important}
+ #favoriteBanner .favorite-logo img{width:25px!important;height:25px!important}
+ #favoriteBanner .favorite-spark{height:32px!important;min-height:0!important;width:100%!important;max-width:100%!important}
+ #favoriteBanner .favorite-spark polyline{stroke-width:1.25px!important}
+ #favoriteBanner .favorite-numbers{font-size:12px!important}
+ #favoriteBanner .favorite-numbers small{font-size:11px!important;margin-top:3px!important}
 }
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-bianco.svg" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
@@ -912,22 +913,23 @@ body[data-theme="light"] .history-method-switch button.btn[aria-pressed="true"] 
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 9.4</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 9.9.2</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
  <p class="settings-intro">Preferenze, dati locali e stato dei servizi.</p><section class="card"><h2>Mercato di riferimento</h2><p class="hint">Orari di borsa indicativi, non dati di negoziazione in tempo reale.</p><div class="field"><label for="settingMainMarket">Borsa principale</label><select id="settingMainMarket"><option value="MIL">🇮🇹 Milano · Euronext Milan</option><option value="XETRA">🇩🇪 Francoforte · Xetra</option><option value="NYSE">🇺🇸 New York · NYSE / Nasdaq</option><option value="LSE">🇬🇧 Londra · LSE</option><option value="PAR">🇫🇷 Parigi · Euronext</option></select></div></section><section class="card"><h2>Modalità simulazione</h2><p class="hint">Portafoglio di prova separato.</p><button class="btn primary full-btn" id="simulationToggle">Avvia simulazione</button></section>
+<section class="card settings-card" id="jsonBackupSettings"><div class="section-head"><h2>Esporta e importa dati JSON</h2></div>
+<p class="hint">Scarica una copia completa del portafoglio, delle operazioni e dello storico, oppure ripristina un backup precedente.</p>
+<div class="actions"><button class="btn primary" id="backup" type="button">↓ Scarica backup JSON</button><button class="btn" id="import" type="button">↑ Carica backup JSON</button></div>
+<input accept="application/json,.json" class="hidden" id="fileInput" type="file"/>
+<p class="foot">Il caricamento sostituisce i dati del profilo corrente dopo la tua conferma. I backup Invesquo precedenti restano compatibili.</p></section>
 <section class="card"><div class="section-head"><h2>Profilo locale</h2><span class="pill">Solo su questo dispositivo</span></div>
 <p class="hint">Utente attivo: <strong id="currentAccountName">—</strong>. Portafogli separati per ciascun profilo. I dati non sono sincronizzati né cifrati.</p>
 <div class="actions"><button class="btn" id="switchLocalAccount" type="button">Cambia profilo / Esci</button><button class="btn" id="openLocalPrivacy" type="button">Privacy e archiviazione</button><button class="btn danger-outline" id="deleteLocalAccount" type="button">Elimina profilo e dati</button></div>
 <p class="foot">Per trasferire dati tra profili o dispositivi usa il backup JSON in questa schermata. La password opzionale non protegge i file del browser da chi accede al dispositivo.</p></section><section class="card settings-card" id="extraSettings713"><h2>Storici e ricerca</h2>
 <label class="toggle"><input id="settingShowReconstructed" type="checkbox" checked> Includi i prezzi storici ricostruiti nei grafici</label><label class="toggle"><input id="settingShowBackfill" type="checkbox" checked> Mostra «Recupera prezzi» nei grafici</label>
 <p class="hint">Mostra solo rilevazioni osservate nei grafici.</p>
-<div class="setting-field"><label for="settingSearchRegion">Borse da cercare per prime</label><select id="settingSearchRegion"><option value="world">Tutto il mondo</option><option value="it">Solo Italia</option><option value="eu">Europa</option><option value="us">Solo USA</option></select><p class="hint">Filtra per mercato di quotazione. Cerca obbligazioni anche per ISIN.</p></div></section><section class="card settings-card" id="favoriteSettings"><h2>Titoli preferiti</h2><label class="toggle"><input type="checkbox" id="favoriteEnabled"> Mostra preferiti nella Home</label><div id="favoriteSettingsBody"><div class="field"><label for="favoriteQuery">Cerca per nome, ticker, ISIN o futures</label><div class="flex"><input id="favoriteQuery" class="order-select" placeholder="Es. VWCE, ES=F, oro, Nasdaq futures"><button type="button" class="btn" id="favoriteSearch">Cerca</button></div></div><section class="browse-categories" id="favoriteBrowse" aria-label="Esplora preferiti per categoria"><div class="browse-head"><strong>Esplora per categoria</strong><span class="sub">Seleziona un titolo e verifica mercato e valuta</span></div><div class="browse-tabs" id="favoriteBrowseTabs" role="group" aria-label="Categorie titoli preferiti"></div><div class="browse-list" id="favoriteBrowseList" aria-live="polite"></div></section><div class="search-results" id="favoriteSearchResults"></div><div id="favoriteSelected" class="favorites-selected"></div><p class="sub">Massimo 3 titoli, anche non posseduti. Futures: la quotazione è indicativa della serie continua e non rappresenta un contratto specifico.</p></div></section><section class="card settings-card" id="jsonBackupSettings"><div class="section-head"><h2>Esporta e importa dati JSON</h2></div>
-<p class="hint">Scarica una copia completa del portafoglio, delle operazioni e dello storico, oppure ripristina un backup precedente.</p>
-<div class="actions"><button class="btn primary" id="backup" type="button">↓ Scarica backup JSON</button><button class="btn" id="import" type="button">↑ Carica backup JSON</button></div>
-<input accept="application/json,.json" class="hidden" id="fileInput" type="file"/>
-<p class="foot">Il caricamento sostituisce i dati del profilo corrente dopo la tua conferma. I backup Invesquo precedenti restano compatibili.</p></section>
+<div class="setting-field"><label for="settingSearchRegion">Borse da cercare per prime</label><select id="settingSearchRegion"><option value="world">Tutto il mondo</option><option value="it">Solo Italia</option><option value="eu">Europa</option><option value="us">Solo USA</option></select><p class="hint">Filtra per mercato di quotazione. Cerca obbligazioni anche per ISIN.</p></div></section><section class="card settings-card" id="favoriteSettings"><h2>Titoli preferiti</h2><label class="toggle"><input type="checkbox" id="favoriteEnabled"> Mostra preferiti nella Home</label><div id="favoriteSettingsBody"><div class="field"><label for="favoriteQuery">Cerca per nome, ticker, ISIN o futures</label><div class="flex"><input id="favoriteQuery" class="order-select" placeholder="Es. VWCE, ES=F, oro, Nasdaq futures"><button type="button" class="btn" id="favoriteSearch">Cerca</button></div></div><section class="browse-categories" id="favoriteBrowse" aria-label="Esplora preferiti per categoria"><div class="browse-head"><strong>Esplora per categoria</strong><span class="sub">Seleziona un titolo e verifica mercato e valuta</span></div><div class="browse-tabs" id="favoriteBrowseTabs" role="group" aria-label="Categorie titoli preferiti"></div><div class="browse-list" id="favoriteBrowseList" aria-live="polite"></div></section><div class="search-results" id="favoriteSearchResults"></div><div id="favoriteSelected" class="favorites-selected"></div><p class="sub">Massimo 3 titoli, anche non posseduti. Futures: la quotazione è indicativa della serie continua e non rappresenta un contratto specifico.</p></div></section>
 <section class="card settings-card" id="settingsSection">
 <div class="section-head"><h2>Preferenze</h2><span class="sub">Le modifiche si salvano automaticamente</span></div>
 <details class="setting-group" open=""><summary>Aspetto e colori</summary><div class="setting-field"><label for="finholdraLanguageSetting">Lingua / Language</label><select id="finholdraLanguageSetting"><option value="it">Italiano</option><option value="en">English</option></select></div>
@@ -2673,6 +2675,54 @@ function futuresSearchCandidates(term){
 }
 function futuresType(r){return String(r?.quoteType||'').toUpperCase().includes('FUTURE')||/^[A-Z0-9]{1,8}=F$/i.test(String(r?.symbol||''));}
 function futuresResultLabel(r){return futuresType(r)?'Futures · serie continua, non contratto a scadenza specifica':String(r.quoteType||'');}
+
+/* Beta 9.9.3 — classify every selected instrument consistently across browse and search. */
+function inferNewAssetCategory(r){
+ const symbol=String(r?.symbol||'').trim().toUpperCase();
+ const name=String(r?.longname||r?.shortname||'').toLowerCase();
+ const type=String(r?.quoteType||'').toUpperCase();
+ const browse=String(r?.browseCategory||'');
+ const allowed=new Set(CAT.map(x=>x[0]));
+ if(futuresType(r))return 'Futures';
+ if(r?.postalKind||browse==='Risparmio postale')return 'Risparmio postale';
+ if(browse==='Conto deposito')return 'Conto deposito';
+ // Recognize crypto with quoteType or the complete currency-pair symbol, not loose substrings.
+ if(type==='CRYPTOCURRENCY'||/^(BTC|ETH|SOL|XRP|ADA|DOGE|DOT|AVAX|LINK|LTC|BCH|BNB)-(EUR|USD|GBP)$/.test(symbol))return 'Crypto';
+ if(browse&&allowed.has(browse)&&browse!=='Crypto'&&browse!=='Futures')return browse;
+ if(type==='ETF'||type==='MUTUALFUND'||/\b(?:UCITS|ETF)\b/i.test(name)||/^(VWCE|VUAA|SWDA|CSSPX|XEON|XDWD|EQQQ|ERNE|CSH2)(?:\.|$)/.test(symbol)){
+  if(/^(XEON|ERNE|CSH2)(?:\.|$)/.test(symbol)||/overnight|ultrashort|monetary|monetari|\bestr\b|\bstr\b/.test(name))return 'ETF monetari';
+  return 'ETF';
+ }
+ if(type==='ETN'||type==='ETC'||/^(PHAU|PHAG|SGLN)(?:\.|$)/.test(symbol))return 'ETC/ETN';
+ if(type==='BOND')return 'Obbligazioni';
+ if(type==='CURRENCY'||/=X$/i.test(symbol))return /^(XAU|XAG)/.test(symbol)?'Oro':'Valute';
+ if(/\b(?:physical gold|physical silver)\b/.test(name))return 'ETC/ETN';
+ if(browse&&allowed.has(browse))return browse;
+ return 'Azioni';
+}
+function setNewAssetCategoryFromQuote(r){
+ const category=inferNewAssetCategory(r);
+ const select=$('newAssetType');
+ if(!Array.from(select.options).some(o=>o.value===category))throw Error('Categoria non prevista: '+category);
+ pendingQuote.detectedCategory=category;
+ select.value=category;
+ select.dataset.detectedCategory=category;
+ select.dataset.manualCategoryChange='false';
+ syncNewAssetMaturity();
+ updateNewAssetEntryPreview();
+ return category;
+}
+function correctAccidentalCryptoCategory(){
+ const select=$('newAssetType');
+ const detected=pendingQuote?.detectedCategory;
+ if(select.value==='Crypto'&&detected&&detected!=='Crypto'){
+  select.value=detected;
+  syncNewAssetMaturity();
+  updateNewAssetEntryPreview();
+ }
+ return select.value;
+}
+
 async function searchYahooQuotes(term){
  const word=term.trim(),t=word.toUpperCase(),isin=isinFormat(t)&&isinChecksum(t);
  const lookups=[word];const futureAliases=futuresSearchCandidates(word);for(const f of futureAliases)if(f.symbol.toLowerCase()!==word.toLowerCase())lookups.push(f.symbol);if(/amazon|amzn/i.test(word))lookups.push('1AMZN.MI','AMZN','Amazon Milano');
@@ -2812,11 +2862,12 @@ $('assetSearchResults').onclick=async e=>{ $('newAssetQuantityWrap').querySelect
  pendingQuote={symbol:code,name:r.longname||r.shortname||code,market:r.exchDisp||r.exchange||'Borsa da verificare',exchange:r.exchange,price:null,isin:r.isin||'',currency:cur,kind:r.quoteType||'',verifiedPrice:false};
  $('chosenAssetName').textContent=pendingQuote.name;
  $('chosenAssetExchange').textContent=exchangeFlag(r)+' '+code+' · '+pendingQuote.market+' · '+cur+(futuresType(r)?' · SERIE CONTINUA: solo monitoraggio, non un contratto negoziabile':' · verifica prima di aggiungere')+(String(r.quoteType||'').toUpperCase()==='BOND'?' · grafico solo se disponibile storico verificato':'');
+ $('newAssetType').setAttribute('autocomplete','off');
  $('newAssetIsin').value=pendingQuote.isin;
  $('newAssetCurrency').value=cur;
  const ty=String(r.quoteType||'').toUpperCase(),nm=pendingQuote.name.toLowerCase();
  const gold=/\b(gold|gld|oro|silver|argento|physical gold|physical silver)\b/i.test(nm+' '+code);
- $('newAssetType').value=r.browseCategory||ty==='CRYPTOCURRENCY'||/-(EUR|USD)$/.test(code)&&/BTC|ETH|SOL|XRP|ADA/.test(code)?'Crypto':gold&&ty!=='EQUITY'&&!futuresType(r)?'Oro':(ty==='ETF'||/^(XEON\.|QQQ$)/i.test(code)||/\b(ETF|UCITS)\b/i.test(nm))?(/^(XEON\.)/i.test(code)||/overnight|monetary|monetari|\bstr\b|\bestr\b/i.test(nm)?'ETF monetari':'ETF'):ty==='ETN'?'ETC/ETN':futuresType(r)?'Futures':ty==='BOND'?'Obbligazioni':ty==='CURRENCY'?'Valute':'Azioni';
+ setNewAssetCategoryFromQuote(r);
  $('assetSearchHint').textContent=futuresType(r)?'Futures: prezzo della serie continua a fini informativi. Margini, moltiplicatori, scadenza e P/L non sono gestiti: aggiungilo ai Preferiti per seguirlo.':'Inserisci il prezzo di acquisto. Verifica ticker, borsa e valuta.';syncNewAssetMaturity();$('newAssetQuantity').value='1';$('newAssetMaturityDate').value='';$('newAssetMaturityValue').value='';syncNewAssetMaturity();$('newAssetPmc').value='';$('newAssetDate').value=today();$('newAssetAmount').value='';updateNewAssetEntryPreview();
  $('newAssetFx').value=cur==='EUR'?'1':'';
  $('assetNewFields').classList.remove('hidden');
@@ -2824,6 +2875,8 @@ $('assetSearchResults').onclick=async e=>{ $('newAssetQuantityWrap').querySelect
  $('assetSearch').closest('.field').classList.add('hidden');
  $('addAssetOverlay').querySelector('.app-modal-card').scrollTop=0;
  $('assetNewFields').scrollIntoView({block:'nearest',behavior:'instant'});
+ // Safeguard against browser form restoration when the selected result opens.
+ queueMicrotask(()=>{if(pendingQuote?.symbol===code&&$('newAssetType').dataset.manualCategoryChange!=='true')setNewAssetCategoryFromQuote(r);});
  if(!futuresType(r))$('assetSearchHint').textContent='Inserisci il prezzo di acquisto. Verifica ticker, borsa e valuta; ISIN facoltativo.';
  if(cur!=='EUR')$('newAssetCurrency').dispatchEvent(new Event('change'));
  // Non bloccare la selezione per timeout/CORS della quotazione: ricerca e verifica sono separate.
@@ -2860,12 +2913,11 @@ function updateNewAssetEntryPreview(){const amtMode=entryMode('newAssetInputMode
  $('newAssetEntryPreview').innerHTML=valid?'<strong>Anteprima acquisto</strong> · '+shortDate($('newAssetDate').value)+'<div>Quantità calcolata: <strong>'+entryDecimal(qty)+(bond?' € nominali':' quote')+'</strong></div><div>Prezzo di acquisto: <strong>'+localMoney(price,cur)+(bond?' / 100 nominali':' / quota')+'</strong></div><div>Capitale investito: <strong>'+eur(spent)+'</strong></div><div class="entry-explain">I valori sono lordi; commissioni escluse. Il prezzo corrente del titolo resta indipendente dal prezzo di acquisto.</div>':'Inserisci un prezzo effettivo, '+(amtMode?'l’importo in €':'la quantità')+' e una data valida per vedere il calcolo prima della conferma.';
 }
 function syncNewAssetMaturity(){const typ=$('newAssetType').value;const active=['Obbligazioni','Risparmio postale'].includes(typ);$('newAssetMaturityFields').classList.toggle('hidden',!active);const futures=typ==='Futures';$('postalTrackNotice').classList.toggle('hidden',!(pendingQuote?.postalKind&&typ==='Risparmio postale'));$('futureTrackNotice').classList.toggle('hidden',!futures);$('addAssetCommit').disabled=futures;$('addToPacOnly').disabled=futures;}
-$('newAssetType').addEventListener('change',syncNewAssetMaturity);
+$('newAssetType').addEventListener('change',()=>{ $('newAssetType').dataset.manualCategoryChange='true';syncNewAssetMaturity(); });
 for(const id of ['newAssetQuantity','newAssetAmount','newAssetPmc','newAssetFx','newAssetDate','newAssetType'])$(id).addEventListener('input',updateNewAssetEntryPreview);
 for(const id of ['newAssetCurrency','newAssetType'])$(id).addEventListener('change',updateNewAssetEntryPreview);
 document.querySelectorAll('input[name="newAssetInputMode"]').forEach(r=>r.addEventListener('change',updateNewAssetEntryPreview));
-$('addToPacOnly').onclick=()=>{
- const a=pendingQuote;if(!a)return;
+$('addToPacOnly').onclick=()=>{const a=pendingQuote;if(!a)return;correctAccidentalCryptoCategory();
  if($('newAssetType').value==='Futures'){alert('I futures possono essere monitorati nei Preferiti. I PAC su contratti futures non sono supportati.');return;}
  const isin=String($('newAssetIsin').value||'').trim().toUpperCase(),currency=$('newAssetCurrency').value,cat=$('newAssetType').value;
  if(isin&&(!isinFormat(isin)||!isinChecksum(isin))){alert('Controlla il codice ISIN.');return}
@@ -2879,7 +2931,7 @@ $('addToPacOnly').onclick=()=>{
  window.__pacAddingInstrument=false;closeAddAsset();pacRefreshLists();$('pacAsset').value=selected.id;$('pacOverlay').classList.remove('hidden');
  $('pacMessage').classList.remove('hidden');$('pacMessage').textContent='Titolo selezionato per il PAC. Nessun acquisto iniziale è stato registrato.';
 };
-$('addAssetCommit').onclick=()=>{const a=pendingQuote;if(!a)return;
+$('addAssetCommit').onclick=()=>{const a=pendingQuote;if(!a)return;correctAccidentalCryptoCategory();
  if($('newAssetType').value==='Futures'){alert('I futures sono disponibili per ricerca, grafici e preferiti. La registrazione di posizioni futures richiede gestione di margini, moltiplicatori e regolamento: non è ancora supportata per evitare un patrimonio inesatto.');return;}
  const isin=$('newAssetIsin').value.trim().toUpperCase(),qty=newAssetEnteredQty(),pmc=Number($('newAssetPmc').value),cat=$('newAssetType').value,currency=$('newAssetCurrency').value,fx=Number($('newAssetFx').value),purchaseDate=validEntryDate('newAssetDate');
  if(isin&&(!isinFormat(isin)||!isinChecksum(isin))){alert('Se inserisci un ISIN, deve essere formalmente valido. Puoi anche lasciarlo vuoto.');return}
@@ -3071,7 +3123,7 @@ let favoriteCache=new Map(),favoriteResults=[],favoritePollBusy=false,favoriteLa
 function favoriteAssets(){return Array.isArray(prefs.favoriteAssets)?prefs.favoriteAssets.slice(0,FAVORITES_MAX):[]}
 function favoriteSafe(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function favoriteLogo(asset){const name=String(asset.name||'').toLowerCase();const known=[[/alphabet|google/,'google.com'],[/amazon/,'amazon.com'],[/microsoft/,'microsoft.com'],[/apple/,'apple.com'],[/vanguard/,'vanguard.com'],[/ishares|blackrock/,'ishares.com'],[/xtrackers/,'etf.dws.com'],[/nvidia/,'nvidia.com'],[/tesla/,'tesla.com'],[/amundi/,'amundietf.com'],[/invesco/,'invesco.com'],[/intel/,'intel.com']];const domain=known.find(([rx])=>rx.test(name))?.[1];const fallback=favoriteSafe((asset.symbol||asset.name||'--').slice(0,2).toUpperCase());return '<span class="favorite-logo">'+fallback+(domain?'<img alt="" loading="eager" src="https://www.google.com/s2/favicons?domain='+domain+'&sz=64" onload="this.parentElement.firstChild.textContent=\'\'" onerror="this.remove()">':'')+'</span>'}
-function favoriteSpark(points,negative){if(!Array.isArray(points)||points.length<2)return '<div class="favorite-placeholder">1G n.d.</div>';const v=points.map(p=>p.p),min=Math.min(...v),max=Math.max(...v),span=Math.max(max-min,1e-9),coords=points.map((p,i)=>(2+96*i/(points.length-1)).toFixed(1)+','+(31-26*(p.p-min)/span).toFixed(1)).join(' ');return '<svg class="favorite-spark" viewBox="0 0 100 34" preserveAspectRatio="none" aria-label="Andamento 1 giorno"><polyline fill="none" stroke="'+(negative?'var(--red)':'var(--green)')+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="'+coords+'"/></svg>'}
+function favoriteSpark(points,negative){if(!Array.isArray(points)||points.length<2)return '<div class="favorite-placeholder">1G n.d.</div>';const v=points.map(p=>p.p),min=Math.min(...v),max=Math.max(...v),span=Math.max(max-min,1e-9),coords=points.map((p,i)=>(2+96*i/(points.length-1)).toFixed(1)+','+(31-26*(p.p-min)/span).toFixed(1)).join(' ');return '<svg class="favorite-spark" viewBox="0 0 100 34" preserveAspectRatio="'+(window.matchMedia('(min-width:768px) and (hover:hover)').matches?'xMidYMid meet':'none')+'" aria-label="Andamento 1 giorno"><polyline fill="none" stroke="'+(negative?'var(--red)':'var(--green)')+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="'+coords+'"/></svg>'}
 function renderFavoriteBanner(){const el=$('favoriteBanner');if(!el)return;const assets=favoriteAssets();el.classList.toggle('hidden',!prefs.favoriteEnabled||!assets.length);if(!prefs.favoriteEnabled||!assets.length){el.innerHTML='';return}el.innerHTML=assets.map(a=>{const d=favoriteCache.get(a.symbol),value=d&&Number.isFinite(d.price)?d.price.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:4})+' '+favoriteSafe(a.currency||''): '—',pct=d&&Number.isFinite(d.change)?(d.change>=0?'+':'')+d.change.toFixed(2).replace('.',',')+'%':'—',negative=!!d&&d.change<0;return '<article class="favorite-row" role="button" tabindex="0" data-fav-open="'+favoriteSafe(a.symbol)+'" aria-label="Apri '+favoriteSafe(a.name||a.symbol)+'"><div class="favorite-name">'+favoriteLogo(a)+'<span class="favorite-name-text" title="'+favoriteSafe(a.name)+'">'+favoriteSafe(a.name||a.symbol)+'</span></div>'+favoriteSpark(d?.points,negative)+'<div class="favorite-numbers">'+value+'<small class="'+(!d?'':negative?'loss':'gain')+'">'+pct+'</small></div></article>'}).join('')}
 function renderFavoriteSettings(){const box=$('favoriteSelected');if(!box)return;const a=favoriteAssets();box.innerHTML=a.length?a.map((x,i)=>'<div class="favorite-chosen"><span>'+favoriteSafe(x.name||x.symbol)+' · '+favoriteSafe(x.symbol)+'</span><button class="btn" type="button" data-fav-remove="'+i+'">Rimuovi</button></div>').join(''):'<div class="favorite-empty">Nessun titolo selezionato.</div>';box.querySelectorAll('[data-fav-remove]').forEach(b=>b.addEventListener('click',()=>{prefs.favoriteAssets=favoriteAssets().filter((_,i)=>i!==Number(b.dataset.favRemove));savePreferences();renderFavoriteSettings();renderFavoriteBanner()}));$('favoriteEnabled').checked=!!prefs.favoriteEnabled;$('favoriteSettingsBody').classList.toggle('hidden',!prefs.favoriteEnabled)}
 async function fetchFavoriteQuote(a){const symbol=String(a.symbol||'').toUpperCase(),currency=String(a.currency||'EUR').toUpperCase();if(!symbol||!currency)throw Error('Ticker assente');const query='?symbol='+encodeURIComponent(symbol)+'&range=1d&currency='+encodeURIComponent(currency);const endpoints=['/.netlify/functions/history'+query,'https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol)+'?range=1d&interval=5m'];let lastError=null;for(const url of endpoints){try{const r=JSON.parse(await readUrl(url,6200));const x=r?.chart?.result?.[0];if(!x||String(x.meta?.symbol||'').toUpperCase()!==symbol||String(x.meta?.currency||'').toUpperCase()!==currency)continue;const time=x.timestamp||[],values=x.indicators?.quote?.[0]?.close||[];const points=time.map((t,i)=>({t:Number(t),p:Number(values[i])})).filter(x=>Number.isFinite(x.t)&&Number.isFinite(x.p)&&x.p>0&&x.t*1000<=Date.now()+3600000).slice(-140);if(points.length<2)continue;const prev=Number(x.meta?.chartPreviousClose||x.meta?.previousClose||x.meta?.regularMarketPreviousClose),first=prev>0?prev:points[0].p,last=points[points.length-1].p;const price=Number(x.meta?.regularMarketPrice)>0?Number(x.meta.regularMarketPrice):last;const change=(last/first-1)*100;return{price,change,points,asOf:points[points.length-1].t*1000}}catch(e){lastError=e}}throw lastError||Error('Storico intraday non disponibile')}
@@ -3141,7 +3193,22 @@ function updateMarketStatus(){
 updateMarketStatus();setInterval(updateMarketStatus,60000);
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const INVESQUO_VERSION='Beta 9.4';
+const FINHOLDRA_VERSION_FALLBACK='Beta 9.9.2';
+async function updateFinholdraVersion(){
+ const versionLabel=document.getElementById('appBuildVersion');
+ if(!versionLabel)return;
+ versionLabel.textContent=FINHOLDRA_VERSION_FALLBACK;
+ try{
+  const response=await fetch('./version.json?v='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw Error('File versione non disponibile');
+  const data=await response.json();
+  if(data&&data.app==='Finholdra'&&data.channel==='beta'&&/^\d+\.\d+(?:\.\d+)?$/.test(String(data.version||''))){
+   versionLabel.textContent='Beta '+data.version;
+   versionLabel.title='Canale: beta · Build '+String(data.version);
+  }
+ }catch(_){ /* Il valore incorporato resta leggibile anche offline. */ }
+}
+updateFinholdraVersion();
 let invesquoHealthToken=0;
 async function invesquoCheckServer(){
  const token=++invesquoHealthToken,led=document.getElementById('netlifyServerLed'),status=document.getElementById('netlifyServerState'),detail=document.getElementById('netlifyServerDetail');
@@ -3158,7 +3225,7 @@ async function invesquoCheckServer(){
  }catch(err){if(token!==invesquoHealthToken)return;led.className='server-led '+(err.httpStatus===401||err.httpStatus===403?'checking':'offline');status.textContent=err.httpStatus===401||err.httpStatus===403?'Funzioni limitate':'Funzioni non verificate';detail.textContent=err.httpStatus===401||err.httpStatus===403?'HTTP '+err.httpStatus+': accesso alla funzione di controllo limitato; le quotazioni possono funzionare.':err.name==='AbortError'?'Controllo scaduto; i dati locali restano disponibili.':String(err.message||'Errore di collegamento').slice(0,85);}
  finally{clearTimeout(timeout)}
 }
-document.getElementById('appBuildVersion').textContent=INVESQUO_VERSION;
+
 document.getElementById('checkNetlifyServer').addEventListener('click',invesquoCheckServer);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!document.getElementById('settingsView').classList.contains('hidden'))invesquoCheckServer()});
 window.addEventListener('online',()=>{if(!document.getElementById('settingsView').classList.contains('hidden'))invesquoCheckServer()});
