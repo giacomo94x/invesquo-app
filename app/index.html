@@ -760,6 +760,18 @@ body.motion-off .finn-scene-anticipation svg .finn-left-arm,body.motion-off .fin
 .setting-title-color-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
 .setting-title-color-row input[type=color]{width:55px;height:40px;padding:3px;border:1px solid var(--border);border-radius:10px;background:var(--panel2);cursor:pointer}
 
+
+/* Beta 9.9.21 — align payoff with the visible start of the F and keep it away from the candle. */
+.finholdra-news-brand .finholdra-news-payoff{margin:10px 0 12px!important;padding-left:5px!important;text-align:left!important;line-height:1.5!important;}
+.account-panel .finholdra-payoff{margin:10px 0 21px!important;padding-left:6px!important;text-align:left!important;line-height:1.5!important;}
+/* Compact category chooser rather than a long list of color swatches. */
+#settingCategoryColors.category-color-grid{display:block!important;margin:10px 0!important;}
+#settingCategoryColors .category-color-picker{display:flex;gap:12px;align-items:center;flex-wrap:wrap;min-width:0;}
+#settingCategoryColorChoice{flex:1 1 190px;min-width:0;max-width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:11px;background:var(--panel2);color:var(--text);font:600 13px Montserrat,sans-serif;}
+#settingCategoryColorChoice option{background:var(--panel);color:var(--text);}
+#settingCategoryColors .category-color-swatch{display:inline-flex;gap:9px;align-items:center;justify-content:flex-start;font-size:12px;font-weight:600;color:var(--muted);}
+#settingCategoryColorValue{width:54px;height:40px;padding:3px;border:1px solid var(--border);border-radius:10px;background:var(--panel2);cursor:pointer;}
+#settingsView > #mascotLab{margin-top:16px;margin-bottom:20px;}
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
 .pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
@@ -1055,7 +1067,7 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 @media(min-width:700px){.finholdra-indices-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:480px){#finholdraNewsPanel.finholdra-news-panel{padding-left:16px!important;padding-right:16px!important}.finholdra-news-brand img{width:min(235px,73vw)!important}.finholdra-index{padding:10px}.finholdra-index-price{font-size:13px}.finholdra-index-change{font-size:11px}}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
-<div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.19" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
+<div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.21" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
 <div class="finholdra-language-gate"><label for="finholdraLanguageWelcome">Lingua / Language</label><select id="finholdraLanguageWelcome"><option value="it">Italiano</option><option value="en">English</option></select></div><div class="account-tabs"><button type="button" id="accountTabCreate" class="selected">Nuovo profilo</button><button type="button" id="accountTabLogin">Accedi</button></div>
 <form id="accountCreateForm" autocomplete="off"><label for="localAccountName">Nome utente</label><input id="localAccountName" maxlength="36" minlength="2" placeholder="Come vuoi chiamare il profilo?" required>
@@ -1148,9 +1160,9 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 <button class="btn primary" id="visitClose" type="button">Ricevuto, a dopo</button>
 </div>
 </div>
-<header class="top"><div class="new-header-main"><div class="new-header-brand" id="finholdraBrandTrigger" role="button" tabindex="0" aria-expanded="false" aria-controls="finholdraNewsPanel" aria-label="Finholdra · Apri le notizie dei mercati"><picture class="finholdra-wordmark"><img id="finholdraLogo" src="./finholdra-header-bianco.svg?v=9.9.19" alt="Finholdra" loading="eager"></picture></div><button aria-expanded="false" aria-label="Apri analisi performance" class="face-button" id="faceButton" type="button"><span aria-label="Performance stabile" class="performance-face" id="performanceFace" role="img"></span></button><div class="new-header-status"><span class="pill" id="count">7 strumenti</span><span aria-live="off" class="header-mood-status" id="headerMoodStatus"><i class="mood-dot"></i><span id="headerMoodText">Stabile</span></span><span class="market-status" id="marketStatus" title="Orari della borsa selezionata"><i class="market-led" id="marketLed"></i><span id="marketText">Mercati · …</span></span></div></div><div class="new-header-nav"><button aria-current="page" aria-label="Dashboard" class="gear-btn nav-tool active" id="navDashboard" title="Dashboard" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button id="navHistory" class="gear-btn nav-tool" type="button" aria-label="Storico" title="Storico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M7 15l5-5 4 3 5-7"/></svg></button><button aria-label="Investimenti" class="gear-btn nav-tool" id="navPortfolio" title="Investimenti" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M8 15h4"></path></svg></button><button aria-label="Educational" class="gear-btn nav-tool" id="navEducation" title="Impara" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C6.5 4 9.5 4 12 6v14c-2.5-2-5.5-2-9-.5V5.5Zm18 0c-3.5-1.5-6.5-1.5-9 .5v14c2.5-2 5.5-2 9-.5V5.5Z"/></svg></button><button aria-label="Nascondi importi" class="gear-btn" id="privacyShortcut" title="Mostra / nascondi importi">◉</button><button aria-label="Apri impostazioni" class="gear-btn" id="settingsShortcut" title="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3v2.1m0 13.2v2.1M3.3 12h2.1m13.2 0h2.1M5.85 5.85l1.5 1.5m9.3 9.3 1.5 1.5m0-12.3-1.5 1.5m-9.3 9.3-1.5 1.5"/><circle cx="12" cy="12" r="4.1"/></svg></button></div></header><section id="finholdraNewsPanel" class="finholdra-news-panel hidden" role="dialog" aria-modal="true" aria-labelledby="finholdraNewsTitle">
+<header class="top"><div class="new-header-main"><div class="new-header-brand" id="finholdraBrandTrigger" role="button" tabindex="0" aria-expanded="false" aria-controls="finholdraNewsPanel" aria-label="Finholdra · Apri le notizie dei mercati"><picture class="finholdra-wordmark"><img id="finholdraLogo" src="./finholdra-header-bianco.svg?v=9.9.21" alt="Finholdra" loading="eager"></picture></div><button aria-expanded="false" aria-label="Apri analisi performance" class="face-button" id="faceButton" type="button"><span aria-label="Performance stabile" class="performance-face" id="performanceFace" role="img"></span></button><div class="new-header-status"><span class="pill" id="count">7 strumenti</span><span aria-live="off" class="header-mood-status" id="headerMoodStatus"><i class="mood-dot"></i><span id="headerMoodText">Stabile</span></span><span class="market-status" id="marketStatus" title="Orari della borsa selezionata"><i class="market-led" id="marketLed"></i><span id="marketText">Mercati · …</span></span></div></div><div class="new-header-nav"><button aria-current="page" aria-label="Dashboard" class="gear-btn nav-tool active" id="navDashboard" title="Dashboard" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button id="navHistory" class="gear-btn nav-tool" type="button" aria-label="Storico" title="Storico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M7 15l5-5 4 3 5-7"/></svg></button><button aria-label="Investimenti" class="gear-btn nav-tool" id="navPortfolio" title="Investimenti" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M8 15h4"></path></svg></button><button aria-label="Educational" class="gear-btn nav-tool" id="navEducation" title="Impara" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C6.5 4 9.5 4 12 6v14c-2.5-2-5.5-2-9-.5V5.5Zm18 0c-3.5-1.5-6.5-1.5-9 .5v14c2.5-2 5.5-2 9-.5V5.5Z"/></svg></button><button aria-label="Nascondi importi" class="gear-btn" id="privacyShortcut" title="Mostra / nascondi importi">◉</button><button aria-label="Apri impostazioni" class="gear-btn" id="settingsShortcut" title="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3v2.1m0 13.2v2.1M3.3 12h2.1m13.2 0h2.1M5.85 5.85l1.5 1.5m9.3 9.3 1.5 1.5m0-12.3-1.5 1.5m-9.3 9.3-1.5 1.5"/><circle cx="12" cy="12" r="4.1"/></svg></button></div></header><section id="finholdraNewsPanel" class="finholdra-news-panel hidden" role="dialog" aria-modal="true" aria-labelledby="finholdraNewsTitle">
  <div class="finholdra-news-shell">
-  <div class="finholdra-news-head"><div class="finholdra-news-brand"><img id="finholdraNewsLogo" src="./finholdra-header-bianco.svg?v=9.9.19" alt="Finholdra"><p class="finholdra-news-payoff">Every investments you hold. One view.</p></div><button class="finholdra-news-close" id="finholdraNewsClose" type="button" aria-label="Chiudi la schermata mercati">×</button></div>
+  <div class="finholdra-news-head"><div class="finholdra-news-brand"><img id="finholdraNewsLogo" src="./finholdra-header-bianco.svg?v=9.9.21" alt="Finholdra"><p class="finholdra-news-payoff">Every investments you hold. One view.</p></div><button class="finholdra-news-close" id="finholdraNewsClose" type="button" aria-label="Chiudi la schermata mercati">×</button></div>
   <h2 id="finholdraNewsTitle" class="finholdra-news-label">LE ULTIME DAI MERCATI <span id="finholdraNewsSourceLabel">· YAHOO FINANCE ITALIA</span></h2>
   <div id="finholdraNewsResults" aria-live="polite"><p class="finholdra-news-state">Apri per leggere le ultime notizie disponibili.</p></div>
   <div class="finholdra-news-footer"><a id="finholdraNewsProviderLink" href="https://it.finance.yahoo.com/" target="_blank" rel="noopener noreferrer">Yahoo Finanza ↗</a><button type="button" id="finholdraNewsRefresh">Aggiorna notizie</button></div>
@@ -1183,7 +1195,7 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 9.9.17</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 9.9.21</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -2021,10 +2033,20 @@ try{if(store.getItem(VISIT_SUPPRESS_KEY)==='true')prefs.warnings=false}catch(e){
 const validColor=v=>/^#[0-9a-fA-F]{6}$/.test(v);
 function renderCategoryColorSettings(){
  const host=$('settingCategoryColors');if(!host)return;
- const current=CAT.map(([cat,color])=>{const selected=prefs.categoryColors?.[cat];return {cat,color:validColor(selected)?selected:color}});
- // Rebuilding inputs only when controls need to change avoids removing focus mid-edit.
- if(host.children.length!==current.length){host.innerHTML=current.map(({cat,color})=>'<label class="category-color-item"><span>'+svgEscape(cat)+'</span><input type="color" value="'+color+'" data-category-color="'+svgEscape(cat)+'" aria-label="Colore '+svgEscape(cat)+'"></label>').join('');}
- current.forEach(({cat,color})=>{const input=Array.from(host.querySelectorAll('input[data-category-color]')).find(x=>x.dataset.categoryColor===cat);if(input&&document.activeElement!==input)input.value=color;});
+ const current=CAT.map(([cat,defaultColor])=>{const picked=prefs.categoryColors?.[cat];return {cat,color:validColor(picked)?picked:defaultColor}});
+ if(!current.length)return;
+ if(!host.dataset.dropdownReady){
+  host.innerHTML='<div class="category-color-picker"><select id="settingCategoryColorChoice" aria-label="Categoria di investimento">'+current.map(({cat})=>'<option value="'+svgEscape(cat)+'">'+svgEscape(cat)+'</option>').join('')+'</select><label class="category-color-swatch" for="settingCategoryColorValue">Colore <input type="color" id="settingCategoryColorValue" data-category-color="'+svgEscape(current[0].cat)+'" aria-label="Colore della categoria selezionata"></label></div>';
+  host.dataset.dropdownReady='true';
+  host.querySelector('#settingCategoryColorChoice').addEventListener('change',()=>renderCategoryColorSettings());
+ }
+ const selector=host.querySelector('#settingCategoryColorChoice');
+ const input=host.querySelector('#settingCategoryColorValue');
+ if(!selector||!input)return;
+ const active=current.find(c=>c.cat===selector.value)||current[0];
+ input.dataset.categoryColor=active.cat;
+ input.setAttribute('aria-label','Colore della categoria '+active.cat);
+ if(document.activeElement!==input)input.value=active.color;
 }
 
 function effectiveTheme(){return prefs.theme==='system'?(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):prefs.theme}
@@ -4235,8 +4257,8 @@ reportPopulatePeriods();
  function setLanguage(value){lang=value==='en'?'en':'it';localStorage.setItem(LANG_KEY,lang);updateLanguage()}
  document.querySelectorAll('select[id^="finholdraLanguage"]').forEach(el=>el.addEventListener('change',e=>setLanguage(e.target.value)));
  updateLanguage();obs.observe(document.body,{subtree:true,childList:true,characterData:true});
- function updateLogo(){let t=document.body.dataset.theme||'dark';let logo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.19':'./finholdra-header-bianco.svg?v=9.9.19';
-  const header=$('finholdraLogo'),gate=document.querySelector('.finholdra-gate-logo');const headerLogo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.19':'./finholdra-header-bianco.svg?v=9.9.19';if(header&&header.getAttribute('src')!==headerLogo)header.src=headerLogo;if(gate&&gate.getAttribute('src')!==logo)gate.src=logo;
+ function updateLogo(){let t=document.body.dataset.theme||'dark';let logo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.21':'./finholdra-header-bianco.svg?v=9.9.21';
+  const header=$('finholdraLogo'),gate=document.querySelector('.finholdra-gate-logo');const headerLogo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.21':'./finholdra-header-bianco.svg?v=9.9.21';if(header&&header.getAttribute('src')!==headerLogo)header.src=headerLogo;if(gate&&gate.getAttribute('src')!==logo)gate.src=logo;
  }
  updateLogo();new MutationObserver(updateLogo).observe(document.body,{attributes:true,attributeFilter:['data-theme']});
  document.addEventListener('click',e=>{const el=e.target.closest('[data-fav-open]');if(!el)return;openFavorite(el.dataset.favOpen)});
@@ -4279,7 +4301,7 @@ reportPopulatePeriods();
  const stamp=value=>{try{return new Date(value).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}catch(_){return ''}};
  const fmt=n=>new Intl.NumberFormat('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
  const source=()=>prefs.newsSource==='investing'?'investing':'yahoo';
- function synchronizeLogo(){if(logo)logo.src=document.body.dataset.theme==='light'?'./finholdra-header-blu.svg?v=9.9.19':'./finholdra-header-bianco.svg?v=9.9.19'}
+ function synchronizeLogo(){if(logo)logo.src=document.body.dataset.theme==='light'?'./finholdra-header-blu.svg?v=9.9.21':'./finholdra-header-bianco.svg?v=9.9.21'}
  function updateProviderLinks(){const isInvesting=source()==='investing';document.getElementById('finholdraNewsSourceLabel').textContent=isInvesting?'· INVESTING.COM ITALIA':'· YAHOO FINANZA ITALIA';const link=document.getElementById('finholdraNewsProviderLink');link.href=isInvesting?'https://it.investing.com/news/':'https://it.finance.yahoo.com/';link.textContent=isInvesting?'Investing.com Italia ↗':'Yahoo Finanza ↗';}
  async function getNews(force=false){
   const src=source();if(newsLoading||(!force&&newsCache.source===src&&Date.now()-newsCache.at<10*60*1000))return;
@@ -4328,13 +4350,14 @@ reportPopulatePeriods();
  const groups=Array.from(pref.querySelectorAll(':scope > .setting-group'));
  const moveGroups=(labels,dest)=>{for(const label of labels){const g=groups.find(x=>x.querySelector(':scope > summary')?.textContent.trim()===label);if(g)dest.appendChild(g)}};
  moveGroups(['Aspetto e colori','Aspetto avanzato','Benessere e accessi'],appearance);
- const lab=document.getElementById('mascotLab');if(lab)appearance.appendChild(lab);
+ // The mascot playground is a standalone final settings section, outside the macro categories.
  const market=Array.from(settings.querySelectorAll(':scope > section.card')).find(x=>x.querySelector(':scope > h2')?.textContent.trim()==='Mercato di riferimento');if(market)finance.appendChild(market);
  for(const id of ['extraSettings713','favoriteSettings']){const n=document.getElementById(id);if(n)finance.appendChild(n)}
  moveGroups(['Privacy e visualizzazione','Quotazioni e frequenza','Educational e protezione dei dati'],finance);
  for(const id of ['simulationToggle','jsonBackupSettings','switchLocalAccount']){const n=document.getElementById(id);const c=n?.closest('section.card');if(c&&c.parentElement!==data)data.appendChild(c)}
  moveGroups(['Backup programmato e cartella','Azzeramento dati e sicurezza'],data);
  const notice=document.getElementById('settingsSaved');if(notice)data.appendChild(notice);
+ const lab=document.getElementById('mascotLab');if(lab)settings.appendChild(lab);
  pref.remove();
 })();
 </script></body></html>
