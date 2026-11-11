@@ -1066,6 +1066,16 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 .finholdra-index-stamp{font-size:9px;color:var(--muted)}
 @media(min-width:700px){.finholdra-indices-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:480px){#finholdraNewsPanel.finholdra-news-panel{padding-left:16px!important;padding-right:16px!important}.finholdra-news-brand img{width:min(235px,73vw)!important}.finholdra-index{padding:10px}.finholdra-index-price{font-size:13px}.finholdra-index-change{font-size:11px}}
+
+/* Beta 9.9.26: desktop Home logo matches the markets panel brand. Mobile untouched. */
+@media (min-width: 768px) {
+  .top .new-header-main .new-header-brand .finholdra-wordmark { width: 285px !important; max-width: 285px !important; min-width: 0 !important; }
+  .top .new-header-main .new-header-brand .finholdra-wordmark img,
+  .top .new-header-main .new-header-brand .finholdra-wordmark #finholdraLogo {
+    width: 285px !important; max-width: 285px !important; max-height: none !important; height: auto !important;
+    object-fit: contain !important; object-position: left center !important;
+  }
+}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.22" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -1340,13 +1350,23 @@ function cryptoIcon(symbol,name){
  const chosen=options.find(([rx])=>rx.test(s+' '+n));
  return chosen?{src:'https://www.google.com/s2/favicons?domain='+chosen[1]+'&sz=128',short:chosen[2],alt:'Logo '+chosen[2]}:{src:'',short:s.split('-')[0].slice(0,4)||'₿',alt:'Logo crypto'};
 }
-function futureGenericIcon(){return {src:'data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%0A%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2714%27%20fill%3D%27%23F0ECFF%27%2F%3E%0A%3Crect%20x%3D%2711%27%20y%3D%2712%27%20width%3D%2742%27%20height%3D%2740%27%20rx%3D%2710%27%20fill%3D%27%23B68DF4%27%2F%3E%0A%3Cpath%20d%3D%27M18%2040l8-9%207%205%2012-14%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%274%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%3E%0A%3Cpath%20d%3D%27M42%2022h8v8%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%274%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%3E%0A%3C%2Fsvg%3E',short:'FUT',alt:'Icona futures'}}
-function goldBarIcon(){return {src:'data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%0A%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2714%27%20fill%3D%27%23FFF6D6%27%2F%3E%0A%3Cpath%20d%3D%27M16%2038l10-15h24l-10%2015H16z%27%20fill%3D%27%23E6B84A%27%2F%3E%0A%3Cpath%20d%3D%27M28%2038l8-15h14l-10%2015H28z%27%20fill%3D%27%23D39A22%27%2F%3E%0A%3Cpath%20d%3D%27M16%2038h24l8%209H24l-8-9z%27%20fill%3D%27%23F0C860%27%2F%3E%0A%3Cpath%20d%3D%27M24%2047l4-9h20l-8%209H24z%27%20fill%3D%27%23D8A43A%27%2F%3E%0A%3C%2Fsvg%3E',short:'Au',alt:"Icona lingotto d'oro"}}
+function futureGenericIcon(){return {src:'data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2213%22%20fill%3D%22%236341B5%22%2F%3E%3Cpath%20d%3D%22M18%2014h25l9%209v27a4%204%200%200%201-4%204H18a5%205%200%200%201-5-5V19a5%205%200%200%201%205-5Z%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223.5%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M43%2014v10h9%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2232%22%20font-size%3D%2212%22%20font-family%3D%22Arial%2Csans-serif%22%20fill%3D%22%23fff%22%20font-weight%3D%22bold%22%3EFUT%3C%2Ftext%3E%3Cpath%20d%3D%22M20%2044l7-5%207%202%2010-11m-6%200h6v6%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223.5%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E',short:'FUT',alt:'Icona futures'}}
+function goldBarIcon(){return {src:'data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2213%22%20fill%3D%22%23E9A600%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223.7%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m18%2037%206-9h15l6%209-4%208H22z%22%2F%3E%3Cpath%20d%3D%22m8%2048%206-10h12l5%2010-4%206H12z%22%2F%3E%3Cpath%20d%3D%22m34%2048%206-10h12l5%2010-4%206H38z%22%2F%3E%3Cpath%20d%3D%22M18%2037h27M8%2048h23m3%200h23%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22m49%2011%202%206%206%202-6%202-2%206-2-6-6-2%206-2z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E',short:'Au',alt:"Icona lingotto d'oro"}}
 function isGoldLinkedAsset(a){
  if(!a)return false;
  const txt=((a.symbol||'')+' '+(a.name||'')+' '+(a.isin||'')).toLowerCase();
  if(!['ETF','ETC/ETN','Oro','Materie prime'].includes(a.cat))return false;
  return /\bwgld\b/.test(txt)||/\bgold\b/.test(txt)||/\boro\b/.test(txt)||/bullion/.test(txt)||/physical gold/.test(txt)||/precious gold/.test(txt)||/xetra.?gold/.test(txt)||/gold etf/.test(txt)||/gold ect/.test(txt)||/gold etc/.test(txt);
+}
+function specialInstrumentIcon(a){
+ if(!a)return null;
+ if(String(a.cat||'').toLowerCase()==='futures'||futuresType(a))return futureGenericIcon();
+ if(isGoldLinkedAsset({...a,cat:['ETF','ETC/ETN','Oro','Materie prime'].includes(a.cat)?a.cat:'ETC/ETN'}))return goldBarIcon();
+ return null;
+}
+function specialIconHtml(icon,cssClass){
+ if(!icon)return '';
+ return '<span class="'+cssClass+'" role="img" aria-label="'+svgEscape(icon.alt)+'"><img src="'+icon.src+'" alt="" loading="eager" decoding="async"></span>';
 }
 function categoryGlyph(cat){
  // The exact same SVG artwork used by the Academy, displayed at icon size.
@@ -1357,7 +1377,7 @@ function categoryGlyph(cat){
 function issuerIcon(id){const a=state.assets.find(x=>x.id===id);let b=ISSUER_ICONS[id];
  if(a&&a.cat==='Crypto')b=cryptoIcon(a.symbol,a.name);
  if(a&&a.cat==='Futures')b=futureGenericIcon();
- if(!b&&a&&isGoldLinkedAsset(a))b=goldBarIcon();
+ if(a&&isGoldLinkedAsset(a))b=goldBarIcon();
  if(!b&&a){const n=(a.name||'').toLowerCase(),vendors=[[/\b(vanguard)\b/,'vanguard.com'],[/\b(ishares|blackrock)\b/,'ishares.com'],[/\b(xtrackers|dws)\b/,'etf.dws.com'],[/\b(google|alphabet)\b/,'google.com'],[/\b(microsoft)\b/,'microsoft.com'],[/\b(apple inc)\b/,'apple.com'],[/\b(amundi)\b/,'amundietf.com'],[/\b(spdr|state street)\b/,'ssga.com'],[/\b(invesco)\b/,'invesco.com'],[/\b(amazon|amazon.com)\b/,'amazon.com'],[/\b(nvidia)\b/,'nvidia.com'],[/\b(tesla)\b/,'tesla.com'],[/\b(meta platforms|facebook)\b/,'meta.com'],[/\b(berkshire hathaway)\b/,'berkshirehathaway.com'],[/\b(nestl[eé])\b/,'nestle.com'],[/\b(coca.cola)\b/,'coca-cola.com'],[/\b(samsung)\b/,'samsung.com'],[/\b(lvmh)\b/,'lvmh.com'],[/\b(asml)\b/,'asml.com'],[/\b(intel)\b/,'intel.com'],[/\b(visa inc)\b/,'visa.com'],[/\b(mastercard)\b/,'mastercard.com']];const domain=vendors.find(([pattern])=>pattern.test(n))?.[1];const initial=a.cat==='Crypto'?String(a.symbol||'CR').split('-')[0].slice(0,4):a.cat==='Futures'?'FUT':a.cat==='Oro'?'Au':a.cat==='Valute'?'FX':a.cat==='ETC/ETN'?'ETN':String(a.symbol||a.name||'•').slice(0,2).toUpperCase();b={src:domain?'https://www.google.com/s2/favicons?domain='+domain+'&sz=128':'',short:initial,alt:'Simbolo '+a.name};}
  b=b||{src:'',short:'✦',alt:'Simbolo titolo'};if(!b.src)return '<span class="asset-logo"><span class="asset-logo-fallback">'+svgEscape(b.short)+'</span></span>';return '<span class="asset-logo" data-asset="'+id+'" role="img" aria-label="'+b.alt+'"><span class="asset-logo-fallback">'+b.short+'</span><img src="'+b.src+'" alt="" loading="eager" decoding="async" onload="this.style.opacity=1" onerror="this.remove()"></span>'}
 
@@ -3198,6 +3218,8 @@ function exchangeFlag(r){
  return '🌐';
 }
 function searchIssuerLogo(r){
+ const special=specialInstrumentIcon({symbol:r.symbol,name:r.longname||r.shortname,cat:futuresType(r)?'Futures':(r.cat||r.category||(r.quoteType==='ETF'?'ETF':'ETC/ETN')),quoteType:r.quoteType});
+ if(special)return specialIconHtml(special,'asset-search-logo');
  const crypto=/CRYPTO|-(EUR|USD)$/.test(String(r.quoteType||'')+' '+String(r.symbol||''));if(crypto){const ico=cryptoIcon(r.symbol,r.longname||r.shortname);return '<span class="asset-search-logo">'+svgEscape(ico.short)+(ico.src?'<img alt="" loading="lazy" src="'+ico.src+'" onerror="this.remove()">':'')+'</span>';}
  const n=String((r.longname||'')+' '+(r.shortname||'')+' '+(r.symbol||'')).toLowerCase();
  const brands=[[/alphabet|google|1goog/, 'google.com'],[/amazon|1amzn|amzn/, 'amazon.com'],[/microsoft|msft/, 'microsoft.com'],[/apple inc|aapl/, 'apple.com'],[/nvidia|nvda/, 'nvidia.com'],[/tesla|tsla/, 'tesla.com'],[/meta platforms|facebook|meta\b/, 'meta.com'],[/vanguard|vwce/, 'vanguard.com'],[/ishares|blackrock|rbot/, 'ishares.com'],[/xtrackers|dws|xdev/, 'etf.dws.com'],[/amundi/, 'amundietf.com'],[/invesco/, 'invesco.com'],[/spdr|state street/, 'ssga.com'],[/intel|intc/, 'intel.com'],[/asml/, 'asml.com'],[/netflix|nflx/, 'netflix.com'],[/disney|dis\b/, 'disney.com'],[/coca.cola/, 'coca-cola.com'],[/visa inc/, 'visa.com'],[/mastercard/, 'mastercard.com']];
@@ -3562,7 +3584,16 @@ const FAVORITES_MAX=3;
 let favoriteCache=new Map(),favoriteResults=[],favoritePollBusy=false,favoriteLastPoll=0;
 function favoriteAssets(){return Array.isArray(prefs.favoriteAssets)?prefs.favoriteAssets.slice(0,FAVORITES_MAX):[]}
 function favoriteSafe(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function favoriteLogo(asset){const name=String(asset.name||'').toLowerCase();const known=[[/alphabet|google/,'google.com'],[/amazon/,'amazon.com'],[/microsoft/,'microsoft.com'],[/apple/,'apple.com'],[/vanguard/,'vanguard.com'],[/ishares|blackrock/,'ishares.com'],[/xtrackers/,'etf.dws.com'],[/nvidia/,'nvidia.com'],[/tesla/,'tesla.com'],[/amundi/,'amundietf.com'],[/invesco/,'invesco.com'],[/intel/,'intel.com']];const domain=known.find(([rx])=>rx.test(name))?.[1];const fallback=favoriteSafe((asset.symbol||asset.name||'--').slice(0,2).toUpperCase());return '<span class="favorite-logo">'+fallback+(domain?'<img alt="" loading="eager" src="https://www.google.com/s2/favicons?domain='+domain+'&sz=64" onload="this.parentElement.firstChild.textContent=\'\'" onerror="this.remove()">':'')+'</span>'}
+function favoriteLogo(asset){
+ const special=specialInstrumentIcon(asset);
+ if(special)return specialIconHtml(special,'favorite-logo');
+ const name=String(asset.name||'').toLowerCase();
+ const known=[[/alphabet|google/,'google.com'],[/amazon/,'amazon.com'],[/microsoft/,'microsoft.com'],[/apple/,'apple.com'],[/vanguard/,'vanguard.com'],[/ishares|blackrock/,'ishares.com'],[/xtrackers/,'etf.dws.com'],[/nvidia/,'nvidia.com'],[/tesla/,'tesla.com'],[/amundi/,'amundietf.com'],[/invesco/,'invesco.com'],[/intel/,'intel.com']];
+ const domain=known.find(([rx])=>rx.test(name))?.[1];
+ const fallback=favoriteSafe((asset.symbol||asset.name||'--').slice(0,2).toUpperCase());
+ return '<span class="favorite-logo">'+fallback+(domain?'<img alt="" loading="eager" src="https://www.google.com/s2/favicons?domain='+domain+'&sz=64" onload="this.parentElement.firstChild.textContent=\'\'" onerror="this.remove()">':'')+'</span>';
+}
+
 function favoriteSpark(points,negative){if(!Array.isArray(points)||points.length<2)return '<div class="favorite-placeholder">1G n.d.</div>';const v=points.map(p=>p.p),min=Math.min(...v),max=Math.max(...v),span=Math.max(max-min,1e-9),coords=points.map((p,i)=>(2+96*i/(points.length-1)).toFixed(1)+','+(31-26*(p.p-min)/span).toFixed(1)).join(' ');return '<svg class="favorite-spark" viewBox="0 0 100 34" preserveAspectRatio="none" aria-label="Andamento 1 giorno"><polyline fill="none" stroke="'+(negative?'var(--red)':'var(--green)')+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="'+coords+'"/></svg>'}
 function renderFavoriteBanner(){const el=$('favoriteBanner');if(!el)return;const assets=favoriteAssets();el.classList.toggle('hidden',!prefs.favoriteEnabled||!assets.length);if(!prefs.favoriteEnabled||!assets.length){el.innerHTML='';return}el.innerHTML=assets.map(a=>{const d=favoriteCache.get(a.symbol),value=d&&Number.isFinite(d.price)?d.price.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:4})+' '+favoriteSafe(a.currency||''): '—',pct=d&&Number.isFinite(d.change)?(d.change>=0?'+':'')+d.change.toFixed(2).replace('.',',')+'%':'—',negative=!!d&&d.change<0;return '<article class="favorite-row" role="button" tabindex="0" data-fav-open="'+favoriteSafe(a.symbol)+'" aria-label="Apri '+favoriteSafe(a.name||a.symbol)+'"><div class="favorite-name">'+favoriteLogo(a)+'<span class="favorite-name-text" title="'+favoriteSafe(a.name)+'">'+favoriteSafe(a.name||a.symbol)+'</span></div>'+favoriteSpark(d?.points,negative)+'<div class="favorite-numbers">'+value+'<small class="'+(!d?'':negative?'loss':'gain')+'">'+pct+'</small></div></article>'}).join('')}
 function renderFavoriteSettings(){const box=$('favoriteSelected');if(!box)return;const a=favoriteAssets();box.innerHTML=a.length?a.map((x,i)=>'<div class="favorite-chosen"><span>'+favoriteSafe(x.name||x.symbol)+' · '+favoriteSafe(x.symbol)+'</span><button class="btn" type="button" data-fav-remove="'+i+'">Rimuovi</button></div>').join(''):'<div class="favorite-empty">Nessun titolo selezionato.</div>';box.querySelectorAll('[data-fav-remove]').forEach(b=>b.addEventListener('click',()=>{prefs.favoriteAssets=favoriteAssets().filter((_,i)=>i!==Number(b.dataset.favRemove));savePreferences();renderFavoriteSettings();renderFavoriteBanner()}));$('favoriteEnabled').checked=!!prefs.favoriteEnabled;$('favoriteSettingsBody').classList.toggle('hidden',!prefs.favoriteEnabled)}
