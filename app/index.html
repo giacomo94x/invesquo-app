@@ -1004,7 +1004,7 @@ body[data-appearance="glass"][data-theme="light"] :is(.btn.primary,.nav-tool.act
  #favoriteBanner .favorite-row{grid-template-columns:minmax(155px,1fr) minmax(125px,2fr) minmax(112px,.75fr)!important;column-gap:10px!important}
 }
 
-/* Beta 9.9.18 — Brand news panel, accessible and compact */
+/* Beta 9.9.19 — Brand news panel, accessible and compact */
 #finholdraBrandTrigger{cursor:pointer;border-radius:10px;outline-offset:4px;touch-action:manipulation}
 #finholdraBrandTrigger:focus-visible{outline:2px solid var(--blue)}
 .finholdra-news-panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;margin:0 0 14px;padding:17px 18px;box-shadow:0 14px 35px #0002;min-width:0}
@@ -1027,8 +1027,35 @@ body[data-appearance="glass"][data-theme="light"] :is(.btn.primary,.nav-tool.act
 /* The greeting sits below the avatar and never overlays its SVG. */
 .finn-greeting{position:fixed!important;top:0;left:0;transform:none!important;z-index:9999;max-width:calc(100vw - 24px);font-size:12px!important;padding:9px 12px!important;box-shadow:0 5px 18px #0004}
 @media(max-width:480px){.finholdra-news-panel{padding:13px}.finholdra-news-brand img{width:min(235px,85%)}.finholdra-news-payoff{font-size:10px}}
+
+/* 9.9.19 — the markets view is a true full-screen sheet, not a second Home card. */
+#finholdraNewsPanel.finholdra-news-panel{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;max-height:100dvh!important;overflow-y:auto!important;overscroll-behavior:contain!important;z-index:10030!important;margin:0!important;border:0!important;border-radius:0!important;padding:calc(env(safe-area-inset-top) + 22px) max(18px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 20px) max(18px,env(safe-area-inset-left))!important;background:var(--bg)!important;box-shadow:none!important;display:block!important}
+#finholdraNewsPanel.finholdra-news-panel.hidden{display:none!important}
+body.finholdra-market-open{overflow:hidden!important;touch-action:none}
+.finholdra-news-shell{width:min(100%,860px);min-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 42px);margin:0 auto;display:flex;flex-direction:column;gap:0;touch-action:pan-y}
+.finholdra-news-head{padding-bottom:20px;border-bottom:1px solid var(--border)}
+.finholdra-news-brand img{width:min(285px,74vw)!important;max-width:100%;height:auto}
+.finholdra-news-payoff{margin:-3px 0 0!important;padding:0 0 0 4px!important}
+.finholdra-news-close{width:42px;height:42px;min-width:42px;min-height:42px}
+.finholdra-news-label{font-size:11px;line-height:1.45;letter-spacing:.09em;margin:24px 0 8px}
+.finholdra-news-item{padding:14px 0}
+.finholdra-news-item a{font-size:clamp(13px,2.1vw,16px)}
+.finholdra-news-footer{padding:12px 0 18px}
+.finholdra-market-indices{margin-top:auto;padding-top:20px;border-top:1px solid var(--border)}
+.finholdra-market-indices-heading{display:flex;flex-wrap:wrap;gap:7px;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.finholdra-market-indices-heading h3{font-size:16px;margin:0}
+.finholdra-market-indices-source{font-size:10px;color:var(--muted)}
+.finholdra-indices-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.finholdra-index{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:11px 13px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.finholdra-index strong{font-size:12px;line-height:1.35}
+.finholdra-index-main{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:5px}
+.finholdra-index-price{font-size:15px;font-weight:750;font-variant-numeric:tabular-nums}
+.finholdra-index-change{font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}
+.finholdra-index-stamp{font-size:9px;color:var(--muted)}
+@media(min-width:700px){.finholdra-indices-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:480px){#finholdraNewsPanel.finholdra-news-panel{padding-left:16px!important;padding-right:16px!important}.finholdra-news-brand img{width:min(235px,73vw)!important}.finholdra-index{padding:10px}.finholdra-index-price{font-size:13px}.finholdra-index-change{font-size:11px}}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
-<div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.18" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
+<div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.19" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
 <div class="finholdra-language-gate"><label for="finholdraLanguageWelcome">Lingua / Language</label><select id="finholdraLanguageWelcome"><option value="it">Italiano</option><option value="en">English</option></select></div><div class="account-tabs"><button type="button" id="accountTabCreate" class="selected">Nuovo profilo</button><button type="button" id="accountTabLogin">Accedi</button></div>
 <form id="accountCreateForm" autocomplete="off"><label for="localAccountName">Nome utente</label><input id="localAccountName" maxlength="36" minlength="2" placeholder="Come vuoi chiamare il profilo?" required>
@@ -1121,7 +1148,15 @@ body[data-appearance="glass"][data-theme="light"] :is(.btn.primary,.nav-tool.act
 <button class="btn primary" id="visitClose" type="button">Ricevuto, a dopo</button>
 </div>
 </div>
-<header class="top"><div class="new-header-main"><div class="new-header-brand" id="finholdraBrandTrigger" role="button" tabindex="0" aria-expanded="false" aria-controls="finholdraNewsPanel" aria-label="Finholdra · Apri le notizie dei mercati"><picture class="finholdra-wordmark"><img id="finholdraLogo" src="./finholdra-header-bianco.svg?v=9.9.18" alt="Finholdra" loading="eager"></picture></div><button aria-expanded="false" aria-label="Apri analisi performance" class="face-button" id="faceButton" type="button"><span aria-label="Performance stabile" class="performance-face" id="performanceFace" role="img"></span></button><div class="new-header-status"><span class="pill" id="count">7 strumenti</span><span aria-live="off" class="header-mood-status" id="headerMoodStatus"><i class="mood-dot"></i><span id="headerMoodText">Stabile</span></span><span class="market-status" id="marketStatus" title="Orari della borsa selezionata"><i class="market-led" id="marketLed"></i><span id="marketText">Mercati · …</span></span></div></div><div class="new-header-nav"><button aria-current="page" aria-label="Dashboard" class="gear-btn nav-tool active" id="navDashboard" title="Dashboard" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button id="navHistory" class="gear-btn nav-tool" type="button" aria-label="Storico" title="Storico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M7 15l5-5 4 3 5-7"/></svg></button><button aria-label="Investimenti" class="gear-btn nav-tool" id="navPortfolio" title="Investimenti" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M8 15h4"></path></svg></button><button aria-label="Educational" class="gear-btn nav-tool" id="navEducation" title="Impara" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C6.5 4 9.5 4 12 6v14c-2.5-2-5.5-2-9-.5V5.5Zm18 0c-3.5-1.5-6.5-1.5-9 .5v14c2.5-2 5.5-2 9-.5V5.5Z"/></svg></button><button aria-label="Nascondi importi" class="gear-btn" id="privacyShortcut" title="Mostra / nascondi importi">◉</button><button aria-label="Apri impostazioni" class="gear-btn" id="settingsShortcut" title="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3v2.1m0 13.2v2.1M3.3 12h2.1m13.2 0h2.1M5.85 5.85l1.5 1.5m9.3 9.3 1.5 1.5m0-12.3-1.5 1.5m-9.3 9.3-1.5 1.5"/><circle cx="12" cy="12" r="4.1"/></svg></button></div></header><section id="finholdraNewsPanel" class="finholdra-news-panel hidden" aria-label="Notizie dai mercati · Yahoo Finance"><div class="finholdra-news-head"><div class="finholdra-news-brand"><img id="finholdraNewsLogo" src="./finholdra-header-bianco.svg?v=9.9.18" alt="Finholdra"><p class="finholdra-news-payoff">Every investments you hold. One view.</p></div><button class="finholdra-news-close" id="finholdraNewsClose" type="button" aria-label="Chiudi notizie">×</button></div><div class="finholdra-news-label">LE ULTIME DAI MERCATI · YAHOO FINANCE</div><div id="finholdraNewsResults" aria-live="polite"><p class="finholdra-news-state">Apri per leggere le ultime notizie disponibili.</p></div><div class="finholdra-news-footer"><a href="https://finance.yahoo.com/" target="_blank" rel="noopener noreferrer">Yahoo Finance ↗</a><button type="button" id="finholdraNewsRefresh">Aggiorna notizie</button></div></section><div id="pullRefreshIndicator" class="pull-refresh-indicator" role="status" aria-live="polite" aria-hidden="true"><span class="pull-refresh-spinner">↻</span><span id="pullRefreshLabel">Trascina per aggiornare</span></div><div class="app-view" id="dashboardView"><section id="favoriteBanner" class="favorite-banner hidden" aria-label="Titoli preferiti"></section>
+<header class="top"><div class="new-header-main"><div class="new-header-brand" id="finholdraBrandTrigger" role="button" tabindex="0" aria-expanded="false" aria-controls="finholdraNewsPanel" aria-label="Finholdra · Apri le notizie dei mercati"><picture class="finholdra-wordmark"><img id="finholdraLogo" src="./finholdra-header-bianco.svg?v=9.9.19" alt="Finholdra" loading="eager"></picture></div><button aria-expanded="false" aria-label="Apri analisi performance" class="face-button" id="faceButton" type="button"><span aria-label="Performance stabile" class="performance-face" id="performanceFace" role="img"></span></button><div class="new-header-status"><span class="pill" id="count">7 strumenti</span><span aria-live="off" class="header-mood-status" id="headerMoodStatus"><i class="mood-dot"></i><span id="headerMoodText">Stabile</span></span><span class="market-status" id="marketStatus" title="Orari della borsa selezionata"><i class="market-led" id="marketLed"></i><span id="marketText">Mercati · …</span></span></div></div><div class="new-header-nav"><button aria-current="page" aria-label="Dashboard" class="gear-btn nav-tool active" id="navDashboard" title="Dashboard" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button id="navHistory" class="gear-btn nav-tool" type="button" aria-label="Storico" title="Storico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M7 15l5-5 4 3 5-7"/></svg></button><button aria-label="Investimenti" class="gear-btn nav-tool" id="navPortfolio" title="Investimenti" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M8 15h4"></path></svg></button><button aria-label="Educational" class="gear-btn nav-tool" id="navEducation" title="Impara" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C6.5 4 9.5 4 12 6v14c-2.5-2-5.5-2-9-.5V5.5Zm18 0c-3.5-1.5-6.5-1.5-9 .5v14c2.5-2 5.5-2 9-.5V5.5Z"/></svg></button><button aria-label="Nascondi importi" class="gear-btn" id="privacyShortcut" title="Mostra / nascondi importi">◉</button><button aria-label="Apri impostazioni" class="gear-btn" id="settingsShortcut" title="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3v2.1m0 13.2v2.1M3.3 12h2.1m13.2 0h2.1M5.85 5.85l1.5 1.5m9.3 9.3 1.5 1.5m0-12.3-1.5 1.5m-9.3 9.3-1.5 1.5"/><circle cx="12" cy="12" r="4.1"/></svg></button></div></header><section id="finholdraNewsPanel" class="finholdra-news-panel hidden" role="dialog" aria-modal="true" aria-labelledby="finholdraNewsTitle">
+ <div class="finholdra-news-shell">
+  <div class="finholdra-news-head"><div class="finholdra-news-brand"><img id="finholdraNewsLogo" src="./finholdra-header-bianco.svg?v=9.9.19" alt="Finholdra"><p class="finholdra-news-payoff">Every investments you hold. One view.</p></div><button class="finholdra-news-close" id="finholdraNewsClose" type="button" aria-label="Chiudi la schermata mercati">×</button></div>
+  <h2 id="finholdraNewsTitle" class="finholdra-news-label">LE ULTIME DAI MERCATI <span id="finholdraNewsSourceLabel">· YAHOO FINANCE ITALIA</span></h2>
+  <div id="finholdraNewsResults" aria-live="polite"><p class="finholdra-news-state">Apri per leggere le ultime notizie disponibili.</p></div>
+  <div class="finholdra-news-footer"><a id="finholdraNewsProviderLink" href="https://it.finance.yahoo.com/" target="_blank" rel="noopener noreferrer">Yahoo Finanza ↗</a><button type="button" id="finholdraNewsRefresh">Aggiorna notizie</button></div>
+  <section class="finholdra-market-indices" aria-label="Quotazioni principali indici"><div class="finholdra-market-indices-heading"><h3>Indici principali</h3><span class="finholdra-market-indices-source">Dati Yahoo Finance · possibili ritardi</span></div><div id="finholdraIndicesResults" aria-live="polite"><p class="finholdra-news-state">Caricamento indici…</p></div></section>
+ </div>
+</section><div id="pullRefreshIndicator" class="pull-refresh-indicator" role="status" aria-live="polite" aria-hidden="true"><span class="pull-refresh-spinner">↻</span><span id="pullRefreshLabel">Trascina per aggiornare</span></div><div class="app-view" id="dashboardView"><section id="favoriteBanner" class="favorite-banner hidden" aria-label="Titoli preferiti"></section>
 
 <div aria-live="polite" class="card face-analysis hidden" id="faceAnalysis"></div>
 <section class="card hero"><div class="eyebrow">Patrimonio delle categorie selezionate</div><div class="big nums" id="total">76.223,36 €</div><div class="flex"><strong class="gain nums" id="profit">+411,40 € (+0,54%)</strong><span class="sub" id="stamp" aria-live="polite">Ultimo aggiornamento: non disponibile</span></div></section>
@@ -1161,7 +1196,7 @@ body[data-appearance="glass"][data-theme="light"] :is(.btn.primary,.nav-tool.act
 <section class="card"><div class="section-head"><h2>Profilo locale</h2><span class="pill">Solo su questo dispositivo</span></div>
 <p class="hint">Utente attivo: <strong id="currentAccountName">—</strong>. Portafogli separati per ciascun profilo. I dati non sono sincronizzati né cifrati.</p>
 <div class="actions"><button class="btn" id="switchLocalAccount" type="button">Cambia profilo / Esci</button><button class="btn" id="openLocalPrivacy" type="button">Privacy e archiviazione</button><button class="btn danger-outline" id="deleteLocalAccount" type="button">Elimina profilo e dati</button></div>
-<p class="foot">Per trasferire dati tra profili o dispositivi usa il backup JSON in questa schermata. La password opzionale non protegge i file del browser da chi accede al dispositivo.</p></section><section class="card settings-card" id="extraSettings713"><h2>Storici e ricerca</h2>
+<p class="foot">Per trasferire dati tra profili o dispositivi usa il backup JSON in questa schermata. La password opzionale non protegge i file del browser da chi accede al dispositivo.</p></section><section class="card settings-card" id="extraSettings713"><h2>Notizie e mercati</h2><div class="setting-field"><label for="settingMarketNewsSource">Fonte delle notizie in italiano</label><select id="settingMarketNewsSource"><option value="yahoo">Yahoo Finanza · Italia</option><option value="investing">Investing.com · Italia</option></select><p class="hint">Scegli da quale fonte leggere le notizie quando tocchi il logo. Le quotazioni degli indici vengono sempre da Yahoo Finance.</p></div><h2>Storici e ricerca</h2>
 <label class="toggle"><input id="settingShowReconstructed" type="checkbox" checked> Includi i prezzi storici ricostruiti nei grafici</label><label class="toggle"><input id="settingShowBackfill" type="checkbox" checked> Mostra «Recupera prezzi» nei grafici</label>
 <p class="hint">Mostra solo rilevazioni osservate nei grafici.</p>
 <div class="setting-field"><label for="settingSearchRegion">Borse da cercare per prime</label><select id="settingSearchRegion"><option value="world">Tutto il mondo</option><option value="it">Solo Italia</option><option value="eu">Europa</option><option value="us">Solo USA</option></select><p class="hint">Filtra per mercato di quotazione. Cerca obbligazioni anche per ISIN.</p></div></section><section class="card settings-card" id="favoriteSettings"><h2>Titoli preferiti</h2><label class="toggle"><input type="checkbox" id="favoriteEnabled"> Mostra preferiti nella Home</label><div id="favoriteSettingsBody"><div class="field"><label for="favoriteQuery">Cerca per nome, ticker, ISIN o futures</label><div class="flex"><input id="favoriteQuery" class="order-select" placeholder="Es. VWCE, ES=F, oro, Nasdaq futures"><button type="button" class="btn" id="favoriteSearch">Cerca</button></div></div><section class="browse-categories" id="favoriteBrowse" aria-label="Esplora preferiti per categoria"><div class="browse-head"><strong>Esplora per categoria</strong><span class="sub">Seleziona un titolo e verifica mercato e valuta</span></div><div class="browse-tabs" id="favoriteBrowseTabs" role="group" aria-label="Categorie titoli preferiti"></div><div class="browse-list" id="favoriteBrowseList" aria-live="polite"></div></section><div class="search-results" id="favoriteSearchResults"></div><div id="favoriteSelected" class="favorites-selected"></div><p class="sub">Massimo 3 titoli, anche non posseduti. Futures: la quotazione è indicativa della serie continua e non rappresenta un contratto specifico.</p></div></section>
@@ -1978,7 +2013,7 @@ const VISIT_COUNTER_KEY='my_patrimonio_daily_opens_v1';
 const VISIT_SUPPRESS_KEY='my_patrimonio_visit_alert_disabled_v1';
 
 const PREF_KEY='invesquo_preferences_v50';
-const PREF_DEFAULTS={moodNeutral:1,moodPositive:2,moodExtreme:5,mainMarket:'MIL',palette:'classic',mascotStyle:'rounded',glow:true,theme:'dark',appearanceMode:'flat',categoryColors:{},motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',educationDetails:true,showQuoteTime:true,showLogos:true,showBackfill:true,favoriteEnabled:false,favoriteAssets:[],compact:false,autoOpenSettings:true,colors:{positive:'#22c55e',neutral:'#9fe870',negative:'#ef4444'}};
+const PREF_DEFAULTS={moodNeutral:1,moodPositive:2,moodExtreme:5,mainMarket:'MIL',newsSource:'yahoo',palette:'classic',mascotStyle:'rounded',glow:true,theme:'dark',appearanceMode:'flat',categoryColors:{},motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',educationDetails:true,showQuoteTime:true,showLogos:true,showBackfill:true,favoriteEnabled:false,favoriteAssets:[],compact:false,autoOpenSettings:true,colors:{positive:'#22c55e',neutral:'#9fe870',negative:'#ef4444'}};
 let prefs={...PREF_DEFAULTS,colors:{...PREF_DEFAULTS.colors}};
 try{const x=JSON.parse(store.getItem(PREF_KEY));if(x&&typeof x==='object'){prefs={...prefs,...x,colors:{...PREF_DEFAULTS.colors,...(x.colors||{})}}}}catch(e){}
 // Preserve legacy opt-out, but offer an accessible toggle to re-enable alerts.
@@ -1997,7 +2032,7 @@ function applyPreferences(){
  renderCategoryColorSettings();document.body.dataset.theme=effectiveTheme();document.body.dataset.appearance=prefs.appearanceMode==='glass'?'glass':'flat';const appearanceControl=$('settingAppearanceMode');if(appearanceControl)appearanceControl.value=document.body.dataset.appearance;document.body.classList.toggle('mascot-glow',prefs.glow!==false);document.body.dataset.mascotStyle=prefs.mascotStyle||'rounded';document.body.classList.toggle('motion-normal',prefs.motion==='normal');document.body.classList.toggle('motion-off',prefs.motion==='off');document.body.classList.toggle('privacy-on',!!prefs.privacy);document.body.classList.toggle('compact-cards',!!prefs.compact);$('privacyShortcut').textContent=prefs.privacy?'◉':'◎';$('privacyShortcut').setAttribute('aria-label',prefs.privacy?'Mostra importi':'Nascondi importi');
  document.querySelector('meta[name="theme-color"]').content=effectiveTheme()==='light'?'#edf2f8':effectiveTheme()==='ocean'?'#091b2a':'#0b1426';
  $(`settingTheme`).value=prefs.theme;$(`settingMotion`).value=prefs.motion;$(`settingWarnings`).checked=prefs.warnings;$(`settingLimit`).value=String([4,6,10].includes(Number(prefs.limit))?prefs.limit:4);$(`settingPrivacy`).checked=!!prefs.privacy;$(`settingRefreshMinutes`).value=String([1,5,15,30].includes(Number(prefs.refreshMinutes))?prefs.refreshMinutes:1);$(`settingHistoryDefault`).value=prefs.historyDefault||'30';$(`settingShowQuoteTime`).checked=!!prefs.showQuoteTime;$(`settingWealthGraph`).checked=prefs.wealthGraph!==false;$(`settingShowLogos`).checked=prefs.showLogos!==false;$(`settingCompact`).checked=!!prefs.compact;$(`settingAutoOpenSettings`).checked=prefs.autoOpenSettings!==false;
- for(const [id,key] of [['settingMoodNeutral','moodNeutral'],['settingMoodPositive','moodPositive'],['settingMoodExtreme','moodExtreme']]){const field=$(id);if(field)field.value=String(prefs[key]??PREF_DEFAULTS[key]);} $('settingPalette').value=prefs.palette||'classic';$('settingMascotStyle').value=prefs.mascotStyle||'rounded';$('settingGlow').checked=prefs.glow!==false;
+ for(const [id,key] of [['settingMoodNeutral','moodNeutral'],['settingMoodPositive','moodPositive'],['settingMoodExtreme','moodExtreme']]){const field=$(id);if(field)field.value=String(prefs[key]??PREF_DEFAULTS[key]);} $('settingMarketNewsSource').value=prefs.newsSource==='investing'?'investing':'yahoo';$('settingPalette').value=prefs.palette||'classic';$('settingMascotStyle').value=prefs.mascotStyle||'rounded';$('settingGlow').checked=prefs.glow!==false;
  const visitMascot=$('visitMascot');if(visitMascot)visitMascot.innerHTML=mascotSVG('negative',prefs.colors.negative,true);
  updateVisitStatus();
 }
@@ -2017,6 +2052,7 @@ function savePreferences(){try{store.setItem(PREF_KEY,JSON.stringify(prefs));sto
 function updateVisitStatus(){let n=0;try{const x=JSON.parse(store.getItem(VISIT_COUNTER_KEY));if(x&&x.date===getVisitDay())n=Number(x.count)||0}catch(e){}$('visitToday').textContent='Ingressi oggi: '+n}
 $('settingTheme').onchange=e=>{prefs.theme=e.target.value;savePreferences()};
 $('settingAppearanceMode').onchange=e=>{prefs.appearanceMode=e.target.value==='glass'?'glass':'flat';savePreferences()};
+$('settingMarketNewsSource').onchange=e=>{prefs.newsSource=e.target.value==='investing'?'investing':'yahoo';savePreferences()};
 $('settingCategoryColors').addEventListener('input',e=>{const control=e.target.closest('[data-category-color]');if(!control||!validColor(control.value))return;const category=control.dataset.categoryColor;if(!CAT.some(c=>c[0]===category))return;prefs.categoryColors={...(prefs.categoryColors||{}),[category]:control.value};savePreferences();});
 $('settingCategoryColorsReset').onclick=()=>{prefs.categoryColors={};savePreferences()};
 $('settingMotion').onchange=e=>{prefs.motion=e.target.value;savePreferences()};
@@ -4199,8 +4235,8 @@ reportPopulatePeriods();
  function setLanguage(value){lang=value==='en'?'en':'it';localStorage.setItem(LANG_KEY,lang);updateLanguage()}
  document.querySelectorAll('select[id^="finholdraLanguage"]').forEach(el=>el.addEventListener('change',e=>setLanguage(e.target.value)));
  updateLanguage();obs.observe(document.body,{subtree:true,childList:true,characterData:true});
- function updateLogo(){let t=document.body.dataset.theme||'dark';let logo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.18':'./finholdra-header-bianco.svg?v=9.9.18';
-  const header=$('finholdraLogo'),gate=document.querySelector('.finholdra-gate-logo');const headerLogo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.18':'./finholdra-header-bianco.svg?v=9.9.18';if(header&&header.getAttribute('src')!==headerLogo)header.src=headerLogo;if(gate&&gate.getAttribute('src')!==logo)gate.src=logo;
+ function updateLogo(){let t=document.body.dataset.theme||'dark';let logo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.19':'./finholdra-header-bianco.svg?v=9.9.19';
+  const header=$('finholdraLogo'),gate=document.querySelector('.finholdra-gate-logo');const headerLogo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.19':'./finholdra-header-bianco.svg?v=9.9.19';if(header&&header.getAttribute('src')!==headerLogo)header.src=headerLogo;if(gate&&gate.getAttribute('src')!==logo)gate.src=logo;
  }
  updateLogo();new MutationObserver(updateLogo).observe(document.body,{attributes:true,attributeFilter:['data-theme']});
  document.addEventListener('click',e=>{const el=e.target.closest('[data-fav-open]');if(!el)return;openFavorite(el.dataset.favOpen)});
@@ -4229,41 +4265,56 @@ reportPopulatePeriods();
 })();
 </script>
 <script>
-/* 9.9.18 — Home brand panel with fresh Yahoo Finance market headlines. */
+/* Finholdra 9.9.19 — full-screen markets/news, selectable Italian RSS and Yahoo indices. */
 (function(){
  const panel=document.getElementById('finholdraNewsPanel');
  const brand=document.getElementById('finholdraBrandTrigger');
  const results=document.getElementById('finholdraNewsResults');
+ const indexes=document.getElementById('finholdraIndicesResults');
  const logo=document.getElementById('finholdraNewsLogo');
- if(!panel||!brand||!results)return;
- let lastLoaded=0,loading=false,requestId=0;
+ const close=document.getElementById('finholdraNewsClose');
+ if(!panel||!brand||!results||!indexes)return;
+ let newsCache={source:'',at:0},indexCacheAt=0,newsLoading=false,indexLoading=false;
  const safe=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const stamp=value=>{try{return new Date(value).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}catch(_){return ''}};
- function synchronizeLogo(){const isLight=document.body.dataset.theme==='light';if(logo)logo.src=isLight?'./finholdra-header-blu.svg?v=9.9.18':'./finholdra-header-bianco.svg?v=9.9.18'}
+ const fmt=n=>new Intl.NumberFormat('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+ const source=()=>prefs.newsSource==='investing'?'investing':'yahoo';
+ function synchronizeLogo(){if(logo)logo.src=document.body.dataset.theme==='light'?'./finholdra-header-blu.svg?v=9.9.19':'./finholdra-header-bianco.svg?v=9.9.19'}
+ function updateProviderLinks(){const isInvesting=source()==='investing';document.getElementById('finholdraNewsSourceLabel').textContent=isInvesting?'· INVESTING.COM ITALIA':'· YAHOO FINANZA ITALIA';const link=document.getElementById('finholdraNewsProviderLink');link.href=isInvesting?'https://it.investing.com/news/':'https://it.finance.yahoo.com/';link.textContent=isInvesting?'Investing.com Italia ↗':'Yahoo Finanza ↗';}
  async function getNews(force=false){
-  if(loading||(!force&&Date.now()-lastLoaded<10*60*1000))return;
-  loading=true;const id=++requestId;
-  results.innerHTML='<p class="finholdra-news-state">Caricamento delle notizie Yahoo Finance…</p>';
+  const src=source();if(newsLoading||(!force&&newsCache.source===src&&Date.now()-newsCache.at<10*60*1000))return;
+  newsLoading=true;updateProviderLinks();results.innerHTML='<p class="finholdra-news-state">Caricamento delle notizie in italiano…</p>';
   try{
-   const response=await fetch('/.netlify/functions/market-news',{cache:'no-store',headers:{Accept:'application/json'}});
-   if(!response.ok)throw Error('Servizio notizie non disponibile ('+response.status+')');
-   const json=await response.json();if(id!==requestId)return;
-   const items=Array.isArray(json.articles)?json.articles.slice(0,4):[];
-   if(!items.length)throw Error('Nessuna notizia recente disponibile');
-   results.innerHTML=items.map(n=>{const u=String(n.url||'');if(!/^https:\/\//.test(u))return '';
-    return '<article class="finholdra-news-item"><a href="'+safe(u)+'" target="_blank" rel="noopener noreferrer">'+safe(n.title||'Notizia')+'</a><div class="finholdra-news-meta">'+safe(n.source||'Yahoo Finance')+(n.publishedAt?' · '+safe(stamp(n.publishedAt)):'')+'</div></article>';
-   }).join('');lastLoaded=Date.now();
-  }catch(e){if(id!==requestId)return;results.innerHTML='<p class="finholdra-news-state">Notizie Yahoo Finance momentaneamente non disponibili. Riprova con Aggiorna notizie.</p>'}
-  finally{loading=false}
+   const response=await fetch('/.netlify/functions/market-news?source='+encodeURIComponent(src),{cache:'no-store',headers:{Accept:'application/json'}});
+   if(!response.ok)throw Error('Notizie non disponibili');const payload=await response.json();
+   if(!panel.classList.contains('hidden')&&source()===src){const items=Array.isArray(payload.articles)?payload.articles.slice(0,4):[];
+    if(items.length){results.innerHTML=items.map(n=>{const url=String(n.url||'');if(!/^https:\/\//i.test(url))return '';return '<article class="finholdra-news-item"><a href="'+safe(url)+'" target="_blank" rel="noopener noreferrer">'+safe(n.title||'Notizia')+'</a><div class="finholdra-news-meta">'+safe(n.source||'')+(n.publishedAt?' · '+safe(stamp(n.publishedAt)):'')+'</div></article>';}).join('');}
+    else results.innerHTML='<p class="finholdra-news-state">La fonte non ha restituito notizie italiane recenti. Apri il sito della fonte oppure riprova più tardi.</p>';
+    newsCache={source:src,at:Date.now()};}
+  }catch(_){if(!panel.classList.contains('hidden'))results.innerHTML='<p class="finholdra-news-state">Notizie non disponibili dalla fonte selezionata. Riprova più tardi.</p>'}
+  finally{newsLoading=false;}
  }
- function toggle(){const open=panel.classList.contains('hidden');if(open&&document.getElementById('dashboardView')?.classList.contains('hidden'))document.getElementById('navDashboard')?.click();panel.classList.toggle('hidden',!open);brand.setAttribute('aria-expanded',String(open));if(open){synchronizeLogo();void getNews();}}
- document.querySelectorAll('.new-header-nav button').forEach(b=>b.addEventListener('click',()=>{panel.classList.add('hidden');brand.setAttribute('aria-expanded','false')}));
- brand.addEventListener('click',toggle);
- brand.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});
- document.getElementById('finholdraNewsClose')?.addEventListener('click',()=>{panel.classList.add('hidden');brand.setAttribute('aria-expanded','false');brand.focus()});
- document.getElementById('finholdraNewsRefresh')?.addEventListener('click',()=>void getNews(true));
- new MutationObserver(synchronizeLogo).observe(document.body,{attributes:true,attributeFilter:['data-theme']});
- synchronizeLogo();
+ async function getIndices(force=false){
+  if(indexLoading||(!force&&Date.now()-indexCacheAt<5*60*1000))return;
+  indexLoading=true;indexes.innerHTML='<p class="finholdra-news-state">Aggiornamento indici principali…</p>';
+  try{
+   const response=await fetch('/.netlify/functions/market-indices',{cache:'no-store',headers:{Accept:'application/json'}});
+   if(!response.ok)throw Error('Indici non disponibili');const payload=await response.json();const items=Array.isArray(payload.indices)?payload.indices:[];
+   if(!items.length)throw Error('Nessuna quotazione verificata');
+   indexes.innerHTML='<div class="finholdra-indices-grid">'+items.map(q=>{const change=Number(q.changePercent),v=Number(q.price);if(!Number.isFinite(v)||!Number.isFinite(change))return '';const color=change>0?'gain':change<0?'loss':'';const pct=(change>0?'+':'')+fmt(change)+'%';return '<div class="finholdra-index"><strong>'+safe(q.name)+'</strong><div class="finholdra-index-main"><span class="finholdra-index-price">'+fmt(v)+'</span><span class="finholdra-index-change '+color+'">'+pct+'</span></div><span class="finholdra-index-stamp">'+safe(q.marketTime?stamp(q.marketTime):'Ultima rilevazione disponibile')+'</span></div>';}).join('')+'</div>';
+   indexCacheAt=Date.now();
+  }catch(_){indexes.innerHTML='<p class="finholdra-news-state">Quotazioni degli indici momentaneamente non disponibili.</p>'}
+  finally{indexLoading=false;}
+ }
+ let focusBefore=null;
+ function show(){focusBefore=document.activeElement;synchronizeLogo();updateProviderLinks();panel.classList.remove('hidden');brand.setAttribute('aria-expanded','true');document.body.classList.add('finholdra-market-open');panel.scrollTop=0;close.focus();void getNews();void getIndices();}
+ function hide(){panel.classList.add('hidden');brand.setAttribute('aria-expanded','false');document.body.classList.remove('finholdra-market-open');(focusBefore&&focusBefore.isConnected?focusBefore:brand).focus();}
+ brand.addEventListener('click',()=>{if(panel.classList.contains('hidden'))show();else hide()});
+ brand.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(panel.classList.contains('hidden'))show();else hide()}});
+ close.addEventListener('click',hide);
+ document.getElementById('finholdraNewsRefresh')?.addEventListener('click',()=>{void getNews(true);void getIndices(true)});
+ document.addEventListener('keydown',e=>{if(!panel.classList.contains('hidden')&&e.key==='Escape'){e.preventDefault();hide()}});
+ new MutationObserver(synchronizeLogo).observe(document.body,{attributes:true,attributeFilter:['data-theme']});synchronizeLogo();
 })();
 </script>
 <script>
