@@ -717,7 +717,7 @@ body.motion-off .finn-scene-anticipation svg .finn-left-arm,body.motion-off .fin
 .face-button.finn-waving .performance-face{animation:finnWaveHello .85s ease-in-out both}
 @media(prefers-reduced-motion:reduce){.face-button.finn-waving .performance-face{animation:none}}
 
-/* Beta 9.9.16: readable system menus in desktop Liquid Glass */
+/* Beta 9.9.17: readable system menus in desktop Liquid Glass */
 @media(hover:hover) and (pointer:fine){
  body[data-appearance="glass"] select,body[data-appearance="glass"] select.order-select{color:var(--text)!important;opacity:1!important}
  body[data-appearance="glass"] select option,body[data-appearance="glass"] select optgroup{color:#f5f8fe!important;background-color:#16263f!important;font-weight:550}
@@ -730,10 +730,21 @@ body.motion-off .finn-scene-anticipation svg .finn-left-arm,body.motion-off .fin
 .donut-slices{position:absolute;inset:0;z-index:0;width:100%;height:100%;overflow:visible;transform:rotate(var(--donut-rotation,0deg));transition:transform .36s cubic-bezier(.2,.65,.2,1);pointer-events:none}
 .donut.is-dragging .donut-slices{transition:none}
 .donut-slice{transition:stroke-width .18s ease,filter .18s ease;transform-box:view-box;transform-origin:50% 50%;pointer-events:none}
-.donut-slice.is-selected{filter:drop-shadow(0 3px 4px rgba(0,0,0,.24))}
+.donut-slice.is-selected{filter:none}
 .donut::after{pointer-events:none}
 .donut-inner{pointer-events:none}
 @media(prefers-reduced-motion:reduce){.donut-slices,.donut-slice{transition:none}}
+
+/* Beta 9.9.17: category palette, precise donut feedback and isolated touch gestures. */
+.category-color-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+.category-color-item{display:flex;align-items:center;justify-content:space-between;min-width:0;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--panel2);font-size:12px}
+.category-color-item span{overflow-wrap:anywhere}
+.category-color-item input[type="color"]{flex:0 0 40px;width:40px;height:34px;padding:2px;border:1px solid var(--border);border-radius:7px;background:transparent;cursor:pointer}
+@media(max-width:370px){.category-color-grid{grid-template-columns:1fr}}
+#donut,#donut .donut-slices,#donut .donut-slice{touch-action:none!important;overscroll-behavior:contain}
+.donut-slice.is-selected{filter:none!important;stroke:none!important;transition:transform .16s ease-out}
+.donut-slices{filter:none!important;overflow:visible}
+
 /* Three clear settings areas instead of a long list of separate cards. */
 .settings-categories{display:grid;gap:12px;margin:12px 0}
 .settings-macro{min-width:0;border:1px solid var(--border);border-radius:16px;background:var(--panel);overflow:hidden}
@@ -748,7 +759,6 @@ body.motion-off .finn-scene-anticipation svg .finn-left-arm,body.motion-off .fin
 .settings-macro-note{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-top:3px}
 .setting-title-color-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
 .setting-title-color-row input[type=color]{width:55px;height:40px;padding:3px;border:1px solid var(--border);border-radius:10px;background:var(--panel2);cursor:pointer}
-body[data-title-custom="true"] :is(.card h2,.card h3,.settings-screen-head h1,.asset-name,.legend-title,.allocation-detail-name,.sub-screen-head h2){color:var(--fh-title-color)!important}
 
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
@@ -993,8 +1003,32 @@ body[data-appearance="glass"][data-theme="light"] :is(.btn.primary,.nav-tool.act
 @media (min-width:768px) and (max-width:960px) and (hover:hover){
  #favoriteBanner .favorite-row{grid-template-columns:minmax(155px,1fr) minmax(125px,2fr) minmax(112px,.75fr)!important;column-gap:10px!important}
 }
+
+/* Beta 9.9.18 — Brand news panel, accessible and compact */
+#finholdraBrandTrigger{cursor:pointer;border-radius:10px;outline-offset:4px;touch-action:manipulation}
+#finholdraBrandTrigger:focus-visible{outline:2px solid var(--blue)}
+.finholdra-news-panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;margin:0 0 14px;padding:17px 18px;box-shadow:0 14px 35px #0002;min-width:0}
+.finholdra-news-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.finholdra-news-brand{min-width:0;flex:1;display:flex;flex-direction:column;align-items:flex-start}
+.finholdra-news-brand img{display:block;width:min(265px,85%);height:auto;object-fit:contain;object-position:left center}
+.finholdra-news-payoff{margin:0;color:var(--muted);font-weight:600;font-size:11px;line-height:1.4;text-align:left;letter-spacing:.01em}
+.finholdra-news-close{flex:none;width:36px;height:36px;background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:12px;font-size:26px;cursor:pointer;line-height:1}
+.finholdra-news-label{font-size:10px;font-weight:750;letter-spacing:.11em;color:var(--muted);margin:17px 0 5px}
+.finholdra-news-item{padding:12px 0;border-top:1px solid var(--border);min-width:0}
+.finholdra-news-item a{font-size:13px;line-height:1.45;font-weight:700;text-decoration:none;color:var(--text);display:block;overflow-wrap:anywhere}
+.finholdra-news-item a:hover{text-decoration:underline}
+.finholdra-news-meta{color:var(--muted);font-size:10px;margin-top:5px}
+.finholdra-news-state{font-size:12px;color:var(--muted);padding:14px 0;margin:0}
+.finholdra-news-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px;flex-wrap:wrap;font-size:11px}
+.finholdra-news-footer button{background:var(--panel2);border:1px solid var(--border);padding:8px 10px;border-radius:9px;color:var(--text);cursor:pointer;font:650 11px Montserrat,sans-serif}
+/* The logo and payoff on the profile gate share one left edge. */
+.account-panel .finholdra-gate-logo{width:min(310px,100%);max-height:none;object-fit:contain;object-position:left center;margin:0 0 0 0}
+.account-panel .finholdra-payoff{margin:0 0 19px;text-align:left;line-height:1.4;font-size:12px}
+/* The greeting sits below the avatar and never overlays its SVG. */
+.finn-greeting{position:fixed!important;top:0;left:0;transform:none!important;z-index:9999;max-width:calc(100vw - 24px);font-size:12px!important;padding:9px 12px!important;box-shadow:0 5px 18px #0004}
+@media(max-width:480px){.finholdra-news-panel{padding:13px}.finholdra-news-brand img{width:min(235px,85%)}.finholdra-news-payoff{font-size:10px}}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
-<div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-bianco.svg" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
+<div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.18" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
 <div class="finholdra-language-gate"><label for="finholdraLanguageWelcome">Lingua / Language</label><select id="finholdraLanguageWelcome"><option value="it">Italiano</option><option value="en">English</option></select></div><div class="account-tabs"><button type="button" id="accountTabCreate" class="selected">Nuovo profilo</button><button type="button" id="accountTabLogin">Accedi</button></div>
 <form id="accountCreateForm" autocomplete="off"><label for="localAccountName">Nome utente</label><input id="localAccountName" maxlength="36" minlength="2" placeholder="Come vuoi chiamare il profilo?" required>
@@ -1087,7 +1121,7 @@ body[data-appearance="glass"][data-theme="light"] :is(.btn.primary,.nav-tool.act
 <button class="btn primary" id="visitClose" type="button">Ricevuto, a dopo</button>
 </div>
 </div>
-<header class="top"><div class="new-header-main"><div class="new-header-brand"><picture class="finholdra-wordmark"><img id="finholdraLogo" src="./finholdra-header-bianco.svg?v=9.9.15" alt="Finholdra" loading="eager"></picture></div><button aria-expanded="false" aria-label="Apri analisi performance" class="face-button" id="faceButton" type="button"><span aria-label="Performance stabile" class="performance-face" id="performanceFace" role="img"></span></button><div class="new-header-status"><span class="pill" id="count">7 strumenti</span><span aria-live="off" class="header-mood-status" id="headerMoodStatus"><i class="mood-dot"></i><span id="headerMoodText">Stabile</span></span><span class="market-status" id="marketStatus" title="Orari della borsa selezionata"><i class="market-led" id="marketLed"></i><span id="marketText">Mercati · …</span></span></div></div><div class="new-header-nav"><button aria-current="page" aria-label="Dashboard" class="gear-btn nav-tool active" id="navDashboard" title="Dashboard" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button id="navHistory" class="gear-btn nav-tool" type="button" aria-label="Storico" title="Storico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M7 15l5-5 4 3 5-7"/></svg></button><button aria-label="Investimenti" class="gear-btn nav-tool" id="navPortfolio" title="Investimenti" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M8 15h4"></path></svg></button><button aria-label="Educational" class="gear-btn nav-tool" id="navEducation" title="Impara" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C6.5 4 9.5 4 12 6v14c-2.5-2-5.5-2-9-.5V5.5Zm18 0c-3.5-1.5-6.5-1.5-9 .5v14c2.5-2 5.5-2 9-.5V5.5Z"/></svg></button><button aria-label="Nascondi importi" class="gear-btn" id="privacyShortcut" title="Mostra / nascondi importi">◉</button><button aria-label="Apri impostazioni" class="gear-btn" id="settingsShortcut" title="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3v2.1m0 13.2v2.1M3.3 12h2.1m13.2 0h2.1M5.85 5.85l1.5 1.5m9.3 9.3 1.5 1.5m0-12.3-1.5 1.5m-9.3 9.3-1.5 1.5"/><circle cx="12" cy="12" r="4.1"/></svg></button></div></header><div id="pullRefreshIndicator" class="pull-refresh-indicator" role="status" aria-live="polite" aria-hidden="true"><span class="pull-refresh-spinner">↻</span><span id="pullRefreshLabel">Trascina per aggiornare</span></div><div class="app-view" id="dashboardView"><section id="favoriteBanner" class="favorite-banner hidden" aria-label="Titoli preferiti"></section>
+<header class="top"><div class="new-header-main"><div class="new-header-brand" id="finholdraBrandTrigger" role="button" tabindex="0" aria-expanded="false" aria-controls="finholdraNewsPanel" aria-label="Finholdra · Apri le notizie dei mercati"><picture class="finholdra-wordmark"><img id="finholdraLogo" src="./finholdra-header-bianco.svg?v=9.9.18" alt="Finholdra" loading="eager"></picture></div><button aria-expanded="false" aria-label="Apri analisi performance" class="face-button" id="faceButton" type="button"><span aria-label="Performance stabile" class="performance-face" id="performanceFace" role="img"></span></button><div class="new-header-status"><span class="pill" id="count">7 strumenti</span><span aria-live="off" class="header-mood-status" id="headerMoodStatus"><i class="mood-dot"></i><span id="headerMoodText">Stabile</span></span><span class="market-status" id="marketStatus" title="Orari della borsa selezionata"><i class="market-led" id="marketLed"></i><span id="marketText">Mercati · …</span></span></div></div><div class="new-header-nav"><button aria-current="page" aria-label="Dashboard" class="gear-btn nav-tool active" id="navDashboard" title="Dashboard" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"></path></svg></button><button id="navHistory" class="gear-btn nav-tool" type="button" aria-label="Storico" title="Storico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17M7 15l5-5 4 3 5-7"/></svg></button><button aria-label="Investimenti" class="gear-btn nav-tool" id="navPortfolio" title="Investimenti" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="5"></rect><path d="M3 10h18M8 15h4"></path></svg></button><button aria-label="Educational" class="gear-btn nav-tool" id="navEducation" title="Impara" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C6.5 4 9.5 4 12 6v14c-2.5-2-5.5-2-9-.5V5.5Zm18 0c-3.5-1.5-6.5-1.5-9 .5v14c2.5-2 5.5-2 9-.5V5.5Z"/></svg></button><button aria-label="Nascondi importi" class="gear-btn" id="privacyShortcut" title="Mostra / nascondi importi">◉</button><button aria-label="Apri impostazioni" class="gear-btn" id="settingsShortcut" title="Impostazioni"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.3v2.1m0 13.2v2.1M3.3 12h2.1m13.2 0h2.1M5.85 5.85l1.5 1.5m9.3 9.3 1.5 1.5m0-12.3-1.5 1.5m-9.3 9.3-1.5 1.5"/><circle cx="12" cy="12" r="4.1"/></svg></button></div></header><section id="finholdraNewsPanel" class="finholdra-news-panel hidden" aria-label="Notizie dai mercati · Yahoo Finance"><div class="finholdra-news-head"><div class="finholdra-news-brand"><img id="finholdraNewsLogo" src="./finholdra-header-bianco.svg?v=9.9.18" alt="Finholdra"><p class="finholdra-news-payoff">Every investments you hold. One view.</p></div><button class="finholdra-news-close" id="finholdraNewsClose" type="button" aria-label="Chiudi notizie">×</button></div><div class="finholdra-news-label">LE ULTIME DAI MERCATI · YAHOO FINANCE</div><div id="finholdraNewsResults" aria-live="polite"><p class="finholdra-news-state">Apri per leggere le ultime notizie disponibili.</p></div><div class="finholdra-news-footer"><a href="https://finance.yahoo.com/" target="_blank" rel="noopener noreferrer">Yahoo Finance ↗</a><button type="button" id="finholdraNewsRefresh">Aggiorna notizie</button></div></section><div id="pullRefreshIndicator" class="pull-refresh-indicator" role="status" aria-live="polite" aria-hidden="true"><span class="pull-refresh-spinner">↻</span><span id="pullRefreshLabel">Trascina per aggiornare</span></div><div class="app-view" id="dashboardView"><section id="favoriteBanner" class="favorite-banner hidden" aria-label="Titoli preferiti"></section>
 
 <div aria-live="polite" class="card face-analysis hidden" id="faceAnalysis"></div>
 <section class="card hero"><div class="eyebrow">Patrimonio delle categorie selezionate</div><div class="big nums" id="total">76.223,36 €</div><div class="flex"><strong class="gain nums" id="profit">+411,40 € (+0,54%)</strong><span class="sub" id="stamp" aria-live="polite">Ultimo aggiornamento: non disponibile</span></div></section>
@@ -1114,7 +1148,7 @@ body[data-appearance="glass"][data-theme="light"] :is(.btn.primary,.nav-tool.act
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 9.9.16</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 9.9.17</strong><span class="sub">Profili locali · nessuna sincronizzazione cloud</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -1136,7 +1170,7 @@ body[data-appearance="glass"][data-theme="light"] :is(.btn.primary,.nav-tool.act
 <details class="setting-group" open=""><summary>Aspetto e colori</summary><div class="setting-field"><label for="finholdraLanguageSetting">Lingua / Language</label><select id="finholdraLanguageSetting"><option value="it">Italiano</option><option value="en">English</option></select></div>
 <div class="setting-field"><label for="settingTheme">Tema dell'app</label><select id="settingTheme"><option value="dark">Blu notte (attuale)</option><option value="ocean">Blu oceano</option><option value="light">Chiaro</option><option value="amethyst">Ametista</option><option value="graphite">Grafite</option><option value="pine">Verde petrolio</option><option value="system">Automatico (iPhone)</option></select></div>
 <div class="setting-field"><label for="settingAppearanceMode">Stile dell'interfaccia e dei menu</label><select id="settingAppearanceMode" aria-label="Stile dell'interfaccia"><option value="flat">Flat · essenziale</option><option value="glass">Liquid Glass · vetro e trasparenze</option></select><p class="hint">Flat mantiene la grafica classica. Liquid Glass aggiunge vetro satinato, sfocature e profondità a schede, pulsanti e menu. I menu aperti su iPhone restano gestiti da iOS.</p></div>
-<div class="setting-field"><label for="settingTitleColor">Colore dei titoli</label><div class="setting-title-color-row"><input type="color" id="settingTitleColor" value="#B9F2D6" aria-label="Scegli il colore dei titoli"><button type="button" class="btn" id="settingTitleColorReset">Predefinito</button></div><p class="hint">Personalizza intestazioni e nomi degli strumenti. Il logo originale rimane invariato.</p></div><div class="setting-field"><label for="settingPalette">Palette mascotte</label><select id="settingPalette"><option value="classic">Classica · verde / menta / rosso</option><option value="ocean">Oceano · turchese / azzurro / blu</option><option value="royal">Royal · blu / celeste / indaco</option><option value="forest">Bosco · smeraldo / lime / corallo</option></select></div><div class="mood-settings"><strong>Soglie emotive sul rendimento lordo (%)</strong><p class="hint">Soglie di reazione della mascotte.</p><div class="mood-setting-grid"><label>Zona neutra ± %<input id="settingMoodNeutral" type="number" min="0" max="50" step="0.1" value="1"/></label><label>Felice/arrabbiata ± %<input id="settingMoodPositive" type="number" min="0.1" max="100" step="0.1" value="2"/></label><label>Super felice/triste ± %<input id="settingMoodExtreme" type="number" min="0.2" max="200" step="0.1" value="5"/></label></div></div><div class="setting-field"><label for="settingMascotStyle">Modello mascotte</label><select id="settingMascotStyle"><option value="rounded">Candela classica</option><option value="slim">Candela sottile</option><option value="square">Candela geometrica</option></select></div><label class="toggle setting-toggle"><input id="settingGlow" type="checkbox" checked> Alone luminoso intorno alla mascotte</label><div class="setting-field"><label for="settingMotion">Movimento mascotte</label><select id="settingMotion"><option value="lively">Vivace</option><option value="normal">Normale</option><option value="off">Disattivato</option></select></div>
+<div class="setting-field" id="settingCategoryColorsSection"><label>Colori delle categorie del grafico</label><p class="hint">Personalizza le fette del donut e la legenda. Le intestazioni e i titoli dell'app mantengono il colore del tema.</p><div class="category-color-grid" id="settingCategoryColors"></div><button type="button" class="btn" id="settingCategoryColorsReset">Ripristina tutti i colori</button></div><div class="setting-field"><label for="settingPalette">Palette mascotte</label><select id="settingPalette"><option value="classic">Classica · verde / menta / rosso</option><option value="ocean">Oceano · turchese / azzurro / blu</option><option value="royal">Royal · blu / celeste / indaco</option><option value="forest">Bosco · smeraldo / lime / corallo</option></select></div><div class="mood-settings"><strong>Soglie emotive sul rendimento lordo (%)</strong><p class="hint">Soglie di reazione della mascotte.</p><div class="mood-setting-grid"><label>Zona neutra ± %<input id="settingMoodNeutral" type="number" min="0" max="50" step="0.1" value="1"/></label><label>Felice/arrabbiata ± %<input id="settingMoodPositive" type="number" min="0.1" max="100" step="0.1" value="2"/></label><label>Super felice/triste ± %<input id="settingMoodExtreme" type="number" min="0.2" max="200" step="0.1" value="5"/></label></div></div><div class="setting-field"><label for="settingMascotStyle">Modello mascotte</label><select id="settingMascotStyle"><option value="rounded">Candela classica</option><option value="slim">Candela sottile</option><option value="square">Candela geometrica</option></select></div><label class="toggle setting-toggle"><input id="settingGlow" type="checkbox" checked> Alone luminoso intorno alla mascotte</label><div class="setting-field"><label for="settingMotion">Movimento mascotte</label><select id="settingMotion"><option value="lively">Vivace</option><option value="normal">Normale</option><option value="off">Disattivato</option></select></div>
 </details>
 <details class="setting-group"><summary>Privacy e visualizzazione</summary>
 <label class="toggle setting-toggle"><input id="settingPrivacy" type="checkbox"/> Nascondi importi e dettagli sensibili</label>
@@ -1732,7 +1766,7 @@ function activeAssets(){return state.assets.filter(a=>filter[a.cat]&&Number(a.q)
 function totalCapital(){return activeAssets().reduce((s,a)=>s+cap(a),0)}
 function totalValue(){return activeAssets().reduce((s,a)=>s+val(a),0)}
 function notice(msg,warning){$('notice').textContent=msg;$('notice').className='notice'+(warning?' warn':'')}
-function groups(){return CAT.filter(([c])=>filter[c]).map(([name,color])=>{const list=state.assets.filter(a=>a.cat===name),c=list.reduce((s,a)=>s+cap(a),0),v=list.reduce((s,a)=>s+val(a),0);return{name,color,capital:c,value:v,ret:c?(v-c)/c:0}})}
+function groups(){return CAT.filter(([c])=>filter[c]).map(([name,defaultColor])=>{const custom=prefs.categoryColors?.[name],color=validColor(custom)?custom:defaultColor;const list=state.assets.filter(a=>a.cat===name),c=list.reduce((s,a)=>s+cap(a),0),v=list.reduce((s,a)=>s+val(a),0);return{name,color,capital:c,value:v,ret:c?(v-c)/c:0}})}
 
 let donutRotationDeg=0,donutGesture=null,donutSuppressClick=false;
 function donutArcPath(cx,cy,outer,inner,startDeg,endDeg){
@@ -1745,9 +1779,9 @@ function renderInteractiveDonut(full,den){
  let offset=0;
  const slices=full.filter(g=>(mode==='now'?g.value:g.capital)>0).map(g=>{
   const weight=(mode==='now'?g.value:g.capital)/den,from=offset,to=offset+weight*360;offset=to;
-  const middle=(from+to)/2*Math.PI/180,selected=g.name===allocationSelectedCategory;
-  const dx=selected?5*Math.sin(middle):0,dy=selected?-5*Math.cos(middle):0;
-  return `<path class="donut-slice${selected?' is-selected':''}" d="${donutArcPath(130,130,125,63,from,Math.min(to,359.99999))}" transform="translate(${dx.toFixed(2)} ${dy.toFixed(2)})" fill="${g.color}" stroke="${selected?'rgba(255,255,255,.8)':'none'}" stroke-width="${selected?1.8:0}"/>`;
+  const selected=g.name===allocationSelectedCategory;
+  // Expand only the selected slice radially: no white outline, glow, or offset geometry.
+  return `<path class="donut-slice${selected?' is-selected':''}" d="${donutArcPath(130,130,selected?128:125,63,from,Math.min(to,359.99999))}" fill="${g.color}" stroke="none" stroke-width="0"/>`;
  });
  let svg=donut.querySelector('.donut-slices');if(!svg){svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 260 260');svg.setAttribute('class','donut-slices');svg.setAttribute('aria-hidden','true');donut.insertBefore(svg,donut.firstChild)}
  svg.innerHTML=slices.join('');donut.style.setProperty('--donut-rotation',donutRotationDeg+'deg');
@@ -1794,9 +1828,10 @@ $('donut').setAttribute('role','group');
 $('donut').setAttribute('tabindex','0');
 $('donut').setAttribute('aria-label','Grafico di allocazione interattivo: trascina per ruotare, tocca una fetta per visualizzare i titoli');
 function donutAngleAt(e){const r=$('donut').getBoundingClientRect();return Math.atan2(e.clientY-r.top-r.height/2,e.clientX-r.left-r.width/2)*180/Math.PI}
+$('donut').addEventListener('touchmove',e=>{if(e.cancelable)e.preventDefault()},{passive:false});
 $('donut').addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;donutGesture={id:e.pointerId,startX:e.clientX,startY:e.clientY,lastAngle:donutAngleAt(e),moved:false};donutSuppressClick=false;try{$('donut').setPointerCapture(e.pointerId)}catch(_){};});
-$('donut').addEventListener('pointermove',e=>{const g=donutGesture;if(!g||g.id!==e.pointerId)return;if(Math.hypot(e.clientX-g.startX,e.clientY-g.startY)>7)g.moved=true;if(!g.moved)return;const angle=donutAngleAt(e);let delta=angle-g.lastAngle;if(delta>180)delta-=360;if(delta< -180)delta+=360;donutRotationDeg=(donutRotationDeg+delta)%360;g.lastAngle=angle;$('donut').classList.add('is-dragging');$('donut').style.setProperty('--donut-rotation',donutRotationDeg+'deg');});
-$('donut').addEventListener('pointerup',e=>{const g=donutGesture;if(!g||g.id!==e.pointerId)return;donutGesture=null;$('donut').classList.remove('is-dragging');const cat=donutCategoryAt(e.clientX,e.clientY);if(cat)selectAllocationCategory(cat);donutSuppressClick=true;});
+$('donut').addEventListener('pointermove',e=>{const g=donutGesture;if(!g||g.id!==e.pointerId)return;if(Math.hypot(e.clientX-g.startX,e.clientY-g.startY)>7)g.moved=true;if(!g.moved)return;if(e.cancelable)e.preventDefault();const angle=donutAngleAt(e);let delta=angle-g.lastAngle;if(delta>180)delta-=360;if(delta< -180)delta+=360;donutRotationDeg=(donutRotationDeg+delta)%360;g.lastAngle=angle;$('donut').classList.add('is-dragging');$('donut').style.setProperty('--donut-rotation',donutRotationDeg+'deg');});
+$('donut').addEventListener('pointerup',e=>{const g=donutGesture;if(!g||g.id!==e.pointerId)return;donutGesture=null;$('donut').classList.remove('is-dragging');if(!g.moved){const cat=donutCategoryAt(e.clientX,e.clientY);if(cat)selectAllocationCategory(cat)}donutSuppressClick=true;});
 $('donut').addEventListener('pointercancel',()=>{donutGesture=null;$('donut').classList.remove('is-dragging')});
 $('donut').addEventListener('click',e=>{if(donutSuppressClick){donutSuppressClick=false;return}const cat=donutCategoryAt(e.clientX,e.clientY);if(cat)selectAllocationCategory(cat)});
 $('donut').addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft'&&e.key!=='Enter')return;e.preventDefault();if(e.key==='Enter'){const cats=groups().filter(g=>(mode==='now'?g.value:g.capital)>0);if(cats.length)selectAllocationCategory(cats[0].name);return}donutRotationDeg=(donutRotationDeg+(e.key==='ArrowRight'?15:-15))%360;$('donut').style.setProperty('--donut-rotation',donutRotationDeg+'deg');});
@@ -1806,6 +1841,10 @@ function renderFacePanel(){const box=$('faceAnalysis');if(!facePanelOpen){box.cl
 $('faceButton').onclick=()=>{
  const face=$('faceButton');
  face.classList.remove('touch','finn-waving');void face.offsetWidth;
+ // A tap gently wakes Finn (open eyes) even when the market is closed.
+ if(finnMarketClosed||finnCurrentEmotion(mascotMood||'neutral',currentMascotEmotion(mascotMood||'neutral'))==='sleeping'||finnCurrentEmotion(mascotMood||'neutral',currentMascotEmotion(mascotMood||'neutral'))==='dozing'){
+  finnSceneStart('awake','hopeful',2600);
+ }
  if(invesquoActiveView==='dashboard'){
   // In Home Finn opens only the existing performance panel: no greeting toast.
   facePanelOpen=!facePanelOpen;
@@ -1939,15 +1978,23 @@ const VISIT_COUNTER_KEY='my_patrimonio_daily_opens_v1';
 const VISIT_SUPPRESS_KEY='my_patrimonio_visit_alert_disabled_v1';
 
 const PREF_KEY='invesquo_preferences_v50';
-const PREF_DEFAULTS={moodNeutral:1,moodPositive:2,moodExtreme:5,mainMarket:'MIL',palette:'classic',mascotStyle:'rounded',glow:true,theme:'dark',appearanceMode:'flat',titleColor:null,motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',educationDetails:true,showQuoteTime:true,showLogos:true,showBackfill:true,favoriteEnabled:false,favoriteAssets:[],compact:false,autoOpenSettings:true,colors:{positive:'#22c55e',neutral:'#9fe870',negative:'#ef4444'}};
+const PREF_DEFAULTS={moodNeutral:1,moodPositive:2,moodExtreme:5,mainMarket:'MIL',palette:'classic',mascotStyle:'rounded',glow:true,theme:'dark',appearanceMode:'flat',categoryColors:{},motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',educationDetails:true,showQuoteTime:true,showLogos:true,showBackfill:true,favoriteEnabled:false,favoriteAssets:[],compact:false,autoOpenSettings:true,colors:{positive:'#22c55e',neutral:'#9fe870',negative:'#ef4444'}};
 let prefs={...PREF_DEFAULTS,colors:{...PREF_DEFAULTS.colors}};
 try{const x=JSON.parse(store.getItem(PREF_KEY));if(x&&typeof x==='object'){prefs={...prefs,...x,colors:{...PREF_DEFAULTS.colors,...(x.colors||{})}}}}catch(e){}
 // Preserve legacy opt-out, but offer an accessible toggle to re-enable alerts.
 try{if(store.getItem(VISIT_SUPPRESS_KEY)==='true')prefs.warnings=false}catch(e){}
 const validColor=v=>/^#[0-9a-fA-F]{6}$/.test(v);
+function renderCategoryColorSettings(){
+ const host=$('settingCategoryColors');if(!host)return;
+ const current=CAT.map(([cat,color])=>{const selected=prefs.categoryColors?.[cat];return {cat,color:validColor(selected)?selected:color}});
+ // Rebuilding inputs only when controls need to change avoids removing focus mid-edit.
+ if(host.children.length!==current.length){host.innerHTML=current.map(({cat,color})=>'<label class="category-color-item"><span>'+svgEscape(cat)+'</span><input type="color" value="'+color+'" data-category-color="'+svgEscape(cat)+'" aria-label="Colore '+svgEscape(cat)+'"></label>').join('');}
+ current.forEach(({cat,color})=>{const input=Array.from(host.querySelectorAll('input[data-category-color]')).find(x=>x.dataset.categoryColor===cat);if(input&&document.activeElement!==input)input.value=color;});
+}
+
 function effectiveTheme(){return prefs.theme==='system'?(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):prefs.theme}
 function applyPreferences(){
- document.body.dataset.titleCustom=validColor(prefs.titleColor)?'true':'false';document.body.style.setProperty('--fh-title-color',validColor(prefs.titleColor)?prefs.titleColor:'#B9F2D6');const titleColorPicker=$('settingTitleColor');if(titleColorPicker)titleColorPicker.value=validColor(prefs.titleColor)?prefs.titleColor:'#B9F2D6';document.body.dataset.theme=effectiveTheme();document.body.dataset.appearance=prefs.appearanceMode==='glass'?'glass':'flat';const appearanceControl=$('settingAppearanceMode');if(appearanceControl)appearanceControl.value=document.body.dataset.appearance;document.body.classList.toggle('mascot-glow',prefs.glow!==false);document.body.dataset.mascotStyle=prefs.mascotStyle||'rounded';document.body.classList.toggle('motion-normal',prefs.motion==='normal');document.body.classList.toggle('motion-off',prefs.motion==='off');document.body.classList.toggle('privacy-on',!!prefs.privacy);document.body.classList.toggle('compact-cards',!!prefs.compact);$('privacyShortcut').textContent=prefs.privacy?'◉':'◎';$('privacyShortcut').setAttribute('aria-label',prefs.privacy?'Mostra importi':'Nascondi importi');
+ renderCategoryColorSettings();document.body.dataset.theme=effectiveTheme();document.body.dataset.appearance=prefs.appearanceMode==='glass'?'glass':'flat';const appearanceControl=$('settingAppearanceMode');if(appearanceControl)appearanceControl.value=document.body.dataset.appearance;document.body.classList.toggle('mascot-glow',prefs.glow!==false);document.body.dataset.mascotStyle=prefs.mascotStyle||'rounded';document.body.classList.toggle('motion-normal',prefs.motion==='normal');document.body.classList.toggle('motion-off',prefs.motion==='off');document.body.classList.toggle('privacy-on',!!prefs.privacy);document.body.classList.toggle('compact-cards',!!prefs.compact);$('privacyShortcut').textContent=prefs.privacy?'◉':'◎';$('privacyShortcut').setAttribute('aria-label',prefs.privacy?'Mostra importi':'Nascondi importi');
  document.querySelector('meta[name="theme-color"]').content=effectiveTheme()==='light'?'#edf2f8':effectiveTheme()==='ocean'?'#091b2a':'#0b1426';
  $(`settingTheme`).value=prefs.theme;$(`settingMotion`).value=prefs.motion;$(`settingWarnings`).checked=prefs.warnings;$(`settingLimit`).value=String([4,6,10].includes(Number(prefs.limit))?prefs.limit:4);$(`settingPrivacy`).checked=!!prefs.privacy;$(`settingRefreshMinutes`).value=String([1,5,15,30].includes(Number(prefs.refreshMinutes))?prefs.refreshMinutes:1);$(`settingHistoryDefault`).value=prefs.historyDefault||'30';$(`settingShowQuoteTime`).checked=!!prefs.showQuoteTime;$(`settingWealthGraph`).checked=prefs.wealthGraph!==false;$(`settingShowLogos`).checked=prefs.showLogos!==false;$(`settingCompact`).checked=!!prefs.compact;$(`settingAutoOpenSettings`).checked=prefs.autoOpenSettings!==false;
  for(const [id,key] of [['settingMoodNeutral','moodNeutral'],['settingMoodPositive','moodPositive'],['settingMoodExtreme','moodExtreme']]){const field=$(id);if(field)field.value=String(prefs[key]??PREF_DEFAULTS[key]);} $('settingPalette').value=prefs.palette||'classic';$('settingMascotStyle').value=prefs.mascotStyle||'rounded';$('settingGlow').checked=prefs.glow!==false;
@@ -1970,8 +2017,8 @@ function savePreferences(){try{store.setItem(PREF_KEY,JSON.stringify(prefs));sto
 function updateVisitStatus(){let n=0;try{const x=JSON.parse(store.getItem(VISIT_COUNTER_KEY));if(x&&x.date===getVisitDay())n=Number(x.count)||0}catch(e){}$('visitToday').textContent='Ingressi oggi: '+n}
 $('settingTheme').onchange=e=>{prefs.theme=e.target.value;savePreferences()};
 $('settingAppearanceMode').onchange=e=>{prefs.appearanceMode=e.target.value==='glass'?'glass':'flat';savePreferences()};
-$('settingTitleColor').oninput=e=>{if(validColor(e.target.value)){prefs.titleColor=e.target.value;savePreferences()}};
-$('settingTitleColorReset').onclick=()=>{prefs.titleColor=null;savePreferences()};
+$('settingCategoryColors').addEventListener('input',e=>{const control=e.target.closest('[data-category-color]');if(!control||!validColor(control.value))return;const category=control.dataset.categoryColor;if(!CAT.some(c=>c[0]===category))return;prefs.categoryColors={...(prefs.categoryColors||{}),[category]:control.value};savePreferences();});
+$('settingCategoryColorsReset').onclick=()=>{prefs.categoryColors={};savePreferences()};
 $('settingMotion').onchange=e=>{prefs.motion=e.target.value;savePreferences()};
 $('settingWarnings').onchange=e=>{prefs.warnings=e.target.checked;savePreferences()};
 $('settingLimit').onchange=e=>{prefs.limit=Number(e.target.value)||4;savePreferences()};
@@ -3594,7 +3641,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 9.9.16';
+const FINHOLDRA_VERSION_FALLBACK='Beta 9.9.17';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -4152,8 +4199,8 @@ reportPopulatePeriods();
  function setLanguage(value){lang=value==='en'?'en':'it';localStorage.setItem(LANG_KEY,lang);updateLanguage()}
  document.querySelectorAll('select[id^="finholdraLanguage"]').forEach(el=>el.addEventListener('change',e=>setLanguage(e.target.value)));
  updateLanguage();obs.observe(document.body,{subtree:true,childList:true,characterData:true});
- function updateLogo(){let t=document.body.dataset.theme||'dark';let logo=(t==='light')?'./finholdra-blu.svg':'./finholdra-bianco.svg';
-  const header=$('finholdraLogo'),gate=document.querySelector('.finholdra-gate-logo');const headerLogo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.15':'./finholdra-header-bianco.svg?v=9.9.15';if(header&&header.getAttribute('src')!==headerLogo)header.src=headerLogo;if(gate&&gate.getAttribute('src')!==logo)gate.src=logo;
+ function updateLogo(){let t=document.body.dataset.theme||'dark';let logo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.18':'./finholdra-header-bianco.svg?v=9.9.18';
+  const header=$('finholdraLogo'),gate=document.querySelector('.finholdra-gate-logo');const headerLogo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.18':'./finholdra-header-bianco.svg?v=9.9.18';if(header&&header.getAttribute('src')!==headerLogo)header.src=headerLogo;if(gate&&gate.getAttribute('src')!==logo)gate.src=logo;
  }
  updateLogo();new MutationObserver(updateLogo).observe(document.body,{attributes:true,attributeFilter:['data-theme']});
  document.addEventListener('click',e=>{const el=e.target.closest('[data-fav-open]');if(!el)return;openFavorite(el.dataset.favOpen)});
@@ -4172,12 +4219,55 @@ reportPopulatePeriods();
  window.showFinnGreeting=function(){
   const prev=$('finholdraFinnToast');if(prev)prev.remove();const div=document.createElement('div');
   div.id='finholdraFinnToast';div.className='finn-greeting';div.textContent=lang==='en'?"Hi, I'm Finn!":"Ciao, sono Finn!";
-  document.body.appendChild(div);setTimeout(()=>div.remove(),2000);
+  document.body.appendChild(div);
+  const mascot=document.getElementById('faceButton');const box=mascot?.getBoundingClientRect();
+  if(box){const w=div.offsetWidth,h=div.offsetHeight;const spaceBelow=window.innerHeight-box.bottom;
+   div.style.top=Math.max(8,Math.min(window.innerHeight-h-8,spaceBelow>h+12?box.bottom+9:box.top-h-9))+'px';
+   div.style.left=Math.max(12,Math.min(window.innerWidth-w-12,box.left+box.width/2-w/2))+'px';}
+  setTimeout(()=>{if(div.isConnected)div.remove()},2000);
  };
 })();
 </script>
 <script>
-/* Finholdra 9.9.16: reorganize existing controls without cloning their nodes or listeners. */
+/* 9.9.18 — Home brand panel with fresh Yahoo Finance market headlines. */
+(function(){
+ const panel=document.getElementById('finholdraNewsPanel');
+ const brand=document.getElementById('finholdraBrandTrigger');
+ const results=document.getElementById('finholdraNewsResults');
+ const logo=document.getElementById('finholdraNewsLogo');
+ if(!panel||!brand||!results)return;
+ let lastLoaded=0,loading=false,requestId=0;
+ const safe=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const stamp=value=>{try{return new Date(value).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}catch(_){return ''}};
+ function synchronizeLogo(){const isLight=document.body.dataset.theme==='light';if(logo)logo.src=isLight?'./finholdra-header-blu.svg?v=9.9.18':'./finholdra-header-bianco.svg?v=9.9.18'}
+ async function getNews(force=false){
+  if(loading||(!force&&Date.now()-lastLoaded<10*60*1000))return;
+  loading=true;const id=++requestId;
+  results.innerHTML='<p class="finholdra-news-state">Caricamento delle notizie Yahoo Finance…</p>';
+  try{
+   const response=await fetch('/.netlify/functions/market-news',{cache:'no-store',headers:{Accept:'application/json'}});
+   if(!response.ok)throw Error('Servizio notizie non disponibile ('+response.status+')');
+   const json=await response.json();if(id!==requestId)return;
+   const items=Array.isArray(json.articles)?json.articles.slice(0,4):[];
+   if(!items.length)throw Error('Nessuna notizia recente disponibile');
+   results.innerHTML=items.map(n=>{const u=String(n.url||'');if(!/^https:\/\//.test(u))return '';
+    return '<article class="finholdra-news-item"><a href="'+safe(u)+'" target="_blank" rel="noopener noreferrer">'+safe(n.title||'Notizia')+'</a><div class="finholdra-news-meta">'+safe(n.source||'Yahoo Finance')+(n.publishedAt?' · '+safe(stamp(n.publishedAt)):'')+'</div></article>';
+   }).join('');lastLoaded=Date.now();
+  }catch(e){if(id!==requestId)return;results.innerHTML='<p class="finholdra-news-state">Notizie Yahoo Finance momentaneamente non disponibili. Riprova con Aggiorna notizie.</p>'}
+  finally{loading=false}
+ }
+ function toggle(){const open=panel.classList.contains('hidden');if(open&&document.getElementById('dashboardView')?.classList.contains('hidden'))document.getElementById('navDashboard')?.click();panel.classList.toggle('hidden',!open);brand.setAttribute('aria-expanded',String(open));if(open){synchronizeLogo();void getNews();}}
+ document.querySelectorAll('.new-header-nav button').forEach(b=>b.addEventListener('click',()=>{panel.classList.add('hidden');brand.setAttribute('aria-expanded','false')}));
+ brand.addEventListener('click',toggle);
+ brand.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});
+ document.getElementById('finholdraNewsClose')?.addEventListener('click',()=>{panel.classList.add('hidden');brand.setAttribute('aria-expanded','false');brand.focus()});
+ document.getElementById('finholdraNewsRefresh')?.addEventListener('click',()=>void getNews(true));
+ new MutationObserver(synchronizeLogo).observe(document.body,{attributes:true,attributeFilter:['data-theme']});
+ synchronizeLogo();
+})();
+</script>
+<script>
+/* Finholdra 9.9.17: reorganize existing controls without cloning their nodes or listeners. */
 (function(){
  const settings=document.getElementById('settingsView'),pref=document.getElementById('settingsSection');if(!settings||!pref)return;
  const marker=settings.querySelector('.settings-intro');if(!marker)return;
