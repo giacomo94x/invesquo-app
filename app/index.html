@@ -712,6 +712,23 @@ body.motion-off .finn-scene-anticipation svg .finn-left-arm,body.motion-off .fin
 .mascot-scene-buttons .btn.selected{background:#3265b5;border-color:#7ca9f8;color:#fff}
 @media(max-width:480px){.mascot-scene-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+
+/* Beta 9.9.28: the Finn notice is AFTER the entire header, so the navbar never shifts. */
+header.top + .finn-greeting,header.top + .wallstreet-countdown-note{
+ position:relative!important;display:block!important;box-sizing:border-box;
+ width:max-content;max-width:calc(100% - 24px);margin:-5px auto 10px!important;
+ padding:8px 13px!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+ transform:none!important;z-index:1!important;text-align:center;line-height:1.4;font-size:12px!important;
+ overflow-wrap:break-word;white-space:normal!important;pointer-events:none;animation:finnNoticeFadeIn .2s ease both;
+}
+@keyframes finnNoticeFadeIn{from{opacity:0}to{opacity:1}}
+@media(max-width:420px){header.top + .finn-greeting,header.top + .wallstreet-countdown-note{font-size:11px!important;padding:7px 10px!important}}
+/* A subtle glance and wrist raise instead of enlarging or shifting the whole header. */
+@keyframes finnCheckWrist{0%,100%{transform:rotate(0)}35%,75%{transform:rotate(-9deg)}}
+.finn-scene-anticipation.expression-watching svg .finn-right-arm{animation:finnCheckWrist 3s ease-in-out infinite;transform-origin:70px 60px}
+@media(prefers-reduced-motion:reduce){.finn-scene-anticipation.expression-watching svg .finn-right-arm{animation:none!important}}
+body.motion-off .finn-scene-anticipation.expression-watching svg .finn-right-arm{animation:none!important}
+
 /* Beta 9.9.9: Finn greets only outside Home; accessible short wave on tap. */
 @keyframes finnWaveHello{0%,100%{transform:rotate(0) scale(1)}20%{transform:rotate(-8deg) scale(1.04)}45%{transform:rotate(8deg) scale(1.04)}70%{transform:rotate(-5deg) scale(1.02)}}
 .face-button.finn-waving .performance-face{animation:finnWaveHello .85s ease-in-out both}
@@ -1269,7 +1286,7 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 </details>
 <p aria-live="polite" class="sub" id="settingsSaved" role="status">Le preferenze vengono salvate su questo dispositivo.</p>
 </section>
-<section class="card mascot-lab" id="mascotLab"><div class="section-head"><h2>Gioca con la mascotte</h2><span class="sub">Solo per divertimento</span></div><p class="hint">Tocca o trascina Finn.</p><div aria-describedby="mascotPlayStatus" aria-label="Tocca la mascotte per cambiare espressione" class="mascot-playground" id="mascotPlayground" role="button" tabindex="0"><div class="mascot-toys" aria-label="Oggetti illustrati interattivi della mascotte"><button type="button" id="toyMonkey" aria-label="Tieni premuta la scimmietta per far piovere banane" title="Tieni premuto: pioggia di banane"><svg viewBox="0 0 80 83" aria-hidden="true"><ellipse cx="40" cy="71" rx="32" ry="6" fill="#061c30" opacity=".5"/><path d="M24 54Q8 50 12 32Q14 25 21 28" fill="none" stroke="#8b583e" stroke-width="8" stroke-linecap="round"/><ellipse cx="40" cy="56" rx="23" ry="22" fill="#ae7853" stroke="#10263d" stroke-width="3"/><circle cx="18" cy="30" r="12" fill="#9d6244" stroke="#10263d" stroke-width="3"/><circle cx="62" cy="30" r="12" fill="#9d6244" stroke="#10263d" stroke-width="3"/><circle cx="18" cy="30" r="5" fill="#e8b98e"/><circle cx="62" cy="30" r="5" fill="#e8b98e"/><ellipse cx="40" cy="35" rx="23" ry="25" fill="#b67b56" stroke="#10263d" stroke-width="3"/><ellipse cx="40" cy="43" rx="16" ry="15" fill="#eec49c"/><circle cx="32" cy="34" r="3.2" fill="#10263d"/><circle cx="48" cy="34" r="3.2" fill="#10263d"/><ellipse cx="40" cy="43" rx="5" ry="3" fill="#6e3e32"/><path d="M34 49Q40 55 46 49" fill="none" stroke="#6e3e32" stroke-width="2.3" stroke-linecap="round"/></svg><small>Scimmietta</small></button><button type="button" id="toyHat" aria-label="Metti o togli il cappello IPF" title="Indossa cappello IPF"><svg viewBox="0 0 80 83" aria-hidden="true"><path d="M14 55Q15 25 40 23Q65 25 66 55Z" fill="#274568" stroke="#0d213b" stroke-width="4"/><path d="M16 52Q42 48 67 54" fill="none" stroke="#a3b7d8" stroke-width="5"/><ellipse cx="41" cy="58" rx="37" ry="9" fill="#192e4a" stroke="#0d213b" stroke-width="3"/><text x="40" y="43" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="19" font-style="italic" font-weight="900">IPF</text></svg><small>Cappello</small></button><button type="button" id="toyBull" aria-label="Statuetta toro rialzista" title="Bull: portafoglio positivo"><svg viewBox="0 0 100 105" aria-hidden="true"><ellipse cx="50" cy="97" rx="36" ry="5" fill="#071423" opacity=".48"/><path d="M17 81H83L88 91H12Z" fill="#145c47" stroke="#a5f5cc" stroke-width="2"/><path d="M30 34Q15 35 10 15Q23 26 33 22L39 34M70 34Q85 35 90 15Q77 26 67 22L61 34" fill="#b9f2d6" stroke="#155e48" stroke-width="3" stroke-linejoin="round"/><path d="M28 40Q13 30 10 45Q13 57 26 55M72 40Q87 30 90 45Q87 57 74 55" fill="#3bc58b" stroke="#155e48" stroke-width="3"/><path d="M26 38Q27 23 50 24Q73 23 74 38L78 57Q80 75 64 82H36Q20 75 22 57Z" fill="#4cdca1" stroke="#155e48" stroke-width="3.5"/><path d="M29 43Q36 37 42 44M58 44Q64 37 71 43" fill="none" stroke="#0a4937" stroke-width="3.5" stroke-linecap="round"/><circle cx="38" cy="46" r="3.7" fill="#092d27"/><circle cx="62" cy="46" r="3.7" fill="#092d27"/><ellipse cx="50" cy="64" rx="20" ry="15" fill="#b1efd4" stroke="#155e48" stroke-width="2.5"/><ellipse cx="42" cy="65" rx="3.3" ry="4" fill="#155e48"/><ellipse cx="58" cy="65" rx="3.3" ry="4" fill="#155e48"/><path d="M41 72Q50 78 59 72" fill="none" stroke="#165444" stroke-width="2.5" stroke-linecap="round"/><path d="M46 75Q50 82 54 75" fill="none" stroke="#e2bb58" stroke-width="3" stroke-linecap="round"/></svg><small>Bull</small></button><button type="button" id="toyBear" aria-label="Statuetta orso ribassista" title="Bear: portafoglio negativo"><svg viewBox="0 0 100 105" aria-hidden="true"><ellipse cx="50" cy="97" rx="36" ry="5" fill="#071423" opacity=".48"/><path d="M17 81H83L88 91H12Z" fill="#793348" stroke="#f0b1bc" stroke-width="2"/><circle cx="25" cy="31" r="15" fill="#bc4d64" stroke="#70283f" stroke-width="3"/><circle cx="75" cy="31" r="15" fill="#bc4d64" stroke="#70283f" stroke-width="3"/><circle cx="25" cy="31" r="7" fill="#f4a6b5"/><circle cx="75" cy="31" r="7" fill="#f4a6b5"/><path d="M20 48Q17 21 50 21Q83 21 80 48L81 64Q77 83 50 85Q23 83 19 64Z" fill="#da6277" stroke="#782840" stroke-width="3.5"/><path d="M27 42Q34 37 41 44M59 44Q66 37 73 42" fill="none" stroke="#6d223c" stroke-width="3.5" stroke-linecap="round"/><circle cx="37" cy="48" r="4" fill="#451d2e"/><circle cx="63" cy="48" r="4" fill="#451d2e"/><ellipse cx="50" cy="66" rx="21" ry="16" fill="#ffbac6" stroke="#873149" stroke-width="2.5"/><path d="M41 59Q50 56 59 59L55 67Q50 71 45 67Z" fill="#5d2936"/><path d="M50 69V73M50 73Q43 78 38 73M50 73Q57 78 62 73" fill="none" stroke="#7e3247" stroke-width="2.5" stroke-linecap="round"/></svg><small>Bear</small></button><span class="mascot-market-spot" id="mascotMarketSpot">Stato del portafoglio</span></div><div class="mascot-play-art" id="mascotPlayArt"></div></div><p aria-live="polite" class="mascot-play-status" id="mascotPlayStatus">👆 Tocca · ↕ Trascina · ◉ Tieni premuto</p><div class="mascot-emotions" aria-label="Scegli un’emozione della mascotte"><button type="button" data-toy-emotion="neutral">Neutra</button><button type="button" data-toy-emotion="positive">Felice</button><button type="button" data-toy-emotion="celebrate">Super felice</button><button type="button" data-toy-emotion="angry">Arrabbiata</button><button type="button" data-toy-emotion="crying">Super triste</button></div><div class="mascot-scene-preview" aria-label="Prova le animazioni dei mercati"><p class="sub">Animazioni dei mercati · prova quando vuoi</p><div class="mascot-scene-buttons"><button class="btn" type="button" data-finn-preview="awake">☀️ Risveglio</button><button class="btn" type="button" data-finn-preview="prayer">⏳ Wall Street</button><button class="btn" type="button" data-finn-preview="party">🎉 Festa</button><button class="btn" type="button" data-finn-preview="tears">💧 Pianto</button><button class="btn" type="button" data-finn-preview="doze">🌙 Si addormenta</button><button class="btn" type="button" data-finn-preview="sleep">💤 Tre Z</button></div></div><div class="mascot-play-actions"><button class="btn" id="mascotPlayReset" type="button">Ricomincia</button><span class="sub" id="mascotTapCount">0 tocchi</span></div></section><button class="btn settings-bottom-back" id="backDashboardBottom" type="button">← Torna alla dashboard</button>
+<section class="card mascot-lab" id="mascotLab"><div class="section-head"><h2>Gioca con la mascotte</h2><span class="sub">Solo per divertimento</span></div><p class="hint">Tocca o trascina Finn.</p><div aria-describedby="mascotPlayStatus" aria-label="Tocca la mascotte per cambiare espressione" class="mascot-playground" id="mascotPlayground" role="button" tabindex="0"><div class="mascot-toys" aria-label="Oggetti illustrati interattivi della mascotte"><button type="button" id="toyMonkey" aria-label="Tieni premuta la scimmietta per far piovere banane" title="Tieni premuto: pioggia di banane"><svg viewBox="0 0 80 83" aria-hidden="true"><ellipse cx="40" cy="71" rx="32" ry="6" fill="#061c30" opacity=".5"/><path d="M24 54Q8 50 12 32Q14 25 21 28" fill="none" stroke="#8b583e" stroke-width="8" stroke-linecap="round"/><ellipse cx="40" cy="56" rx="23" ry="22" fill="#ae7853" stroke="#10263d" stroke-width="3"/><circle cx="18" cy="30" r="12" fill="#9d6244" stroke="#10263d" stroke-width="3"/><circle cx="62" cy="30" r="12" fill="#9d6244" stroke="#10263d" stroke-width="3"/><circle cx="18" cy="30" r="5" fill="#e8b98e"/><circle cx="62" cy="30" r="5" fill="#e8b98e"/><ellipse cx="40" cy="35" rx="23" ry="25" fill="#b67b56" stroke="#10263d" stroke-width="3"/><ellipse cx="40" cy="43" rx="16" ry="15" fill="#eec49c"/><circle cx="32" cy="34" r="3.2" fill="#10263d"/><circle cx="48" cy="34" r="3.2" fill="#10263d"/><ellipse cx="40" cy="43" rx="5" ry="3" fill="#6e3e32"/><path d="M34 49Q40 55 46 49" fill="none" stroke="#6e3e32" stroke-width="2.3" stroke-linecap="round"/></svg><small>Scimmietta</small></button><button type="button" id="toyHat" aria-label="Metti o togli il cappello IPF" title="Indossa cappello IPF"><svg viewBox="0 0 80 83" aria-hidden="true"><path d="M14 55Q15 25 40 23Q65 25 66 55Z" fill="#274568" stroke="#0d213b" stroke-width="4"/><path d="M16 52Q42 48 67 54" fill="none" stroke="#a3b7d8" stroke-width="5"/><ellipse cx="41" cy="58" rx="37" ry="9" fill="#192e4a" stroke="#0d213b" stroke-width="3"/><text x="40" y="43" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="19" font-style="italic" font-weight="900">IPF</text></svg><small>Cappello</small></button><button type="button" id="toyBull" aria-label="Statuetta toro rialzista" title="Bull: portafoglio positivo"><svg viewBox="0 0 100 105" aria-hidden="true"><ellipse cx="50" cy="97" rx="36" ry="5" fill="#071423" opacity=".48"/><path d="M17 81H83L88 91H12Z" fill="#145c47" stroke="#a5f5cc" stroke-width="2"/><path d="M30 34Q15 35 10 15Q23 26 33 22L39 34M70 34Q85 35 90 15Q77 26 67 22L61 34" fill="#b9f2d6" stroke="#155e48" stroke-width="3" stroke-linejoin="round"/><path d="M28 40Q13 30 10 45Q13 57 26 55M72 40Q87 30 90 45Q87 57 74 55" fill="#3bc58b" stroke="#155e48" stroke-width="3"/><path d="M26 38Q27 23 50 24Q73 23 74 38L78 57Q80 75 64 82H36Q20 75 22 57Z" fill="#4cdca1" stroke="#155e48" stroke-width="3.5"/><path d="M29 43Q36 37 42 44M58 44Q64 37 71 43" fill="none" stroke="#0a4937" stroke-width="3.5" stroke-linecap="round"/><circle cx="38" cy="46" r="3.7" fill="#092d27"/><circle cx="62" cy="46" r="3.7" fill="#092d27"/><ellipse cx="50" cy="64" rx="20" ry="15" fill="#b1efd4" stroke="#155e48" stroke-width="2.5"/><ellipse cx="42" cy="65" rx="3.3" ry="4" fill="#155e48"/><ellipse cx="58" cy="65" rx="3.3" ry="4" fill="#155e48"/><path d="M41 72Q50 78 59 72" fill="none" stroke="#165444" stroke-width="2.5" stroke-linecap="round"/><path d="M46 75Q50 82 54 75" fill="none" stroke="#e2bb58" stroke-width="3" stroke-linecap="round"/></svg><small>Bull</small></button><button type="button" id="toyBear" aria-label="Statuetta orso ribassista" title="Bear: portafoglio negativo"><svg viewBox="0 0 100 105" aria-hidden="true"><ellipse cx="50" cy="97" rx="36" ry="5" fill="#071423" opacity=".48"/><path d="M17 81H83L88 91H12Z" fill="#793348" stroke="#f0b1bc" stroke-width="2"/><circle cx="25" cy="31" r="15" fill="#bc4d64" stroke="#70283f" stroke-width="3"/><circle cx="75" cy="31" r="15" fill="#bc4d64" stroke="#70283f" stroke-width="3"/><circle cx="25" cy="31" r="7" fill="#f4a6b5"/><circle cx="75" cy="31" r="7" fill="#f4a6b5"/><path d="M20 48Q17 21 50 21Q83 21 80 48L81 64Q77 83 50 85Q23 83 19 64Z" fill="#da6277" stroke="#782840" stroke-width="3.5"/><path d="M27 42Q34 37 41 44M59 44Q66 37 73 42" fill="none" stroke="#6d223c" stroke-width="3.5" stroke-linecap="round"/><circle cx="37" cy="48" r="4" fill="#451d2e"/><circle cx="63" cy="48" r="4" fill="#451d2e"/><ellipse cx="50" cy="66" rx="21" ry="16" fill="#ffbac6" stroke="#873149" stroke-width="2.5"/><path d="M41 59Q50 56 59 59L55 67Q50 71 45 67Z" fill="#5d2936"/><path d="M50 69V73M50 73Q43 78 38 73M50 73Q57 78 62 73" fill="none" stroke="#7e3247" stroke-width="2.5" stroke-linecap="round"/></svg><small>Bear</small></button><span class="mascot-market-spot" id="mascotMarketSpot">Stato del portafoglio</span></div><div class="mascot-play-art" id="mascotPlayArt"></div></div><p aria-live="polite" class="mascot-play-status" id="mascotPlayStatus">👆 Tocca · ↕ Trascina · ◉ Tieni premuto</p><div class="mascot-emotions" aria-label="Scegli un’emozione della mascotte"><button type="button" data-toy-emotion="neutral">Neutra</button><button type="button" data-toy-emotion="positive">Felice</button><button type="button" data-toy-emotion="celebrate">Super felice</button><button type="button" data-toy-emotion="angry">Arrabbiata</button><button type="button" data-toy-emotion="crying">Super triste</button></div><div class="mascot-scene-preview" aria-label="Prova le animazioni dei mercati"><p class="sub">Animazioni dei mercati · prova quando vuoi</p><div class="mascot-scene-buttons"><button class="btn" type="button" data-finn-preview="awake">☀️ Risveglio</button><button class="btn" type="button" data-finn-preview="prayer">⏳ Wall Street</button><button class="btn" type="button" data-finn-preview="watch">⌚ Orologio</button><button class="btn" type="button" data-finn-preview="party">🎉 Festa</button><button class="btn" type="button" data-finn-preview="tears">💧 Pianto</button><button class="btn" type="button" data-finn-preview="doze">🌙 Si addormenta</button><button class="btn" type="button" data-finn-preview="sleep">💤 Tre Z</button></div></div><div class="mascot-play-actions"><button class="btn" id="mascotPlayReset" type="button">Ricomincia</button><span class="sub" id="mascotTapCount">0 tocchi</span></div></section><button class="btn settings-bottom-back" id="backDashboardBottom" type="button">← Torna alla dashboard</button>
 </section>
 <div class="app-modal hidden" id="pacOverlay" role="dialog" aria-modal="true" aria-label="Il mio PAC"><div class="app-modal-card pac-modal">
 <button class="modal-close" id="pacClose" type="button" aria-label="Chiudi PAC">×</button><h2>Il mio PAC</h2>
@@ -1936,7 +1953,7 @@ $('faceButton').onclick=()=>{
  }
 };
 const MASCOT_EXPRESSIONS={neutral:['thinking','neutral','calm'],positive:['satisfied','positive','celebrate'],negative:['angry','sad','crying']};
-const MASCOT_LABELS={thinking:'pensierosa',neutral:'neutra',calm:'tranquilla',satisfied:'soddisfatta',positive:'positiva',celebrate:'festeggia',angry:'arrabbiata',sad:'triste',crying:'piange',sleeping:'addormentato',waking:'si sveglia',dozing:'si addormenta',praying:'in attesa di Wall Street',doubtful:'dubbioso',hopeful:'speranzoso',anxious:'angosciato'};
+const MASCOT_LABELS={thinking:'pensierosa',neutral:'neutra',calm:'tranquilla',satisfied:'soddisfatta',positive:'positiva',celebrate:'festeggia',angry:'arrabbiata',sad:'triste',crying:'piange',sleeping:'addormentato',waking:'si sveglia',dozing:'si addormenta',praying:'in attesa di Wall Street',doubtful:'dubbioso',hopeful:'speranzoso',anxious:'angosciato',watching:'controlla l’orologio aspettando Wall Street'};
 let mascotMood=null,mascotIndex=0;
 let finnMarketClosed=false;
 function currentMascotEmotion(mood){return MASCOT_EXPRESSIONS[mood][mascotIndex%3]}
@@ -1993,6 +2010,12 @@ function mascotSVG(mood,color,alertMode=false,emotionOverride){
   eyeA='<ellipse cx="42" cy="47" rx="5" ry="6" fill="'+dark+'"/><ellipse cx="58" cy="47" rx="5" ry="6" fill="'+dark+'"/>';
   mouth='<ellipse cx="50" cy="65" rx="4.5" ry="6" fill="'+dark+'" stroke="none"/>';
   extras='<path d="M77 28q-5 8 0 11q6 1 0 -11" fill="#64c8f6"/>';
+ }else if(emotion==='watching'){
+  eyebrows='<path d="M36 36Q42 34 47 37M53 37Q58 34 64 35"/>';
+  eyeA='<ellipse cx="44" cy="47" rx="3.4" ry="4.8" fill="'+dark+'"/><ellipse cx="60" cy="47" rx="3.4" ry="4.8" fill="'+dark+'"/>';
+  mouth='<path d="M45 65q5 3 10 0"/>';
+  // His wristwatch is actually attached to his raised arm, not a free-floating clock.
+  extras='<circle cx="85" cy="42" r="10" fill="#f6fafc" stroke="'+dark+'" stroke-width="2.5"/><path d="M85 35v8l4 2" stroke="'+dark+'" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="85" cy="42" r="1.3" fill="'+dark+'"/>';
  }else if(emotion==='praying'){
   eyebrows='<path d="M37 37 Q41 32 47 38 M53 38 Q59 32 63 37"/>';
   eyeA='<ellipse cx="42" cy="47" rx="4" ry="5.3" fill="'+dark+'"/><ellipse cx="58" cy="47" rx="4" ry="5.3" fill="'+dark+'"/>';
@@ -2047,6 +2070,7 @@ function mascotSVG(mood,color,alertMode=false,emotionOverride){
  const cheer=emotion==='celebrate';
  leftArm=cheer?'<path d="M30 58Q13 51 16 32"/><circle cx="16" cy="31" r="5.2" fill="'+white+'"/>':'<path d="M30 60Q13 58 16 76"/><circle cx="16" cy="76" r="5.2" fill="'+white+'"/>';
  rightArm=cheer?'<path d="M70 58Q87 45 84 27"/><circle cx="84" cy="27" r="5.2" fill="'+white+'"/>':'<path d="M70 60Q87 58 84 76"/><circle cx="84" cy="76" r="5.2" fill="'+white+'"/>';
+ if(emotion==='watching'){rightArm='<path d="M70 60Q80 58 85 42"/><circle cx="85" cy="42" r="6" fill="'+white+'"/>'; }
  if(emotion==='praying'){leftArm='<path d="M30 62Q37 66 47 67"/><circle cx="47" cy="67" r="5" fill="'+white+'"/>';rightArm='<path d="M70 62Q63 66 53 67"/><circle cx="53" cy="67" r="5" fill="'+white+'"/>'; }
  return `<svg viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g class="candle-character"><ellipse cx="50" cy="103" rx="29" ry="4" fill="#041428" opacity=".16"/><g fill="none" stroke="${dark}" stroke-width="4.2" stroke-linecap="round"><g class="finn-left-arm">${leftArm}</g><g class="finn-right-arm">${rightArm}</g></g><path d="M50 12V5M50 91v10" stroke="${dark}" stroke-width="8" stroke-linecap="round"/><path d="M50 12V5M50 91v10" stroke="${safe}" stroke-width="4.6" stroke-linecap="round"/><rect x="29" y="13" width="42" height="78" rx="14" fill="${safe}" stroke="${dark}" stroke-width="4"/><path d="M35 27q3 -8 10 -8" stroke="#fff" stroke-opacity=".38" stroke-width="5" stroke-linecap="round" fill="none"/><g class="mascot-brows" stroke="${dark}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">${eyebrows}</g><g class="mascot-mouth" stroke="${dark}" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none">${mouth}</g>${eyeA}${extras}</g></svg>`;
 }
@@ -3557,13 +3581,13 @@ mascotPlayContainer.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key==='
 function mascotPreviewStop(){clearTimeout(mascotPreviewTimer);mascotPreviewTimer=null;mascotPreviewScene=null;mascotPlayArt.classList.remove('finn-scene','finn-scene-awake','finn-scene-doze','finn-scene-party','finn-scene-tears','finn-scene-prayer','finn-scene-anticipation');}
 function mascotPreviewRun(key){
  mascotPreviewStop();
- const variants={awake:{type:'awake',emotion:'waking',text:'☀️ Finn si sveglia'},prayer:{type:'anticipation',emotion:'anxious',text:'⏳ Wall Street apre alle 15:30 · Finn è in attesa'},party:{type:'party',emotion:'celebrate',text:'🎉 Chiusura positiva: Finn festeggia'},tears:{type:'tears',emotion:'crying',text:'💧 Chiusura negativa: Finn piange'},doze:{type:'doze',emotion:'dozing',text:'🌙 Finn si addormenta'},sleep:{type:'sleep',emotion:'sleeping',text:'💤 Finn dorme con tre Z animate'}};
+ const variants={awake:{type:'awake',emotion:'waking',text:'☀️ Finn si sveglia'},prayer:{type:'anticipation',emotion:'anxious',text:'⏳ Wall Street apre alle 15:30 · Finn è in attesa'},watch:{type:'anticipation',emotion:'watching',text:'⌚ Finn controlla l’orologio aspettando Wall Street'},party:{type:'party',emotion:'celebrate',text:'🎉 Chiusura positiva: Finn festeggia'},tears:{type:'tears',emotion:'crying',text:'💧 Chiusura negativa: Finn piange'},doze:{type:'doze',emotion:'dozing',text:'🌙 Finn si addormenta'},sleep:{type:'sleep',emotion:'sleeping',text:'💤 Finn dorme con tre Z animate'}};
  const config=variants[key];if(!config)return;
  mascotPreviewScene={key,...config};mascotPlayRender();
  // Restart CSS animation even when the same action is requested twice.
  void mascotPlayArt.offsetWidth;
  $('mascotPlayStatus').textContent=config.text+' · anteprima';
- if(key!=='sleep')mascotPreviewTimer=setTimeout(()=>{if(!mascotPreviewScene||mascotPreviewScene.key!==key)return;if(key==='party'||key==='tears'||key==='doze'){mascotPreviewScene={key:'sleep',type:'sleep',emotion:'sleeping'};mascotPlayRender();$('mascotPlayStatus').textContent='💤 Finn dorme dopo la chiusura · anteprima';}else{mascotPreviewStop();mascotPlayRender();}},key==='prayer'?3500:key==='awake'?2200:3100);
+ if(key!=='sleep')mascotPreviewTimer=setTimeout(()=>{if(!mascotPreviewScene||mascotPreviewScene.key!==key)return;if(key==='party'||key==='tears'||key==='doze'){mascotPreviewScene={key:'sleep',type:'sleep',emotion:'sleeping'};mascotPlayRender();$('mascotPlayStatus').textContent='💤 Finn dorme dopo la chiusura · anteprima';}else{mascotPreviewStop();mascotPlayRender();}},(key==='prayer'||key==='watch')?3500:key==='awake'?2200:3100);
 }
 document.querySelectorAll('[data-finn-preview]').forEach(b=>b.addEventListener('click',()=>mascotPreviewRun(b.dataset.finnPreview)));
 document.querySelectorAll('[data-toy-emotion]').forEach(b=>b.addEventListener('click',()=>{mascotPreviewStop();mascotPlayChosenEmotion=b.dataset.toyEmotion;mascotPlayRender();document.getElementById('mascotPlayStatus').textContent='Espressione: '+b.textContent}));
@@ -3673,11 +3697,13 @@ function finnOnMarketTransition(nowActive,previousActive,parts,key){
 }
 // Countdown based on the requested Italian clock window; never replay after resuming a hidden tab.
 let finnWallStreetMinuteShown=new Set();
+let finnWallStreetWindowActive=false;
 function finnWallStreetMessage(){
- const host=document.querySelector('.top .new-header-main');if(!host)return;
- const existing=host.querySelector('.wallstreet-countdown-note');if(existing)existing.remove();
- const message=document.createElement('span');message.className='wallstreet-countdown-note';message.textContent='Wall Street apre alle 15:30';message.setAttribute('role','status');
- host.appendChild(message);setTimeout(()=>{if(message.isConnected)message.remove()},3600);
+ const host=document.querySelector('header.top');if(!host)return;
+ document.querySelector('.wallstreet-countdown-note')?.remove();
+ document.getElementById('finholdraFinnToast')?.remove();
+ const message=document.createElement('div');message.className='wallstreet-countdown-note';message.textContent='Apertura Wall Street alle 15:30';message.setAttribute('role','status');
+ host.after(message);setTimeout(()=>{if(message.isConnected)message.remove()},3600);
 }
 function finnCheckWallStreetCountdown(){
  const p=marketLocalParts('Europe/Rome');
@@ -3687,6 +3713,7 @@ function finnCheckWallStreetCountdown(){
  const ny=marketLocalParts('America/New_York');
  const eligible=workday&&!isMarketHoliday('NYSE',ny)&&minute>=14*60+30&&minute<15*60+30;
  if(!eligible){
+  finnWallStreetWindowActive=false;
   if(finnScene?.type==='anticipation'){
    finnScene=null;++finnSceneToken;clearTimeout(finnSceneTimer);finnUpdateFigure();
   }
@@ -3695,13 +3722,17 @@ function finnCheckWallStreetCountdown(){
  }
  // Preserve an opening/closing scene if one is running.
  if(!finnScene||finnScene.type==='anticipation'){
-  const emotions=['doubtful','hopeful','anxious'];
+  const emotions=['doubtful','hopeful','anxious','watching'];
   const slot=Math.floor(Date.now()/12000)%emotions.length;
   if(finnScene?.type!=='anticipation'||finnScene.emotion!==emotions[slot]){
    finnScene={type:'anticipation',emotion:emotions[slot]};finnUpdateFigure();
   }
  }
- if(Number(p.minute)%10===0){
+ // Preserve the greeting shown when the app opens in the waiting window,
+ // and the original reminders at ten-minute intervals.
+ const justEntered=!finnWallStreetWindowActive;
+ finnWallStreetWindowActive=true;
+ if(justEntered||Number(p.minute)%10===0){
   const key=finnMinuteKey('wallstreet-notice',p)+':'+p.hour+':'+p.minute;
   if(!finnWallStreetMinuteShown.has(key)){
    finnWallStreetMinuteShown.add(key);finnWallStreetMessage();
@@ -4316,15 +4347,21 @@ reportPopulatePeriods();
    q:0,pmc:0,p:price,invested:0,finholdraWatchOnly:true};
   openAssetDetail(window.finholdraPreviewAsset.id);
  }
+ let finnGreetingTimer=null;
  window.showFinnGreeting=function(){
-  const prev=$('finholdraFinnToast');if(prev)prev.remove();const div=document.createElement('div');
-  div.id='finholdraFinnToast';div.className='finn-greeting';div.textContent=lang==='en'?"Hi, I'm Finn!":"Ciao, sono Finn!";
-  document.body.appendChild(div);
-  const mascot=document.getElementById('faceButton');const box=mascot?.getBoundingClientRect();
-  if(box){const w=div.offsetWidth,h=div.offsetHeight;const spaceBelow=window.innerHeight-box.bottom;
-   div.style.top=Math.max(8,Math.min(window.innerHeight-h-8,spaceBelow>h+12?box.bottom+9:box.top-h-9))+'px';
-   div.style.left=Math.max(12,Math.min(window.innerWidth-w-12,box.left+box.width/2-w/2))+'px';}
-  setTimeout(()=>{if(div.isConnected)div.remove()},2000);
+  const prev=$('finholdraFinnToast');if(prev)prev.remove();
+  clearTimeout(finnGreetingTimer);
+  const top=document.querySelector('header.top');
+  if(!top)return;
+  // Use the Italy clock, not the user's selected exchange time zone.
+  const now=marketLocalParts('Europe/Rome');const clock=Number(now.hour)*60+Number(now.minute);
+  const inWallStreetWait=clock>=14*60+30&&clock<15*60+30;
+  const div=document.createElement('div');div.id='finholdraFinnToast';div.className='finn-greeting';div.setAttribute('role','status');
+  div.textContent=inWallStreetWait?(lang==='en'?'Wall Street opens at 15:30':'Apertura Wall Street alle 15:30'):(lang==='en'?"Hi, I'm Finn!":"Ciao, sono Finn!");
+  // Below the entire header, IN FLOW: navbar remains at its original position.
+  document.querySelector('.wallstreet-countdown-note')?.remove();
+  top.after(div);
+  finnGreetingTimer=setTimeout(()=>{if(div.isConnected)div.remove()},2700);
  };
 })();
 </script>
