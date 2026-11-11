@@ -899,6 +899,42 @@ body[data-appearance="glass"] :is(.btn.primary,.nav-tool.active,.timeline-range 
 @media(prefers-reduced-transparency:reduce){body[data-appearance="glass"] :is(.card,.box,.setting-group,.favorite-row,.search-results,.account-panel,.app-modal-card,.asset-detail-sheet,.pmc-history-plot,.browse-categories){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)!important}}
 @media(prefers-reduced-motion:reduce){body[data-appearance="glass"] :is(.btn,.gear-btn,.nav-tool,.chip){transition:none!important}}
 
+
+/* Beta 9.9.12 — Liquid Glass leggibile anche con luce diurna.
+   Questi effetti appartengono alla web app; il popover aperto dei select e' disegnato da iOS. */
+body[data-appearance="glass"]{
+ background-image:radial-gradient(ellipse 85% 42% at 15% 7%,rgba(95,159,235,.105),transparent 80%),radial-gradient(ellipse 70% 43% at 90% 58%,rgba(48,195,174,.075),transparent 80%);
+ background-attachment:fixed;
+}
+body[data-appearance="glass"][data-theme="light"]{
+ --fh-glass-fill:rgba(255,255,255,.47);
+ --fh-glass-stroke:rgba(72,123,185,.38);
+ --fh-glass-shadow:0 10px 28px rgba(28,62,110,.12),inset 0 1.5px 0 rgba(255,255,255,.98),inset 0 -1px 0 rgba(95,146,202,.10);
+ background-image:radial-gradient(ellipse 85% 38% at 9% 9%,rgba(122,180,242,.27),transparent 78%),radial-gradient(ellipse 76% 45% at 92% 54%,rgba(91,191,185,.16),transparent 82%),linear-gradient(135deg,#e8f1fc,#f3f7fc 46%,#e7f1f9);
+}
+body[data-appearance="glass"] :is(.card,.box,.setting-group,.favorite-row,.search-results,.account-panel,.app-modal-card,.asset-detail-sheet,.pmc-history-plot,.browse-categories){
+ -webkit-backdrop-filter:blur(23px) saturate(155%);
+ backdrop-filter:blur(23px) saturate(155%);
+}
+body[data-appearance="glass"][data-theme="light"] :is(.btn,.gear-btn,.nav-tool,.chip,.browse-tab,.browse-category,.seg button,.timeline-range button,.asset-detail-ranges button){
+ background-color:rgba(230,241,255,.54);
+ border-color:rgba(90,136,194,.42)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.96),0 3px 10px rgba(38,85,139,.11)!important;
+}
+body[data-appearance="glass"][data-theme="light"] :is(select,.order-select,input:not([type="checkbox"]):not([type="radio"]),textarea){
+ background-color:rgba(239,247,255,.57)!important;
+ border-color:rgba(93,141,196,.55)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.94),0 2px 9px rgba(43,81,130,.10)!important;
+}
+body[data-appearance="glass"][data-theme="light"] :is(.btn.primary,.nav-tool.active,.timeline-range button.selected,.asset-detail-ranges button.selected,.seg button.selected){
+ background-color:rgba(55,105,196,.90)!important;
+ color:#fff!important;
+}
+@media(prefers-reduced-transparency:reduce){
+ body[data-appearance="glass"]{background-image:none}
+ body[data-appearance="glass"][data-theme="light"]{--fh-glass-fill:#fff}
+}
+
 </style>
 </head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-bianco.svg" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
@@ -2440,8 +2476,15 @@ function plotAssetDetail(points,a,opts={}){
  const highlighted='<g id="assetHoverDot" style="display:none"><line id="detailCrosshair" class="chart-crosshair" x1="0" y1="'+T+'" x2="0" y2="'+(H-B)+'"/><circle id="detailTargetDot" cx="0" cy="0" r="5.8" fill="'+color+'" stroke="#fff" stroke-width="2"/><rect class="chart-tooltip-bg" id="detailTipBg" x="0" y="0" width="138" height="33" rx="7"/><text class="chart-tooltip-label" id="detailTipText" x="0" y="0" text-anchor="middle">—</text></g>';
  const singleBondLabel=singleBond?'<text x="'+(W-R)+'" y="'+Math.max(T+11,y(points[0].p)-8).toFixed(2)+'" text-anchor="end" font-size="10.5" fill="#45dbae">Ultimo prezzo '+number(points[0].p)+'/100</text>':'';
  chart.innerHTML='<svg id="detailSvg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Prezzi osservati per '+svgEscape(a.name)+'"><g>'+borderTop+borderBottom+'</g>'+mc+'<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+(singleBond?'2.4':'2.8')+'" stroke-dasharray="'+(singleBond?'7 4':'none')+'" stroke-linejoin="round" stroke-linecap="round"/>'+singleBondLabel+tail+marks+highlighted+axis+'</svg>';
- const intraday=assetDetailRange==='1d',first=opts.previousClose&&intraday?opts.previousClose:points[0].p,last=points[points.length-1].p;
- detailSetDelta(points.length<2&&!opts.previousClose?null:(last-first)/first);
+ // Beta 9.9.11: the percentage must describe the SAME endpoints drawn in the graph.
+ // Yahoo's chartPreviousClose is a prior-session reference, not the first plotted
+ // intraday point. Comparing it with the last plot point made declining curves
+ // appear positive. Never report a period change with fewer than two observations.
+ const intraday=assetDetailRange==='1d';
+ const first=Number(points[0].p),last=Number(points[points.length-1].p);
+ const hasComparablePeriod=points.length>=2&&Number.isFinite(first)&&first>0&&Number.isFinite(last)
+  &&points[points.length-1].t>points[0].t;
+ detailSetDelta(hasComparablePeriod?(last-first)/first:null);
  $('assetDetailPrice').textContent=a.cat==='Obbligazioni'?number(a.p)+' / 100 '+currencyOf(a):localMoney(a.p,currencyOf(a));$('assetDetailPriceLabel').textContent='Ultima quotazione del portafoglio';
  $('assetDetailSelected').textContent=(liveLast?'Ultima quotazione'+(liveLast.delayed?' differita':'')+': ':'Ultima rilevazione: ')+detailDate(points[points.length-1].t,true);
  function onPoint(ev){const svg=$('detailSvg');if(!svg)return;const bounds=svg.getBoundingClientRect();let px=(ev.clientX-bounds.left)/Math.max(1,bounds.width)*W;
@@ -3470,7 +3513,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 9.9.10';
+const FINHOLDRA_VERSION_FALLBACK='Beta 9.9.12';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
