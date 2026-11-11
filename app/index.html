@@ -713,16 +713,22 @@ body.motion-off .finn-scene-anticipation svg .finn-left-arm,body.motion-off .fin
 @media(max-width:480px){.mascot-scene-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 
-/* Beta 9.9.28: the Finn notice is AFTER the entire header, so the navbar never shifts. */
-header.top + .finn-greeting,header.top + .wallstreet-countdown-note{
- position:relative!important;display:block!important;box-sizing:border-box;
- width:max-content;max-width:calc(100% - 24px);margin:-5px auto 10px!important;
- padding:8px 13px!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
- transform:none!important;z-index:1!important;text-align:center;line-height:1.4;font-size:12px!important;
- overflow-wrap:break-word;white-space:normal!important;pointer-events:none;animation:finnNoticeFadeIn .2s ease both;
+/* Beta 9.9.29: compact Finn note between mascot and nav, overlay within header: no layout shifts. */
+header.top{position:relative!important}
+header.top > .finn-greeting,header.top > .wallstreet-countdown-note{
+ position:absolute!important;display:block!important;box-sizing:border-box!important;
+ left:50%!important;right:auto!important;top:0;bottom:auto!important;
+ width:max-content!important;max-width:min(92%,290px)!important;
+ margin:0!important;padding:2px 8px!important;border-radius:999px!important;
+ transform:translateX(-50%)!important;text-align:center!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ font-size:10px!important;line-height:1.2!important;font-weight:700!important;
+ z-index:2!important;pointer-events:none!important;
+ box-shadow:0 2px 8px #0003!important;
+ animation:finnCompactNotice .16s ease-out both!important;
 }
-@keyframes finnNoticeFadeIn{from{opacity:0}to{opacity:1}}
-@media(max-width:420px){header.top + .finn-greeting,header.top + .wallstreet-countdown-note{font-size:11px!important;padding:7px 10px!important}}
+@keyframes finnCompactNotice{from{opacity:0}to{opacity:1}}
+@media(max-width:420px){header.top > .finn-greeting,header.top > .wallstreet-countdown-note{font-size:9px!important;padding:2px 6px!important}}
 /* A subtle glance and wrist raise instead of enlarging or shifting the whole header. */
 @keyframes finnCheckWrist{0%,100%{transform:rotate(0)}35%,75%{transform:rotate(-9deg)}}
 .finn-scene-anticipation.expression-watching svg .finn-right-arm{animation:finnCheckWrist 3s ease-in-out infinite;transform-origin:70px 60px}
@@ -3698,12 +3704,20 @@ function finnOnMarketTransition(nowActive,previousActive,parts,key){
 // Countdown based on the requested Italian clock window; never replay after resuming a hidden tab.
 let finnWallStreetMinuteShown=new Set();
 let finnWallStreetWindowActive=false;
+function finnholdraPlaceCompactNotice(message){
+ const host=document.querySelector('header.top'),nav=host?.querySelector('.new-header-nav');
+ if(!host||!nav)return false;
+ host.appendChild(message); // Out of normal document flow; no movement of tabs or content.
+ const navTop=nav.getBoundingClientRect().top-host.getBoundingClientRect().top;
+ const noteHeight=message.getBoundingClientRect().height;
+ message.style.top=Math.max(0,Math.floor(navTop-noteHeight-2))+'px';
+ return true;
+}
 function finnWallStreetMessage(){
- const host=document.querySelector('header.top');if(!host)return;
  document.querySelector('.wallstreet-countdown-note')?.remove();
  document.getElementById('finholdraFinnToast')?.remove();
  const message=document.createElement('div');message.className='wallstreet-countdown-note';message.textContent='Apertura Wall Street alle 15:30';message.setAttribute('role','status');
- host.after(message);setTimeout(()=>{if(message.isConnected)message.remove()},3600);
+ if(finnholdraPlaceCompactNotice(message))setTimeout(()=>{if(message.isConnected)message.remove()},3600);
 }
 function finnCheckWallStreetCountdown(){
  const p=marketLocalParts('Europe/Rome');
@@ -4358,9 +4372,9 @@ reportPopulatePeriods();
   const inWallStreetWait=clock>=14*60+30&&clock<15*60+30;
   const div=document.createElement('div');div.id='finholdraFinnToast';div.className='finn-greeting';div.setAttribute('role','status');
   div.textContent=inWallStreetWait?(lang==='en'?'Wall Street opens at 15:30':'Apertura Wall Street alle 15:30'):(lang==='en'?"Hi, I'm Finn!":"Ciao, sono Finn!");
-  // Below the entire header, IN FLOW: navbar remains at its original position.
+  // Compact overlay placed in the existing gap between mascot and tab buttons.
   document.querySelector('.wallstreet-countdown-note')?.remove();
-  top.after(div);
+  if(!finnholdraPlaceCompactNotice(div))return;
   finnGreetingTimer=setTimeout(()=>{if(div.isConnected)div.remove()},2700);
  };
 })();
