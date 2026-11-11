@@ -4265,7 +4265,7 @@ reportPopulatePeriods();
 })();
 </script>
 <script>
-/* Finholdra 9.9.19 — full-screen markets/news, selectable Italian RSS and Yahoo indices. */
+/* Finholdra 9.9.20 — full-screen markets/news, selectable Italian RSS and Yahoo indices. */
 (function(){
  const panel=document.getElementById('finholdraNewsPanel');
  const brand=document.getElementById('finholdraBrandTrigger');
@@ -4288,7 +4288,7 @@ reportPopulatePeriods();
    const response=await fetch('/.netlify/functions/market-news?source='+encodeURIComponent(src),{cache:'no-store',headers:{Accept:'application/json'}});
    if(!response.ok)throw Error('Notizie non disponibili');const payload=await response.json();
    if(!panel.classList.contains('hidden')&&source()===src){const items=Array.isArray(payload.articles)?payload.articles.slice(0,4):[];
-    if(items.length){results.innerHTML=items.map(n=>{const url=String(n.url||'');if(!/^https:\/\//i.test(url))return '';return '<article class="finholdra-news-item"><a href="'+safe(url)+'" target="_blank" rel="noopener noreferrer">'+safe(n.title||'Notizia')+'</a><div class="finholdra-news-meta">'+safe(n.source||'')+(n.publishedAt?' · '+safe(stamp(n.publishedAt)):'')+'</div></article>';}).join('');}
+    if(items.length){results.innerHTML=items.map(n=>{const url=String(n.url||'');if(!/^https:\/\//i.test(url))return '';return '<article class="finholdra-news-item"><a href="'+safe(url)+'" target="_blank" rel="noopener noreferrer">'+safe(n.title||'Notizia')+'</a><div class="finholdra-news-meta">'+safe(n.source||'')+(n.publishedAt?' · '+safe(stamp(n.publishedAt)):'')+'</div></article>';}).join('')+(items.length<4?'<p class="finholdra-news-state">La fonte ha restituito '+items.length+' notizie disponibili su 4. Nessun articolo aggiunto senza una fonte verificabile.</p>':'');}
     else results.innerHTML='<p class="finholdra-news-state">La fonte non ha restituito notizie italiane recenti. Apri il sito della fonte oppure riprova più tardi.</p>';
     newsCache={source:src,at:Date.now()};}
   }catch(_){if(!panel.classList.contains('hidden'))results.innerHTML='<p class="finholdra-news-state">Notizie non disponibili dalla fonte selezionata. Riprova più tardi.</p>'}
