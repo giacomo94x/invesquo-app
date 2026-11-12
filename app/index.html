@@ -1183,6 +1183,35 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 .finholdra-chart-fullscreen-plot>.ab-chart-wrap{height:100%;flex:1;min-height:0}
 .finholdra-chart-fullscreen-plot>.ab-chart-wrap>svg{max-height:100%;width:100%;height:100%;object-fit:contain}
 @media(max-width:600px){.ab-chart-wrap>.ab-chart-tools-v936{bottom:7px!important;right:7px!important;gap:6px!important}.ab-chart-wrap>.ab-chart-tools-v936 button{min-height:35px!important;padding:6px 10px!important;font-size:12px!important}}
+</style><style id="finholdra938SafeCharts">
+/* v9.9.38 - a single, stable two-end control bar. No controls overlay the plot or its dates. */
+.ab-chart-wrap{position:relative!important;display:block!important;overflow:visible!important;contain:layout!important;isolation:auto!important}
+.ab-chart-wrap>svg{display:block;width:100%;height:auto;max-width:100%;transform:none!important;will-change:auto!important}
+.ab-chart-wrap>.ab-chart-overlay{pointer-events:none!important}
+.ab-chart-wrap>.ab-chart-tools-v936{position:relative!important;inset:auto!important;left:auto!important;right:auto!important;bottom:auto!important;display:flex!important;justify-content:space-between!important;align-items:center!important;width:100%!important;max-width:none!important;min-height:46px!important;margin:9px 0 3px!important;padding:0 5px!important;gap:12px!important;z-index:3!important;box-sizing:border-box!important;overflow:visible!important}
+.ab-chart-wrap>.ab-chart-tools-v936 button{position:static!important;display:inline-flex!important;flex:none!important;align-items:center!important;justify-content:center!important;min-height:37px!important;padding:7px 12px!important;font-size:12px!important;border-radius:12px!important;line-height:1.25!important;white-space:nowrap!important}
+.ab-chart-wrap>.ab-chart-tools-v936 .ab-chart-expand{order:0!important;margin-right:auto!important;background:#315b9c!important;border-color:#7fa4e9!important;color:white!important}
+.ab-chart-wrap>.ab-chart-tools-v936 .ab-chart-trigger{order:1!important;margin-left:auto!important}
+.ab-chart-wrap.ab-active>svg{touch-action:none!important}
+.finholdra-chart-fullscreen{position:fixed!important;inset:0!important;overflow:hidden!important;overscroll-behavior:contain!important;z-index:2147483000!important;transform:none!important;contain:layout paint!important}
+.finholdra-chart-landscape{position:relative;display:flex;flex-direction:column;gap:4px;width:100%;height:100%;overflow:hidden;box-sizing:border-box;transform:none!important}
+.finholdra-chart-fullscreen-plot{flex:1!important;min-height:0!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;overflow:hidden!important}
+.finholdra-chart-fullscreen-plot>.ab-chart-wrap{flex:1!important;min-height:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important;overflow:hidden!important}
+.finholdra-chart-fullscreen-plot>.ab-chart-wrap>svg{height:100%!important;width:100%!important;flex:1!important;min-height:0!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important}
+.finholdra-chart-fullscreen-plot .ab-chart-tools-v936{flex:0 0 45px!important;width:100%!important;min-height:45px!important;position:relative!important;inset:auto!important;justify-content:space-between!important}
+@media(orientation:portrait){
+  .finholdra-chart-fullscreen .finholdra-chart-landscape{
+   position:absolute!important;top:0!important;left:100%!important;
+   width:100dvh!important;height:100vw!important;
+   transform-origin:top left!important;transform:rotate(90deg)!important;
+   padding:6px 12px!important;backface-visibility:hidden!important;
+  }
+}
+@media(max-width:480px){
+ .ab-chart-wrap>.ab-chart-tools-v936{padding:0 4px!important;min-height:44px!important}
+ .ab-chart-wrap>.ab-chart-tools-v936 button{min-height:36px!important;padding:6px 9px!important}
+}
+@media(prefers-reduced-motion:reduce){.finholdra-chart-fullscreen *{animation:none!important;transition:none!important}}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.22" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -4908,7 +4937,7 @@ reportPopulatePeriods();
   a.overlay.replaceChildren();a.result.textContent='';a.result.hidden=true;
   document.documentElement.style.overflow=a.previousHtmlOverflow;
   document.body.style.overflow=a.previousBodyOverflow;
-  window.scrollTo(0,lockedY);
+  // No forced viewport repositioning on Safari.
  }
  function redraw(){
   if(!active)return;
@@ -4979,10 +5008,14 @@ reportPopulatePeriods();
   const plot=document.createElement('div');plot.className='finholdra-chart-fullscreen-plot';
   const clone=source.cloneNode(true);clone.removeAttribute('id');clone.setAttribute('aria-label',(source.getAttribute('aria-label')||'Grafico')+' · schermo intero');
   head.append(label,back);plot.appendChild(clone);panel.append(head,plot);dialog.appendChild(panel);document.body.appendChild(dialog);
+  // Block accidental two-finger zoom on the transformed viewer ONLY (never globally).
+  const stopViewerZoom=e=>{if(e.cancelable)e.preventDefault()};
+  for(const type of ['gesturestart','gesturechange','gestureend'])dialog.addEventListener(type,stopViewerZoom,{passive:false});
+  dialog.addEventListener('touchmove',e=>{if(e.touches.length>1&&e.cancelable)e.preventDefault()},{passive:false});
   document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';
   fullscreen={dialog,previousHtmlOverflow,previousBodyOverflow,oldScrollY};
   // iOS Safari usually rejects lock(): CSS portrait rotation remains the reliable fallback.
-  try{if(screen.orientation?.lock)Promise.resolve(screen.orientation.lock('landscape')).catch(()=>{});}catch(_){}
+  // No screen.orientation.lock on iOS: avoid browser-level orientation negotiation.
   attach(clone,true);
   back.addEventListener('click',closeFullscreen);
  }
@@ -4991,10 +5024,10 @@ reportPopulatePeriods();
   const f=fullscreen;fullscreen=null;
   if(active&&f.dialog.contains(active.svg))close();
   f.dialog.remove();
-  try{screen.orientation?.unlock?.()}catch(_){}
+  // Do not modify OS orientation state.
   document.documentElement.style.overflow=f.previousHtmlOverflow;
   document.body.style.overflow=f.previousBodyOverflow;
-  window.scrollTo(0,f.oldScrollY);
+  // Keep viewport in place; iOS may change its visual viewport while rotating the overlay.
  }
  function attach(svg,insideFullscreen=false){
   if(svg.parentElement?.classList.contains('ab-chart-wrap'))return;
@@ -5011,11 +5044,11 @@ reportPopulatePeriods();
   // clipped by chart layers or any of the chart SVG's overlapping controls.
   const tools=document.createElement('div');tools.className='ab-chart-tools ab-chart-tools-v936';
   wrap.appendChild(tools);
-  const button=document.createElement('button');button.type='button';button.className='ab-chart-trigger';button.textContent='A↔B';button.setAttribute('aria-label','Confronta due punti del grafico');button.title='Confronta A e B';tools.appendChild(button);
   if(!insideFullscreen){
-   const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);
+   const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶ Schermo intero';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);
    expand.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFullscreen(svg)});
   }
+  const button=document.createElement('button');button.type='button';button.className='ab-chart-trigger';button.textContent='A↔B';button.setAttribute('aria-label','Confronta due punti del grafico');button.title='Confronta A e B';tools.appendChild(button);
   button.addEventListener('click',ev=>{ev.stopPropagation();ev.preventDefault();toggle(svg,button,wrap,overlay,result);result.hidden=!active||active.svg!==svg});
   const select=ev=>{
    if(!active||active.svg!==svg)return;
@@ -5025,7 +5058,7 @@ reportPopulatePeriods();
   };
   svg.addEventListener('pointerdown',select,true);
   svg.addEventListener('click',select,true);
-  svg.addEventListener('touchstart',e=>{if(active?.svg===svg){if(e.cancelable)e.preventDefault();e.stopImmediatePropagation()}},{capture:true,passive:false});
+  svg.addEventListener('touchstart',e=>{if(active?.svg===svg&&e.touches.length===1){if(e.cancelable)e.preventDefault();e.stopImmediatePropagation()}},{capture:true,passive:false});
  }
  let scheduled=false;
  function scan(){scheduled=false;document.querySelectorAll('svg[data-ab-series]').forEach(attach);
