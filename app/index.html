@@ -1144,6 +1144,27 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 .ab-chart-result strong{display:block;font-size:12px}.ab-chart-result .ab-result-up{color:#34d399}.ab-chart-result .ab-result-down{color:#fb7185}
 .ab-chart-wrap.ab-active .ab-chart-trigger{bottom:9px}
 @media(max-width:480px){.ab-chart-trigger{bottom:18px;right:4px;min-width:38px;min-height:30px}.ab-chart-result{font-size:10px;padding:6px 8px}}
+</style><style id="finholdraChartLandscapeCSS">
+/* Beta 9.9.33: adjacent chart tools and an isolated landscape viewer. */
+.ab-chart-tools{position:absolute;right:8px;bottom:16px;z-index:6;display:flex;align-items:center;gap:6px}
+.ab-chart-tools>.ab-chart-trigger,.ab-chart-tools>.ab-chart-expand{position:static!important;bottom:auto!important;right:auto!important;min-width:39px;min-height:32px;padding:5px 9px;box-shadow:0 3px 12px rgba(0,0,0,.18)}
+.ab-chart-expand{border:1px solid var(--border,#52647a);border-radius:12px;background:var(--panel,#172a46);color:var(--text,#fff);font-size:15px;font-weight:750;cursor:pointer}
+.ab-chart-expand:focus-visible,.ab-chart-trigger:focus-visible{outline:2px solid #61baf8;outline-offset:2px}
+.finholdra-chart-fullscreen{position:fixed;inset:0;z-index:2147483000;background:var(--bg,#081426);color:var(--text,#fff);padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);overflow:hidden}
+.finholdra-chart-fullscreen[hidden]{display:none!important}
+.finholdra-chart-landscape{width:100%;height:100%;display:flex;flex-direction:column;gap:6px;padding:10px 12px;box-sizing:border-box}
+.finholdra-chart-fullscreen-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;min-height:42px}
+.finholdra-chart-fullscreen-head strong{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.finholdra-chart-fullscreen-close{background:var(--panel,#172a46);border:1px solid var(--border,#52647a);border-radius:10px;color:var(--text,#fff);padding:7px 12px;font-weight:750}
+.finholdra-chart-fullscreen-plot{flex:1;min-height:0;min-width:0;display:flex;align-items:center;justify-content:center;position:relative}
+.finholdra-chart-fullscreen-plot>.ab-chart-wrap{height:100%;width:100%;display:flex;justify-content:center;align-items:center}
+.finholdra-chart-fullscreen-plot .ab-chart-wrap>svg{height:100%;width:100%;max-width:100%;object-fit:contain}
+.finholdra-chart-fullscreen-plot .ab-chart-tools{bottom:12px;right:16px}
+.finholdra-chart-fullscreen-plot .ab-chart-result{top:5px;left:8px;right:auto;max-width:min(65%,430px)}
+@media(orientation:portrait){
+ .finholdra-chart-fullscreen .finholdra-chart-landscape{position:absolute;top:0;left:100vw;width:100dvh;height:100vw;transform-origin:top left;transform:rotate(90deg);padding:8px 14px}
+}
+@media(max-width:480px){.ab-chart-tools{right:5px;bottom:12px;gap:5px}.ab-chart-tools>.ab-chart-trigger,.ab-chart-tools>.ab-chart-expand{min-width:35px;min-height:30px;padding:4px 7px}}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.22" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -1836,12 +1857,21 @@ function renderHistory(){
  const dFirst=days(points[0].date),dLast=days(points[points.length-1].date);const x=i=>L+(W-L-R)*(days(points[i].date)-dFirst)/Math.max(1,dLast-dFirst),y=v=>T+(H-T-B)*(hi-v)/(hi-lo);
  const Y=p=>twMode?p.twrr:returnMethod==='roi'?p.roi:p.mwrr;
  let path='',lastValid=false;
- let gapLines='';
- points.forEach((p,i)=>{const z=Y(p);if(!Number.isFinite(z)){lastValid=false;return}
- const previous=points[i-1],elapsed=previous?days(p.date)-days(previous.date):0;
- const gap=!!previous&&elapsed>3&&Number.isFinite(Y(previous));
- if(gap){gapLines+='<line x1="'+x(i-1)+'" y1="'+y(Y(previous))+'" x2="'+x(i)+'" y2="'+y(z)+'" stroke="#7b91b3" stroke-width="1.5" stroke-dasharray="3 5"/>';lastValid=false}
- path+=(lastValid?'L':'M')+x(i).toFixed(2)+' '+y(z).toFixed(2)+' ';lastValid=true;
+ let gapLines='',lastPlottedIndex=-1,missingSinceLast=false,unverifiableDays=[];
+ points.forEach((p,i)=>{const z=Y(p);
+  if(!Number.isFinite(z)){
+   if(i>0){missingSinceLast=true;unverifiableDays.push(p.date)}
+   lastValid=false;return;
+  }
+  if(lastPlottedIndex>=0&&missingSinceLast){
+   const v=Y(points[lastPlottedIndex]);
+   gapLines+='<line x1="'+x(lastPlottedIndex)+'" y1="'+y(v)+'" x2="'+x(i)+'" y2="'+y(z)+'" stroke="#7b91b3" stroke-width="1.5" stroke-dasharray="3 5" aria-label="Intervallo non verificabile: nessun rendimento ricostruito"/>';
+   lastValid=false;
+  }
+  // Non-working days do not interrupt an otherwise valid observed time series.
+  // Missing returns are *not* linearly interpolated: a dotted link only signals missing data.
+  path+=(lastValid?'L':'M')+x(i).toFixed(2)+' '+y(z).toFixed(2)+' ';lastValid=true;
+  lastPlottedIndex=i;missingSinceLast=false;
  });
  const axisFormat=v=>(v>=0?'+':'')+v.toLocaleString('it-IT',{maximumFractionDigits:1})+'%';
  const ticks=[lo,(lo+hi)/2,hi].map(v=>'<line x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'" stroke="#40516b" stroke-dasharray="3 5"/><text x="'+L+'" y="'+(y(v)-5)+'" fill="#b8c5da" font-size="9">'+axisFormat(v)+'</text>').join('');
@@ -1862,7 +1892,7 @@ function renderHistory(){
   return '<g class="history-point" data-history-date="'+p.date+'" role="button" tabindex="0" aria-label="'+svgEscape(shortDate(p.date)+' · '+axisFormat(yy))+'">'+(showDot?'<circle cx="'+x(i)+'" cy="'+y(yy)+'" r="'+(chosen?4:2.6)+'" fill="'+color+'"/>':'')+'<circle data-hit-area="1" cx="'+x(i)+'" cy="'+y(yy)+'" r="8" fill="transparent" stroke="none"/>'+text+'</g>';
  }).join('');
  const plotLabel=(twMode?'TWRR':returnMethod==='roi'?'ROI':'MWRR')+' (%)';
- el.innerHTML=comparableNote+'<div class="history-axis-name">'+plotLabel+'</div><svg class="history-plot"'+abSeriesAttribute(points.filter(p=>Number.isFinite(Y(p))).map((p,i)=>({x:x(points.indexOf(p)),y:y(Y(p)),value:Y(p),label:shortDate(p.date)})),twMode?'twrr':returnMethod==='roi'?'roi':'mwrr')+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+plotLabel+' dal '+shortDate(first.date)+' al '+shortDate(last.date)+'">'+ticks+baseline+'<path d="'+path+'" fill="none" stroke="#37c9ff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>'+gapLines+ops+marks+'<text x="'+L+'" y="'+(H-6)+'" fill="#b8c5da" font-size="10">'+shortDate(first.date)+'</text><text x="'+(W-R)+'" y="'+(H-6)+'" fill="#b8c5da" text-anchor="end" font-size="10">'+shortDate(last.date)+'</text></svg><p class="history-helper">'+(isSeven?'Percentuali giornaliere visibili:':'Tocca un punto per dettagli e rendimento.')+' Verde/rosso: rendimento dell’intervallo.</p>';
+ el.innerHTML=comparableNote+'<div class="history-axis-name">'+plotLabel+'</div><svg class="history-plot"'+abSeriesAttribute(points.filter(p=>Number.isFinite(Y(p))).map((p,i)=>({x:x(points.indexOf(p)),y:y(Y(p)),value:Y(p),label:shortDate(p.date)})),twMode?'twrr':returnMethod==='roi'?'roi':'mwrr')+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+plotLabel+' dal '+shortDate(first.date)+' al '+shortDate(last.date)+'">'+ticks+baseline+'<path d="'+path+'" fill="none" stroke="#37c9ff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>'+gapLines+ops+marks+'<text x="'+L+'" y="'+(H-6)+'" fill="#b8c5da" font-size="10">'+shortDate(first.date)+'</text><text x="'+(W-R)+'" y="'+(H-6)+'" fill="#b8c5da" text-anchor="end" font-size="10">'+shortDate(last.date)+'</text></svg><p class="history-helper">'+(isSeven?'Percentuali giornaliere visibili:':'Tocca un punto per dettagli e rendimento.')+' Verde/rosso: rendimento dell’intervallo.'+(unverifiableDays.length?' · Tratto tratteggiato: rendimento non verificabile, nessun valore stimato.':'')+'</p>';
  if(!historySelectedDay||!points.some(p=>p.date===historySelectedDay))historySelectedDay=last.date;
  renderHistoryDay();
  summary.innerHTML='<span>'+plotLabel+'</span><span>Dal '+shortDate(first.date)+' al '+shortDate(last.date)+'</span>'+(twMode?'<span>Flussi neutralizzati: '+eur(netFlows)+'</span>':'<span>Flussi netti: '+eur(netFlows)+'</span>');
@@ -2857,7 +2887,7 @@ function plotAssetDetail(points,a,opts={}){
  '<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+svgEscape(detailDate(left,assetDetailRange==='1d'))+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+svgEscape(detailDate(right,assetDetailRange==='1d'))+'</text>';
  const highlighted='<g id="assetHoverDot" style="display:none"><line id="detailCrosshair" class="chart-crosshair" x1="0" y1="'+T+'" x2="0" y2="'+(H-B)+'"/><circle id="detailTargetDot" cx="0" cy="0" r="5.8" fill="'+color+'" stroke="#fff" stroke-width="2"/><rect class="chart-tooltip-bg" id="detailTipBg" x="0" y="0" width="138" height="33" rx="7"/><text class="chart-tooltip-label" id="detailTipText" x="0" y="0" text-anchor="middle">—</text></g>';
  const singleBondLabel=singleBond?'<text x="'+(W-R)+'" y="'+Math.max(T+11,y(points[0].p)-8).toFixed(2)+'" text-anchor="end" font-size="10.5" fill="#45dbae">Ultimo prezzo '+number(points[0].p)+'/100</text>':'';
- chart.innerHTML='<svg id="detailSvg"'+abSeriesAttribute(points.map(p=>({x:x(p.t),y:y(p.p),value:p.p,label:detailDate(p.t,intraday||!!p.live)})),'price',currencyOf(a))+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Prezzi osservati per '+svgEscape(a.name)+'"><g>'+borderTop+borderBottom+'</g>'+mc+'<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+(singleBond?'2.4':'2.8')+'" stroke-dasharray="'+(singleBond?'7 4':'none')+'" stroke-linejoin="round" stroke-linecap="round"/>'+singleBondLabel+tail+marks+highlighted+axis+'</svg>';
+ chart.innerHTML='<svg id="detailSvg"'+abSeriesAttribute(points.map(p=>({x:x(p.t),y:y(p.p),value:p.p,label:detailDate(p.t,assetDetailRange==='1d'||!!p.live)})),'price',currencyOf(a))+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Prezzi osservati per '+svgEscape(a.name)+'"><g>'+borderTop+borderBottom+'</g>'+mc+'<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+(singleBond?'2.4':'2.8')+'" stroke-dasharray="'+(singleBond?'7 4':'none')+'" stroke-linejoin="round" stroke-linecap="round"/>'+singleBondLabel+tail+marks+highlighted+axis+'</svg>';
  // Beta 9.9.11: the percentage must describe the SAME endpoints drawn in the graph.
  // Yahoo's chartPreviousClose is a prior-session reference, not the first plotted
  // intraday point. Comparing it with the last plot point made declining curves
@@ -4592,7 +4622,7 @@ reportPopulatePeriods();
 (()=>{
  'use strict';
  const NS='http://www.w3.org/2000/svg';
- let active=null,lockedY=0;
+ let active=null,lockedY=0,fullscreen=null;
  const fmt=(n,d=2)=>Number(n).toLocaleString('it-IT',{minimumFractionDigits:d,maximumFractionDigits:d});
  const signed=(n)=> (n>0?'+':'')+fmt(n);
  const pct=(n)=> (n>0?'+':'')+fmt(n)+'%';
@@ -4666,7 +4696,35 @@ reportPopulatePeriods();
   wrap.classList.add('ab-active');button.classList.add('active');button.textContent='× Esci';
   redraw();
  }
- function attach(svg){
+
+ function openFullscreen(source){
+  if(fullscreen)closeFullscreen();
+  if(active)close();
+  const previousHtmlOverflow=document.documentElement.style.overflow,previousBodyOverflow=document.body.style.overflow;
+  const oldScrollY=window.scrollY||0;
+  const dialog=document.createElement('section');dialog.className='finholdra-chart-fullscreen';dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-label','Grafico a tutto schermo orizzontale');
+  const panel=document.createElement('div');panel.className='finholdra-chart-landscape';
+  const head=document.createElement('div');head.className='finholdra-chart-fullscreen-head';
+  const label=document.createElement('strong');label.textContent=source.getAttribute('aria-label')||'Grafico · Vista orizzontale';
+  const back=document.createElement('button');back.className='finholdra-chart-fullscreen-close';back.type='button';back.textContent='✕ Chiudi';
+  const plot=document.createElement('div');plot.className='finholdra-chart-fullscreen-plot';
+  const clone=source.cloneNode(true);clone.removeAttribute('id');clone.setAttribute('aria-label',(source.getAttribute('aria-label')||'Grafico')+' · schermo intero');
+  head.append(label,back);plot.appendChild(clone);panel.append(head,plot);dialog.appendChild(panel);document.body.appendChild(dialog);
+  document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';
+  fullscreen={dialog,previousHtmlOverflow,previousBodyOverflow,oldScrollY};
+  attach(clone,true);
+  back.addEventListener('click',closeFullscreen);
+ }
+ function closeFullscreen(){
+  if(!fullscreen)return;
+  const f=fullscreen;fullscreen=null;
+  if(active&&f.dialog.contains(active.svg))close();
+  f.dialog.remove();
+  document.documentElement.style.overflow=f.previousHtmlOverflow;
+  document.body.style.overflow=f.previousBodyOverflow;
+  window.scrollTo(0,f.oldScrollY);
+ }
+ function attach(svg,insideFullscreen=false){
   if(svg.parentElement?.classList.contains('ab-chart-wrap'))return;
   const meta=decode(svg);if(!meta||!Array.isArray(meta.pts)||meta.pts.length<2)return;
   const wrap=document.createElement('div');wrap.className='ab-chart-wrap';
@@ -4677,7 +4735,9 @@ reportPopulatePeriods();
   overlay.setAttribute('class','ab-chart-overlay');wrap.appendChild(overlay);
   const result=document.createElement('div');result.className='ab-chart-result';result.setAttribute('role','status');result.setAttribute('aria-live','polite');wrap.appendChild(result);
   result.textContent='';result.hidden=true;
-  const button=document.createElement('button');button.type='button';button.className='ab-chart-trigger';button.textContent='A↔B';button.setAttribute('aria-label','Confronta due punti del grafico');button.title='Confronta A e B';wrap.appendChild(button);
+  const tools=document.createElement('div');tools.className='ab-chart-tools';wrap.appendChild(tools);
+  const button=document.createElement('button');button.type='button';button.className='ab-chart-trigger';button.textContent='A↔B';button.setAttribute('aria-label','Confronta due punti del grafico');button.title='Confronta A e B';tools.appendChild(button);
+  if(!insideFullscreen){const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);expand.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFullscreen(svg)});}
   button.addEventListener('click',ev=>{ev.stopPropagation();ev.preventDefault();toggle(svg,button,wrap,overlay,result);result.hidden=!active||active.svg!==svg});
   const select=ev=>{
    if(!active||active.svg!==svg)return;
@@ -4694,6 +4754,6 @@ reportPopulatePeriods();
   if(active&&!active.svg.isConnected)close();}
  const mo=new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(scan)}});
  mo.observe(document.body,{childList:true,subtree:true});scan();
- document.addEventListener('keydown',e=>{if(e.key==='Escape'&&active){e.preventDefault();close()}});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(fullscreen){e.preventDefault();closeFullscreen()}else if(active){e.preventDefault();close()}}});
 })();
 </script></body></html>
