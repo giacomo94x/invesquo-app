@@ -1146,9 +1146,9 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 @media(max-width:480px){.ab-chart-trigger{bottom:18px;right:4px;min-width:38px;min-height:30px}.ab-chart-result{font-size:10px;padding:6px 8px}}
 </style><style id="finholdraChartLandscapeCSS">
 /* Beta 9.9.33: adjacent chart tools and an isolated landscape viewer. */
-.ab-chart-tools{position:absolute;right:8px;bottom:16px;z-index:6;display:flex;align-items:center;gap:6px}
-.ab-chart-tools>.ab-chart-trigger,.ab-chart-tools>.ab-chart-expand{position:static!important;bottom:auto!important;right:auto!important;min-width:39px;min-height:32px;padding:5px 9px;box-shadow:0 3px 12px rgba(0,0,0,.18)}
-.ab-chart-expand{border:1px solid var(--border,#52647a);border-radius:12px;background:var(--panel,#172a46);color:var(--text,#fff);font-size:15px;font-weight:750;cursor:pointer}
+.ab-chart-tools{position:absolute;right:7px;bottom:14px;z-index:30;display:flex!important;align-items:center;justify-content:flex-end;gap:6px;pointer-events:auto!important;visibility:visible!important;overflow:visible!important}
+.ab-chart-tools>.ab-chart-trigger,.ab-chart-tools>.ab-chart-expand{position:static!important;bottom:auto!important;right:auto!important;min-width:39px;min-height:32px;padding:5px 9px;box-shadow:0 3px 12px rgba(0,0,0,.18);flex-shrink:0!important}
+.ab-chart-expand{border:1px solid var(--border,#52647a);border-radius:12px;background:var(--panel,#172a46);color:var(--text,#fff);font-size:12px;font-weight:750;cursor:pointer;white-space:nowrap;display:inline-flex!important;align-items:center;justify-content:center;visibility:visible!important;opacity:1!important}
 .ab-chart-expand:focus-visible,.ab-chart-trigger:focus-visible{outline:2px solid #61baf8;outline-offset:2px}
 .finholdra-chart-fullscreen{position:fixed;inset:0;z-index:2147483000;background:var(--bg,#081426);color:var(--text,#fff);padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);overflow:hidden}
 .finholdra-chart-fullscreen[hidden]{display:none!important}
@@ -1164,7 +1164,7 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 @media(orientation:portrait){
  .finholdra-chart-fullscreen .finholdra-chart-landscape{position:absolute;top:0;left:100vw;width:100dvh;height:100vw;transform-origin:top left;transform:rotate(90deg);padding:8px 14px}
 }
-@media(max-width:480px){.ab-chart-tools{right:5px;bottom:12px;gap:5px}.ab-chart-tools>.ab-chart-trigger,.ab-chart-tools>.ab-chart-expand{min-width:35px;min-height:30px;padding:4px 7px}}
+@media(max-width:480px){.ab-chart-tools{right:5px;bottom:12px;gap:5px}.ab-chart-tools>.ab-chart-trigger,.ab-chart-tools>.ab-chart-expand{min-width:35px;min-height:30px;padding:4px 7px}.ab-chart-expand{font-size:10px!important}}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.22" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -1646,28 +1646,84 @@ function trackedValue(s){
 }
 function trackedCapital(s){return CAT.filter(([cat])=>historySelectedCats().includes(cat)).reduce((n,[cat])=>n+Number(s.byCat?.[cat]?.capital||0),0)}
 function shortDate(date){const m=String(date||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[3]+'/'+m[2]+'/'+m[1].slice(2):String(date||'')}
+// A historical capital flow can be verified either from the ledger or from
+// two stored positions with unchanged asset identity and a documented increase
+// in cost basis. This prevents backdated/late-added ledger entries from being
+// counted as market performance, without inventing any market prices.
+function historyAssetFlow(from,to,id){
+ const before=from?.byAsset?.[id],after=to?.byAsset?.[id];
+ const q0=Number(before?.quantity||0),q1=Number(after?.quantity||0);
+ const v0=Number(before?.value||0),v1=Number(after?.value||0);
+ if(![q0,q1,v0,v1].every(Number.isFinite))return null;
+ const ops=trades.filter(t=>t.asset===id&&t.date>from.date&&t.date<=to.date&&['buy','sale'].includes(t.kind));
+ if(ops.some(t=>!Number.isFinite(Number(t.quantity))||!Number.isFinite(Number(t.spent))))return null;
+ const ledgerQ=ops.reduce((n,t)=>n+(t.kind==='buy'?1:-1)*Number(t.quantity),0);
+ const tolerance=Math.max(1e-6,Math.abs(q1)*1e-6);
+ const c0=Number(before?.capital),c1=Number(after?.capital);
+ if(Math.abs(q1-q0-ledgerQ)<=tolerance){
+  const ledgerCash=ops.reduce((n,t)=>n+Number(t.spent),0);
+  if(q1>q0+tolerance&&ledgerCash<=0&&Number.isFinite(c0)&&Number.isFinite(c1)&&c1>c0)
+   return {flow:c1-c0,source:'capitale registrato',ops};
+  return {flow:ledgerCash,source:'registro',ops};
+ }
+ // Documented cash invested in a pure accumulation (no unexplained reduction).
+ // The difference of saved cost bases is the contribution, not a price guess.
+ if(q1>q0+tolerance&&Number.isFinite(c0)&&Number.isFinite(c1)&&c1>c0&&c0>=0){
+  const cash=c1-c0;
+  if(cash>0&&cash<Math.max(100,Math.abs(v1)*10))return {flow:cash,source:'capitale registrato',ops};
+ }
+ // If no shares changed and no transactions can be reconciled, cost basis and
+ // position value still permit a comparison when they are both unchanged.
+ if(Math.abs(q1-q0)<=tolerance&&Number.isFinite(c0)&&Number.isFinite(c1)&&Math.abs(c1-c0)<.01)return {flow:0,source:'posizione invariata',ops:[]};
+ return null;
+}
 function historyFlowsReconcile(from,to){
  const ids=new Set([...Object.keys(from?.byAsset||{}),...Object.keys(to?.byAsset||{})]);
- for(const id of ids){
-  const b=from.byAsset?.[id],e=to.byAsset?.[id];
-  const cat=e?.cat||b?.cat;
-  if(!historyCatIncluded(cat))continue;
-  const q0=Number(b?.quantity||0),q1=Number(e?.quantity||0);
-  const delta=trades.filter(t=>t.asset===id&&t.date>from.date&&t.date<=to.date&&['buy','sale'].includes(t.kind)).reduce((n,t)=>n+(t.kind==='buy'?1:-1)*Number(t.quantity||0),0);
-  if(!Number.isFinite(q0)||!Number.isFinite(q1)||!Number.isFinite(delta)||Math.abs(q1-q0-delta)>Math.max(1e-6,Math.abs(q1)*1e-6))return false;
+ for(const id of ids){const cat=to?.byAsset?.[id]?.cat||from?.byAsset?.[id]?.cat;
+  if(historyCatIncluded(cat)&&!historyAssetFlow(from,to,id))return false;
  }
  return true;
 }
+function historyEffectiveFlows(from,to){
+ if(!from||!to||!from.byAsset||!to.byAsset)return null;
+ const ids=new Set([...Object.keys(from.byAsset),...Object.keys(to.byAsset)]);
+ let flow=0,estimated=false;
+ for(const id of ids){const cat=to.byAsset?.[id]?.cat||from.byAsset?.[id]?.cat;
+  if(!historyCatIncluded(cat))continue;
+  const item=historyAssetFlow(from,to,id);if(!item)return null;
+  flow+=item.flow;if(item.source==='capitale registrato')estimated=true;
+ }
+ return {flow,estimated};
+}
 
 function historyInterval(from,to){
- if(!from||!to||days(to.date)<=days(from.date)||!historyFlowsReconcile(from,to))return null;
+ if(!from||!to||days(to.date)<=days(from.date))return null;
+ const net=historyEffectiveFlows(from,to);if(!net)return null;
  const fromDay=days(from.date),toDay=days(to.date),duration=toDay-fromDay;
- const intervalFlows=trades.filter(t=>t.date>from.date&&t.date<=to.date&&historyCatIncluded(t.cat)&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0);
- const flow=intervalFlows.reduce((sum,t)=>sum+Number(t.spent),0);
- const weighted=intervalFlows.reduce((sum,t)=>sum+Number(t.spent)*Math.max(0,Math.min(1,(toDay-days(t.date))/duration)),0);
- const baseline=trackedValue(from),ending=trackedValue(to),gain=ending-baseline-flow;
+ const registered=trades.filter(t=>t.date>from.date&&t.date<=to.date&&historyCatIncluded(t.cat)&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0);
+ const registeredSum=registered.reduce((sum,t)=>sum+Number(t.spent),0);
+ // For same-day purchases exact transaction times are unavailable; the time
+ // weighting is an estimate, never a claim of transaction-exact TWRR.
+ const weightedRegistered=registered.reduce((sum,t)=>sum+Number(t.spent)*Math.max(0,Math.min(1,(toDay-days(t.date))/duration)),0);
+ const inferred=net.flow-registeredSum;
+ const weighted=weightedRegistered+(inferred!==0?inferred*.5:0);
+ const baseline=trackedValue(from),ending=trackedValue(to),gain=ending-baseline-net.flow;
  const denominator=baseline+weighted;
- return {from:from.date,to:to.date,days:duration,gain,pct:denominator>0?gain/denominator:null,flow,ending};
+ return {from:from.date,to:to.date,days:duration,gain,pct:denominator>0?gain/denominator:null,flow:net.flow,ending,estimated:net.estimated};
+}
+
+function historyPeriodNetFlows(first,last){
+ const eligible=snapshots.filter(s=>s&&s.date>=first.date&&s.date<=last.date&&Number.isFinite(trackedValue(s)));
+ // Do not treat a reconstructed and a directly observed reading on the same
+ // calendar date as two different cash-flow periods.
+ const byDate=new Map();for(const snap of eligible){const prior=byDate.get(snap.date);
+  if(!prior||(prior.source==='reconstructed'&&snap.source!=='reconstructed')||((snap.stamp||0)>(prior.stamp||0)&&snap.source===prior.source))byDate.set(snap.date,snap);
+ }
+ const ordered=[...byDate.values()].sort((a,b)=>a.date.localeCompare(b.date));
+ if(ordered.length<2)return null;
+ let net=0;
+ for(let i=1;i<ordered.length;i++){const iv=historyEffectiveFlows(ordered[i-1],ordered[i]);if(!iv)return null;net+=iv.flow;}
+ return net;
 }
 function periodFlows(from,to){return trades.filter(t=>t.date>from.date&&t.date<=to.date&&historyCatIncluded(t.cat)&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0)}
 // TWRR: chain returns across each observed subperiod. Trades between daily observations
@@ -1697,11 +1753,13 @@ function mwrrForPeriod(first,last){
  return (lo+hi)/2;
 }
 function roiSimpleForPeriod(first,last){
- if(!first||!last||days(last.date)<=days(first.date)||!historyFlowsReconcile(first,last))return null;
+ if(!first||!last||days(last.date)<=days(first.date))return null;
  const initial=trackedValue(first),ending=trackedValue(last);
  if(!Number.isFinite(initial)||!Number.isFinite(ending))return null;
- const period=periodFlows(first,last),net=period.reduce((n,t)=>n+Number(t.spent||0),0);
- const added=period.reduce((n,t)=>n+Math.max(0,Number(t.spent||0)),0);
+ const period=periodFlows(first,last),reconciled=historyPeriodNetFlows(first,last);
+ if(reconciled===null)return null;
+ const net=reconciled;
+ const added=Math.max(0,net); // Conservative denominator when historical trades were backfilled.
  const denominator=initial+added;
  return denominator>0?(ending-initial-net)/denominator:null;
 }
@@ -1762,17 +1820,14 @@ function dailyMovement(prev,curr,id){
  const b=prev.byAsset?.[id],e=curr.byAsset?.[id];
  const q0=Number(b?.quantity||0),q1=Number(e?.quantity||0),v0=Number(b?.value||0),v1=Number(e?.value||0);
  if(![q0,q1,v0,v1].every(Number.isFinite))return {error:'Rilevazione incompleta'};
- const ops=trades.filter(t=>t.asset===id&&t.date>prev.date&&t.date<=curr.date&&['buy','sale'].includes(t.kind));
- const deltaQ=ops.reduce((n,t)=>n+(t.kind==='buy'?1:-1)*Number(t.quantity||0),0);
- if(Math.abs(q1-q0-deltaQ)>Math.max(1e-6,Math.abs(q1)*1e-6))return {error:'Quote e operazioni non coincidono'};
- if(ops.some(t=>!Number.isFinite(Number(t.spent))))return {error:'Importo operazione mancante'};
- const net=ops.reduce((n,t)=>n+Number(t.spent),0);
- const buys=ops.reduce((n,t)=>n+(t.kind==='buy'?Math.max(0,Number(t.spent)):0),0);
+ const reconciled=historyAssetFlow(prev,curr,id);
+ if(!reconciled)return {error:'Operazioni e capitale da verificare'};
+ const net=reconciled.flow;
+ const buys=Math.max(0,net);
  const gain=v1-v0-net,base=v0+buys;
- // A purchase is capital movement, never market profit. A zero starting position
- // with a buy uses purchased capital as its return denominator.
- return {id,gain,pct:base>0?gain/base:null,net,buys,v0,v1,q0,q1,ops};
+ return {id,gain,pct:base>0?gain/base:null,net,buys,v0,v1,q0,q1,ops:reconciled.ops,estimated:reconciled.source==='capitale registrato'};
 }
+
 function renderDailyHistory(){
  const el=$('dailyHistoryView');if(!el)return;
  const rows=dailyHistoryRecords();
@@ -1825,7 +1880,7 @@ function renderHistory(){
  const end=days(today()),selected=observed.filter(s=>historyRange==='all'||end-days(s.date)<=Number(historyRange));
  const series=selected.length?selected:[observed[observed.length-1]];
  const first=series[0],last=series[series.length-1];showMethodHelp(maxMode,series);
- const labelCats=historySelectedCats();const comparableNote='<p class="hint">Categorie: '+svgEscape(historyCategory)+' · Rilevazioni complete: '+observed.length+'</p>';
+ const labelCats=historySelectedCats();const comparableNote='<p class="hint">Categorie: '+svgEscape(historyCategory)+' · Rilevazioni complete: '+observed.length+' · Gli acquisti sono flussi, non rendimenti.</p>';
  if(series.length<2){el.innerHTML=comparableNote+'<div class="history-empty">Solo una rilevazione confrontabile in questo periodo.</div>';perf.innerHTML='';summary.innerHTML='<span>Rilevazione: '+shortDate(first.date)+'</span>';detail.classList.add('hidden');return}
  // Time-weighted performance is a chained return INDEX: it is never the portfolio balance.
  const points=[];let twFactor=1,twValid=true;
@@ -1843,13 +1898,14 @@ function renderHistory(){
  const numbers=points.map(p=>twMode?p.twrr:returnMethod==='roi'?p.roi:p.mwrr).filter(Number.isFinite);
  if(numbers.length<2){el.innerHTML=comparableNote+'<div class="history-empty">Rendimento non calcolabile: manca un valore iniziale positivo o una rilevazione confrontabile.</div>';perf.innerHTML='';summary.innerHTML='';detail.classList.add('hidden');return}
  const startVal=points[0].value,endVal=points[points.length-1].value;
- const netFlows=trades.filter(t=>t.date>first.date&&t.date<=last.date&&historyCatIncluded(t.cat)).reduce((a,t)=>a+Number(t.spent||0),0);
- const marketGain=endVal-startVal-netFlows;
+ const reconciledNet=historyPeriodNetFlows(first,last);
+ const netFlows=reconciledNet===null?NaN:reconciledNet;
+ const marketGain=Number.isFinite(netFlows)?endVal-startVal-netFlows:NaN;
  const lastRet=twMode?points.at(-1).twrr:returnMethod==='roi'?points.at(-1).roi:points.at(-1).mwrr;const periodPct=Number.isFinite(lastRet)?lastRet/100:null;
  const change=marketGain;
  const signed=(n,fmt)=>(n>=0?'+':'')+fmt(n);
  const perfCls=(twMode?periodPct:change)>=0?'gain':'loss';
- perf.innerHTML='<div><small>Guadagno di mercato stimato (€)</small><strong class="'+(marketGain>=0?'gain':'loss')+'">'+signed(marketGain,eur)+'</strong></div><div><small>'+ (twMode?'TWRR':returnMethod==='roi'?'ROI semplice':'MWRR') +' · periodo (%)</small><strong class="'+perfCls+'">'+(periodPct===null?'n.d.':signed(periodPct,pct))+'</strong></div>';
+ perf.innerHTML='<div><small>Guadagno di mercato stimato (€)</small><strong class="'+(marketGain>=0?'gain':'loss')+'">'+(Number.isFinite(marketGain)?signed(marketGain,eur):'n.d.')+'</strong></div><div><small>'+ (twMode?'TWRR':returnMethod==='roi'?'ROI semplice':'MWRR') +' · periodo (%)</small><strong class="'+perfCls+'">'+(periodPct===null?'n.d.':signed(periodPct,pct))+'</strong></div>';
  let lo=Math.min(...numbers),hi=Math.max(...numbers),spread=hi-lo;
  if(spread<.0001){const pad=twMode?1:Math.max(10,Math.abs(lo)*.002);lo-=pad;hi+=pad}else{lo-=spread*.18;hi+=spread*.18}
  if(twMode){lo=Math.min(lo,0);hi=Math.max(hi,0)}
@@ -3792,8 +3848,43 @@ function favoriteLogo(asset){
 function favoriteSpark(points,negative){if(!Array.isArray(points)||points.length<2)return '<div class="favorite-placeholder">1G n.d.</div>';const v=points.map(p=>p.p),min=Math.min(...v),max=Math.max(...v),span=Math.max(max-min,1e-9),coords=points.map((p,i)=>(2+96*i/(points.length-1)).toFixed(1)+','+(31-26*(p.p-min)/span).toFixed(1)).join(' ');return '<svg class="favorite-spark" viewBox="0 0 100 34" preserveAspectRatio="none" aria-label="Andamento 1 giorno"><polyline fill="none" stroke="'+(negative?'var(--red)':'var(--green)')+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="'+coords+'"/></svg>'}
 function renderFavoriteBanner(){const el=$('favoriteBanner');if(!el)return;const assets=favoriteAssets();el.classList.toggle('hidden',!prefs.favoriteEnabled||!assets.length);if(!prefs.favoriteEnabled||!assets.length){el.innerHTML='';return}el.innerHTML=assets.map(a=>{const d=favoriteCache.get(a.symbol),value=d&&Number.isFinite(d.price)?d.price.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:4})+' '+favoriteSafe(a.currency||''): '—',pct=d&&Number.isFinite(d.change)?(d.change>=0?'+':'')+d.change.toFixed(2).replace('.',',')+'%':'—',negative=!!d&&d.change<0;return '<article class="favorite-row" role="button" tabindex="0" data-fav-open="'+favoriteSafe(a.symbol)+'" aria-label="Apri '+favoriteSafe(a.name||a.symbol)+'"><div class="favorite-name">'+favoriteLogo(a)+'<span class="favorite-name-text" title="'+favoriteSafe(a.name)+'">'+favoriteSafe(a.name||a.symbol)+'</span></div>'+favoriteSpark(d?.points,negative)+'<div class="favorite-numbers">'+value+'<small class="'+(!d?'':negative?'loss':'gain')+'">'+pct+'</small></div></article>'}).join('')}
 function renderFavoriteSettings(){const box=$('favoriteSelected');if(!box)return;const a=favoriteAssets();box.innerHTML=a.length?a.map((x,i)=>'<div class="favorite-chosen"><span>'+favoriteSafe(x.name||x.symbol)+' · '+favoriteSafe(x.symbol)+'</span><button class="btn" type="button" data-fav-remove="'+i+'">Rimuovi</button></div>').join(''):'<div class="favorite-empty">Nessun titolo selezionato.</div>';box.querySelectorAll('[data-fav-remove]').forEach(b=>b.addEventListener('click',()=>{prefs.favoriteAssets=favoriteAssets().filter((_,i)=>i!==Number(b.dataset.favRemove));savePreferences();renderFavoriteSettings();renderFavoriteBanner()}));$('favoriteEnabled').checked=!!prefs.favoriteEnabled;$('favoriteSettingsBody').classList.toggle('hidden',!prefs.favoriteEnabled)}
-async function fetchFavoriteQuote(a){const symbol=String(a.symbol||'').toUpperCase(),currency=String(a.currency||'EUR').toUpperCase();if(!symbol||!currency)throw Error('Ticker assente');const query='?symbol='+encodeURIComponent(symbol)+'&range=1d&currency='+encodeURIComponent(currency);const endpoints=['/.netlify/functions/history'+query,'https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol)+'?range=1d&interval=5m'];let lastError=null;for(const url of endpoints){try{const r=JSON.parse(await readUrl(url,6200));const x=r?.chart?.result?.[0];if(!x||String(x.meta?.symbol||'').toUpperCase()!==symbol||String(x.meta?.currency||'').toUpperCase()!==currency)continue;const time=x.timestamp||[],values=x.indicators?.quote?.[0]?.close||[];const points=time.map((t,i)=>({t:Number(t),p:Number(values[i])})).filter(x=>Number.isFinite(x.t)&&Number.isFinite(x.p)&&x.p>0&&x.t*1000<=Date.now()+3600000).slice(-140);if(points.length<2)continue;const prev=Number(x.meta?.chartPreviousClose||x.meta?.previousClose||x.meta?.regularMarketPreviousClose),first=prev>0?prev:points[0].p,last=points[points.length-1].p;const price=Number(x.meta?.regularMarketPrice)>0?Number(x.meta.regularMarketPrice):last;const change=(last/first-1)*100;return{price,change,points,asOf:points[points.length-1].t*1000}}catch(e){lastError=e}}throw lastError||Error('Storico intraday non disponibile')}
-async function refreshFavoriteQuotes(force=false){const current=favoriteAssets();if(!prefs.favoriteEnabled||!current.length||favoritePollBusy||(!force&&Date.now()-favoriteLastPoll<60000)||document.visibilityState==='hidden')return;favoritePollBusy=true;favoriteLastPoll=Date.now();try{await Promise.all(current.map(async a=>{try{const q=await fetchFavoriteQuote(a);favoriteCache.set(a.symbol,q)}catch(_){favoriteCache.delete(a.symbol)}}));renderFavoriteBanner()}finally{favoritePollBusy=false}}
+async function fetchFavoriteQuote(a){
+ const symbol=String(a.symbol||'').toUpperCase(),currency=String(a.currency||'EUR').toUpperCase();
+ if(!symbol||!currency)throw Error('Ticker assente');
+ let lastError=null;
+ // 1d intraday can be empty before the local market opens. Never erase a
+ // previously valid quote solely because today's candles are not yet available.
+ for(const range of ['1d','5d','1mo']){
+  const interval=range==='1d'?'5m':range==='5d'?'30m':'1d';
+  const query='?symbol='+encodeURIComponent(symbol)+'&range='+range+'&currency='+encodeURIComponent(currency);
+  const urls=['/.netlify/functions/history'+query,'https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol)+'?range='+range+'&interval='+interval];
+  for(const url of urls){try{
+   const r=JSON.parse(await readUrl(url,6500)),x=r?.chart?.result?.[0];
+   if(!x||String(x.meta?.symbol||'').toUpperCase()!==symbol||String(x.meta?.currency||'').toUpperCase()!==currency)continue;
+   const times=x.timestamp||[],values=x.indicators?.quote?.[0]?.close||[];
+   const all=times.map((t,i)=>({t:Number(t),p:Number(values[i])})).filter(p=>Number.isFinite(p.t)&&Number.isFinite(p.p)&&p.p>0&&p.t*1000<=Date.now()+3600000).sort((a,b)=>a.t-b.t);
+   if(!all.length)continue;
+   let start=0;
+   if(range==='5d'||range==='1mo'){
+    // Use last quoted session, not an artificial line across overnight gaps.
+    const gap=range==='5d'?6*3600:20*3600;
+    for(let i=all.length-1;i>0;i--)if(all[i].t-all[i-1].t>gap){start=i;break;}
+   }
+   const points=all.slice(start).slice(-140),last=points.at(-1).p;
+   const prevRecorded=Number(x.meta?.chartPreviousClose||x.meta?.previousClose||x.meta?.regularMarketPreviousClose);
+   const previousSession=start>0?all[start-1].p:NaN;
+   const reference=Number.isFinite(previousSession)&&previousSession>0?previousSession:prevRecorded>0?prevRecorded:NaN;
+   const price=Number(x.meta?.regularMarketPrice)>0?Number(x.meta.regularMarketPrice):last;
+   const change=Number.isFinite(reference)&&reference>0?(price/reference-1)*100:NaN;
+   if(!Number.isFinite(price)||price<=0||Date.now()-points.at(-1).t*1000>8*86400000)continue;
+   return {price,change,points,asOf:points.at(-1).t*1000,previousClose:reference,sourceRange:range};
+  }catch(e){lastError=e}
+  }
+ }
+ throw lastError||Error('Storico prezzi non disponibile');
+}
+
+async function refreshFavoriteQuotes(force=false){const current=favoriteAssets();if(!prefs.favoriteEnabled||!current.length||favoritePollBusy||(!force&&Date.now()-favoriteLastPoll<60000)||document.visibilityState==='hidden')return;favoritePollBusy=true;favoriteLastPoll=Date.now();try{await Promise.all(current.map(async a=>{try{const q=await fetchFavoriteQuote(a);favoriteCache.set(a.symbol,q)}catch(_){/* Mantieni l'ultima quotazione salvata; non sostituirla con trattini per una chiusura di mercato. */}}));renderFavoriteBanner()}finally{favoritePollBusy=false}}
 $('favoriteEnabled').addEventListener('change',e=>{prefs.favoriteEnabled=e.target.checked;savePreferences();renderFavoriteSettings();renderFavoriteBanner();void refreshFavoriteQuotes(true)});
 // Preferiti: stesso motore, ordinamento, filtri geografici, nomi e icone usati in Investimenti.
 $('favoriteSearch').addEventListener('click',async()=>{
@@ -4737,7 +4828,7 @@ reportPopulatePeriods();
   result.textContent='';result.hidden=true;
   const tools=document.createElement('div');tools.className='ab-chart-tools';wrap.appendChild(tools);
   const button=document.createElement('button');button.type='button';button.className='ab-chart-trigger';button.textContent='A↔B';button.setAttribute('aria-label','Confronta due punti del grafico');button.title='Confronta A e B';tools.appendChild(button);
-  if(!insideFullscreen){const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);expand.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFullscreen(svg)});}
+  if(!insideFullscreen){const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶ Ingrandisci';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);expand.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFullscreen(svg)});}
   button.addEventListener('click',ev=>{ev.stopPropagation();ev.preventDefault();toggle(svg,button,wrap,overlay,result);result.hidden=!active||active.svg!==svg});
   const select=ev=>{
    if(!active||active.svg!==svg)return;
