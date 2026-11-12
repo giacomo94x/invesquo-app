@@ -1165,6 +1165,15 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
  .finholdra-chart-fullscreen .finholdra-chart-landscape{position:absolute;top:0;left:100vw;width:100dvh;height:100vw;transform-origin:top left;transform:rotate(90deg);padding:8px 14px}
 }
 @media(max-width:480px){.ab-chart-tools{right:auto!important;bottom:auto!important;gap:5px}.ab-chart-tools>.ab-chart-trigger,.ab-chart-tools>.ab-chart-expand{min-width:35px;min-height:30px;padding:4px 7px}.ab-chart-expand{font-size:10px!important}}
+</style><style id="finholdra936toolFix">
+/* Sibling toolbar: cannot be clipped or overlaid by chart SVG */
+.ab-chart-tools-v936{position:relative!important;display:flex!important;visibility:visible!important;opacity:1!important;flex-flow:row nowrap!important;justify-content:flex-end!important;align-items:center!important;gap:8px!important;width:100%!important;min-height:42px!important;padding:3px 0 5px!important;box-sizing:border-box!important;z-index:100!important;overflow:visible!important}
+.ab-chart-tools-v936 button{position:relative!important;display:inline-flex!important;visibility:visible!important;opacity:1!important;min-height:36px!important;align-items:center!important;justify-content:center!important;border-radius:11px!important;pointer-events:auto!important;white-space:nowrap!important}
+.ab-chart-tools-v936 .ab-chart-expand{background:#315b9c!important;border-color:#7fa4e9!important;color:#fff!important;font-size:12px!important;}
+.finholdra-chart-fullscreen-plot{flex-direction:column!important;align-items:stretch!important;}
+.finholdra-chart-fullscreen-plot>.ab-chart-wrap{flex:1!important;min-height:0!important;}
+.finholdra-chart-fullscreen-plot>.ab-chart-tools-v936{flex:0 0 42px!important;}
+@media(max-width:480px){.ab-chart-tools-v936 button{min-height:38px!important;font-size:12px!important}.ab-chart-tools-v936 .ab-chart-expand{font-size:12px!important;}}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.22" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -1668,12 +1677,26 @@ function historyAssetFlow(from,to,id){
  // A pure purchase adds its actual invested capital; market appreciation does not.
  if(delta>tolerance&&basisValid&&c1>c0)return {flow:c1-c0,source:'capitale registrato',ops};
  if(sameQty&&basisValid&&Math.abs(c1-c0)<.02)return {flow:0,source:'posizione invariata',ops:[]};
- // Selling shares reduces cost basis by book cost, not by proceeds: require cash ledger.
+ // For sales, only a matching ledger contains exact cash proceeds. If missing,
+ // estimate the cash flow from the *observed* closing value per unit.
+ // This is not presented as the actual brokerage execution price.
  if(delta < -tolerance && validOps && ops.some(t=>t.kind==='sale'))return {flow:ledgerCash,source:'vendita registrata',ops};
  if(sameQty&&validOps&&ops.length)return {flow:ledgerCash,source:'registro non allineato',ops};
- // A newly appearing/vanishing position can be valued from documented cash basis,
- // but never from a guessed change in market price.
- if(delta>tolerance&&basisValid&&c0===0&&c1>0)return {flow:c1,source:'capitale registrato',ops};
+ // A position may be re-priced or have its cost basis corrected without new shares.
+ // Neither event is itself a cash deposit.
+ if(sameQty)return {flow:0,source:basisValid&&Math.abs(c1-c0)>.02?'quantità stabile / base rettificata':'quantità stabile',ops:[]};
+ // Legacy snapshots often have a purchase date which differs from the ledger date.
+ // Use saved cost basis when it is consistent; otherwise use actual saved valuations
+ // to estimate transfer cash. No invented time series prices are added.
+ const v0=Number(before?.value||0),v1=Number(after?.value||0);
+ if(delta>tolerance){
+  if(basisValid&&c1>c0)return {flow:c1-c0,source:'capitale registrato',ops};
+  if(q1>0&&Number.isFinite(v1)&&v1>=0)return {flow:delta*(v1/q1),source:'flusso stimato da quantità e valore osservati',ops};
+ }
+ if(delta < -tolerance){
+  if(q1>0&&Number.isFinite(v1)&&v1>=0)return {flow:delta*(v1/q1),source:'vendita stimata da prezzo osservato',ops};
+  if(q0>0&&Number.isFinite(v0)&&v0>=0)return {flow:-v0,source:'uscita posizione · prezzo finale ignoto',ops};
+ }
  return null;
 }
 function historyFlowsReconcile(from,to){
@@ -1706,6 +1729,23 @@ function historyEffectiveFlows(from,to){
  }
  if(Number.isFinite(delta)&&Math.abs(delta)<.02)return {flow:0,estimated:true,source:'capitale categoria invariato'};
  if(Number.isFinite(delta)&&delta>0)return {flow:delta,estimated:true,source:'capitale categoria'};
+ // Older snapshots may have negative cost-basis changes even though proceeds are
+ // absent from the ledger. Prefer a per-asset observed-price approximation if possible.
+ if(Number.isFinite(delta)&&delta<0){
+  const before=from.byAsset||{},after=to.byAsset||{};
+  let estimatedFlow=0,hasHolding=false;
+  for(const id of new Set([...Object.keys(before),...Object.keys(after)])){
+   const cat=after[id]?.cat||before[id]?.cat;
+   if(!historyCatIncluded(cat))continue;
+   const q0=Number(before[id]?.quantity||0),q1=Number(after[id]?.quantity||0);
+   const v0=Number(before[id]?.value||0),v1=Number(after[id]?.value||0);
+   if(![q0,q1,v0,v1].every(Number.isFinite))return null;
+   hasHolding=true;
+   if(q1<q0){estimatedFlow-=(q0-q1)*(q1>0?v1/q1:q0>0?v0/q0:0)}
+   if(q1>q0)estimatedFlow+=(q1-q0)*(q1>0?v1/q1:0);
+  }
+  if(hasHolding)return {flow:estimatedFlow,estimated:true,source:'quantità e valori osservati'};
+ }
  return null;
 }
 function historyInterval(from,to){
@@ -4848,9 +4888,15 @@ reportPopulatePeriods();
   overlay.setAttribute('class','ab-chart-overlay');wrap.appendChild(overlay);
   const result=document.createElement('div');result.className='ab-chart-result';result.setAttribute('role','status');result.setAttribute('aria-live','polite');wrap.appendChild(result);
   result.textContent='';result.hidden=true;
-  const tools=document.createElement('div');tools.className='ab-chart-tools';wrap.appendChild(tools);
+  // A persistent sibling toolbar lives OUTSIDE the SVG wrapper and cannot be
+  // clipped by chart layers or any of the chart SVG's overlapping controls.
+  const tools=document.createElement('div');tools.className='ab-chart-tools ab-chart-tools-v936';
+  wrap.insertAdjacentElement('afterend',tools);
   const button=document.createElement('button');button.type='button';button.className='ab-chart-trigger';button.textContent='A↔B';button.setAttribute('aria-label','Confronta due punti del grafico');button.title='Confronta A e B';tools.appendChild(button);
-  if(!insideFullscreen){const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶ Schermo intero';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);expand.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFullscreen(svg)});}
+  if(!insideFullscreen){
+   const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶ Schermo intero';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);
+   expand.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFullscreen(svg)});
+  }
   button.addEventListener('click',ev=>{ev.stopPropagation();ev.preventDefault();toggle(svg,button,wrap,overlay,result);result.hidden=!active||active.svg!==svg});
   const select=ev=>{
    if(!active||active.svg!==svg)return;
