@@ -1212,6 +1212,21 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
  .ab-chart-wrap>.ab-chart-tools-v936 button{min-height:36px!important;padding:6px 9px!important}
 }
 @media(prefers-reduced-motion:reduce){.finholdra-chart-fullscreen *{animation:none!important;transition:none!important}}
+</style><style id="finholdra939AllCharts">
+/* Detail charts: allow the common A/B and fullscreen toolbar to occupy real space. */
+#assetDetailChart{overflow:visible!important;contain:layout!important;padding-bottom:6px!important}
+#assetDetailChart>.ab-chart-wrap{overflow:visible!important;contain:layout!important}
+#assetDetailChart .ab-chart-tools-v936,.pmc-history-plot .ab-chart-tools-v936{position:relative!important;display:flex!important;visibility:visible!important;opacity:1!important;justify-content:space-between!important;gap:12px!important;min-height:44px!important;z-index:4!important}
+.pmc-history-plot{overflow:visible!important}
+#favoriteBanner .favorite-row{position:relative}
+#favoriteBanner .favorite-expand{appearance:none;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:9px;background:var(--panel2);color:var(--text);width:31px;height:32px;padding:0;cursor:pointer;touch-action:manipulation;flex:none;font-size:17px;line-height:1}
+#favoriteBanner .favorite-expand:focus-visible{outline:2px solid #7fa4e9;outline-offset:2px}
+#favoriteBanner .favorite-expand[disabled]{opacity:.35;cursor:default}
+#favoriteBanner .favorite-row{grid-template-columns:minmax(75px,1fr) minmax(50px,1.08fr) minmax(73px,.86fr) 32px!important}
+@media(min-width:768px) and (hover:hover){#favoriteBanner .favorite-row{grid-template-columns:minmax(95px,1.05fr) minmax(80px,2.6fr) minmax(95px,.7fr) 32px!important}}
+@media(max-width:420px){#favoriteBanner .favorite-row{grid-template-columns:minmax(68px,1fr) minmax(44px,1fr) minmax(69px,.92fr) 31px!important;column-gap:5px!important}}
+/* Never shrink the chart or overlay its dates to make room for controls. */
+#assetDetailChart .ab-chart-tools-v936 button,.pmc-history-plot .ab-chart-tools-v936 button{position:static!important;min-width:43px!important}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.22" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -3946,7 +3961,7 @@ function favoriteLogo(asset){
 }
 
 function favoriteSpark(points,negative){if(!Array.isArray(points)||points.length<2)return '<div class="favorite-placeholder">1G n.d.</div>';const v=points.map(p=>p.p),min=Math.min(...v),max=Math.max(...v),span=Math.max(max-min,1e-9),coords=points.map((p,i)=>(2+96*i/(points.length-1)).toFixed(1)+','+(31-26*(p.p-min)/span).toFixed(1)).join(' ');return '<svg class="favorite-spark" viewBox="0 0 100 34" preserveAspectRatio="none" aria-label="Andamento 1 giorno"><polyline fill="none" stroke="'+(negative?'var(--red)':'var(--green)')+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="'+coords+'"/></svg>'}
-function renderFavoriteBanner(){const el=$('favoriteBanner');if(!el)return;const assets=favoriteAssets();el.classList.toggle('hidden',!prefs.favoriteEnabled||!assets.length);if(!prefs.favoriteEnabled||!assets.length){el.innerHTML='';return}el.innerHTML=assets.map(a=>{const d=favoriteCache.get(a.symbol),value=d&&Number.isFinite(d.price)?d.price.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:4})+' '+favoriteSafe(a.currency||''): '—',pct=d&&Number.isFinite(d.change)?(d.change>=0?'+':'')+d.change.toFixed(2).replace('.',',')+'%':'—',negative=!!d&&d.change<0;return '<article class="favorite-row" role="button" tabindex="0" data-fav-open="'+favoriteSafe(a.symbol)+'" aria-label="Apri '+favoriteSafe(a.name||a.symbol)+'"><div class="favorite-name">'+favoriteLogo(a)+'<span class="favorite-name-text" title="'+favoriteSafe(a.name)+'">'+favoriteSafe(a.name||a.symbol)+'</span></div>'+favoriteSpark(d?.points,negative)+'<div class="favorite-numbers">'+value+'<small class="'+(!d?'':negative?'loss':'gain')+'">'+pct+'</small></div></article>'}).join('')}
+function renderFavoriteBanner(){const el=$('favoriteBanner');if(!el)return;const assets=favoriteAssets();el.classList.toggle('hidden',!prefs.favoriteEnabled||!assets.length);if(!prefs.favoriteEnabled||!assets.length){el.innerHTML='';return}el.innerHTML=assets.map(a=>{const d=favoriteCache.get(a.symbol),value=d&&Number.isFinite(d.price)?d.price.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:4})+' '+favoriteSafe(a.currency||''): '—',pct=d&&Number.isFinite(d.change)?(d.change>=0?'+':'')+d.change.toFixed(2).replace('.',',')+'%':'—',negative=!!d&&d.change<0;return '<article class="favorite-row" role="button" tabindex="0" data-fav-open="'+favoriteSafe(a.symbol)+'" aria-label="Apri '+favoriteSafe(a.name||a.symbol)+'"><div class="favorite-name">'+favoriteLogo(a)+'<span class="favorite-name-text" title="'+favoriteSafe(a.name)+'">'+favoriteSafe(a.name||a.symbol)+'</span></div>'+favoriteSpark(d?.points,negative)+'<div class="favorite-numbers">'+value+'<small class="'+(!d?'':negative?'loss':'gain')+'">'+pct+'</small></div><button type="button" class="favorite-expand" data-fav-expand="'+favoriteSafe(a.symbol)+'" aria-label="Apri grafico a schermo intero di '+favoriteSafe(a.name||a.symbol)+'" title="Schermo intero"'+(!(d?.points?.length>=2)?' disabled':'')+'>⛶</button></article>'}).join('')}
 function renderFavoriteSettings(){const box=$('favoriteSelected');if(!box)return;const a=favoriteAssets();box.innerHTML=a.length?a.map((x,i)=>'<div class="favorite-chosen"><span>'+favoriteSafe(x.name||x.symbol)+' · '+favoriteSafe(x.symbol)+'</span><button class="btn" type="button" data-fav-remove="'+i+'">Rimuovi</button></div>').join(''):'<div class="favorite-empty">Nessun titolo selezionato.</div>';box.querySelectorAll('[data-fav-remove]').forEach(b=>b.addEventListener('click',()=>{prefs.favoriteAssets=favoriteAssets().filter((_,i)=>i!==Number(b.dataset.favRemove));savePreferences();renderFavoriteSettings();renderFavoriteBanner()}));$('favoriteEnabled').checked=!!prefs.favoriteEnabled;$('favoriteSettingsBody').classList.toggle('hidden',!prefs.favoriteEnabled)}
 async function fetchFavoriteQuote(a){
  const symbol=String(a.symbol||'').toUpperCase(),currency=String(a.currency||'EUR').toUpperCase();
@@ -4704,8 +4719,8 @@ reportPopulatePeriods();
   const header=$('finholdraLogo'),gate=document.querySelector('.finholdra-gate-logo');const headerLogo=(t==='light')?'./finholdra-header-blu.svg?v=9.9.22':'./finholdra-header-bianco.svg?v=9.9.22';if(header&&header.getAttribute('src')!==headerLogo)header.src=headerLogo;if(gate&&gate.getAttribute('src')!==logo)gate.src=logo;
  }
  updateLogo();new MutationObserver(updateLogo).observe(document.body,{attributes:true,attributeFilter:['data-theme']});
- document.addEventListener('click',e=>{const el=e.target.closest('[data-fav-open]');if(!el)return;openFavorite(el.dataset.favOpen)});
- document.addEventListener('keydown',e=>{const el=e.target.closest('[data-fav-open]');if(el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openFavorite(el.dataset.favOpen)}});
+ document.addEventListener('click',e=>{if(e.target.closest('[data-fav-expand]'))return;const el=e.target.closest('[data-fav-open]');if(!el)return;openFavorite(el.dataset.favOpen)});
+ document.addEventListener('keydown',e=>{if(e.target.closest('[data-fav-expand]'))return;const el=e.target.closest('[data-fav-open]');if(el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openFavorite(el.dataset.favOpen)}});
  function openFavorite(symbol){
   const a=typeof favoriteAssets==='function'?favoriteAssets().find(x=>String(x.symbol).toUpperCase()===String(symbol).toUpperCase()):null;
   if(!a)return;
@@ -5029,6 +5044,34 @@ reportPopulatePeriods();
   document.body.style.overflow=f.previousBodyOverflow;
   // Keep viewport in place; iOS may change its visual viewport while rotating the overlay.
  }
+ // The tiny Home sparkline stays compact. Only its separate fullscreen icon
+ // creates a full-sized verified-price SVG, using the same viewer as investments.
+ function favoriteFullscreen(symbol){
+  const fav=(typeof favoriteAssets==='function'?favoriteAssets():[]).find(a=>String(a.symbol).toUpperCase()===String(symbol).toUpperCase());
+  const quote=typeof favoriteCache!=='undefined'?favoriteCache.get(fav?.symbol):null;
+  const series=(quote?.points||[]).filter(p=>Number.isFinite(Number(p.p))&&Number(p.p)>0&&Number.isFinite(Number(p.t)))
+   .slice(-140);
+  if(!fav||series.length<2)return;
+  const W=640,H=285,L=35,R=24,T=25,B=45;
+  const values=series.map(p=>Number(p.p)),lo=Math.min(...values),hi=Math.max(...values),pad=(hi-lo)*.15||hi*.005||.1;
+  const x=i=>L+(W-L-R)*i/(series.length-1),y=v=>T+(H-T-B)*(hi+pad-v)/(hi-lo+2*pad);
+  const pts=series.map((p,i)=>({x:x(i),y:y(p.p),value:p.p,label:new Date(p.t*1000).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}));
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.setAttribute('role','img');svg.setAttribute('aria-label',(fav.name||fav.symbol)+' · andamento della seduta disponibile');
+  svg.setAttribute('data-ab-series',encodeURIComponent(JSON.stringify({kind:'price',currency:fav.currency||'EUR',pts})));
+  const path=document.createElementNS(NS,'path');path.setAttribute('d',pts.map((p,i)=>(i?'L':'M')+p.x.toFixed(2)+' '+p.y.toFixed(2)).join(' '));
+  path.setAttribute('fill','none');path.setAttribute('stroke',quote.change<0?'#fb7185':'#39d9a9');path.setAttribute('stroke-width','3');path.setAttribute('stroke-linecap','round');path.setAttribute('stroke-linejoin','round');svg.appendChild(path);
+  for(const i of [0,pts.length-1]){
+   const label=document.createElementNS(NS,'text');label.setAttribute('x',pts[i].x);label.setAttribute('y',H-14);
+   label.setAttribute('text-anchor',i?'end':'start');label.setAttribute('fill','#adbed2');label.setAttribute('font-size','12');
+   label.textContent=pts[i].label;svg.appendChild(label);
+  }
+  openFullscreen(svg);
+ }
+ document.addEventListener('click',ev=>{
+  const btn=ev.target.closest('[data-fav-expand]');if(!btn||btn.disabled)return;
+  ev.preventDefault();ev.stopPropagation();favoriteFullscreen(btn.dataset.favExpand);
+ },true);
  function attach(svg,insideFullscreen=false){
   if(svg.parentElement?.classList.contains('ab-chart-wrap'))return;
   const meta=decode(svg);if(!meta||!Array.isArray(meta.pts)||meta.pts.length<2)return;
