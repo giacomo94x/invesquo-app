@@ -1146,7 +1146,7 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 @media(max-width:480px){.ab-chart-trigger{bottom:18px;right:4px;min-width:38px;min-height:30px}.ab-chart-result{font-size:10px;padding:6px 8px}}
 </style><style id="finholdraChartLandscapeCSS">
 /* Beta 9.9.33: adjacent chart tools and an isolated landscape viewer. */
-.ab-chart-tools{position:absolute;right:7px;bottom:14px;z-index:30;display:flex!important;align-items:center;justify-content:flex-end;gap:6px;pointer-events:auto!important;visibility:visible!important;overflow:visible!important}
+.ab-chart-tools{position:relative!important;right:auto!important;bottom:auto!important;z-index:30;display:flex!important;align-items:center;justify-content:flex-end;gap:7px;margin:7px 0 2px;pointer-events:auto!important;visibility:visible!important;overflow:visible!important}
 .ab-chart-tools>.ab-chart-trigger,.ab-chart-tools>.ab-chart-expand{position:static!important;bottom:auto!important;right:auto!important;min-width:39px;min-height:32px;padding:5px 9px;box-shadow:0 3px 12px rgba(0,0,0,.18);flex-shrink:0!important}
 .ab-chart-expand{border:1px solid var(--border,#52647a);border-radius:12px;background:var(--panel,#172a46);color:var(--text,#fff);font-size:12px;font-weight:750;cursor:pointer;white-space:nowrap;display:inline-flex!important;align-items:center;justify-content:center;visibility:visible!important;opacity:1!important}
 .ab-chart-expand:focus-visible,.ab-chart-trigger:focus-visible{outline:2px solid #61baf8;outline-offset:2px}
@@ -1157,14 +1157,14 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 .finholdra-chart-fullscreen-head strong{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .finholdra-chart-fullscreen-close{background:var(--panel,#172a46);border:1px solid var(--border,#52647a);border-radius:10px;color:var(--text,#fff);padding:7px 12px;font-weight:750}
 .finholdra-chart-fullscreen-plot{flex:1;min-height:0;min-width:0;display:flex;align-items:center;justify-content:center;position:relative}
-.finholdra-chart-fullscreen-plot>.ab-chart-wrap{height:100%;width:100%;display:flex;justify-content:center;align-items:center}
-.finholdra-chart-fullscreen-plot .ab-chart-wrap>svg{height:100%;width:100%;max-width:100%;object-fit:contain}
-.finholdra-chart-fullscreen-plot .ab-chart-tools{bottom:12px;right:16px}
+.finholdra-chart-fullscreen-plot>.ab-chart-wrap{height:100%;width:100%;display:flex;flex-direction:column;justify-content:center;align-items:stretch}
+.finholdra-chart-fullscreen-plot .ab-chart-wrap>svg{height:calc(100% - 48px);width:100%;max-width:100%;object-fit:contain;flex:1;min-height:0}
+.finholdra-chart-fullscreen-plot .ab-chart-tools{position:relative!important;bottom:auto!important;right:auto!important;justify-content:flex-end}
 .finholdra-chart-fullscreen-plot .ab-chart-result{top:5px;left:8px;right:auto;max-width:min(65%,430px)}
 @media(orientation:portrait){
  .finholdra-chart-fullscreen .finholdra-chart-landscape{position:absolute;top:0;left:100vw;width:100dvh;height:100vw;transform-origin:top left;transform:rotate(90deg);padding:8px 14px}
 }
-@media(max-width:480px){.ab-chart-tools{right:5px;bottom:12px;gap:5px}.ab-chart-tools>.ab-chart-trigger,.ab-chart-tools>.ab-chart-expand{min-width:35px;min-height:30px;padding:4px 7px}.ab-chart-expand{font-size:10px!important}}
+@media(max-width:480px){.ab-chart-tools{right:auto!important;bottom:auto!important;gap:5px}.ab-chart-tools>.ab-chart-trigger,.ab-chart-tools>.ab-chart-expand{min-width:35px;min-height:30px;padding:4px 7px}.ab-chart-expand{font-size:10px!important}}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.22" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -1653,28 +1653,27 @@ function shortDate(date){const m=String(date||'').match(/^(\d{4})-(\d{2})-(\d{2}
 function historyAssetFlow(from,to,id){
  const before=from?.byAsset?.[id],after=to?.byAsset?.[id];
  const q0=Number(before?.quantity||0),q1=Number(after?.quantity||0);
- const v0=Number(before?.value||0),v1=Number(after?.value||0);
- if(![q0,q1,v0,v1].every(Number.isFinite))return null;
- const ops=trades.filter(t=>t.asset===id&&t.date>from.date&&t.date<=to.date&&['buy','sale'].includes(t.kind));
- if(ops.some(t=>!Number.isFinite(Number(t.quantity))||!Number.isFinite(Number(t.spent))))return null;
- const ledgerQ=ops.reduce((n,t)=>n+(t.kind==='buy'?1:-1)*Number(t.quantity),0);
- const tolerance=Math.max(1e-6,Math.abs(q1)*1e-6);
  const c0=Number(before?.capital),c1=Number(after?.capital);
- if(Math.abs(q1-q0-ledgerQ)<=tolerance){
-  const ledgerCash=ops.reduce((n,t)=>n+Number(t.spent),0);
-  if(q1>q0+tolerance&&ledgerCash<=0&&Number.isFinite(c0)&&Number.isFinite(c1)&&c1>c0)
-   return {flow:c1-c0,source:'capitale registrato',ops};
-  return {flow:ledgerCash,source:'registro',ops};
- }
- // Documented cash invested in a pure accumulation (no unexplained reduction).
- // The difference of saved cost bases is the contribution, not a price guess.
- if(q1>q0+tolerance&&Number.isFinite(c0)&&Number.isFinite(c1)&&c1>c0&&c0>=0){
-  const cash=c1-c0;
-  if(cash>0&&cash<Math.max(100,Math.abs(v1)*10))return {flow:cash,source:'capitale registrato',ops};
- }
- // If no shares changed and no transactions can be reconciled, cost basis and
- // position value still permit a comparison when they are both unchanged.
- if(Math.abs(q1-q0)<=tolerance&&Number.isFinite(c0)&&Number.isFinite(c1)&&Math.abs(c1-c0)<.01)return {flow:0,source:'posizione invariata',ops:[]};
+ const ops=trades.filter(t=>t.asset===id&&t.date>from.date&&t.date<=to.date&&['buy','sale'].includes(t.kind));
+ const validOps=ops.every(t=>Number.isFinite(Number(t.spent))&&Number.isFinite(Number(t.quantity)));
+ const ledgerQ=validOps?ops.reduce((n,t)=>n+(t.kind==='buy'?1:-1)*Number(t.quantity),0):NaN;
+ const ledgerCash=validOps?ops.reduce((n,t)=>n+Number(t.spent),0):NaN;
+ const tolerance=Math.max(1e-6,Math.abs(q1)*1e-6);
+ const delta=q1-q0;
+ const sameQty=Number.isFinite(delta)&&Math.abs(delta)<=tolerance;
+ const basisValid=Number.isFinite(c0)&&Number.isFinite(c1)&&c0>=0&&c1>=0;
+ // A ledger flow can always be used when its traded quantity matches the observed change.
+ if(validOps&&Math.abs(delta-ledgerQ)<=tolerance)return {flow:ledgerCash,source:'registro',ops};
+ // Existing saved cost bases are more reliable than a backdated/misaligned transaction.
+ // A pure purchase adds its actual invested capital; market appreciation does not.
+ if(delta>tolerance&&basisValid&&c1>c0)return {flow:c1-c0,source:'capitale registrato',ops};
+ if(sameQty&&basisValid&&Math.abs(c1-c0)<.02)return {flow:0,source:'posizione invariata',ops:[]};
+ // Selling shares reduces cost basis by book cost, not by proceeds: require cash ledger.
+ if(delta < -tolerance && validOps && ops.some(t=>t.kind==='sale'))return {flow:ledgerCash,source:'vendita registrata',ops};
+ if(sameQty&&validOps&&ops.length)return {flow:ledgerCash,source:'registro non allineato',ops};
+ // A newly appearing/vanishing position can be valued from documented cash basis,
+ // but never from a guessed change in market price.
+ if(delta>tolerance&&basisValid&&c0===0&&c1>0)return {flow:c1,source:'capitale registrato',ops};
  return null;
 }
 function historyFlowsReconcile(from,to){
@@ -1685,17 +1684,30 @@ function historyFlowsReconcile(from,to){
  return true;
 }
 function historyEffectiveFlows(from,to){
- if(!from||!to||!from.byAsset||!to.byAsset)return null;
- const ids=new Set([...Object.keys(from.byAsset),...Object.keys(to.byAsset)]);
- let flow=0,estimated=false;
- for(const id of ids){const cat=to.byAsset?.[id]?.cat||from.byAsset?.[id]?.cat;
+ if(!from||!to)return null;
+ const ids=new Set([...Object.keys(from.byAsset||{}),...Object.keys(to.byAsset||{})]);
+ let flow=0,estimated=false,complete=true;
+ if(ids.size){for(const id of ids){const cat=to.byAsset?.[id]?.cat||from.byAsset?.[id]?.cat;
   if(!historyCatIncluded(cat))continue;
-  const item=historyAssetFlow(from,to,id);if(!item)return null;
-  flow+=item.flow;if(item.source==='capitale registrato')estimated=true;
+  const item=historyAssetFlow(from,to,id);
+  if(!item){complete=false;break}
+  flow+=item.flow;if(item.source!=='registro'&&item.source!=='posizione invariata')estimated=true;
+ }}else complete=false;
+ if(complete)return {flow,estimated,source:'per titolo'};
+ // Unified fallback for old snapshots: category-level cost basis and movements.
+ // These are stored historical observations, not reconstructed market prices.
+ const c0=trackedCapital(from),c1=trackedCapital(to);
+ const ops=periodFlows(from,to),ledger=ops.reduce((n,t)=>n+Number(t.spent),0);
+ const delta=c1-c0;
+ if(ops.length&&ops.every(t=>Number.isFinite(Number(t.spent)))){
+  // For purchase-only intervals an increase in cost basis is a verifiable cash flow.
+  if(!ops.some(t=>t.kind==='sale')&&Number.isFinite(delta)&&delta>=0)return {flow:Math.max(0,delta,ledger),estimated:true,source:'capitale categoria / registro'};
+  return {flow:ledger,estimated:true,source:'registro categoria'};
  }
- return {flow,estimated};
+ if(Number.isFinite(delta)&&Math.abs(delta)<.02)return {flow:0,estimated:true,source:'capitale categoria invariato'};
+ if(Number.isFinite(delta)&&delta>0)return {flow:delta,estimated:true,source:'capitale categoria'};
+ return null;
 }
-
 function historyInterval(from,to){
  if(!from||!to||days(to.date)<=days(from.date))return null;
  const net=historyEffectiveFlows(from,to);if(!net)return null;
@@ -1712,18 +1724,24 @@ function historyInterval(from,to){
  return {from:from.date,to:to.date,days:duration,gain,pct:denominator>0?gain/denominator:null,flow:net.flow,ending,estimated:net.estimated};
 }
 
-function historyPeriodNetFlows(first,last){
- const eligible=snapshots.filter(s=>s&&s.date>=first.date&&s.date<=last.date&&Number.isFinite(trackedValue(s)));
- // Do not treat a reconstructed and a directly observed reading on the same
- // calendar date as two different cash-flow periods.
- const byDate=new Map();for(const snap of eligible){const prior=byDate.get(snap.date);
-  if(!prior||(prior.source==='reconstructed'&&snap.source!=='reconstructed')||((snap.stamp||0)>(prior.stamp||0)&&snap.source===prior.source))byDate.set(snap.date,snap);
- }
- const ordered=[...byDate.values()].sort((a,b)=>a.date.localeCompare(b.date));
+function historyPeriodNetFlows(first,last,series=null){
+ const ordered=(Array.isArray(series)&&series.length?series:historyCanonicalObservations()).filter(s=>s.date>=first.date&&s.date<=last.date);
  if(ordered.length<2)return null;
- let net=0;
- for(let i=1;i<ordered.length;i++){const iv=historyEffectiveFlows(ordered[i-1],ordered[i]);if(!iv)return null;net+=iv.flow;}
- return net;
+ let total=0;
+ for(let i=1;i<ordered.length;i++){
+  const iv=historyEffectiveFlows(ordered[i-1],ordered[i]);if(!iv)return null;
+  total+=iv.flow;
+ }
+ return total;
+}
+function historyCanonicalObservations(){
+ const map=new Map();
+ for(const snap of snapshots){
+  if(!snap||(prefs.showReconstructed===false&&snap.source==='reconstructed')||!Number.isFinite(trackedValue(snap)))continue;
+  const old=map.get(snap.date);
+  if(!old||(old.source==='reconstructed'&&snap.source!=='reconstructed')||(snap.source===old.source&&Number(snap.stamp||0)>Number(old.stamp||0)))map.set(snap.date,snap);
+ }
+ return [...map.values()].sort((a,b)=>a.date.localeCompare(b.date));
 }
 function periodFlows(from,to){return trades.filter(t=>t.date>from.date&&t.date<=to.date&&historyCatIncluded(t.cat)&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0)}
 // TWRR: chain returns across each observed subperiod. Trades between daily observations
@@ -1740,27 +1758,30 @@ function twrrEstimate(series){
 }
 // Money-weighted return for the chosen *period*, not annualised. Bisection on the
 // future value equation (starting balance + dated cash inflows = ending balance).
-function mwrrForPeriod(first,last){
+function mwrrForPeriod(first,last,series=null){
+ const ordered=(Array.isArray(series)&&series.length?series:historyCanonicalObservations()).filter(s=>s.date>=first.date&&s.date<=last.date);
  const span=days(last.date)-days(first.date),initial=trackedValue(first),ending=trackedValue(last);
- if(!(span>0)||!(initial>0)||!(ending>=0)||!historyFlowsReconcile(first,last))return null;
- const flows=periodFlows(first,last);
- const balance=r=>initial*(1+r)+flows.reduce((n,t)=>n+Number(t.spent)*Math.pow(1+r,(days(last.date)-days(t.date))/span),0)-ending;
- let lo=-0.999999999,hi=1;
+ if(!(span>0)||!(initial>0)||!(ending>=0)||ordered.length<2)return null;
+ const flows=[];
+ for(let i=1;i<ordered.length;i++){
+  const r=historyEffectiveFlows(ordered[i-1],ordered[i]);if(!r)return null;
+  if(Math.abs(r.flow)>1e-8)flows.push({date:ordered[i].date,amount:r.flow});
+ }
+ const balance=r=>initial*(1+r)+flows.reduce((n,t)=>n+t.amount*Math.pow(1+r,(days(last.date)-days(t.date))/span),0)-ending;
+ let lo=-.999999999,hi=1;
  if(balance(lo)>0)return null;
  while(balance(hi)<0&&hi<1e8)hi=hi*2+1;
  if(balance(hi)<0)return null;
- for(let i=0;i<110;i++){const mid=(lo+hi)/2;if(balance(mid)<0)lo=mid;else hi=mid}
+ for(let i=0;i<100;i++){const mid=(lo+hi)/2;if(balance(mid)<0)lo=mid;else hi=mid}
  return (lo+hi)/2;
 }
-function roiSimpleForPeriod(first,last){
+function roiSimpleForPeriod(first,last,series=null){
  if(!first||!last||days(last.date)<=days(first.date))return null;
  const initial=trackedValue(first),ending=trackedValue(last);
  if(!Number.isFinite(initial)||!Number.isFinite(ending))return null;
- const period=periodFlows(first,last),reconciled=historyPeriodNetFlows(first,last);
- if(reconciled===null)return null;
- const net=reconciled;
- const added=Math.max(0,net); // Conservative denominator when historical trades were backfilled.
- const denominator=initial+added;
+ const net=historyPeriodNetFlows(first,last,series);
+ if(net===null)return null;
+ const denominator=initial+Math.max(0,net);
  return denominator>0?(ending-initial-net)/denominator:null;
 }
 function methodResult(series){
@@ -1785,7 +1806,7 @@ function renderHistoryDay(){
  const day=historyPointData.find(p=>p.date===historySelectedDay);
  if(!day||!day.interval){detail.classList.add('hidden');detail.innerHTML='';return}
  const d=day.interval,positive=d.gain>=0,cls=positive?'gain':'loss',sgn=positive?'+':'';
- const prev=snapshots.find(s=>s.date===d.from&&Number.isFinite(trackedValue(s))),next=snapshots.find(s=>s.date===d.to&&Number.isFinite(trackedValue(s)));const shownPct=prev&&next?(returnMethod==='roi'?roiSimpleForPeriod(prev,next):returnMethod==='mwrr'?mwrrForPeriod(prev,next):twrrEstimate([prev,next])):d.pct;
+ const shownPct=d.pct;
  detail.classList.remove('hidden');
  detail.innerHTML='<div class="hist-period">'+(d.days===1?'Performance del '+shortDate(d.to):'Variazione '+shortDate(d.from)+' – '+shortDate(d.to)+' ('+d.days+' giorni)')+'</div><div class="hist-figures"><strong class="'+cls+'">'+sgn+eur(d.gain)+'</strong><strong class="'+cls+'">'+(shownPct===null?'n.d.':(shownPct>=0?'+':'')+pct(shownPct))+'</strong></div><span class="sub">'+(returnMethod==='twrr'?'TWRR cumulato nel periodo: '+(day.twrr===null?'n.d.':(day.twrr>=0?'+':'')+day.twrr.toLocaleString('it-IT',{maximumFractionDigits:2})+'%')+' · ':'')+'Patrimonio alla rilevazione: '+eur(d.ending)+(d.flow?' · Acquisti registrati: '+eur(d.flow):'')+'</span>';
 }
@@ -1872,7 +1893,7 @@ function renderHistory(){
  $('dailyHistoryView').classList.toggle('hidden',!daily);
  if(daily){updateMethodButtons();renderDailyHistory();return}
  historyComparableScope=null;
- const observed=snapshots.filter(s=>(prefs.showReconstructed!==false||s.source!=='reconstructed')&&Number.isFinite(trackedValue(s))).sort((a,b)=>a.date.localeCompare(b.date));
+ const observed=historyCanonicalObservations();
  const maxMode=historyRange==='all';updateMethodButtons();showMethodHelp(maxMode);renderTradeEvents();
  if(!historySelectedCats().length){el.innerHTML='<div class="history-empty">Attiva almeno una categoria nella Dashboard.</div>';summary.innerHTML='';perf.innerHTML='';detail.classList.add('hidden');return}
  if(!observed.length){el.innerHTML='<div class="history-empty">Nessuna rilevazione completa per le categorie scelte. Puoi tentare di recuperare le quotazioni storiche verificate.</div>';summary.innerHTML='';perf.innerHTML='';detail.classList.add('hidden');return}
@@ -1880,7 +1901,7 @@ function renderHistory(){
  const end=days(today()),selected=observed.filter(s=>historyRange==='all'||end-days(s.date)<=Number(historyRange));
  const series=selected.length?selected:[observed[observed.length-1]];
  const first=series[0],last=series[series.length-1];showMethodHelp(maxMode,series);
- const labelCats=historySelectedCats();const comparableNote='<p class="hint">Categorie: '+svgEscape(historyCategory)+' · Rilevazioni complete: '+observed.length+' · Gli acquisti sono flussi, non rendimenti.</p>';
+ const labelCats=historySelectedCats();const comparableNote='<p class="hint">Categorie: '+svgEscape(historyCategory)+' · Rilevazioni complete: '+observed.length+' · Gli acquisti sono flussi, non rendimenti. Le operazioni non allineate usano il capitale storico registrato, ove disponibile.</p>';
  if(series.length<2){el.innerHTML=comparableNote+'<div class="history-empty">Solo una rilevazione confrontabile in questo periodo.</div>';perf.innerHTML='';summary.innerHTML='<span>Rilevazione: '+shortDate(first.date)+'</span>';detail.classList.add('hidden');return}
  // Time-weighted performance is a chained return INDEX: it is never the portfolio balance.
  const points=[];let twFactor=1,twValid=true;
@@ -1888,8 +1909,9 @@ function renderHistory(){
   const snap=series[i],val=trackedValue(snap),previous=series[i-1];
   const interval=previous?historyInterval(previous,snap):null;
   if(interval){if(interval.pct===null||interval.pct<=-1){twValid=false}else if(twValid){twFactor*=1+interval.pct}}
-  const mwrr=previous?mwrrForPeriod(first,snap):0;
-  const roi=previous?roiSimpleForPeriod(first,snap):0;
+  const prefix=series.slice(0,i+1);
+  const mwrr=previous?mwrrForPeriod(first,snap,prefix):0;
+  const roi=previous?roiSimpleForPeriod(first,snap,prefix):0;
   points.push({date:snap.date,value:val,interval,twrr:twValid?(twFactor-1)*100:null,mwrr:mwrr===null?null:mwrr*100,roi:roi===null?null:roi*100});
  }
  historyPointData=points;
@@ -1898,7 +1920,7 @@ function renderHistory(){
  const numbers=points.map(p=>twMode?p.twrr:returnMethod==='roi'?p.roi:p.mwrr).filter(Number.isFinite);
  if(numbers.length<2){el.innerHTML=comparableNote+'<div class="history-empty">Rendimento non calcolabile: manca un valore iniziale positivo o una rilevazione confrontabile.</div>';perf.innerHTML='';summary.innerHTML='';detail.classList.add('hidden');return}
  const startVal=points[0].value,endVal=points[points.length-1].value;
- const reconciledNet=historyPeriodNetFlows(first,last);
+ const reconciledNet=historyPeriodNetFlows(first,last,series);
  const netFlows=reconciledNet===null?NaN:reconciledNet;
  const marketGain=Number.isFinite(netFlows)?endVal-startVal-netFlows:NaN;
  const lastRet=twMode?points.at(-1).twrr:returnMethod==='roi'?points.at(-1).roi:points.at(-1).mwrr;const periodPct=Number.isFinite(lastRet)?lastRet/100:null;
@@ -4828,7 +4850,7 @@ reportPopulatePeriods();
   result.textContent='';result.hidden=true;
   const tools=document.createElement('div');tools.className='ab-chart-tools';wrap.appendChild(tools);
   const button=document.createElement('button');button.type='button';button.className='ab-chart-trigger';button.textContent='A↔B';button.setAttribute('aria-label','Confronta due punti del grafico');button.title='Confronta A e B';tools.appendChild(button);
-  if(!insideFullscreen){const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶ Ingrandisci';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);expand.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFullscreen(svg)});}
+  if(!insideFullscreen){const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶ Schermo intero';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);expand.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFullscreen(svg)});}
   button.addEventListener('click',ev=>{ev.stopPropagation();ev.preventDefault();toggle(svg,button,wrap,overlay,result);result.hidden=!active||active.svg!==svg});
   const select=ev=>{
    if(!active||active.svg!==svg)return;
