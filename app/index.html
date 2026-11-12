@@ -1227,7 +1227,20 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 @media(max-width:420px){#favoriteBanner .favorite-row{grid-template-columns:minmax(68px,1fr) minmax(44px,1fr) minmax(69px,.92fr) 31px!important;column-gap:5px!important}}
 /* Never shrink the chart or overlay its dates to make room for controls. */
 #assetDetailChart .ab-chart-tools-v936 button,.pmc-history-plot .ab-chart-tools-v936 button{position:static!important;min-width:43px!important}
-</style></head><body><section id="accountGate" aria-labelledby="accountTitle">
+</style>
+<style id="finholdra940ChartCorrections">
+/* Dedicated investment chart commands: outside plotting area, symmetric and never hidden by its SVG. */
+#assetDetailChart>.ab-investment-tools{display:flex!important;position:relative!important;visibility:visible!important;opacity:1!important;width:100%!important;min-height:48px!important;align-items:center!important;justify-content:space-between!important;padding:3px 5px 6px!important;margin:6px 0!important;gap:10px!important;z-index:12!important;overflow:visible!important}
+#assetDetailChart>.ab-investment-tools>.ab-chart-expand{display:inline-flex!important;position:relative!important;visibility:visible!important;opacity:1!important;min-width:50px!important;min-height:37px!important;padding:7px 11px!important;margin:0 auto 0 0!important;align-items:center!important;justify-content:center!important;flex:none!important}
+#assetDetailChart>.ab-investment-tools>.ab-chart-trigger{display:inline-flex!important;position:relative!important;visibility:visible!important;opacity:1!important;min-width:49px!important;min-height:37px!important;padding:7px 11px!important;margin:0 0 0 auto!important;align-items:center!important;justify-content:center!important;flex:none!important}
+#assetDetailChart>.ab-chart-wrap>.ab-chart-tools-v936{display:none!important}
+.finholdra-chart-fullscreen .ab-chart-readout[hidden]{display:none!important}
+.finholdra-chart-fullscreen .ab-chart-readout{position:absolute;top:48px;left:12px;max-width:calc(100% - 24px);font-size:13px;font-weight:650;color:#f3f7ff;background:rgba(27,47,76,.96);border:1px solid rgba(132,161,203,.55);border-radius:10px;padding:7px 11px;pointer-events:none;z-index:8;white-space:normal}
+.finholdra-chart-fullscreen .ab-chart-reading-marker{pointer-events:none}
+.finholdra-chart-fullscreen .ab-chart-wrap{position:relative!important}
+.finholdra-chart-fullscreen .ab-chart-wrap>svg{touch-action:none!important}
+</style>
+</head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.22" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
 <div class="finholdra-language-gate"><label for="finholdraLanguageWelcome">Lingua / Language</label><select id="finholdraLanguageWelcome"><option value="it">Italiano</option><option value="en">English</option></select></div><div class="account-tabs"><button type="button" id="accountTabCreate" class="selected">Nuovo profilo</button><button type="button" id="accountTabLogin">Accedi</button></div>
@@ -4950,6 +4963,7 @@ reportPopulatePeriods();
   const a=active;active=null;
   a.wrap.classList.remove('ab-active');a.button.classList.remove('active');a.button.textContent='A↔B';
   a.overlay.replaceChildren();a.result.textContent='';a.result.hidden=true;
+  const reader=a.wrap.querySelector('.ab-chart-readout');if(reader)reader.hidden=false;
   document.documentElement.style.overflow=a.previousHtmlOverflow;
   document.body.style.overflow=a.previousBodyOverflow;
   // No forced viewport repositioning on Safari.
@@ -4987,14 +5001,33 @@ reportPopulatePeriods();
   const delta=document.createElement('div');delta.className=signedClass;delta.textContent='Δ '+comparison;
   result.append(header,values,delta);
  }
+ function nearestScreenPoint(svg,meta,ev){
+  // Map every data point to screen coordinates instead of inverting the rotated
+  // iOS SVG matrix. This works identically in portrait and CSS-rotated landscape.
+  const m=svg.getScreenCTM?.();
+  if(!m)return null;
+  let best=null,dist=Infinity;
+  for(const p of meta.pts){
+   const v=svg.createSVGPoint();v.x=p.x;v.y=p.y;
+   const q=v.matrixTransform(m),d=(q.x-ev.clientX)**2+(q.y-ev.clientY)**2;
+   if(Number.isFinite(d)&&d<dist){best=p;dist=d}
+  }
+  return best;
+ }
+ function showFullPoint(svg,meta,ev){
+  if(active?.svg===svg)return;
+  const parent=svg.closest('.ab-chart-wrap');if(!parent)return;
+  const pt=nearestScreenPoint(svg,meta,ev);if(!pt)return;
+  const o=parent.querySelector('.ab-chart-readout');if(!o)return;
+  o.textContent=pt.label+' · '+pointText(pt,meta)+(meta.pts[0]?.value&&meta.kind!=='twrr'&&meta.kind!=='roi'&&meta.kind!=='mwrr'?' · '+pct((pt.value/meta.pts[0].value-1)*100)+' dal primo punto':'');
+  o.hidden=false;
+  const marker=parent.querySelector('.ab-chart-reading-marker');
+  if(marker){marker.setAttribute('cx',pt.x);marker.setAttribute('cy',pt.y);marker.setAttribute('visibility','visible')}
+ }
  function locate(ev){
   if(!active)return;
   const {svg,meta,chosen}=active;
-  let xx=NaN;
-  try{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;xx=pt.matrixTransform(svg.getScreenCTM().inverse()).x}catch(_){return}
-  const points=meta.pts;
-  let best=points[0],dist=Infinity;
-  for(const p of points){const d=Math.abs(p.x-xx);if(d<dist){best=p;dist=d}}
+  const best=nearestScreenPoint(svg,meta,ev);
   if(!best)return;
   if(chosen.length===2)chosen.splice(0,2);
   chosen.push(best);redraw();
@@ -5007,6 +5040,7 @@ reportPopulatePeriods();
   active={svg,button,wrap,overlay,result,meta,chosen:[],previousHtmlOverflow:document.documentElement.style.overflow,previousBodyOverflow:document.body.style.overflow};
   document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';
   wrap.classList.add('ab-active');button.classList.add('active');button.textContent='× Esci';
+  const reader=wrap.querySelector('.ab-chart-readout');if(reader)reader.hidden=true;
   redraw();
  }
 
@@ -5083,10 +5117,26 @@ reportPopulatePeriods();
   overlay.setAttribute('class','ab-chart-overlay');wrap.appendChild(overlay);
   const result=document.createElement('div');result.className='ab-chart-result';result.setAttribute('role','status');result.setAttribute('aria-live','polite');wrap.appendChild(result);
   result.textContent='';result.hidden=true;
+  if(insideFullscreen){
+   const read=document.createElement('div');read.className='ab-chart-readout';read.textContent='Tocca o trascina il grafico per leggere il valore';wrap.appendChild(read);
+   const circle=document.createElementNS(NS,'circle');circle.classList.add('ab-chart-reading-marker');circle.setAttribute('r','5');circle.setAttribute('fill','#f5c45d');circle.setAttribute('stroke','#10223a');circle.setAttribute('stroke-width','2');circle.setAttribute('visibility','hidden');
+   overlay.appendChild(circle);
+   // Pointer events work on Safari both before and after CSS landscape rotation.
+   svg.addEventListener('pointerdown',e=>{if(active?.svg!==svg){showFullPoint(svg,meta,e);if(e.cancelable)e.preventDefault()}},{passive:false});
+   svg.addEventListener('pointermove',e=>{if(active?.svg!==svg&&(e.pointerType==='touch'||e.buttons))showFullPoint(svg,meta,e)},{passive:false});
+   svg.addEventListener('touchmove',e=>{if(active?.svg!==svg&&e.touches[0]){showFullPoint(svg,meta,e.touches[0]);if(e.cancelable)e.preventDefault()}},{passive:false});
+   svg.addEventListener('click',e=>{if(active?.svg!==svg)showFullPoint(svg,meta,e)});
+  }
   // A persistent sibling toolbar lives OUTSIDE the SVG wrapper and cannot be
   // clipped by chart layers or any of the chart SVG's overlapping controls.
   const tools=document.createElement('div');tools.className='ab-chart-tools ab-chart-tools-v936';
-  wrap.appendChild(tools);
+  if(!insideFullscreen && svg.closest('#assetDetailChart')){
+   // Unlike the SVG (which is replaced on every price refresh), the controls are
+   // siblings of the drawing inside the investment detail chart container.
+   // Safari must not clip them behind the chart's overflow layers.
+   wrap.insertAdjacentElement('afterend',tools);
+   tools.classList.add('ab-investment-tools');
+  }else wrap.appendChild(tools);
   if(!insideFullscreen){
    const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶ Schermo intero';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);
    expand.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFullscreen(svg)});
