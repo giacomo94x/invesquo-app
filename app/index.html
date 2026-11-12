@@ -825,6 +825,18 @@ body.motion-off .finn-scene-anticipation.expression-watching svg .finn-right-arm
 .daily-asset-change{display:flex;flex-direction:column;text-align:right;gap:3px;flex:0 0 auto}
 .daily-asset-change strong{font-size:15px}.daily-asset-change small{font-size:12px}
 @media(max-width:400px){#historySection .history-method-switch .btn{font-size:10px;padding:8px 2px}.daily-total strong{font-size:20px}}
+
+/* Beta 9.9.41: A-B only. Remove fullscreen UI and avoid overlaying axes or dates. */
+.finholdra-chart-fullscreen,.favorite-expand,.ab-chart-expand,.ab-chart-readout,.ab-chart-reading-marker,.ab-chart-tools-v936{display:none!important}
+.ab-chart-wrap{position:relative!important;display:block!important;overflow:visible!important;contain:none!important;isolation:isolate!important}
+.ab-chart-wrap>svg:not(.ab-chart-overlay){display:block;width:100%;max-width:100%;height:auto;touch-action:pan-y pinch-zoom}
+.ab-chart-overlay{pointer-events:none!important}
+.ab-chart-wrap.ab-active>svg:not(.ab-chart-overlay){touch-action:none!important}
+.ab-only-tools{width:100%;display:flex;align-items:center;justify-content:flex-end;padding:7px 3px 3px;min-height:44px;box-sizing:border-box;position:relative;z-index:3;clear:both}
+.ab-only-tools .ab-chart-trigger{display:inline-flex!important;align-items:center;justify-content:center;position:static!important;inset:auto!important;min-width:62px;min-height:35px;font-size:12px;font-weight:750;white-space:nowrap;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+.allocation-detail-clickable{cursor:pointer;border-radius:9px;transition:background .15s ease}
+.allocation-detail-clickable:hover,.allocation-detail-clickable:focus-visible{background:rgba(108,145,209,.14);outline:2px solid transparent}
+.allocation-detail-clickable:focus-visible{outline-color:#73a4ed;outline-offset:2px}
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
 .pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
@@ -2255,7 +2267,7 @@ function allocationBreakdown(category){
  const metric=(label,value)=>'<div class="allocation-detail-metric"><span>'+label+'</span><strong>'+value+'</strong></div>';
  el.innerHTML='<div class="allocation-detail-head"><div><h3>'+svgEscape(category)+'</h3><div class="sub">'+titles.length+' '+(titles.length===1?'titolo':'titoli')+' · rendimento lordo non realizzato</div></div><button type="button" class="allocation-detail-close" id="allocationDetailClose" aria-label="Chiudi dettaglio categoria">×</button></div>'+
  '<div class="allocation-detail-summary">'+metric('Peso sul valore oggi',pct(totalNow?group.value/totalNow:0))+metric('Peso sul capitale investito',pct(totalCost?group.capital/totalCost:0))+metric('Valore oggi',eur(group.value))+metric('Investito',eur(group.capital))+metric('Rendimento lordo', '<span class="'+(ret>=0?'gain':'loss')+'">'+allocationSigned(ret)+' · '+(group.capital?(ret>=0?'+':'')+pct(ret/group.capital):'—')+'</span>')+'</div>'+
- (titles.length?titles.map(a=>{const c=cap(a),v=val(a),r=v-c,meta=[a.symbol,a.isin].filter(Boolean).join(' · ');return '<div class="allocation-detail-item"><div class="allocation-detail-name-row">'+issuerIcon(a.id)+'<div class="allocation-detail-name-wrap"><div class="allocation-detail-name">'+svgEscape(a.name)+'</div>'+(meta?'<div class="allocation-detail-symbol">'+svgEscape(meta)+'</div>':'')+'</div></div><div class="allocation-detail-fields"><div><span>Valore oggi · peso totale</span><strong>'+eur(v)+' · '+pct(totalNow?v/totalNow:0)+'</strong></div><div><span>Investito · peso totale</span><strong>'+eur(c)+' · '+pct(totalCost?c/totalCost:0)+'</strong></div><div style="grid-column:1/-1"><span>Rendimento lordo</span><strong class="'+(r>=0?'gain':'loss')+'">'+allocationSigned(r)+' · '+(c?(r>=0?'+':'')+pct(r/c):'—')+'</strong></div></div></div>'}).join(''):'<p class="hint">Nessun titolo presente in questa categoria.</p>');
+ (titles.length?titles.map(a=>{const c=cap(a),v=val(a),r=v-c,meta=[a.symbol,a.isin].filter(Boolean).join(' · ');return '<div class="allocation-detail-item allocation-detail-clickable" role="button" tabindex="0" data-home-detail-id="'+svgEscape(a.id)+'" aria-label="Apri dettaglio investimento '+svgEscape(a.name)+'"><div class="allocation-detail-name-row">'+issuerIcon(a.id)+'<div class="allocation-detail-name-wrap"><div class="allocation-detail-name">'+svgEscape(a.name)+'</div>'+(meta?'<div class="allocation-detail-symbol">'+svgEscape(meta)+'</div>':'')+'</div></div><div class="allocation-detail-fields"><div><span>Valore oggi · peso totale</span><strong>'+eur(v)+' · '+pct(totalNow?v/totalNow:0)+'</strong></div><div><span>Investito · peso totale</span><strong>'+eur(c)+' · '+pct(totalCost?c/totalCost:0)+'</strong></div><div style="grid-column:1/-1"><span>Rendimento lordo</span><strong class="'+(r>=0?'gain':'loss')+'">'+allocationSigned(r)+' · '+(c?(r>=0?'+':'')+pct(r/c):'—')+'</strong></div></div></div>'}).join(''):'<p class="hint">Nessun titolo presente in questa categoria.</p>');
  el.classList.remove('hidden');
  $('allocationDetailClose').onclick=()=>{allocationSelectedCategory=null;updateAllocationSelection()};
 }
@@ -3208,6 +3220,9 @@ async function loadAssetDetail(){
  }
 }
 $('assetList').addEventListener('click',e=>{const btn=e.target.closest('[data-detail-id]');if(btn){openAssetDetail(btn.dataset.detailId);return}});
+// The Home allocation breakdown opens the same investment detail as the Investments tab.
+document.getElementById('allocationDetail')?.addEventListener('click',e=>{const row=e.target.closest('[data-home-detail-id]');if(row)openAssetDetail(row.dataset.homeDetailId)});
+document.getElementById('allocationDetail')?.addEventListener('keydown',e=>{const row=e.target.closest('[data-home-detail-id]');if(row&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openAssetDetail(row.dataset.homeDetailId)}});
 
 $('assetList').addEventListener('click',e=>{const btn=e.target.closest('[data-buy-id]');if(!btn)return;$('buyAsset').value=btn.dataset.buyId;buyPriceEdited=false;$('buyVerify').checked=false;$('buyStatus').classList.add('hidden');syncBuyPrice();$('purchaseSection').scrollIntoView({behavior:'smooth',block:'start'});});
 $('buyCommit').onclick=()=>{const t=computeBuy(),purchaseDate=validEntryDate('buyDate');if(!t||!$('buyVerify').checked||!purchaseDate){alert('Verifica data, importo e prezzo effettivo. La data non può essere futura.');return;}const latest=state.assets.find(a=>a.id===t.a.id);if(!latest)return;const oldCapital=cap(latest),newQty=latest.q+t.count;if(!Number.isFinite(newQty)||newQty<=0)return;
@@ -3974,7 +3989,7 @@ function favoriteLogo(asset){
 }
 
 function favoriteSpark(points,negative){if(!Array.isArray(points)||points.length<2)return '<div class="favorite-placeholder">1G n.d.</div>';const v=points.map(p=>p.p),min=Math.min(...v),max=Math.max(...v),span=Math.max(max-min,1e-9),coords=points.map((p,i)=>(2+96*i/(points.length-1)).toFixed(1)+','+(31-26*(p.p-min)/span).toFixed(1)).join(' ');return '<svg class="favorite-spark" viewBox="0 0 100 34" preserveAspectRatio="none" aria-label="Andamento 1 giorno"><polyline fill="none" stroke="'+(negative?'var(--red)':'var(--green)')+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="'+coords+'"/></svg>'}
-function renderFavoriteBanner(){const el=$('favoriteBanner');if(!el)return;const assets=favoriteAssets();el.classList.toggle('hidden',!prefs.favoriteEnabled||!assets.length);if(!prefs.favoriteEnabled||!assets.length){el.innerHTML='';return}el.innerHTML=assets.map(a=>{const d=favoriteCache.get(a.symbol),value=d&&Number.isFinite(d.price)?d.price.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:4})+' '+favoriteSafe(a.currency||''): '—',pct=d&&Number.isFinite(d.change)?(d.change>=0?'+':'')+d.change.toFixed(2).replace('.',',')+'%':'—',negative=!!d&&d.change<0;return '<article class="favorite-row" role="button" tabindex="0" data-fav-open="'+favoriteSafe(a.symbol)+'" aria-label="Apri '+favoriteSafe(a.name||a.symbol)+'"><div class="favorite-name">'+favoriteLogo(a)+'<span class="favorite-name-text" title="'+favoriteSafe(a.name)+'">'+favoriteSafe(a.name||a.symbol)+'</span></div>'+favoriteSpark(d?.points,negative)+'<div class="favorite-numbers">'+value+'<small class="'+(!d?'':negative?'loss':'gain')+'">'+pct+'</small></div><button type="button" class="favorite-expand" data-fav-expand="'+favoriteSafe(a.symbol)+'" aria-label="Apri grafico a schermo intero di '+favoriteSafe(a.name||a.symbol)+'" title="Schermo intero"'+(!(d?.points?.length>=2)?' disabled':'')+'>⛶</button></article>'}).join('')}
+function renderFavoriteBanner(){const el=$('favoriteBanner');if(!el)return;const assets=favoriteAssets();el.classList.toggle('hidden',!prefs.favoriteEnabled||!assets.length);if(!prefs.favoriteEnabled||!assets.length){el.innerHTML='';return}el.innerHTML=assets.map(a=>{const d=favoriteCache.get(a.symbol),value=d&&Number.isFinite(d.price)?d.price.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:4})+' '+favoriteSafe(a.currency||''): '—',pct=d&&Number.isFinite(d.change)?(d.change>=0?'+':'')+d.change.toFixed(2).replace('.',',')+'%':'—',negative=!!d&&d.change<0;return '<article class="favorite-row" role="button" tabindex="0" data-fav-open="'+favoriteSafe(a.symbol)+'" aria-label="Apri '+favoriteSafe(a.name||a.symbol)+'"><div class="favorite-name">'+favoriteLogo(a)+'<span class="favorite-name-text" title="'+favoriteSafe(a.name)+'">'+favoriteSafe(a.name||a.symbol)+'</span></div>'+favoriteSpark(d?.points,negative)+'<div class="favorite-numbers">'+value+'<small class="'+(!d?'':negative?'loss':'gain')+'">'+pct+'</small></div></article>'}).join('')}
 function renderFavoriteSettings(){const box=$('favoriteSelected');if(!box)return;const a=favoriteAssets();box.innerHTML=a.length?a.map((x,i)=>'<div class="favorite-chosen"><span>'+favoriteSafe(x.name||x.symbol)+' · '+favoriteSafe(x.symbol)+'</span><button class="btn" type="button" data-fav-remove="'+i+'">Rimuovi</button></div>').join(''):'<div class="favorite-empty">Nessun titolo selezionato.</div>';box.querySelectorAll('[data-fav-remove]').forEach(b=>b.addEventListener('click',()=>{prefs.favoriteAssets=favoriteAssets().filter((_,i)=>i!==Number(b.dataset.favRemove));savePreferences();renderFavoriteSettings();renderFavoriteBanner()}));$('favoriteEnabled').checked=!!prefs.favoriteEnabled;$('favoriteSettingsBody').classList.toggle('hidden',!prefs.favoriteEnabled)}
 async function fetchFavoriteQuote(a){
  const symbol=String(a.symbol||'').toUpperCase(),currency=String(a.currency||'EUR').toUpperCase();
@@ -4948,7 +4963,7 @@ reportPopulatePeriods();
 (()=>{
  'use strict';
  const NS='http://www.w3.org/2000/svg';
- let active=null,lockedY=0,fullscreen=null;
+ let active=null;
  const fmt=(n,d=2)=>Number(n).toLocaleString('it-IT',{minimumFractionDigits:d,maximumFractionDigits:d});
  const signed=(n)=> (n>0?'+':'')+fmt(n);
  const pct=(n)=> (n>0?'+':'')+fmt(n)+'%';
@@ -4956,208 +4971,76 @@ reportPopulatePeriods();
  function pointText(pt,meta){
   if(['twrr','roi','mwrr'].includes(meta.kind))return pct(pt.value);
   if(meta.kind==='wealth')return fmt(pt.value)+' €';
-  return fmt(pt.value,4)+' '+meta.currency+(meta.currency==='EUR'?'':'');
+  return fmt(pt.value,4)+' '+meta.currency;
  }
  function close(){
   if(!active)return;
   const a=active;active=null;
   a.wrap.classList.remove('ab-active');a.button.classList.remove('active');a.button.textContent='A↔B';
-  a.overlay.replaceChildren();a.result.textContent='';a.result.hidden=true;
-  const reader=a.wrap.querySelector('.ab-chart-readout');if(reader)reader.hidden=false;
-  document.documentElement.style.overflow=a.previousHtmlOverflow;
-  document.body.style.overflow=a.previousBodyOverflow;
-  // No forced viewport repositioning on Safari.
+  a.overlay.replaceChildren();a.result.replaceChildren();a.result.hidden=true;
+ }
+ function nearest(svg,meta,ev){
+  const matrix=svg.getScreenCTM?.();if(!matrix)return null;
+  let best=null,dist=Infinity;
+  for(const pt of meta.pts){
+   const v=svg.createSVGPoint();v.x=pt.x;v.y=pt.y;
+   const q=v.matrixTransform(matrix),d=(q.x-ev.clientX)**2+(q.y-ev.clientY)**2;
+   if(Number.isFinite(d)&&d<dist){dist=d;best=pt}
+  }
+  return best;
  }
  function redraw(){
   if(!active)return;
   const {svg,meta,overlay,result,chosen}=active;
-  overlay.replaceChildren();
-  const box=svg.viewBox.baseVal,W=box.width,H=box.height;
+  overlay.replaceChildren();const b=svg.viewBox.baseVal;
   chosen.forEach((pt,i)=>{
-   const line=document.createElementNS(NS,'line');
-   line.setAttribute('x1',pt.x);line.setAttribute('x2',pt.x);
-   line.setAttribute('y1',0);line.setAttribute('y2',H);
-   line.setAttribute('class','ab-guide');overlay.appendChild(line);
-   const dot=document.createElementNS(NS,'circle');
-   dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);dot.setAttribute('r',4.8);
-   dot.setAttribute('class','ab-marker'+(i?' ab-marker-b':''));overlay.appendChild(dot);
+   const line=document.createElementNS(NS,'line');line.setAttribute('x1',pt.x);line.setAttribute('x2',pt.x);line.setAttribute('y1',0);line.setAttribute('y2',b.height);line.setAttribute('class','ab-guide');overlay.appendChild(line);
+   const dot=document.createElementNS(NS,'circle');dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);dot.setAttribute('r',4.8);dot.setAttribute('class','ab-marker'+(i?' ab-marker-b':''));overlay.appendChild(dot);
   });
-  if(chosen.length<2){result.textContent=chosen.length?'A fissato · Tocca il punto B':'Tocca il punto A';return;}
-  const [a,b]=chosen,diff=b.value-a.value;
-  const signedClass=diff>=0?'ab-result-up':'ab-result-down';
+  if(chosen.length<2){result.textContent=chosen.length?'A fissato · Tocca il punto B':'Tocca il punto A';result.hidden=false;return}
+  const [a,c]=chosen,diff=c.value-a.value;
   let comparison='';
   if(meta.kind==='twrr'){
-   const r=(100+a.value)>0?((100+b.value)/(100+a.value)-1)*100:null;
-   comparison=r===null?'Non calcolabile':pct(r)+' · '+(diff>=0?'+':'')+fmt(diff)+' punti percentuali';
+   const r=100+a.value>0?((100+c.value)/(100+a.value)-1)*100:null;
+   comparison=r===null?'Non calcolabile':pct(r)+' · '+signed(diff)+' punti percentuali';
   }else if(meta.kind==='roi'||meta.kind==='mwrr'){
-   comparison=(diff>=0?'+':'')+fmt(diff)+' punti percentuali (non è un rendimento autonomo dell’intervallo)';
+   comparison=signed(diff)+' punti percentuali (non è il rendimento autonomo dell’intervallo)';
   }else{
    comparison=signed(diff)+(meta.kind==='wealth'?' €':' '+meta.currency)+(a.value!==0?' · '+pct(diff/Math.abs(a.value)*100):'');
    if(meta.kind==='wealth')comparison+=' · include eventuali versamenti';
   }
   result.replaceChildren();
-  const header=document.createElement('strong');header.textContent='A '+a.label+' → B '+b.label;
-  const values=document.createElement('div');values.textContent=pointText(a,meta)+' → '+pointText(b,meta);
-  const delta=document.createElement('div');delta.className=signedClass;delta.textContent='Δ '+comparison;
-  result.append(header,values,delta);
+  const h=document.createElement('strong');h.textContent='A '+a.label+' → B '+c.label;
+  const v=document.createElement('div');v.textContent=pointText(a,meta)+' → '+pointText(c,meta);
+  const delta=document.createElement('div');delta.className=diff>=0?'ab-result-up':'ab-result-down';delta.textContent='Δ '+comparison;
+  result.append(h,v,delta);result.hidden=false;
  }
- function nearestScreenPoint(svg,meta,ev){
-  // Map every data point to screen coordinates instead of inverting the rotated
-  // iOS SVG matrix. This works identically in portrait and CSS-rotated landscape.
-  const m=svg.getScreenCTM?.();
-  if(!m)return null;
-  let best=null,dist=Infinity;
-  for(const p of meta.pts){
-   const v=svg.createSVGPoint();v.x=p.x;v.y=p.y;
-   const q=v.matrixTransform(m),d=(q.x-ev.clientX)**2+(q.y-ev.clientY)**2;
-   if(Number.isFinite(d)&&d<dist){best=p;dist=d}
-  }
-  return best;
+ function select(svg,ev){
+  if(active?.svg!==svg)return;
+  const pt=nearest(svg,active.meta,ev);if(!pt)return;
+  if(active.chosen.length===2)active.chosen.length=0;
+  active.chosen.push(pt);redraw();
  }
- function showFullPoint(svg,meta,ev){
-  if(active?.svg===svg)return;
-  const parent=svg.closest('.ab-chart-wrap');if(!parent)return;
-  const pt=nearestScreenPoint(svg,meta,ev);if(!pt)return;
-  const o=parent.querySelector('.ab-chart-readout');if(!o)return;
-  o.textContent=pt.label+' · '+pointText(pt,meta)+(meta.pts[0]?.value&&meta.kind!=='twrr'&&meta.kind!=='roi'&&meta.kind!=='mwrr'?' · '+pct((pt.value/meta.pts[0].value-1)*100)+' dal primo punto':'');
-  o.hidden=false;
-  const marker=parent.querySelector('.ab-chart-reading-marker');
-  if(marker){marker.setAttribute('cx',pt.x);marker.setAttribute('cy',pt.y);marker.setAttribute('visibility','visible')}
- }
- function locate(ev){
-  if(!active)return;
-  const {svg,meta,chosen}=active;
-  const best=nearestScreenPoint(svg,meta,ev);
-  if(!best)return;
-  if(chosen.length===2)chosen.splice(0,2);
-  chosen.push(best);redraw();
- }
- function toggle(svg,button,wrap,overlay,result){
-  if(active?.svg===svg){close();return}
-  close();const meta=decode(svg);
-  if(!meta||meta.pts.length<2)return;
-  lockedY=window.scrollY||0;
-  active={svg,button,wrap,overlay,result,meta,chosen:[],previousHtmlOverflow:document.documentElement.style.overflow,previousBodyOverflow:document.body.style.overflow};
-  document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';
-  wrap.classList.add('ab-active');button.classList.add('active');button.textContent='× Esci';
-  const reader=wrap.querySelector('.ab-chart-readout');if(reader)reader.hidden=true;
-  redraw();
- }
-
- function openFullscreen(source){
-  if(fullscreen)closeFullscreen();
-  if(active)close();
-  const previousHtmlOverflow=document.documentElement.style.overflow,previousBodyOverflow=document.body.style.overflow;
-  const oldScrollY=window.scrollY||0;
-  const dialog=document.createElement('section');dialog.className='finholdra-chart-fullscreen';dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-label','Grafico a tutto schermo orizzontale');
-  const panel=document.createElement('div');panel.className='finholdra-chart-landscape';
-  const head=document.createElement('div');head.className='finholdra-chart-fullscreen-head';
-  const label=document.createElement('strong');label.textContent=source.getAttribute('aria-label')||'Grafico · Vista orizzontale';
-  const back=document.createElement('button');back.className='finholdra-chart-fullscreen-close';back.type='button';back.textContent='✕ Chiudi';
-  const plot=document.createElement('div');plot.className='finholdra-chart-fullscreen-plot';
-  const clone=source.cloneNode(true);clone.removeAttribute('id');clone.setAttribute('aria-label',(source.getAttribute('aria-label')||'Grafico')+' · schermo intero');
-  head.append(label,back);plot.appendChild(clone);panel.append(head,plot);dialog.appendChild(panel);document.body.appendChild(dialog);
-  // Block accidental two-finger zoom on the transformed viewer ONLY (never globally).
-  const stopViewerZoom=e=>{if(e.cancelable)e.preventDefault()};
-  for(const type of ['gesturestart','gesturechange','gestureend'])dialog.addEventListener(type,stopViewerZoom,{passive:false});
-  dialog.addEventListener('touchmove',e=>{if(e.touches.length>1&&e.cancelable)e.preventDefault()},{passive:false});
-  document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';
-  fullscreen={dialog,previousHtmlOverflow,previousBodyOverflow,oldScrollY};
-  // iOS Safari usually rejects lock(): CSS portrait rotation remains the reliable fallback.
-  // No screen.orientation.lock on iOS: avoid browser-level orientation negotiation.
-  attach(clone,true);
-  back.addEventListener('click',closeFullscreen);
- }
- function closeFullscreen(){
-  if(!fullscreen)return;
-  const f=fullscreen;fullscreen=null;
-  if(active&&f.dialog.contains(active.svg))close();
-  f.dialog.remove();
-  // Do not modify OS orientation state.
-  document.documentElement.style.overflow=f.previousHtmlOverflow;
-  document.body.style.overflow=f.previousBodyOverflow;
-  // Keep viewport in place; iOS may change its visual viewport while rotating the overlay.
- }
- // The tiny Home sparkline stays compact. Only its separate fullscreen icon
- // creates a full-sized verified-price SVG, using the same viewer as investments.
- function favoriteFullscreen(symbol){
-  const fav=(typeof favoriteAssets==='function'?favoriteAssets():[]).find(a=>String(a.symbol).toUpperCase()===String(symbol).toUpperCase());
-  const quote=typeof favoriteCache!=='undefined'?favoriteCache.get(fav?.symbol):null;
-  const series=(quote?.points||[]).filter(p=>Number.isFinite(Number(p.p))&&Number(p.p)>0&&Number.isFinite(Number(p.t)))
-   .slice(-140);
-  if(!fav||series.length<2)return;
-  const W=640,H=285,L=35,R=24,T=25,B=45;
-  const values=series.map(p=>Number(p.p)),lo=Math.min(...values),hi=Math.max(...values),pad=(hi-lo)*.15||hi*.005||.1;
-  const x=i=>L+(W-L-R)*i/(series.length-1),y=v=>T+(H-T-B)*(hi+pad-v)/(hi-lo+2*pad);
-  const pts=series.map((p,i)=>({x:x(i),y:y(p.p),value:p.p,label:new Date(p.t*1000).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}));
-  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-  svg.setAttribute('role','img');svg.setAttribute('aria-label',(fav.name||fav.symbol)+' · andamento della seduta disponibile');
-  svg.setAttribute('data-ab-series',encodeURIComponent(JSON.stringify({kind:'price',currency:fav.currency||'EUR',pts})));
-  const path=document.createElementNS(NS,'path');path.setAttribute('d',pts.map((p,i)=>(i?'L':'M')+p.x.toFixed(2)+' '+p.y.toFixed(2)).join(' '));
-  path.setAttribute('fill','none');path.setAttribute('stroke',quote.change<0?'#fb7185':'#39d9a9');path.setAttribute('stroke-width','3');path.setAttribute('stroke-linecap','round');path.setAttribute('stroke-linejoin','round');svg.appendChild(path);
-  for(const i of [0,pts.length-1]){
-   const label=document.createElementNS(NS,'text');label.setAttribute('x',pts[i].x);label.setAttribute('y',H-14);
-   label.setAttribute('text-anchor',i?'end':'start');label.setAttribute('fill','#adbed2');label.setAttribute('font-size','12');
-   label.textContent=pts[i].label;svg.appendChild(label);
-  }
-  openFullscreen(svg);
- }
- document.addEventListener('click',ev=>{
-  const btn=ev.target.closest('[data-fav-expand]');if(!btn||btn.disabled)return;
-  ev.preventDefault();ev.stopPropagation();favoriteFullscreen(btn.dataset.favExpand);
- },true);
- function attach(svg,insideFullscreen=false){
-  if(svg.parentElement?.classList.contains('ab-chart-wrap'))return;
+ function attach(svg){
+  if(svg.closest('.ab-chart-wrap'))return;
   const meta=decode(svg);if(!meta||!Array.isArray(meta.pts)||meta.pts.length<2)return;
-  const wrap=document.createElement('div');wrap.className='ab-chart-wrap';
-  svg.parentNode.insertBefore(wrap,svg);wrap.appendChild(svg);
-  const overlay=document.createElementNS(NS,'svg');
-  overlay.setAttribute('viewBox',svg.getAttribute('viewBox'));
-  overlay.setAttribute('preserveAspectRatio',svg.getAttribute('preserveAspectRatio')||'xMidYMid meet');
-  overlay.setAttribute('class','ab-chart-overlay');wrap.appendChild(overlay);
-  const result=document.createElement('div');result.className='ab-chart-result';result.setAttribute('role','status');result.setAttribute('aria-live','polite');wrap.appendChild(result);
-  result.textContent='';result.hidden=true;
-  if(insideFullscreen){
-   const read=document.createElement('div');read.className='ab-chart-readout';read.textContent='Tocca o trascina il grafico per leggere il valore';wrap.appendChild(read);
-   const circle=document.createElementNS(NS,'circle');circle.classList.add('ab-chart-reading-marker');circle.setAttribute('r','5');circle.setAttribute('fill','#f5c45d');circle.setAttribute('stroke','#10223a');circle.setAttribute('stroke-width','2');circle.setAttribute('visibility','hidden');
-   overlay.appendChild(circle);
-   // Pointer events work on Safari both before and after CSS landscape rotation.
-   svg.addEventListener('pointerdown',e=>{if(active?.svg!==svg){showFullPoint(svg,meta,e);if(e.cancelable)e.preventDefault()}},{passive:false});
-   svg.addEventListener('pointermove',e=>{if(active?.svg!==svg&&(e.pointerType==='touch'||e.buttons))showFullPoint(svg,meta,e)},{passive:false});
-   svg.addEventListener('touchmove',e=>{if(active?.svg!==svg&&e.touches[0]){showFullPoint(svg,meta,e.touches[0]);if(e.cancelable)e.preventDefault()}},{passive:false});
-   svg.addEventListener('click',e=>{if(active?.svg!==svg)showFullPoint(svg,meta,e)});
-  }
-  // A persistent sibling toolbar lives OUTSIDE the SVG wrapper and cannot be
-  // clipped by chart layers or any of the chart SVG's overlapping controls.
-  const tools=document.createElement('div');tools.className='ab-chart-tools ab-chart-tools-v936';
-  if(!insideFullscreen && svg.closest('#assetDetailChart')){
-   // Unlike the SVG (which is replaced on every price refresh), the controls are
-   // siblings of the drawing inside the investment detail chart container.
-   // Safari must not clip them behind the chart's overflow layers.
-   wrap.insertAdjacentElement('afterend',tools);
-   tools.classList.add('ab-investment-tools');
-  }else wrap.appendChild(tools);
-  if(!insideFullscreen){
-   const expand=document.createElement('button');expand.type='button';expand.className='ab-chart-expand';expand.textContent='⛶ Schermo intero';expand.setAttribute('aria-label','Apri grafico a tutto schermo in orizzontale');expand.title='Schermo intero · Orizzontale';tools.appendChild(expand);
-   expand.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();openFullscreen(svg)});
-  }
-  const button=document.createElement('button');button.type='button';button.className='ab-chart-trigger';button.textContent='A↔B';button.setAttribute('aria-label','Confronta due punti del grafico');button.title='Confronta A e B';tools.appendChild(button);
-  button.addEventListener('click',ev=>{ev.stopPropagation();ev.preventDefault();toggle(svg,button,wrap,overlay,result);result.hidden=!active||active.svg!==svg});
-  const select=ev=>{
-   if(!active||active.svg!==svg)return;
-   if(ev.cancelable)ev.preventDefault();ev.stopImmediatePropagation();ev.stopPropagation();
-   if(ev.type==='pointerdown'&&ev.button!==0&&ev.pointerType!=='touch')return;
-   if(ev.type==='pointerdown')locate(ev);
-  };
-  svg.addEventListener('pointerdown',select,true);
-  svg.addEventListener('click',select,true);
-  svg.addEventListener('touchstart',e=>{if(active?.svg===svg&&e.touches.length===1){if(e.cancelable)e.preventDefault();e.stopImmediatePropagation()}},{capture:true,passive:false});
+  const wrap=document.createElement('div');wrap.className='ab-chart-wrap';svg.parentNode.insertBefore(wrap,svg);wrap.appendChild(svg);
+  const overlay=document.createElementNS(NS,'svg');overlay.setAttribute('viewBox',svg.getAttribute('viewBox'));overlay.setAttribute('preserveAspectRatio',svg.getAttribute('preserveAspectRatio')||'xMidYMid meet');overlay.classList.add('ab-chart-overlay');wrap.appendChild(overlay);
+  const result=document.createElement('div');result.className='ab-chart-result';result.hidden=true;result.setAttribute('role','status');wrap.appendChild(result);
+  const tools=document.createElement('div');tools.className='ab-only-tools';
+  const button=document.createElement('button');button.type='button';button.className='ab-chart-trigger';button.textContent='A↔B';button.setAttribute('aria-label','Confronta due punti del grafico');tools.appendChild(button);
+  wrap.insertAdjacentElement('afterend',tools);
+  button.addEventListener('click',e=>{
+   e.preventDefault();e.stopPropagation();
+   if(active?.svg===svg){close();return}
+   close();active={svg,meta,wrap,overlay,result,button,chosen:[]};wrap.classList.add('ab-active');button.classList.add('active');button.textContent='× Esci';redraw();
+  });
+  svg.addEventListener('pointerdown',e=>{if(active?.svg!==svg)return;if(e.pointerType==='mouse'&&e.button!==0)return;e.preventDefault();e.stopImmediatePropagation();select(svg,e)},true);
+  svg.addEventListener('touchstart',e=>{if(active?.svg===svg&&e.touches.length===1&&e.cancelable)e.preventDefault()},{passive:false,capture:true});
  }
  let scheduled=false;
- function scan(){scheduled=false;document.querySelectorAll('svg[data-ab-series]').forEach(attach);
-  if(active&&!active.svg.isConnected)close();}
- const mo=new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(scan)}});
- mo.observe(document.body,{childList:true,subtree:true});scan();
- document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(fullscreen){e.preventDefault();closeFullscreen()}else if(active){e.preventDefault();close()}}});
+ function scan(){scheduled=false;document.querySelectorAll('svg[data-ab-series]').forEach(attach);if(active&&!active.svg.isConnected)close()}
+ new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(scan)}}).observe(document.body,{childList:true,subtree:true});
+ scan();document.addEventListener('keydown',e=>{if(e.key==='Escape'&&active){e.preventDefault();close()}});
 })();
 </script></body></html>
