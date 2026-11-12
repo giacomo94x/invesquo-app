@@ -795,6 +795,36 @@ body.motion-off .finn-scene-anticipation.expression-watching svg .finn-right-arm
 #settingCategoryColors .category-color-swatch{display:inline-flex;gap:9px;align-items:center;justify-content:flex-start;font-size:12px;font-weight:600;color:var(--muted);}
 #settingCategoryColorValue{width:54px;height:40px;padding:3px;border:1px solid var(--border);border-radius:10px;background:var(--panel2);cursor:pointer;}
 #settingsView > #mascotLab{margin-top:16px;margin-bottom:20px;}
+
+/* Beta 9.9.30 — journal-based daily gain/loss dashboard */
+#historySection .history-method-switch{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+#historySection .history-method-switch .btn{font-size:11px;min-width:0;padding:10px 4px}
+#historySection.daily-mode .history-scope-row,
+#historySection.daily-mode #historyRanges,
+#historySection.daily-mode .history-rebuild-controls,
+#historySection.daily-mode #historyGraph,
+#historySection.daily-mode #historyDayDetail,
+#historySection.daily-mode #historyPerformance,
+#historySection.daily-mode .method-picker,
+#historySection.daily-mode #methodHelp,
+#historySection.daily-mode #historySummary,
+#historySection.daily-mode #tradeEventList,
+#historySection.daily-mode #transactionTimeline{display:none!important}
+.daily-history-view{margin-top:14px;min-width:0}
+.daily-history-title{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.daily-history-title h3{font-size:16px;margin:0 auto 0 0}
+.daily-history-title label{font-size:12px;color:var(--muted)}
+.daily-history-title select{max-width:165px;min-width:110px;color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:9px}
+.daily-total{margin:14px 0;border:1px solid var(--border);border-radius:14px;background:var(--panel2);padding:15px;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.daily-total span{flex:1 0 100%;font-size:12px;color:var(--muted)}
+.daily-total strong{font-size:23px;line-height:1.1}
+.daily-assets{display:flex;flex-direction:column;gap:7px}
+.daily-asset-row{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:12px 10px;border:1px solid var(--border);background:var(--panel2);border-radius:12px}
+.daily-asset-name{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.daily-asset-name>div{min-width:0}.daily-asset-name strong{font-size:13px;display:block;overflow-wrap:anywhere}.daily-asset-name small{font-size:11px;display:block;color:var(--muted);margin-top:3px}
+.daily-asset-change{display:flex;flex-direction:column;text-align:right;gap:3px;flex:0 0 auto}
+.daily-asset-change strong{font-size:15px}.daily-asset-change small{font-size:12px}
+@media(max-width:400px){#historySection .history-method-switch .btn{font-size:10px;padding:8px 2px}.daily-total strong{font-size:20px}}
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
 .pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
@@ -1099,6 +1129,21 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
     object-fit: contain !important; object-position: left center !important;
   }
 }
+</style><style id="abCompareStyle">
+/* The comparison button floats within each chart, preserving surrounding layouts. */
+.ab-chart-wrap{position:relative;min-width:0;width:100%;isolation:isolate}
+.ab-chart-wrap>svg{display:block;width:100%;max-width:100%;}
+.ab-chart-trigger{position:absolute;bottom:22px;right:9px;z-index:4;min-width:43px;min-height:32px;padding:5px 8px;border:1px solid var(--border,#52647a);border-radius:12px;background:var(--panel,#172a46);color:var(--text,#fff);font-size:12px;font-weight:750;box-shadow:0 2px 12px rgba(0,0,0,.15);cursor:pointer}
+.ab-chart-trigger.active{background:#416ec5;color:#fff;border-color:#7298e4}
+.ab-chart-wrap.ab-active>svg{touch-action:none;cursor:crosshair;user-select:none;-webkit-user-select:none}
+.ab-chart-overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.ab-chart-overlay .ab-guide{stroke:#e6f0ff;stroke-width:1.25;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
+.ab-chart-overlay .ab-marker{fill:#fff;stroke:#386ac4;stroke-width:2.3;vector-effect:non-scaling-stroke}
+.ab-chart-overlay .ab-marker-b{stroke:#20c997}
+.ab-chart-result{position:absolute;left:5px;top:6px;right:5px;z-index:5;padding:8px 10px;border:1px solid rgba(153,176,215,.4);border-radius:10px;background:var(--panel,#172a46);color:var(--text,#fff);box-shadow:0 4px 18px rgba(0,0,0,.22);font-size:11px;line-height:1.45;pointer-events:none;max-width:calc(100% - 10px)}
+.ab-chart-result strong{display:block;font-size:12px}.ab-chart-result .ab-result-up{color:#34d399}.ab-chart-result .ab-result-down{color:#fb7185}
+.ab-chart-wrap.ab-active .ab-chart-trigger{bottom:9px}
+@media(max-width:480px){.ab-chart-trigger{bottom:18px;right:4px;min-width:38px;min-height:30px}.ab-chart-result{font-size:10px;padding:6px 8px}}
 </style></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco.svg?v=9.9.22" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -1216,7 +1261,7 @@ body.finholdra-market-open{overflow:hidden!important;touch-action:none}
 
 
 </div>
-<div aria-label="Storico del patrimonio" class="app-view hidden" id="historyView"><div class="sub-screen-head"><span class="eyebrow">FINHOLDRA</span><h2>Storico del patrimonio</h2><p>Rendimenti della categoria selezionata: TWRR per la performance, MWRR per il capitale ponderato nel tempo e ROI semplice per il risultato del periodo.</p></div><section class="card" id="historySection"><div class="section-head"><h2>Storico del patrimonio</h2><span class="sub" id="historyStart">Dalla prima rilevazione</span></div><div class="history-scope-row"><label for="historyCategory">Categoria del grafico</label><select id="historyCategory" aria-label="Seleziona la categoria da visualizzare nello storico"></select></div><div class="history-method-switch" role="group" aria-label="Metodo di rendimento"><button type="button" data-history-method="twrr" class="btn" aria-pressed="false">TWRR · Mercati</button><button type="button" data-history-method="mwrr" class="btn" aria-pressed="false">MWRR · Investitore</button><button type="button" data-history-method="roi" class="btn selected" aria-pressed="true">ROI · Semplice</button></div><div class="timeline-range" id="historyRanges"><button class="btn selected" data-range="7" aria-pressed="true">7G</button><button class="btn" data-range="30" aria-pressed="false">1M</button><button class="btn" data-range="183" aria-pressed="false">6M</button><button class="btn" data-range="365" aria-pressed="false">1A</button><button class="btn" data-range="all" aria-pressed="false">MAX</button></div><div class="history-rebuild-controls"><button type="button" class="btn" id="historyBackfill">↻ Recupera prezzi delle transazioni passate</button><span class="sub" id="historyBackfillStatus" role="status">Storico disponibile.</span></div><div aria-label="Andamento del patrimonio nel tempo" id="historyGraph"></div><div aria-live="polite" class="history-day-detail hidden" id="historyDayDetail"></div><div class="hist-performance" id="historyPerformance"></div><div class="method-picker"><span class="method-label">Metodo: TWRR · rendimento della categoria selezionata</span></div><p aria-live="polite" class="method-help" id="methodHelp"></p><p class="hint">Seleziona una categoria attiva nella Dashboard. TWRR e MWRR considerano i flussi in maniera differente; ROI è il rendimento semplice sul capitale impiegato nel periodo, senza considerare il tempo di investimento. Lo storico segue le categorie attive nella Dashboard. Premi «Recupera prezzi» per tentare la ricostruzione retroattiva dalle transazioni: si usano soltanto prezzi di mercato disponibili; se uno strumento manca, la giornata non viene ricostruita.</p><div class="hist-foot sub" id="historySummary"></div><div class="trade-event-list" id="tradeEventList"></div><div id="transactionTimeline" class="transaction-timeline"></div></section></div><div aria-label="Investimenti e operazioni" class="app-view hidden" id="portfolioView"><div class="sub-screen-head"><span class="eyebrow">FINHOLDRA</span><h2>Investimenti</h2><p>Posizioni, prezzi, acquisti e vendite.</p></div><section class="card"><div class="section-head"><h2>Composizione e rendimenti</h2><button class="btn" id="editToggle">Rettifica dati</button></div><div id="assetList"></div><div class="editor" id="editor"><div class="notice">Correggi i dati iniziali. Per nuove quote usa «Registra acquisto».</div><div id="editItems"></div><button class="btn primary" id="editDone" style="width:100%;margin-top:12px">Salva e chiudi</button></div></section><section class="card" id="purchaseSection"><h2>Registra un acquisto</h2><p class="hint">Inserisci quantità e prezzo effettivo di acquisto.</p><div class="field"><label for="buyAsset">Strumento</label><select class="order-select" id="buyAsset"></select></div><div class="investment-entry"><div class="field"><label for="buyDate">Data effettiva dell’acquisto</label><div class="entry-date-row"><input type="date" id="buyDate"/><button type="button" class="btn" data-first-date="buyDate">Prima data app</button></div></div><p class="entry-explain">Predefinita: oggi. Puoi selezionare la prima data registrata nell’app per inserire un investimento già posseduto. La data non crea quotazioni storiche mancanti.</p><label class="sub">Come vuoi registrare l’operazione?</label><div class="entry-choice"><label><input type="radio" name="buyInputMode" value="qty" checked/> Quantità di quote</label><label><input type="radio" name="buyInputMode" value="eur"/> Importo speso in €</label></div><div class="field entry-field-hidden" id="buyAmountWrap"><label for="buyAmount">Importo effettivamente acquistato (€)</label><input id="buyAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Per Bitcoin o altri strumenti frazionabili: scrivi 500 € e calcolerò automaticamente le quote.</p></div></div><div class="editgrid"><div class="field" id="buyQuantityWrap"><label for="buyQuantity">Nuove quote acquistate (frazioni ammesse)</label><input id="buyQuantity" inputmode="decimal" min="0" step="any" type="number" value="2"/></div><div class="field"><label for="buyPrice">Prezzo effettivo di acquisto per quota (nella valuta del titolo)</label><input id="buyPrice" inputmode="decimal" min="0" step="any" type="number"/></div></div><div class="order-preview" id="buyPreview"></div><div class="notice warn hidden" id="buyStale"></div><label class="toggle" style="margin-top:12px"><input id="buyVerify" type="checkbox"/> Confermo data, quantità/importo e prezzo effettivo pagato</label><button class="btn primary buy-confirm" disabled="" id="buyCommit">Registra acquisto e aggiorna PMC</button><p class="foot">Inserisci sempre il prezzo effettivo pagato al broker, non necessariamente la quotazione attuale. Sono ammesse quote frazionate (es. Bitcoin); puoi indicare direttamente l’importo in euro. Commissioni escluse. Un acquisto storico non ricrea i prezzi passati del portafoglio.</p><div class="notice hidden" id="buyStatus"></div></section><section class="card"><button class="btn primary full-btn" id="newAssetOpen">＋ Aggiungi titolo</button><button class="btn full-btn" id="depositAddOpen" type="button">＋ 🏦 Aggiungi conto deposito</button><button class="btn full-btn" id="purchaseOpen">＋ Registra acquisto</button><button class="btn full-btn" id="saleOpen">− Registra vendita</button><button class="btn full-btn" id="pacPanelOpen" type="button">📅 Il mio PAC</button></section><section class="card" id="ingSection"><h2>Conti deposito</h2><div id="depositSummary"></div></section><section class="card"><h2>Valori a scadenza</h2><div id="maturities"></div><p class="foot">Per il BTP il valore include il capitale e tutte le cedole lorde previste, non un unico pagamento finale. I valori a scadenza non si sommano al patrimonio odierno.</p></section><section class="card"><h2>Quotazioni e dati</h2><div class="flex"><label class="toggle"><input checked="" id="auto" type="checkbox"/> Aggiornamento automatico</label><button class="btn primary" id="refresh">↻ Aggiorna</button></div><div class="sub" id="refreshInfo" style="margin-top:8px">Lettura dei prezzi non garantita</div><div class="notice" id="notice">Prezzi e fonti disponibili.</div><p class="foot">Controllo dei prezzi con frequenza regolabile nelle Impostazioni, solo quando l’app è aperta. Le quotazioni dipendono dalle fonti esterne e potrebbero essere ritardate o non disponibili. Preferenze, backup e prova della faccina sono in <strong>Impostazioni</strong>.</p></section></div><section class="app-view hidden learning-view" id="educationView" aria-label="Educational: conoscere gli investimenti">
+<div aria-label="Storico del patrimonio" class="app-view hidden" id="historyView"><div class="sub-screen-head"><span class="eyebrow">FINHOLDRA</span><h2>Storico del patrimonio</h2><p>Rendimenti della categoria selezionata: TWRR per la performance, MWRR per il capitale ponderato nel tempo e ROI semplice per il risultato del periodo.</p></div><section class="card" id="historySection"><div class="section-head"><h2>Storico del patrimonio</h2><span class="sub" id="historyStart">Dalla prima rilevazione</span></div><div class="history-scope-row"><label for="historyCategory">Categoria del grafico</label><select id="historyCategory" aria-label="Seleziona la categoria da visualizzare nello storico"></select></div><div class="history-method-switch" role="group" aria-label="Metodo di rendimento"><button type="button" data-history-method="twrr" class="btn" aria-pressed="false">TWRR · Mercati</button><button type="button" data-history-method="mwrr" class="btn" aria-pressed="false">MWRR · Investitore</button><button type="button" data-history-method="roi" class="btn" aria-pressed="false">ROI · Semplice</button><button type="button" class="btn selected" data-history-method="daily" aria-pressed="true">Ultimo giorno</button></div><div class="daily-history-view hidden" id="dailyHistoryView" aria-live="polite"></div><div class="timeline-range" id="historyRanges"><button class="btn selected" data-range="7" aria-pressed="true">7G</button><button class="btn" data-range="30" aria-pressed="false">1M</button><button class="btn" data-range="183" aria-pressed="false">6M</button><button class="btn" data-range="365" aria-pressed="false">1A</button><button class="btn" data-range="all" aria-pressed="false">MAX</button></div><div class="history-rebuild-controls"><button type="button" class="btn" id="historyBackfill">↻ Recupera prezzi delle transazioni passate</button><span class="sub" id="historyBackfillStatus" role="status">Storico disponibile.</span></div><div aria-label="Andamento del patrimonio nel tempo" id="historyGraph"></div><div aria-live="polite" class="history-day-detail hidden" id="historyDayDetail"></div><div class="hist-performance" id="historyPerformance"></div><div class="method-picker"><span class="method-label">Metodo: TWRR · rendimento della categoria selezionata</span></div><p aria-live="polite" class="method-help" id="methodHelp"></p><p class="hint">Seleziona una categoria attiva nella Dashboard. TWRR e MWRR considerano i flussi in maniera differente; ROI è il rendimento semplice sul capitale impiegato nel periodo, senza considerare il tempo di investimento. Lo storico segue le categorie attive nella Dashboard. Premi «Recupera prezzi» per tentare la ricostruzione retroattiva dalle transazioni: si usano soltanto prezzi di mercato disponibili; se uno strumento manca, la giornata non viene ricostruita.</p><div class="hist-foot sub" id="historySummary"></div><div class="trade-event-list" id="tradeEventList"></div><div id="transactionTimeline" class="transaction-timeline"></div></section></div><div aria-label="Investimenti e operazioni" class="app-view hidden" id="portfolioView"><div class="sub-screen-head"><span class="eyebrow">FINHOLDRA</span><h2>Investimenti</h2><p>Posizioni, prezzi, acquisti e vendite.</p></div><section class="card"><div class="section-head"><h2>Composizione e rendimenti</h2><button class="btn" id="editToggle">Rettifica dati</button></div><div id="assetList"></div><div class="editor" id="editor"><div class="notice">Correggi i dati iniziali. Per nuove quote usa «Registra acquisto».</div><div id="editItems"></div><button class="btn primary" id="editDone" style="width:100%;margin-top:12px">Salva e chiudi</button></div></section><section class="card" id="purchaseSection"><h2>Registra un acquisto</h2><p class="hint">Inserisci quantità e prezzo effettivo di acquisto.</p><div class="field"><label for="buyAsset">Strumento</label><select class="order-select" id="buyAsset"></select></div><div class="investment-entry"><div class="field"><label for="buyDate">Data effettiva dell’acquisto</label><div class="entry-date-row"><input type="date" id="buyDate"/><button type="button" class="btn" data-first-date="buyDate">Prima data app</button></div></div><p class="entry-explain">Predefinita: oggi. Puoi selezionare la prima data registrata nell’app per inserire un investimento già posseduto. La data non crea quotazioni storiche mancanti.</p><label class="sub">Come vuoi registrare l’operazione?</label><div class="entry-choice"><label><input type="radio" name="buyInputMode" value="qty" checked/> Quantità di quote</label><label><input type="radio" name="buyInputMode" value="eur"/> Importo speso in €</label></div><div class="field entry-field-hidden" id="buyAmountWrap"><label for="buyAmount">Importo effettivamente acquistato (€)</label><input id="buyAmount" type="number" min="0" step="any" inputmode="decimal" placeholder="Es. 500"/><p class="entry-explain">Per Bitcoin o altri strumenti frazionabili: scrivi 500 € e calcolerò automaticamente le quote.</p></div></div><div class="editgrid"><div class="field" id="buyQuantityWrap"><label for="buyQuantity">Nuove quote acquistate (frazioni ammesse)</label><input id="buyQuantity" inputmode="decimal" min="0" step="any" type="number" value="2"/></div><div class="field"><label for="buyPrice">Prezzo effettivo di acquisto per quota (nella valuta del titolo)</label><input id="buyPrice" inputmode="decimal" min="0" step="any" type="number"/></div></div><div class="order-preview" id="buyPreview"></div><div class="notice warn hidden" id="buyStale"></div><label class="toggle" style="margin-top:12px"><input id="buyVerify" type="checkbox"/> Confermo data, quantità/importo e prezzo effettivo pagato</label><button class="btn primary buy-confirm" disabled="" id="buyCommit">Registra acquisto e aggiorna PMC</button><p class="foot">Inserisci sempre il prezzo effettivo pagato al broker, non necessariamente la quotazione attuale. Sono ammesse quote frazionate (es. Bitcoin); puoi indicare direttamente l’importo in euro. Commissioni escluse. Un acquisto storico non ricrea i prezzi passati del portafoglio.</p><div class="notice hidden" id="buyStatus"></div></section><section class="card"><button class="btn primary full-btn" id="newAssetOpen">＋ Aggiungi titolo</button><button class="btn full-btn" id="depositAddOpen" type="button">＋ 🏦 Aggiungi conto deposito</button><button class="btn full-btn" id="purchaseOpen">＋ Registra acquisto</button><button class="btn full-btn" id="saleOpen">− Registra vendita</button><button class="btn full-btn" id="pacPanelOpen" type="button">📅 Il mio PAC</button></section><section class="card" id="ingSection"><h2>Conti deposito</h2><div id="depositSummary"></div></section><section class="card"><h2>Valori a scadenza</h2><div id="maturities"></div><p class="foot">Per il BTP il valore include il capitale e tutte le cedole lorde previste, non un unico pagamento finale. I valori a scadenza non si sommano al patrimonio odierno.</p></section><section class="card"><h2>Quotazioni e dati</h2><div class="flex"><label class="toggle"><input checked="" id="auto" type="checkbox"/> Aggiornamento automatico</label><button class="btn primary" id="refresh">↻ Aggiorna</button></div><div class="sub" id="refreshInfo" style="margin-top:8px">Lettura dei prezzi non garantita</div><div class="notice" id="notice">Prezzi e fonti disponibili.</div><p class="foot">Controllo dei prezzi con frequenza regolabile nelle Impostazioni, solo quando l’app è aperta. Le quotazioni dipendono dalle fonti esterne e potrebbero essere ritardate o non disponibili. Preferenze, backup e prova della faccina sono in <strong>Impostazioni</strong>.</p></section></div><section class="app-view hidden learning-view" id="educationView" aria-label="Educational: conoscere gli investimenti">
 <div class="sub-screen-head"><span class="eyebrow">FINHOLDRA ACADEMY</span><h2>Impara a investire</h2><p>Strumenti, rendimenti e rischi.</p></div>
 <section class="card learning-intro"><div class="section-head"><h2>Esplora gli strumenti</h2><span class="sub" id="learningCount">11 argomenti</span></div>
 <div class="learning-filter"><label for="learningSearch">Trova un argomento</label><input id="learningSearch" type="search" placeholder="Cerca: ETF, cedole, oro, volatilità…"/></div>
@@ -1437,8 +1482,8 @@ function save(){try{store.setItem(STORAGE,JSON.stringify(state))}catch(e){notice
 function saveFilters(){try{store.setItem(FILTER_KEY,JSON.stringify(filter))}catch(e){}}
 
 let snapshots=[],trades=[],historyRange='30',buyPriceEdited=false,historySelectedDay=null,historyPointData=[];
-const RETURN_METHOD_KEY='invesquo_return_method_v57';let returnMethod='roi';
-function updateMethodButtons(){document.querySelectorAll('[data-history-method]').forEach(b=>{const active=b.dataset.historyMethod===returnMethod;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});document.querySelectorAll('.method-picker .method-label').forEach(el=>{el.textContent='Metodo: '+(returnMethod==='twrr'?'TWRR':returnMethod==='mwrr'?'MWRR':'ROI semplice')+' · rendimento della categoria selezionata'})}
+const RETURN_METHOD_KEY='invesquo_return_method_v57';let returnMethod='daily';
+function updateMethodButtons(){document.querySelectorAll('[data-history-method]').forEach(b=>{const active=b.dataset.historyMethod===returnMethod;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});document.querySelectorAll('.method-picker .method-label').forEach(el=>{el.textContent='Metodo: '+(returnMethod==='daily'?'Ultimo giorno':returnMethod==='twrr'?'TWRR':returnMethod==='mwrr'?'MWRR':'ROI semplice')+' · rendimento della categoria selezionata'})}
 document.querySelectorAll('[data-history-method]').forEach(b=>b.addEventListener('click',()=>{returnMethod=b.dataset.historyMethod;historySelectedDay=null;renderHistory()}));
 try{snapshots=JSON.parse(store.getItem(HISTORY_KEY))||[];if(!Array.isArray(snapshots))snapshots=[]}catch(e){snapshots=[]}
 try{trades=JSON.parse(store.getItem(TRADES_KEY))||[];if(!Array.isArray(trades))trades=[]}catch(e){trades=[]}
@@ -1530,6 +1575,18 @@ function trackSnapshot(){
   for(const a of list)byAsset[a.id]={cat,quantity:Number(a.q)||0,value:val(a),capital:cap(a),price:Number(a.p),currency:currencyOf(a),fxRate:assetFx(a)};
  });
  const snap={date:day,stamp,byCat,byAsset,coverage:'all-assets',source:'observed'};
+ // Append real changed observations without replacing historical daily summaries.
+ // Financial data stays profile-scoped and participates in the JSON backup.
+ const compact={date:day,stamp,byAsset:Object.fromEntries(Object.entries(byAsset).map(([id,v])=>[id,{cat:v.cat,quantity:v.quantity,value:v.value,capital:v.capital,price:v.price,currency:v.currency,fxRate:v.fxRate}]))};
+ try{
+  const old=JSON.parse(store.getItem('finholdra_observations_v9930')||'[]');
+  const journal=Array.isArray(old)?old:[];
+  const last=journal[journal.length-1];
+  if(!last||last.date!==day||JSON.stringify(last.byAsset)!==JSON.stringify(compact.byAsset)){
+   journal.push(compact);
+   store.setItem('finholdra_observations_v9930',JSON.stringify(journal.slice(-4000)));
+  }
+ }catch(_){/* Existing daily history is still saved even if journal storage is full. */}
  const i=snapshots.findIndex(x=>x.date===day&&!x.legacySource);
  if(i>=0)snapshots[i]=snap;else snapshots.push(snap);
  snapshots.sort((a,b)=>a.date.localeCompare(b.date));
@@ -1540,13 +1597,13 @@ const svgEscape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':
 // Only the five securities (Obbligazioni, ETF, Azioni) have a supported
 // 3/11 and 4/11 total. Compare the same scope across ALL plotted dates.
 // Other portfolio categories stay untouched in the dashboard.
-let historyComparableScope=null,historyCategory='';
+let historyComparableScope=null,historyCategory='ETF',dailyHistorySelectedDate='';
 function historySelectedCats(){return CAT.filter(([cat])=>filter[cat]&&historyCategory===cat).map(([cat])=>cat)}
 function historyCatIncluded(cat){return historySelectedCats().includes(cat)}
 function refreshHistoryCategoryOptions(){
  const sel=document.getElementById('historyCategory');if(!sel)return;
  const active=CAT.filter(([cat])=>filter[cat]).map(([cat])=>cat);
- if(!active.includes(historyCategory))historyCategory=active[0]||'';
+ if(!active.includes(historyCategory))historyCategory=active.includes('ETF')?'ETF':active[0]||'';
  const opts=active.length?active.map(x=>[x,x]):[['','Nessuna categoria attiva']];
  sel.innerHTML='';opts.forEach(([v,label])=>{const o=document.createElement('option');o.value=v;o.textContent=label;sel.appendChild(o)});
  sel.value=historyCategory;
@@ -1568,8 +1625,21 @@ function trackedValue(s){
 }
 function trackedCapital(s){return CAT.filter(([cat])=>historySelectedCats().includes(cat)).reduce((n,[cat])=>n+Number(s.byCat?.[cat]?.capital||0),0)}
 function shortDate(date){const m=String(date||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[3]+'/'+m[2]+'/'+m[1].slice(2):String(date||'')}
+function historyFlowsReconcile(from,to){
+ const ids=new Set([...Object.keys(from?.byAsset||{}),...Object.keys(to?.byAsset||{})]);
+ for(const id of ids){
+  const b=from.byAsset?.[id],e=to.byAsset?.[id];
+  const cat=e?.cat||b?.cat;
+  if(!historyCatIncluded(cat))continue;
+  const q0=Number(b?.quantity||0),q1=Number(e?.quantity||0);
+  const delta=trades.filter(t=>t.asset===id&&t.date>from.date&&t.date<=to.date&&['buy','sale'].includes(t.kind)).reduce((n,t)=>n+(t.kind==='buy'?1:-1)*Number(t.quantity||0),0);
+  if(!Number.isFinite(q0)||!Number.isFinite(q1)||!Number.isFinite(delta)||Math.abs(q1-q0-delta)>Math.max(1e-6,Math.abs(q1)*1e-6))return false;
+ }
+ return true;
+}
+
 function historyInterval(from,to){
- if(!from||!to||days(to.date)<=days(from.date))return null;
+ if(!from||!to||days(to.date)<=days(from.date)||!historyFlowsReconcile(from,to))return null;
  const fromDay=days(from.date),toDay=days(to.date),duration=toDay-fromDay;
  const intervalFlows=trades.filter(t=>t.date>from.date&&t.date<=to.date&&historyCatIncluded(t.cat)&&Number.isFinite(Number(t.spent))&&Number(t.spent)!==0);
  const flow=intervalFlows.reduce((sum,t)=>sum+Number(t.spent),0);
@@ -1595,7 +1665,7 @@ function twrrEstimate(series){
 // future value equation (starting balance + dated cash inflows = ending balance).
 function mwrrForPeriod(first,last){
  const span=days(last.date)-days(first.date),initial=trackedValue(first),ending=trackedValue(last);
- if(!(span>0)||!(initial>0)||!(ending>=0))return null;
+ if(!(span>0)||!(initial>0)||!(ending>=0)||!historyFlowsReconcile(first,last))return null;
  const flows=periodFlows(first,last);
  const balance=r=>initial*(1+r)+flows.reduce((n,t)=>n+Number(t.spent)*Math.pow(1+r,(days(last.date)-days(t.date))/span),0)-ending;
  let lo=-0.999999999,hi=1;
@@ -1606,7 +1676,7 @@ function mwrrForPeriod(first,last){
  return (lo+hi)/2;
 }
 function roiSimpleForPeriod(first,last){
- if(!first||!last||days(last.date)<=days(first.date))return null;
+ if(!first||!last||days(last.date)<=days(first.date)||!historyFlowsReconcile(first,last))return null;
  const initial=trackedValue(first),ending=trackedValue(last);
  if(!Number.isFinite(initial)||!Number.isFinite(ending))return null;
  const period=periodFlows(first,last),net=period.reduce((n,t)=>n+Number(t.spent||0),0);
@@ -1658,9 +1728,73 @@ function renderTransactionTimeline(items){const target=$('transactionTimeline');
  target.innerHTML='<div class="transaction-timeline-title">Movimenti di capitale registrati</div><svg viewBox="0 0 '+w+' '+h+'" role="img" aria-label="Acquisti in verde e vendite in arancione per data"><line x1="'+L+'" y1="'+base+'" x2="'+(w-R)+'" y2="'+base+'" stroke="#52627c"/>'+bars+'<text x="'+L+'" y="161" fill="#9eb1c9" font-size="10">'+shortDate(arr[0].date)+'</text><text x="'+(w-R)+'" y="161" text-anchor="end" fill="#9eb1c9" font-size="10">'+shortDate(arr[arr.length-1].date)+'</text></svg><p class="hint">Verde: euro investiti · Arancione: euro incassati. Questo grafico mostra le transazioni, non l’andamento delle quotazioni né il rendimento.</p>';
 }
 
+
+function dailyHistoryRecords(){
+ // Preserve existing historic snapshots and use their last recorded observation of each day.
+ // Weekends are excluded for the securities panel; Friday -> Monday stays adjacent.
+ return snapshots.filter(s=>s&&s.coverage==='all-assets'&&s.source!=='reconstructed'&&s.byAsset&&s.byCat&&/^\d{4}-\d\d-\d\d$/.test(s.date)&&![0,6].includes(new Date(s.date+'T12:00:00Z').getUTCDay())&&(s.date!==today()||new Date().getHours()>=9))
+  .sort((a,b)=>a.date.localeCompare(b.date));
+}
+function dailySignedEuro(n){return (n>=0?'+':'')+eur(n)}
+function dailySignedPct(n){return (n>=0?'+':'')+pct(n)}
+function dailyMovement(prev,curr,id){
+ const b=prev.byAsset?.[id],e=curr.byAsset?.[id];
+ const q0=Number(b?.quantity||0),q1=Number(e?.quantity||0),v0=Number(b?.value||0),v1=Number(e?.value||0);
+ if(![q0,q1,v0,v1].every(Number.isFinite))return {error:'Rilevazione incompleta'};
+ const ops=trades.filter(t=>t.asset===id&&t.date>prev.date&&t.date<=curr.date&&['buy','sale'].includes(t.kind));
+ const deltaQ=ops.reduce((n,t)=>n+(t.kind==='buy'?1:-1)*Number(t.quantity||0),0);
+ if(Math.abs(q1-q0-deltaQ)>Math.max(1e-6,Math.abs(q1)*1e-6))return {error:'Quote e operazioni non coincidono'};
+ if(ops.some(t=>!Number.isFinite(Number(t.spent))))return {error:'Importo operazione mancante'};
+ const net=ops.reduce((n,t)=>n+Number(t.spent),0);
+ const buys=ops.reduce((n,t)=>n+(t.kind==='buy'?Math.max(0,Number(t.spent)):0),0);
+ const gain=v1-v0-net,base=v0+buys;
+ // A purchase is capital movement, never market profit. A zero starting position
+ // with a buy uses purchased capital as its return denominator.
+ return {id,gain,pct:base>0?gain/base:null,net,buys,v0,v1,q0,q1,ops};
+}
+function renderDailyHistory(){
+ const el=$('dailyHistoryView');if(!el)return;
+ const rows=dailyHistoryRecords();
+ const pairs=rows.slice(1).map((to,i)=>({from:rows[i],to}));
+ if(!pairs.length){el.innerHTML='<div class="history-empty">Servono almeno due rilevazioni in giornate di mercato differenti. Non vengono inventati prezzi mancanti.</div>';return}
+ const dates=pairs.map(p=>p.to.date);
+ if(!dates.includes(dailyHistorySelectedDate))dailyHistorySelectedDate=dates[dates.length-1];
+ const pair=pairs.find(p=>p.to.date===dailyHistorySelectedDate);
+ const active=CAT.map(c=>c[0]).filter(cat=>filter[cat]);
+ const ids=[...new Set([...Object.keys(pair.from.byAsset||{}),...Object.keys(pair.to.byAsset||{})])];
+ const results=ids.map(id=>{const ref=state.assets.find(a=>a.id===id),cat=pair.to.byAsset?.[id]?.cat||pair.from.byAsset?.[id]?.cat||ref?.cat||'';
+  return {id,ref,cat,name:ref?.name||trades.find(t=>t.asset===id)?.assetName||id,...dailyMovement(pair.from,pair.to,id)};
+ }).filter(r=>active.includes(r.cat)&&(r.v0>0||r.v1>0||r.ops?.length||r.error));
+ const good=results.filter(r=>!r.error),bad=results.filter(r=>r.error);
+ const gain=good.reduce((n,r)=>n+r.gain,0),base=good.reduce((n,r)=>n+r.v0+r.buys,0);
+ const rowHtml=results.map(r=>{
+  const badRow=!!r.error,cls=badRow?'':r.gain>=0?'gain':'loss';
+  return '<div class="daily-asset-row"><div class="daily-asset-name">'+(r.ref?issuerIcon(r.id):'<span class="asset-logo"><span class="asset-logo-fallback">•</span></span>')+'<div><strong>'+svgEscape(r.name)+'</strong><small>'+svgEscape(r.cat)+(r.ref?.symbol?' · '+svgEscape(r.ref.symbol):'')+'</small></div></div><div class="daily-asset-change '+cls+'"><strong>'+(badRow?'n.d.':dailySignedEuro(r.gain))+'</strong><small>'+(badRow?svgEscape(r.error):r.pct===null?'n.d.':dailySignedPct(r.pct))+'</small></div></div>';
+ }).join('');
+ el.innerHTML='<div class="daily-history-title"><h3>Risultato dell’ultima giornata</h3><label for="dailyHistoryDate">Giornata</label><select id="dailyHistoryDate" aria-label="Scegli una giornata precedente">'+dates.slice().reverse().map(d=>'<option value="'+d+'"'+(d===dailyHistorySelectedDate?' selected':'')+'>'+shortDate(d)+'</option>').join('')+'</select></div>'+
+ '<p class="sub">Confronto tra '+shortDate(pair.from.date)+' e '+shortDate(pair.to.date)+'. Le giornate di chiusura sono saltate.</p>'+
+ '<div class="daily-total"><span>Risultato di mercato'+(bad.length?' verificabile':'')+'</span><strong class="'+(gain>=0?'gain':'loss')+'">'+(good.length?dailySignedEuro(gain):'n.d.')+'</strong><strong class="'+(gain>=0?'gain':'loss')+'">'+(base>0?dailySignedPct(gain/base):'n.d.')+'</strong></div>'+
+ (bad.length?'<p class="hint">'+bad.length+' titoli non verificabili: non sono inclusi nel totale, per evitare di considerare versamenti come rendimenti.</p>':'')+
+ '<div class="daily-assets">'+(results.length?rowHtml:'<p class="hint">Nessun titolo nelle categorie attive.</p>')+'</div>'+
+ '<p class="hint">Guadagno giornaliero = variazione del valore − acquisti netti + incassi delle vendite. Le percentuali sono riferite al capitale presente e investito nell’intervallo. Rilevazioni osservate, non chiusure ufficiali: se un prezzo è vecchio, il risultato può essere incompleto.</p>';
+ $('dailyHistoryDate').onchange=e=>{dailyHistorySelectedDate=e.target.value;renderDailyHistory()};
+}
+
+// Beta 9.9.31: A/B comparison metadata remains read-only and uses actual plotted values.
+function abSeriesAttribute(records,kind,currency='EUR'){
+ if(!Array.isArray(records)||records.length<2)return '';
+ const pts=records.filter(p=>p&&Number.isFinite(Number(p.x))&&Number.isFinite(Number(p.y))&&Number.isFinite(Number(p.value)))
+  .map(p=>({x:Number(p.x),y:Number(p.y),value:Number(p.value),label:String(p.label||'')}));
+ if(pts.length<2)return '';
+ return ' data-ab-series="'+encodeURIComponent(JSON.stringify({kind,currency,pts}))+'"';
+}
 function renderHistory(){
  const el=$('historyGraph'),start=$('historyStart'),summary=$('historySummary'),perf=$('historyPerformance'),detail=$('historyDayDetail');
  refreshHistoryCategoryOptions();
+ const daily=returnMethod==='daily';
+ $('historySection').classList.toggle('daily-mode',daily);
+ $('dailyHistoryView').classList.toggle('hidden',!daily);
+ if(daily){updateMethodButtons();renderDailyHistory();return}
  historyComparableScope=null;
  const observed=snapshots.filter(s=>(prefs.showReconstructed!==false||s.source!=='reconstructed')&&Number.isFinite(trackedValue(s))).sort((a,b)=>a.date.localeCompare(b.date));
  const maxMode=historyRange==='all';updateMethodButtons();showMethodHelp(maxMode);renderTradeEvents();
@@ -1728,7 +1862,7 @@ function renderHistory(){
   return '<g class="history-point" data-history-date="'+p.date+'" role="button" tabindex="0" aria-label="'+svgEscape(shortDate(p.date)+' · '+axisFormat(yy))+'">'+(showDot?'<circle cx="'+x(i)+'" cy="'+y(yy)+'" r="'+(chosen?4:2.6)+'" fill="'+color+'"/>':'')+'<circle data-hit-area="1" cx="'+x(i)+'" cy="'+y(yy)+'" r="8" fill="transparent" stroke="none"/>'+text+'</g>';
  }).join('');
  const plotLabel=(twMode?'TWRR':returnMethod==='roi'?'ROI':'MWRR')+' (%)';
- el.innerHTML=comparableNote+'<div class="history-axis-name">'+plotLabel+'</div><svg class="history-plot" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+plotLabel+' dal '+shortDate(first.date)+' al '+shortDate(last.date)+'">'+ticks+baseline+'<path d="'+path+'" fill="none" stroke="#37c9ff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>'+gapLines+ops+marks+'<text x="'+L+'" y="'+(H-6)+'" fill="#b8c5da" font-size="10">'+shortDate(first.date)+'</text><text x="'+(W-R)+'" y="'+(H-6)+'" fill="#b8c5da" text-anchor="end" font-size="10">'+shortDate(last.date)+'</text></svg><p class="history-helper">'+(isSeven?'Percentuali giornaliere visibili:':'Tocca un punto per dettagli e rendimento.')+' Verde/rosso: rendimento dell’intervallo.</p>';
+ el.innerHTML=comparableNote+'<div class="history-axis-name">'+plotLabel+'</div><svg class="history-plot"'+abSeriesAttribute(points.filter(p=>Number.isFinite(Y(p))).map((p,i)=>({x:x(points.indexOf(p)),y:y(Y(p)),value:Y(p),label:shortDate(p.date)})),twMode?'twrr':returnMethod==='roi'?'roi':'mwrr')+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+plotLabel+' dal '+shortDate(first.date)+' al '+shortDate(last.date)+'">'+ticks+baseline+'<path d="'+path+'" fill="none" stroke="#37c9ff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>'+gapLines+ops+marks+'<text x="'+L+'" y="'+(H-6)+'" fill="#b8c5da" font-size="10">'+shortDate(first.date)+'</text><text x="'+(W-R)+'" y="'+(H-6)+'" fill="#b8c5da" text-anchor="end" font-size="10">'+shortDate(last.date)+'</text></svg><p class="history-helper">'+(isSeven?'Percentuali giornaliere visibili:':'Tocca un punto per dettagli e rendimento.')+' Verde/rosso: rendimento dell’intervallo.</p>';
  if(!historySelectedDay||!points.some(p=>p.date===historySelectedDay))historySelectedDay=last.date;
  renderHistoryDay();
  summary.innerHTML='<span>'+plotLabel+'</span><span>Dal '+shortDate(first.date)+' al '+shortDate(last.date)+'</span>'+(twMode?'<span>Flussi neutralizzati: '+eur(netFlows)+'</span>':'<span>Flussi netti: '+eur(netFlows)+'</span>');
@@ -2237,7 +2371,7 @@ function renderWealthGraph(){
  const dots=arr.map((p,i)=>'<g data-wealth-day="'+p.date+'" role="button" tabindex="0" aria-label="'+shortDate(p.date)+' '+eur(p.value)+'"><circle cx="'+x(p)+'" cy="'+y(p.value)+'" r="'+(p.date===wealthSelectedDate?4.1:2.8)+'" fill="'+(i&&p.value<arr[i-1].value?'#fa8090':'#45dbae')+'"/>'+(p.date===wealthSelectedDate?'<circle cx="'+x(p)+'" cy="'+y(p.value)+'" r="8" fill="none" stroke="#ffffff" stroke-opacity=".7" stroke-width="1"/>':'')+'<circle cx="'+x(p)+'" cy="'+y(p.value)+'" r="10" fill="transparent"/></g>').join('');
  const chosen=arr.find(p=>p.date===wealthSelectedDate)||arr.at(-1);
  const gaps=arr.slice(1).reduce((n,p,i)=>n+(days(p.date)-days(arr[i].date)>1?days(p.date)-days(arr[i].date)-1:0),0);
- target.innerHTML='<svg class="history-plot wealth-plot" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Valore giornaliero del patrimonio da '+shortDate(arr[0].date)+' a '+shortDate(arr.at(-1).date)+'"><path d="'+path+'" fill="none" stroke="#42c9ef" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>'+dots+'<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+shortDate(arr[0].date)+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+shortDate(arr.at(-1).date)+'</text></svg><div class="wealth-day-focus"><span>'+shortDate(chosen.date)+'</span><strong>'+eur(chosen.value)+'</strong></div><div class="sub wealth-days-note">'+arr.length+' giornate rilevate'+(gaps?' · '+gaps+' giornate non rilevate':'')+' · Tocca il punto per leggere il valore giornaliero. Le linee fra date lontane non rappresentano quotazioni intermedie.</div>';
+ target.innerHTML='<svg class="history-plot wealth-plot"'+abSeriesAttribute(arr.map(p=>({x:x(p),y:y(p.value),value:p.value,label:shortDate(p.date)})),'wealth')+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Valore giornaliero del patrimonio da '+shortDate(arr[0].date)+' a '+shortDate(arr.at(-1).date)+'"><path d="'+path+'" fill="none" stroke="#42c9ef" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>'+dots+'<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+shortDate(arr[0].date)+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+shortDate(arr.at(-1).date)+'</text></svg><div class="wealth-day-focus"><span>'+shortDate(chosen.date)+'</span><strong>'+eur(chosen.value)+'</strong></div><div class="sub wealth-days-note">'+arr.length+' giornate rilevate'+(gaps?' · '+gaps+' giornate non rilevate':'')+' · Tocca il punto per leggere il valore giornaliero. Le linee fra date lontane non rappresentano quotazioni intermedie.</div>';
 }
 document.getElementById('wealthRanges').addEventListener('click',e=>{const b=e.target.closest('button[data-wealth-range]');if(!b)return;wealthRange=b.dataset.wealthRange;renderWealthGraph()});
 document.getElementById('wealthGraph').addEventListener('click',e=>{const g=e.target.closest('[data-wealth-day]');if(g){wealthSelectedDate=g.dataset.wealthDay;renderWealthGraph()}});
@@ -2283,7 +2417,7 @@ function makePortableBundle(){
   assets:JSON.parse(JSON.stringify(state.assets)),lastUpdate:state.lastUpdate,
   filters:{...filter},snapshots:JSON.parse(JSON.stringify(snapshots)),
   trades:JSON.parse(JSON.stringify(trades)),preferences:JSON.parse(JSON.stringify(prefs)),
-  pacSchedules:readPacSchedules(),quoteHistory:observedPrices,detailQuoteHistory:(()=>{try{return JSON.parse(store.getItem('invesquo_asset_prices_v58')||'{}')}catch(_){return {}}})(),returnMethod,historyRange,
+  pacSchedules:readPacSchedules(),dailyObservations:(()=>{try{return JSON.parse(store.getItem('finholdra_observations_v9930')||'[]')}catch(_){return []}})(),quoteHistory:observedPrices,detailQuoteHistory:(()=>{try{return JSON.parse(store.getItem('invesquo_asset_prices_v58')||'{}')}catch(_){return {}}})(),returnMethod,historyRange,
   note:'Solo rilevazioni effettivamente salvate. Le transazioni retrodatate non generano prezzi storici mancanti.'};
 }
 function applyPortableBundle(json){
@@ -2303,9 +2437,10 @@ function applyPortableBundle(json){
  state={assets:incoming,lastUpdate:String(json.lastUpdate||'Archivio importato')};
  snapshots=importedSnapshots;trades=importedTrades;writePacSchedules(Array.isArray(json.pacSchedules)?json.pacSchedules:[]);
  filter={};CAT.forEach(([c])=>{filter[c]=typeof json.filters?.[c]==='boolean'?json.filters[c]:true});
+ if(Array.isArray(json.dailyObservations)){try{store.setItem('finholdra_observations_v9930',JSON.stringify(json.dailyObservations.filter(x=>x&&/^\d{4}-\d\d-\d\d$/.test(x.date)&&x.byAsset).slice(-4000)))}catch(_){}}
  if(json.preferences&&typeof json.preferences==='object')prefs={...PREF_DEFAULTS,...json.preferences,colors:{...PREF_DEFAULTS.colors,...json.preferences.colors}};
- returnMethod=['twrr','mwrr','roi'].includes(json.returnMethod)?json.returnMethod:'roi';
- historyRange=['7','30','183','365','all'].includes(String(json.historyRange))?String(json.historyRange):'30';
+ returnMethod=['daily','twrr','mwrr','roi'].includes(json.returnMethod)?json.returnMethod:'daily';
+ historyRange=['7','30','183','365','all'].includes(String(json.historyRange))?String(json.historyRange):'7';
  try{store.setItem(PRICE_HISTORY_KEY,JSON.stringify(json.quoteHistory&&typeof json.quoteHistory==='object'?json.quoteHistory:{}));if(json.detailQuoteHistory&&typeof json.detailQuoteHistory==='object')store.setItem('invesquo_asset_prices_v58',JSON.stringify(json.detailQuoteHistory))}catch(_){}
  save();saveTimeline();saveFilters();savePreferences();
  store.setItem(RETURN_METHOD_KEY,returnMethod);
@@ -2575,7 +2710,7 @@ function pmcGraphWithMarket(prices,events,a){const box=$('pmcHistoryGraph');if(!
  let grid='';for(let i=0;i<3;i++){const yy=T+i*(H-T-B)/2;grid+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy.toFixed(1)+'" y2="'+yy.toFixed(1)+'" stroke="rgba(150,176,210,.2)" stroke-dasharray="4 5"/>';}
  let axis='';if(pmcHistoryRange==='week'){for(let i=0;i<7;i++){const d=new Date(start+i*86400000),label=['L','M','M','G','V','S','D'][i];const xx=x(start+(i+.5)*86400000);axis+='<text x="'+xx.toFixed(1)+'" y="'+(H-9)+'" text-anchor="middle" font-size="10" fill="var(--muted)">'+label+' '+String(d.getDate()).padStart(2,'0')+'</text>';}}else{const ticks=pmcHistoryRange==='month'?5:7;for(let i=0;i<ticks;i++){const xx=L+(W-L-R)*(i/(ticks-1)),d=new Date(start+(end-start)*i/(ticks-1)),label=pmcHistoryRange==='month'?String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0'):new Intl.DateTimeFormat('it-IT',{month:'short'}).format(d);axis+='<text x="'+xx.toFixed(1)+'" y="'+(H-9)+'" text-anchor="middle" font-size="10" fill="var(--muted)">'+svgEscape(label)+'</text>';}}
  let dots='';for(let i=0;i<marks.length;i++){const e=marks[i],xx=x(e.t),yy=y(e.pmc);dots+='<g class="pmc-event-dot" role="button" tabindex="0" aria-label="Acquisto del '+svgEscape(shortDate(e.date))+' PMC '+svgEscape(formatPmcHistoryValue(e.pmc,a))+'" data-pmc-index="'+i+'"><circle cx="'+xx.toFixed(1)+'" cy="'+yy.toFixed(1)+'" r="5.5"/><circle class="hit-area" cx="'+xx.toFixed(1)+'" cy="'+yy.toFixed(1)+'" r="16"/></g>';}
- box.innerHTML='<div class="pmc-history-plot"><svg class="pmc-history-chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Prezzi di mercato con indicatori PMC degli acquisti">'+grid+'<path d="'+path+'" fill="none" stroke="'+color+'" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>'+dots+axis+'</svg><div class="pmc-event-info" id="pmcEventInfo" role="status" aria-live="polite"><span>● Prezzo di mercato</span><span style="color:#f3bb63">● PMC all’acquisto</span></div></div>';
+ box.innerHTML='<div class="pmc-history-plot"><svg class="pmc-history-chart"'+abSeriesAttribute(validPrices.map(p=>({x:x(p.t),y:y(p.p),value:p.p,label:detailDate(p.t)})),'price',currencyOf(a))+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Prezzi di mercato con indicatori PMC degli acquisti">'+grid+'<path d="'+path+'" fill="none" stroke="'+color+'" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>'+dots+axis+'</svg><div class="pmc-event-info" id="pmcEventInfo" role="status" aria-live="polite"><span>● Prezzo di mercato</span><span style="color:#f3bb63">● PMC all’acquisto</span></div></div>';
  const info=$('pmcEventInfo');const show=(node)=>{const idx=Number(node.dataset.pmcIndex),e=marks[idx];if(!e)return;box.querySelectorAll('.pmc-event-dot').forEach(n=>n.classList.remove('selected'));node.classList.add('selected');info.innerHTML='<strong>'+svgEscape(shortDate(e.date))+'</strong><span>PMC '+svgEscape(formatPmcHistoryValue(e.pmc,a))+'</span>';};
  box.querySelectorAll('.pmc-event-dot').forEach(n=>{n.addEventListener('click',()=>show(n));n.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();show(n)}});});
 }
@@ -2722,7 +2857,7 @@ function plotAssetDetail(points,a,opts={}){
  '<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+svgEscape(detailDate(left,assetDetailRange==='1d'))+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+svgEscape(detailDate(right,assetDetailRange==='1d'))+'</text>';
  const highlighted='<g id="assetHoverDot" style="display:none"><line id="detailCrosshair" class="chart-crosshair" x1="0" y1="'+T+'" x2="0" y2="'+(H-B)+'"/><circle id="detailTargetDot" cx="0" cy="0" r="5.8" fill="'+color+'" stroke="#fff" stroke-width="2"/><rect class="chart-tooltip-bg" id="detailTipBg" x="0" y="0" width="138" height="33" rx="7"/><text class="chart-tooltip-label" id="detailTipText" x="0" y="0" text-anchor="middle">—</text></g>';
  const singleBondLabel=singleBond?'<text x="'+(W-R)+'" y="'+Math.max(T+11,y(points[0].p)-8).toFixed(2)+'" text-anchor="end" font-size="10.5" fill="#45dbae">Ultimo prezzo '+number(points[0].p)+'/100</text>':'';
- chart.innerHTML='<svg id="detailSvg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Prezzi osservati per '+svgEscape(a.name)+'"><g>'+borderTop+borderBottom+'</g>'+mc+'<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+(singleBond?'2.4':'2.8')+'" stroke-dasharray="'+(singleBond?'7 4':'none')+'" stroke-linejoin="round" stroke-linecap="round"/>'+singleBondLabel+tail+marks+highlighted+axis+'</svg>';
+ chart.innerHTML='<svg id="detailSvg"'+abSeriesAttribute(points.map(p=>({x:x(p.t),y:y(p.p),value:p.p,label:detailDate(p.t,intraday||!!p.live)})),'price',currencyOf(a))+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Prezzi osservati per '+svgEscape(a.name)+'"><g>'+borderTop+borderBottom+'</g>'+mc+'<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+(singleBond?'2.4':'2.8')+'" stroke-dasharray="'+(singleBond?'7 4':'none')+'" stroke-linejoin="round" stroke-linecap="round"/>'+singleBondLabel+tail+marks+highlighted+axis+'</svg>';
  // Beta 9.9.11: the percentage must describe the SAME endpoints drawn in the graph.
  // Yahoo's chartPreviousClose is a prior-session reference, not the first plotted
  // intraday point. Comparing it with the last plot point made declining curves
@@ -4452,5 +4587,113 @@ reportPopulatePeriods();
  const notice=document.getElementById('settingsSaved');if(notice)data.appendChild(notice);
  const lab=document.getElementById('mascotLab');if(lab)settings.appendChild(lab);
  pref.remove();
+})();
+</script><script id="finholdraABCompare">
+(()=>{
+ 'use strict';
+ const NS='http://www.w3.org/2000/svg';
+ let active=null,lockedY=0;
+ const fmt=(n,d=2)=>Number(n).toLocaleString('it-IT',{minimumFractionDigits:d,maximumFractionDigits:d});
+ const signed=(n)=> (n>0?'+':'')+fmt(n);
+ const pct=(n)=> (n>0?'+':'')+fmt(n)+'%';
+ function decode(svg){try{return JSON.parse(decodeURIComponent(svg.getAttribute('data-ab-series')))}catch(_){return null}}
+ function pointText(pt,meta){
+  if(['twrr','roi','mwrr'].includes(meta.kind))return pct(pt.value);
+  if(meta.kind==='wealth')return fmt(pt.value)+' €';
+  return fmt(pt.value,4)+' '+meta.currency+(meta.currency==='EUR'?'':'');
+ }
+ function close(){
+  if(!active)return;
+  const a=active;active=null;
+  a.wrap.classList.remove('ab-active');a.button.classList.remove('active');a.button.textContent='A↔B';
+  a.overlay.replaceChildren();a.result.textContent='';a.result.hidden=true;
+  document.documentElement.style.overflow=a.previousHtmlOverflow;
+  document.body.style.overflow=a.previousBodyOverflow;
+  window.scrollTo(0,lockedY);
+ }
+ function redraw(){
+  if(!active)return;
+  const {svg,meta,overlay,result,chosen}=active;
+  overlay.replaceChildren();
+  const box=svg.viewBox.baseVal,W=box.width,H=box.height;
+  chosen.forEach((pt,i)=>{
+   const line=document.createElementNS(NS,'line');
+   line.setAttribute('x1',pt.x);line.setAttribute('x2',pt.x);
+   line.setAttribute('y1',0);line.setAttribute('y2',H);
+   line.setAttribute('class','ab-guide');overlay.appendChild(line);
+   const dot=document.createElementNS(NS,'circle');
+   dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);dot.setAttribute('r',4.8);
+   dot.setAttribute('class','ab-marker'+(i?' ab-marker-b':''));overlay.appendChild(dot);
+  });
+  if(chosen.length<2){result.textContent=chosen.length?'A fissato · Tocca il punto B':'Tocca il punto A';return;}
+  const [a,b]=chosen,diff=b.value-a.value;
+  const signedClass=diff>=0?'ab-result-up':'ab-result-down';
+  let comparison='';
+  if(meta.kind==='twrr'){
+   const r=(100+a.value)>0?((100+b.value)/(100+a.value)-1)*100:null;
+   comparison=r===null?'Non calcolabile':pct(r)+' · '+(diff>=0?'+':'')+fmt(diff)+' punti percentuali';
+  }else if(meta.kind==='roi'||meta.kind==='mwrr'){
+   comparison=(diff>=0?'+':'')+fmt(diff)+' punti percentuali (non è un rendimento autonomo dell’intervallo)';
+  }else{
+   comparison=signed(diff)+(meta.kind==='wealth'?' €':' '+meta.currency)+(a.value!==0?' · '+pct(diff/Math.abs(a.value)*100):'');
+   if(meta.kind==='wealth')comparison+=' · include eventuali versamenti';
+  }
+  result.replaceChildren();
+  const header=document.createElement('strong');header.textContent='A '+a.label+' → B '+b.label;
+  const values=document.createElement('div');values.textContent=pointText(a,meta)+' → '+pointText(b,meta);
+  const delta=document.createElement('div');delta.className=signedClass;delta.textContent='Δ '+comparison;
+  result.append(header,values,delta);
+ }
+ function locate(ev){
+  if(!active)return;
+  const {svg,meta,chosen}=active;
+  let xx=NaN;
+  try{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;xx=pt.matrixTransform(svg.getScreenCTM().inverse()).x}catch(_){return}
+  const points=meta.pts;
+  let best=points[0],dist=Infinity;
+  for(const p of points){const d=Math.abs(p.x-xx);if(d<dist){best=p;dist=d}}
+  if(!best)return;
+  if(chosen.length===2)chosen.splice(0,2);
+  chosen.push(best);redraw();
+ }
+ function toggle(svg,button,wrap,overlay,result){
+  if(active?.svg===svg){close();return}
+  close();const meta=decode(svg);
+  if(!meta||meta.pts.length<2)return;
+  lockedY=window.scrollY||0;
+  active={svg,button,wrap,overlay,result,meta,chosen:[],previousHtmlOverflow:document.documentElement.style.overflow,previousBodyOverflow:document.body.style.overflow};
+  document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';
+  wrap.classList.add('ab-active');button.classList.add('active');button.textContent='× Esci';
+  redraw();
+ }
+ function attach(svg){
+  if(svg.parentElement?.classList.contains('ab-chart-wrap'))return;
+  const meta=decode(svg);if(!meta||!Array.isArray(meta.pts)||meta.pts.length<2)return;
+  const wrap=document.createElement('div');wrap.className='ab-chart-wrap';
+  svg.parentNode.insertBefore(wrap,svg);wrap.appendChild(svg);
+  const overlay=document.createElementNS(NS,'svg');
+  overlay.setAttribute('viewBox',svg.getAttribute('viewBox'));
+  overlay.setAttribute('preserveAspectRatio',svg.getAttribute('preserveAspectRatio')||'xMidYMid meet');
+  overlay.setAttribute('class','ab-chart-overlay');wrap.appendChild(overlay);
+  const result=document.createElement('div');result.className='ab-chart-result';result.setAttribute('role','status');result.setAttribute('aria-live','polite');wrap.appendChild(result);
+  result.textContent='';result.hidden=true;
+  const button=document.createElement('button');button.type='button';button.className='ab-chart-trigger';button.textContent='A↔B';button.setAttribute('aria-label','Confronta due punti del grafico');button.title='Confronta A e B';wrap.appendChild(button);
+  button.addEventListener('click',ev=>{ev.stopPropagation();ev.preventDefault();toggle(svg,button,wrap,overlay,result);result.hidden=!active||active.svg!==svg});
+  const select=ev=>{
+   if(!active||active.svg!==svg)return;
+   if(ev.cancelable)ev.preventDefault();ev.stopImmediatePropagation();ev.stopPropagation();
+   if(ev.type==='pointerdown'&&ev.button!==0&&ev.pointerType!=='touch')return;
+   if(ev.type==='pointerdown')locate(ev);
+  };
+  svg.addEventListener('pointerdown',select,true);
+  svg.addEventListener('click',select,true);
+  svg.addEventListener('touchstart',e=>{if(active?.svg===svg){if(e.cancelable)e.preventDefault();e.stopImmediatePropagation()}},{capture:true,passive:false});
+ }
+ let scheduled=false;
+ function scan(){scheduled=false;document.querySelectorAll('svg[data-ab-series]').forEach(attach);
+  if(active&&!active.svg.isConnected)close();}
+ const mo=new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(scan)}});
+ mo.observe(document.body,{childList:true,subtree:true});scan();
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&active){e.preventDefault();close()}});
 })();
 </script></body></html>
