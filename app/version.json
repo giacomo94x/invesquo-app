@@ -1,1 +1,5 @@
-{"version": "9.9.76", "build": "beta", "notes": "Correct app icon using the original Finholdra logo F; previous 9.9.75 features retained"}
+{
+  "version": "9.9.77",
+  "build": "beta",
+  "notes": "JSON account login and complete profile backup/restore; preceding 9.9.76 features retained"
+}
