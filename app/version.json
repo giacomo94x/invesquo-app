@@ -1,7 +1,6 @@
 {
   "app": "Finholdra",
   "channel": "beta",
-  "version": "8.0",
-  "base": "9.9.80",
+  "version": "8.1",
   "releaseDate": "2026-11-16"
 }

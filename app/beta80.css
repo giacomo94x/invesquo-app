@@ -75,3 +75,37 @@ body.fh8-sleep-4 #performanceFace{animation:fh8SleepPulse 4s ease-in-out infinit
 #fh8BuysInfo{display:block;font-size:10px;color:#b2cbd9;flex:0 0 auto;padding:2px 5px}
 @media(max-width:767px) and (orientation:portrait){#fh8ChartModal.open{position:fixed;inset:auto;left:100dvw;top:0;width:100dvh;height:100dvw;transform-origin:top left;transform:rotate(90deg);padding:5px 9px}}
 @media(min-width:768px),(orientation:landscape){#fh8ChartModal.open{inset:0;transform:none;width:100vw;height:100dvh}}
+
+/* Beta 8.1 — Giallo e Blu Finholdra */
+body[data-theme="goldblue"]{--bg:#081a38;--panel:#102e59;--panel2:#1a3f71;--border:#426995;--text:#f7faff;--muted:#b5c9de;--blue:#ecc54c;--green:#40cf9a;--red:#f78394}
+body[data-theme="goldblue"] :is(.btn.primary,.nav-tool.active,.timeline-range .selected,.asset-detail-ranges .selected){background:#e8bc3d!important;color:#102345!important;border-color:#f2d67c!important}
+body[data-theme="goldblue"] :is(.card,.box,.setting-group,.asset-detail-card){border-color:rgba(124,166,204,.32)}
+/* No blur or edge halo on instrument detail */
+#assetDetailOverlay .asset-detail-card,#assetDetailOverlay .asset-detail-card:before,#assetDetailOverlay .asset-detail-card:after,#assetDetailSheet,#assetDetailOverlay,#assetDetailOverlay:before,#assetDetailOverlay:after{box-shadow:none!important;filter:none!important;background-image:none!important;backdrop-filter:none!important}
+#assetDetailOverlay .asset-detail-card{outline:none!important}
+/* Header Finn: prevent selection, ghost images and iOS context menu on a long touch */
+#faceButton,#performanceFace,#faceButton *,#performanceFace *{user-select:none!important;-webkit-user-select:none!important;-webkit-touch-callout:none!important;-webkit-user-drag:none!important;touch-action:manipulation}
+/* Sleep moods: natural short actions with pauses between them. */
+@keyframes fh81Startle{0%,22%,32%,100%{transform:translateY(0) scale(1)}24%{transform:translateY(-11px) scale(1.05)}28%{transform:translateY(-5px) scale(1.02)}}
+@keyframes fh81TurnSleep{0%,30%,80%,100%{transform:rotate(0)}38%,52%{transform:rotate(-8deg)}65%{transform:rotate(5deg)}}
+@keyframes fh81Alarm{0%,38%,100%{transform:rotate(0)}43%,49%,55%{transform:rotate(7deg)}46%,52%{transform:rotate(-7deg)}61%{transform:translateY(-4px)}70%{transform:translateY(0)}}
+@keyframes fh81Dream{0%,23%,80%,100%{transform:translateY(0) rotate(0)}35%,50%{transform:translateY(4px) rotate(3deg)}62%{transform:translateY(0) rotate(-3deg)}}
+body.fh8-sleep-1 #performanceFace{animation:fh81Startle 9s ease-in-out infinite!important}
+body.fh8-sleep-2 #performanceFace{animation:fh81TurnSleep 11s ease-in-out infinite!important}
+body.fh8-sleep-3 #performanceFace{animation:fh81Alarm 12s ease-in-out infinite!important}
+body.fh8-sleep-4 #performanceFace{animation:fh81Dream 10s ease-in-out infinite!important}
+@media(prefers-reduced-motion:reduce){body.fh8-sleep-1 #performanceFace,body.fh8-sleep-2 #performanceFace,body.fh8-sleep-3 #performanceFace,body.fh8-sleep-4 #performanceFace{animation:none!important}}
+/* Independent markers in fullscreen: no clustering, permit labels to alternate */
+#fh8ChartArea .fh8-buy text{font-size:10px!important}
+/* Group all Finn controls in one compact palette */
+#mascotLab .mascot-scene-preview{margin-top:3px!important}
+#mascotLab .mascot-scene-preview>p{display:none!important}
+#mascotLab .mascot-emotions,#mascotLab .fh-extra-play-actions,#mascotLab .mascot-scene-buttons{display:flex!important;flex-wrap:wrap!important;gap:7px!important}
+#mascotLab .mascot-emotions>button,#mascotLab .fh-extra-play-actions>button,#mascotLab .mascot-scene-buttons>button{flex:1 1 54px!important}
+#fh81FinnSettings>summary{font-size:18px;font-weight:800;padding:17px 20px;cursor:pointer}
+#fh81FinnSettings{border:1px solid var(--border);background:var(--panel);border-radius:18px;margin:14px 0;padding:3px 9px}
+#fh81FinnSettings #mascotLab{margin:0!important;border:none!important;box-shadow:none!important}
+#fh8Exposure .fh81-worldmap{width:100%;height:auto;display:block;background:#102942;border-radius:12px}
+#fh8Exposure .fh81-worldmap path{transition:fill .2s ease}
+body.fh8-sleep-3 #faceButton{position:relative}
+body.fh8-sleep-3 #faceButton:after{content:'⏰';position:absolute;right:-9px;top:-16px;font-size:18px;pointer-events:none;animation:fh81Alarm 12s ease-in-out infinite}

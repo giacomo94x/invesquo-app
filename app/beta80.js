@@ -7,29 +7,39 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const profileName=()=>{try{const id=localStorage.getItem('invesquo_unlocked_account_v75');const xs=JSON.parse(localStorage.getItem('invesquo_local_profiles_v75')||'[]');return (xs.find(p=>p.id===id)||{}).name||'Finholdra';}catch(_){return 'Finholdra';}};
 function setupSettings(){
   const theme=$('#settingTheme'),appearance=$('#settingAppearanceMode');
-  if(theme){const newOptions=[['iconblue','Blu Finholdra'],['honey','Miele'],['burgundy','Borgogna']];for(const [val,label] of newOptions){if(![...theme.options].some(o=>o.value===val))theme.add(new Option(label,val));} if([...theme.options].some(o=>o.value===document.body.dataset.theme))theme.value=document.body.dataset.theme;}
+  if(theme){const newOptions=[['iconblue','Blu Finholdra'],['honey','Miele'],['burgundy','Borgogna'],['goldblue','Giallo e Blu Finholdra']];for(const [val,label] of newOptions){if(![...theme.options].some(o=>o.value===val))theme.add(new Option(label,val));} if([...theme.options].some(o=>o.value===document.body.dataset.theme))theme.value=document.body.dataset.theme;}
   if(appearance){appearance.querySelector('option[value="fiducia"]')?.replaceChildren(document.createTextNode('Fiducia'));appearance.querySelector('option[value="tradizionale"]')?.replaceChildren(document.createTextNode('Tradizione'));}
   const mascotSection=$('#mascotLab'),groups=$('#settingsSection');
   if(mascotSection&&groups&&!mascotSection.dataset.fh8Done){
     mascotSection.querySelector('.section-head h2').textContent='Finn';
     mascotSection.querySelectorAll('.hint,.foot').forEach(e=>{if((e.textContent||'').match(/trascina|inventat|nessun gioco/i))e.textContent='Tocca Finn per giocare.';});
     const finnGroup=[...groups.querySelectorAll('details.setting-group')].find(g=>/Finn/.test(g.querySelector('summary')?.textContent||''));
-    if(finnGroup)finnGroup.appendChild(mascotSection);
+    if(finnGroup)finnGroup.remove();
+    let finnDetails=$('#fh81FinnSettings');if(!finnDetails){finnDetails=document.createElement('details');finnDetails.id='fh81FinnSettings';finnDetails.className='setting-group';finnDetails.innerHTML='<summary>Gioca con Finn</summary>';groups.appendChild(finnDetails);}finnDetails.appendChild(mascotSection);
     mascotSection.dataset.fh8Done='1';
   }
   // Treat the mascot group as its own settings domain, not part of Appearance.
-  const gr=all('#settingsSection .setting-group');for(const group of gr){const sum=group.querySelector('summary');if(sum&&/Finn · Mascotte/.test(sum.textContent))sum.textContent='Finn';if(sum&&/Aspetto e colori/.test(sum.textContent))sum.textContent='Aspetto';}
+  const gr=all('#settingsSection .setting-group');for(const group of gr){const sum=group.querySelector('summary');if(sum&&/Finn · Mascotte/.test(sum.textContent))sum.textContent='Finn';if(sum&&/Aspetto e (?:colori|Finn)/i.test(sum.textContent))sum.textContent='Aspetto';}
 }
 function setupSources(){
  const sel=$('#assetDetailProvider');if(!sel)return;
- if(![...sel.options].some(o=>o.value==='saved'))sel.add(new Option('Rilevazioni salvate','saved'));
- if(!sel.dataset.fh8Added){sel.dataset.fh8Added='1';sel.addEventListener('change',()=>{
-   if(sel.value!=='saved')return;
-   const svg=$('#detailSvg');const status=$('#assetDetailSource');
-   if(svg&&status)status.textContent='Rilevazioni già salvate: mostra l’ultimo storico disponibile. Per recuperare altre quotazioni usa Yahoo Finance.';
-   // This is an offline comparison choice; no unsupported provider is claimed.
- },false);}
+ // The main app reconstructs this select on every instrument open.
+ const refresh=()=>{
+   for(const o of [...sel.options])if(o.value==='saved')o.remove();
+   if(![...sel.options].some(o=>o.value==='twelvedata'))sel.add(new Option('Twelve Data · API personale','twelvedata'));
+ };
+ const parent=sel.closest('.asset-source-picker');
+ if(parent&&!$('#fh81ApiConfig')){
+   const panel=document.createElement('div');panel.id='fh81ApiConfig';panel.style.cssText='display:none;margin-top:10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--panel2)';
+   panel.innerHTML='<label for="fh81ApiKey">Chiave API Twelve Data</label><input id="fh81ApiKey" type="password" autocomplete="off" style="width:100%;padding:10px;margin:5px 0;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:10px" placeholder="La tua chiave API personale"><label for="fh81ApiSymbol">Ticker alternativo (facoltativo)</label><input id="fh81ApiSymbol" type="text" style="width:100%;padding:10px;margin:5px 0;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:10px" placeholder="Es. VWCE / AAPL"><p style="font-size:11px;color:var(--muted)">L’API può non coprire tutti i titoli o tutti i periodi. La chiave resta memorizzata su questo dispositivo ed è inviata a Twelve Data quando selezioni la fonte.</p>';
+   parent.appendChild(panel);panel.querySelector('#fh81ApiKey').value=localStorage.getItem('fh81_twelve_api_key')||'';
+   panel.querySelector('#fh81ApiKey').addEventListener('change',e=>localStorage.setItem('fh81_twelve_api_key',e.target.value.trim()));
+   panel.querySelector('#fh81ApiSymbol').addEventListener('change',()=>{if(sel.value==='twelvedata')sel.dispatchEvent(new Event('change',{bubbles:false}))});
+ }
+ const sync=()=>{refresh();const pane=$('#fh81ApiConfig');if(pane)pane.style.display=sel.value==='twelvedata'?'block':'none';};
+ new MutationObserver(sync).observe(sel,{childList:true});sel.addEventListener('change',sync);sync();
 }
+
 function setupHome(){
  const head=$('.new-header-nav'),fav=$('#favoriteBanner')||$('.favorites-banner')||$('#favoriteTicker');
  if(head)head.style.marginBottom='0';
@@ -44,7 +54,13 @@ function setupFinn(){
  const begin=e=>{if(e.type==='pointerdown'&&e.button!==0)return;fired=false;startX=e.clientX;startY=e.clientY;clearTimeout(timeout);timeout=setTimeout(open,3000);};
  const move=e=>{if(!timeout)return;if(Math.abs(e.clientX-startX)>24||Math.abs(e.clientY-startY)>24){clearTimeout(timeout);timeout=null;}};
  const end=e=>{clearTimeout(timeout);timeout=null;if(fired){e.preventDefault();e.stopPropagation();}};
- face.addEventListener('pointerdown',begin);face.addEventListener('pointermove',move);face.addEventListener('pointerup',end,true);face.addEventListener('pointercancel',end);face.addEventListener('contextmenu',e=>{e.preventDefault()});
+ face.addEventListener('pointerdown',begin,true);face.addEventListener('pointermove',move,true);face.addEventListener('pointerup',end,true);face.addEventListener('pointercancel',end,true);face.addEventListener('contextmenu',e=>{e.preventDefault();e.stopPropagation()},true);
+ for(const node of [face,fig,...face.querySelectorAll('*'),...fig.querySelectorAll('*')]){node.setAttribute('draggable','false');node.addEventListener('selectstart',e=>e.preventDefault());node.addEventListener('contextmenu',e=>e.preventDefault());}
+ // iOS legacy touch fallback, prevent text selection without blocking taps.
+ let touchStart=null;
+ face.addEventListener('touchstart',e=>{if(e.touches.length===1){const t=e.touches[0];touchStart={x:t.clientX,y:t.clientY};clearTimeout(timeout);fired=false;timeout=setTimeout(open,3000)}},{passive:true,capture:true});
+ face.addEventListener('touchmove',e=>{const t=e.touches[0];if(t&&touchStart&&(Math.abs(t.clientX-touchStart.x)>25||Math.abs(t.clientY-touchStart.y)>25)){clearTimeout(timeout);timeout=null;}},{passive:true,capture:true});
+ face.addEventListener('touchend',e=>{clearTimeout(timeout);timeout=null;touchStart=null;if(fired)e.preventDefault()},{passive:false,capture:true});
  // Four separate ambient sleep motions, randomized only when the market is closed.
  const cycle=()=>{if(document.hidden)return;const closed=/chiusi/i.test($('#marketText')?.textContent||'');document.body.classList.remove('fh8-sleep-1','fh8-sleep-2','fh8-sleep-3','fh8-sleep-4');if(closed){const n=1+Math.floor(Math.random()*4);document.body.classList.add('fh8-sleep-'+n);}};
  cycle();setInterval(cycle,11000);
@@ -71,6 +87,19 @@ function drawWorld(){
  wrap.innerHTML='<h3>🌍 Dove investi</h3><p>Paesi individuati dai titoli diretti delle categorie attive.</p>'+svg+'<div class="fh8-country-rows">'+(rows||'<span>Nessun Paese diretto identificabile</span>')+(unknown>0?`<span>Altri / ETF globali · ${fmt(unknown/Math.max(total,1)*100)}%</span>`:'')+'</div><div class="fh8-note">Gli ETF non vengono attribuiti al Paese di domicilio: servono le partecipazioni effettive per una mappa completa.</div>';
  const mood=$('#headerMoodText')?.textContent?.toLowerCase()||'';
  wrap.style.setProperty('--fh8-map-highlight',mood.includes('negativ')?'#ef4444':mood.includes('stabil')?'#72e59d':'#09d66b');
+ // Real Natural Earth country boundaries. Country exposure is shown only where directly attributable.
+ fetch('./world-map.svg?v=8.1').then(r=>{if(!r.ok)throw Error('map unavailable');return r.text()}).then(svgText=>{
+   if(!wrap.isConnected)return;const node=wrap.querySelector('svg');if(!node)return;
+   const holder=document.createElement('div');holder.innerHTML=svgText;
+   const real=holder.querySelector('svg');if(!real)return;
+   const colors=Object.keys(aggregate);for(const p of real.querySelectorAll('[data-iso]')){
+      const code=p.getAttribute('data-iso');if(colors.includes(code)){
+         p.setAttribute('fill','var(--fh8-map-highlight,#09d66b)');p.setAttribute('stroke','#d8f8e6');p.setAttribute('stroke-width','1.2');
+         const title=document.createElementNS('http://www.w3.org/2000/svg','title');title.textContent=(COUNTRY[code]?.[0]||code)+' · '+fmt(aggregate[code]/Math.max(total,1)*100)+'%';p.appendChild(title);
+      }
+   }node.replaceWith(real);
+ }).catch(()=>{});
+
 }
 function setupMap(){const shell=$('.finholdra-news-shell');if(!shell||$('#fh8Exposure'))return;const sec=document.createElement('section');sec.id='fh8Exposure';shell.append(sec);const btn=$('#finholdraBrandTrigger');btn?.addEventListener('click',()=>setTimeout(drawWorld,40));drawWorld();}
 function setupArchiveIcons(){
@@ -98,10 +127,15 @@ function setupChart(){
   values=(parsed.pts||[]).map(x=>({x:Number(x.x),y:Number(x.y),v:Number(x.value),date:String(x.label||'')})).filter(x=>Number.isFinite(x.x)&&Number.isFinite(x.v));
   if(values.length<2)return false;currency=parsed.currency||'EUR';lo=0;hi=values.length-1;selected=[];isAB=false;$('#fh8AB').classList.remove('is-active');
   const xMin=values[0].x,xMax=values.at(-1).x,denom=Math.max(1e-9,xMax-xMin);
-  markers=Array.from(src.querySelectorAll('g.fh-buy-marker')).map(g=>{
+  const allBuys=src.getAttribute('data-fh81-buys');
+  if(allBuys){try{
+   const listed=JSON.parse(decodeURIComponent(allBuys));
+   markers=listed.map(item=>{let idx=0,dist=Infinity;for(let j=0;j<values.length;j++){const delta=Math.abs(values[j].x-Number(item.x));if(delta<dist){dist=delta;idx=j;}}return {i:idx,label:item.label||'Acquisto registrato'};});
+  }catch(e){markers=[];}}
+  else markers=Array.from(src.querySelectorAll('g.fh-buy-marker')).map(g=>{
    const c=g.querySelector('circle');if(!c)return null;const cx=Number(c.getAttribute('cx'));if(!Number.isFinite(cx))return null;
    let i=0,dist=Infinity;for(let j=0;j<values.length;j++){const delta=Math.abs(values[j].x-cx);if(delta<dist){i=j;dist=delta}}
-   const label=g.querySelector('title')?.textContent?.trim()||'Acquisto registrato';return {i,label};
+   return {i,label:g.querySelector('title')?.textContent?.trim()||'Acquisto registrato'};
   }).filter(Boolean);
   return true;
  }
@@ -116,8 +150,12 @@ function setupChart(){
   const pmcText=$('#assetDetailPmc')?.textContent||'';const pmcMatch=pmcText.match(/[\d.,]+/),pmc=pmcMatch?Number(pmcMatch[0].replace(/\./g,'').replace(',','.')):NaN;
   const pmcMarkup=Number.isFinite(pmc)&&pmc>low&&pmc<high?`<line x1="${L}" x2="${W-R}" y1="${y(pmc)}" y2="${y(pmc)}" stroke="#f7be57" stroke-dasharray="8 7" stroke-width="1.8"/>`:'';
   const last=drawn.at(-1),first=drawn[0];const color=last.point.v>=first.point.v?'#38d8a3':'#ff8796';
-  const buys=markers.filter(m=>m.i>=lo&&m.i<=hi).map(m=>{
-    const dp=drawn[m.i-lo];return `<g class="fh8-buy"><circle cx="${dp.x}" cy="${dp.y}" r="4.5" fill="#31d2b2" stroke="#092038" stroke-width="1.5"/><line x1="${dp.x}" y1="${T}" x2="${dp.x}" y2="${dp.y-5}" stroke="#31d2b2" stroke-dasharray="4 6" opacity=".55"/><rect x="${dp.x-9}" y="${T-13}" width="18" height="18" rx="9" fill="#30d5b6"/><text x="${dp.x}" y="${T}" text-anchor="middle" font-size="11" fill="#062639" font-weight="800">B</text><title>${esc(m.label)}</title></g>`;
+  const visibleMarkers=markers.filter(m=>m.i>=lo&&m.i<=hi);
+  // Fullscreen is a detailed view: display individual labels, no clustering into one B.
+  const perPoint=new Map();const buys=visibleMarkers.map((m,j)=>{
+    const dp=drawn[m.i-lo];const ordinal=perPoint.get(m.i)||0;perPoint.set(m.i,ordinal+1);
+    const markerX=dp.x+Math.min(ordinal,4)*11, markerY=T+ordinal*23;
+    return `<g class="fh8-buy"><line x1="${dp.x}" y1="${dp.y}" x2="${markerX}" y2="${markerY+8}" stroke="#31d2b2" stroke-dasharray="4 6" opacity=".6"/><circle cx="${dp.x}" cy="${dp.y}" r="4.5" fill="#31d2b2" stroke="#092038" stroke-width="1.5"/><circle cx="${markerX}" cy="${markerY}" r="10" fill="#30d5b6"/><text x="${markerX}" y="${markerY+4}" text-anchor="middle" font-size="11" fill="#062639" font-weight="800">B</text><title>${esc(m.label)}</title></g>`;
    }).join('');
   area.innerHTML=`<svg id="fh8Svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="Grafico ingrandito con acquisti"><defs><linearGradient id="fh8Fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity=".23"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient></defs><rect width="${W}" height="${H}" fill="#081a2d"/>${yAxis}<path d="${path} L ${last.x} ${H-B} L ${first.x} ${H-B}Z" fill="url(#fh8Fill)"/>${pmcMarkup}<path d="${path}" fill="none" stroke="${color}" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>${buys}<text x="${L}" y="${H-7}" font-size="11" fill="#a9bacd">${esc(first.point.date)}</text><text x="${W-R}" y="${H-7}" text-anchor="end" font-size="11" fill="#a9bacd">${esc(last.point.date)}</text><g id="fh8Cursor"></g></svg>`;
   info.textContent=`Acquisti nel periodo: ${markers.filter(m=>m.i>=lo&&m.i<=hi).length} · ${markers.length} marker nel grafico originale`;
