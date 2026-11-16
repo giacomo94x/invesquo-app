@@ -1,5 +1,5 @@
 {
-  "version": "9.9.77",
+  "version": "9.9.78",
   "build": "beta",
   "notes": "JSON account login and complete profile backup/restore; preceding 9.9.76 features retained"
 }
