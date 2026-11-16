@@ -1,0 +1,77 @@
+/* Finholdra Beta 8.0: selectable independent palettes */
+body[data-theme="iconblue"]{--bg:#071b36;--panel:#0e2b50;--panel2:#173b65;--border:#365a82;--text:#f0f7ff;--muted:#a9c4dd;--blue:#70b5ff;--green:#28d18e}
+body[data-theme="honey"]{--bg:#161a21;--panel:#292d35;--panel2:#363b44;--border:#62646b;--text:#fff7e4;--muted:#bdbbbb;--blue:#ebbe55;--green:#e7b949;--red:#f08a7a}
+body[data-theme="burgundy"]{--bg:#210e1b;--panel:#391b30;--panel2:#47253c;--border:#79516b;--text:#fff2f5;--muted:#cbb0c0;--blue:#d68cae;--green:#e2b2a1;--red:#ff7283}
+body[data-theme="iconblue"] .hero,body[data-theme="honey"] .hero,body[data-theme="burgundy"] .hero{background:linear-gradient(125deg,var(--panel),var(--bg))!important}
+body[data-theme="iconblue"] :is(.btn.primary,.nav-tool.active,.timeline-range .selected){background:#27579a!important;border-color:#5188c6!important;color:white!important}
+body[data-theme="honey"] :is(.btn.primary,.nav-tool.active,.timeline-range .selected){background:#b18a2c!important;border-color:#eac961!important;color:#1b1c21!important}
+body[data-theme="burgundy"] :is(.btn.primary,.nav-tool.active,.timeline-range .selected){background:#8f3e67!important;border-color:#bc7395!important;color:#fff!important}
+/* Genuine distinction between two preexisting banking skins */
+body[data-appearance="fiducia"] :is(.card,.box,.asset-col,.asset-detail-card,.fin-insight-panel,.setting-group){border-radius:24px!important;border-width:1px!important;box-shadow:0 4px 16px #00000012!important}
+body[data-appearance="fiducia"] :is(.btn,.gear-btn,.order-select,.nav-tool){border-radius:18px!important}
+body[data-appearance="fiducia"] .card{border-left:4px solid #f2bd3b!important}
+body[data-appearance="fiducia"] :is(.asset-detail-info,.asset-detail-metrics){gap:14px!important}
+body[data-appearance="tradizionale"] :is(.card,.box,.asset-col,.asset-detail-card,.setting-group,.fin-insight-panel){border-radius:5px!important;box-shadow:0 2px 0 rgba(133,161,184,.1)!important;border-color:#607b95!important}
+body[data-appearance="tradizionale"] :is(.btn,.gear-btn,.order-select,.nav-tool,.asset-detail-ranges button){border-radius:3px!important}
+body[data-appearance="tradizionale"] :is(.card h2,.sub-screen-head h2){font-family:Georgia,serif!important;letter-spacing:0!important;font-weight:600!important}
+body[data-appearance="tradizionale"] .card{border-top:3px solid #6e99bb!important}
+/* Remove stray glowing corners from the individual investment sheet */
+#assetDetailOverlay,#assetDetailSheet,#assetDetailSheet:before,#assetDetailSheet:after,.asset-detail-card,.asset-detail-card:before,.asset-detail-card:after{filter:none!important;box-shadow:none!important}
+#assetDetailSheet{background-image:none!important}
+#assetDetailSheet>*:not(.asset-chart-wrap){filter:none!important}
+/* Consistent small text: less prose in daily UI */
+#purchaseSection .foot,#purchaseSection .entry-explain,.sub-screen-head>p,.mascot-lab .hint,.fin-insight-head>p,.asset-detail-note,.fin-bench-foot small,.report-download .sub{font-size:11px;line-height:1.4;opacity:.76}
+#portfolioView>.card:first-of-type>.section-head{display:none!important}
+#portfolioView #editToggle{max-width:100%}
+#finnGamePicker .fgp-options{display:flex!important;flex-wrap:wrap;gap:10px!important}
+#finnGamePicker .fgp-options button{flex:1 1 135px!important;min-height:88px!important}
+#mascotLab .mascot-toys{display:flex!important;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px!important}
+#mascotLab .mascot-toys button{flex:0 0 auto}
+/* Theme-consistent overuse notice */
+#visitAlert,.visit-dialog,.visit-extra{background:var(--panel)!important;color:var(--text)!important;border-color:var(--border)!important}
+#visitAlert .btn,.visit-dialog button{background:var(--panel2)!important;color:var(--text)!important;border-color:var(--border)!important}
+/* Sleep animations, restrained to preserve iPhone performance */
+@keyframes fh8SleepSway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes fh8SleepBob{0%,100%{transform:translateY(0)}55%{transform:translateY(5px)}}
+@keyframes fh8SleepTurn{0%,100%{transform:rotate(0)}40%{transform:rotate(7deg)}80%{transform:rotate(-3deg)}}
+@keyframes fh8SleepPulse{0%,100%{transform:scale(1)}50%{transform:scale(.97)}}
+body.fh8-sleep-1 #performanceFace{animation:fh8SleepSway 5.5s ease-in-out infinite!important;transform-origin:50% 75%}
+body.fh8-sleep-2 #performanceFace{animation:fh8SleepBob 4.2s ease-in-out infinite!important}
+body.fh8-sleep-3 #performanceFace{animation:fh8SleepTurn 6s ease-in-out infinite!important;transform-origin:50% 75%}
+body.fh8-sleep-4 #performanceFace{animation:fh8SleepPulse 4s ease-in-out infinite!important}
+@media(prefers-reduced-motion:reduce){body[class*="fh8-sleep-"] #performanceFace{animation:none!important}}
+/* Long press profile card */
+#fh8ProfileModal{position:fixed;inset:0;z-index:2147483638;background:#061224c9;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(9px)}
+#fh8ProfileModal.open{display:flex}
+#fh8ProfileCard{width:min(100%,420px);border:1px solid #557aa7;border-radius:24px;background:linear-gradient(140deg,#123862,#071b39);color:white;padding:22px;box-shadow:0 24px 60px #0009}
+#fh8ProfileCard .fh8-credit{height:195px;border-radius:20px;border:1px solid #8ca5d266;background:linear-gradient(120deg,#153e76,#0c1836 62%,#174763);display:flex;flex-direction:column;justify-content:space-between;padding:22px;box-shadow:inset 0 1px 0 #ffffff22}
+#fh8ProfileCard .fh8-credit img{height:38px;max-width:80%;object-fit:contain;object-position:left center}
+#fh8ProfileCard .fh8-card-chip{width:38px;height:28px;border:1px solid #dec997;border-radius:5px;background:linear-gradient(90deg,#c6ae78,#f5e7b7,#ae8e4b);margin:6px 0}
+#fh8ProfileCard .fh8-card-name{font-size:19px;font-weight:800;letter-spacing:.04em}
+#fh8ProfileCard .fh8-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:16px 0}
+#fh8ProfileCard .fh8-stats>div{background:#203c5a;border-radius:12px;padding:10px}
+#fh8ProfileCard .fh8-stats small{display:block;color:#b6cada;font-size:11px}
+#fh8ProfileCard .fh8-stats strong{display:block;margin-top:4px;font-size:15px}
+#fh8ProfileCard button{background:#2b5480;color:white;border:1px solid #789ac4;border-radius:12px;padding:11px;width:100%;font-weight:800}
+/* Static geographic schematic derived from direct-country instrument codes */
+#fh8Exposure{margin:23px 0 7px;padding:16px;border-radius:17px;border:1px solid var(--border);background:var(--panel)}
+#fh8Exposure h3{font-size:17px;margin:0 0 5px}#fh8Exposure>p{color:var(--muted);font-size:12px;line-height:1.5}
+#fh8Exposure svg{display:block;width:100%;height:auto;margin:8px auto;background:#102942;border-radius:12px}
+#fh8Exposure .fh8-country-rows{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#fh8Exposure .fh8-country-rows span{border:1px solid #6386a7;border-radius:20px;padding:6px 10px;font-size:11px}
+#fh8Exposure .fh8-note{margin-top:12px;font-size:11px;color:var(--muted)}
+/* Reliable full-screen chart: CSS rotation applies to the WHOLE surface, never only to SVG */
+#fh8ChartModal{position:fixed;inset:0;z-index:2147483642;display:none;flex-direction:column;box-sizing:border-box;gap:5px;background:#06172b;color:white;padding:calc(env(safe-area-inset-top,0px) + 6px) max(8px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom,0px) + 7px) max(8px,env(safe-area-inset-left));overscroll-behavior:contain}
+#fh8ChartModal.open{display:flex}
+#fh8ChartModal .fh8-chart-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto}
+#fh8ChartModal .fh8-chart-head strong{font-size:13px}
+#fh8ChartModal button{border:1px solid #668aae;color:white;background:#1a3a5b;border-radius:10px;padding:8px 11px;font-weight:800}
+#fh8ChartArea{flex:1;min-height:0;border:1px solid #345675;border-radius:14px;overflow:hidden;position:relative;touch-action:none}
+#fh8ChartArea svg{width:100%;height:100%;display:block;touch-action:none;user-select:none}
+#fh8ChartStatus{font-size:11px;text-align:center;padding:2px;min-height:20px;color:#bde3df;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#fh8ChartActions{display:flex;align-items:center;justify-content:center;gap:7px;flex:0 0 auto;padding:1px 0 0}
+#fh8ChartActions button{font-size:11px}
+#fh8ChartActions button.is-active{background:#376ba2}
+#fh8BuysInfo{display:block;font-size:10px;color:#b2cbd9;flex:0 0 auto;padding:2px 5px}
+@media(max-width:767px) and (orientation:portrait){#fh8ChartModal.open{position:fixed;inset:auto;left:100dvw;top:0;width:100dvh;height:100dvw;transform-origin:top left;transform:rotate(90deg);padding:5px 9px}}
+@media(min-width:768px),(orientation:landscape){#fh8ChartModal.open{inset:0;transform:none;width:100vw;height:100dvh}}

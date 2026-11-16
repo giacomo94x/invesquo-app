@@ -1,5 +1,7 @@
 {
-  "version": "9.9.80",
-  "build": "beta",
-  "notes": "JSON account login and complete profile backup/restore; preceding 9.9.76 features retained"
+  "app": "Finholdra",
+  "channel": "beta",
+  "version": "8.0",
+  "base": "9.9.80",
+  "releaseDate": "2026-11-16"
 }
