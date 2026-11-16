@@ -1,6 +1,1 @@
-{
-  "app": "Finholdra",
-  "channel": "beta",
-  "version": "9.9.74",
-  "releaseDate": "2026-11-16"
-}
+{"version": "9.9.75", "build": "beta", "notes": "Full-screen buy markers, touch cursor, safe area, all categories history, flat detail, updated icon, PMC purchase simulator"}
