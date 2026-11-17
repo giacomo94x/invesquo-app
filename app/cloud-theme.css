@@ -28,3 +28,13 @@ body[data-theme="goldblue"] #finInvestIntelligence .fin-tag{color:var(--blue)!im
 .fh101-sync .fh101-error{color:var(--red)!important}
 .fh101-sync .foot{margin:10px 0 0;line-height:1.55}
 .fh101-sync button[hidden]{display:none!important}
+
+/* Cloud login is available even before a local portfolio has been selected. */
+#accountGate .fh1012-gate-cloud{border:1px solid rgba(112,174,237,.48);border-radius:15px;margin:18px 0;padding:16px;background:#112744}
+#accountGate .fh1012-gate-cloud h2{font-size:1.06rem;margin:0 0 7px;color:#f7fbff}
+#accountGate .fh1012-gate-cloud p{font-size:.83rem;color:#bacce2;margin:0 0 12px;line-height:1.4}
+#accountGate .fh1012-gate-cloud label{display:block;font-size:.85rem;margin:9px 0 6px}
+#accountGate .fh1012-gate-cloud input{display:block;width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #577fa9;background:#0d1c32;color:#fff;font:inherit}
+#accountGate .fh1012-gate-cloud .account-primary{display:block;width:100%;margin-top:10px}
+#accountGate .fh1012-gate-cloud #fh1012GateNote{margin-top:10px;white-space:normal;overflow-wrap:anywhere}
+#accountGate .fh1012-gate-cloud .fh101-error{color:#ff8a98}
