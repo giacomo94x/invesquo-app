@@ -1,0 +1,16 @@
+FINHOLDRA BETA 10.0.1 — GOOGLE DRIVE
+
+1. Apri https://console.cloud.google.com/ e crea/seleziona un progetto.
+2. In API e servizi, abilita Google Drive API.
+3. Nella Google Auth Platform configura la schermata consenso OAuth; se in test, aggiungi il tuo indirizzo Gmail ai test user.
+4. Crea credenziali OAuth 2.0 del tipo APPLICAZIONE WEB.
+5. In Origini JavaScript autorizzate, inserisci l'origine esatta dell'app pubblicata su Netlify, ad esempio:
+      https://beta--finholdra.netlify.app
+   Niente slash finale, path o indirizzi diversi da quelli effettivamente usati.
+6. Copia il Client ID che termina in .apps.googleusercontent.com.
+7. Modifica il file google-drive-config.js e inserisci il Client ID fra gli apici. Questo ID e' PUBBLICO; non inserire alcun Client Secret.
+8. Ripubblica lo ZIP estratto su Netlify. In alternativa puoi incollare il Client ID in Finholdra -> Impostazioni -> Google Drive su ciascun dispositivo.
+9. In Finholdra -> Impostazioni -> Google Drive: collega l'account, poi Salva su Drive.
+10. Sul secondo dispositivo crea/accedi a un profilo locale, collega lo stesso account Google, premi Trova backup, poi Carica sul JSON desiderato.
+
+NOTA: il backup rimane un file JSON visibile nel tuo Google Drive. Google puo' richiedere la verifica OAuth per un'app distribuita a un pubblico piu' ampio. Non condividere i JSON con terzi. La beta NON effettua salvataggi automatici e NON implementa editing concorrente in tempo reale. Conflitti di modifica: crea una nuova copia invece di sovrascrivere.

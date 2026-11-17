@@ -1,0 +1,23 @@
+{
+  "name": "Finholdra",
+  "short_name": "Finholdra",
+  "description": "Every investments you hold. One view.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#08264B",
+  "theme_color": "#08264B",
+  "icons": [
+    {
+      "src": "icon-192.png?v=8.0",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png?v=8.0",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "version": "8.3"
+}
