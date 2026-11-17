@@ -1799,7 +1799,10 @@ header.top .new-header-nav{margin-bottom:0!important}
 </style>
 <style id="fh1015-archive-single-logo">
 #tradeEventList .fh1015-entry-ident{display:flex;align-items:center;gap:11px;min-width:0;flex:1}
-#tradeEventList .fh1015-entry-ident>.asset-logo{flex:0 0 34px;width:34px;height:34px;float:none;margin:0}
+#tradeEventList .fh1015-entry-badges{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+#tradeEventList .fh1015-entry-badges>.asset-logo{flex:0 0 34px;width:34px;height:34px;float:none;margin:0}
+#tradeEventList .fh1015-entry-badges .instrument-academy-icon{margin-right:0;transform:scale(.95);opacity:.95}
+#tradeEventList .fh1015-entry-badges .education-illustration{width:18px!important;height:18px!important;min-width:18px}
 #tradeEventList .fh1015-entry-details{min-width:0;overflow-wrap:anywhere}
 #tradeEventList .transaction-history-row{flex-wrap:nowrap}
 @media(max-width:430px){#tradeEventList .fh1015-entry-ident{gap:8px}#tradeEventList .transaction-history-row>.btn{flex-shrink:0}}
@@ -2756,7 +2759,7 @@ function renderTradeEvents(){const el=$('tradeEventList');if(!el)return;
  const completed=(returnMethod==='archive'?trades:trades.filter(t=>historyCatIncluded(t.cat))).slice().sort((a,b)=>a.date.localeCompare(b.date));
  el.innerHTML=completed.length?'<div class="eyebrow" style="margin:14px 0 8px">Acquisti e vendite · categorie visualizzate</div>'+completed.slice().reverse().map(t=>{
   const buy=t.kind==='buy',name=tradeAssetName(t);
-  return '<div class="transaction-history-row" data-fh8-cat="'+svgEscape(t.cat)+'"><div class="fh1015-entry-ident">'+issuerIcon(t.asset)+'<div class="fh1015-entry-details"><strong style="color:'+(buy?'#55d5b0':'#efb76e')+'">'+(buy?'＋ Acquisto':'− Vendita')+'</strong> · '+shortDate(t.date)+' · '+svgEscape(name)+(t.assumedDate?' *':'')+'<div class="sub">'+entryDecimal(Number(t.quantity))+' '+(t.cat==='Obbligazioni'?'€ nominali':'quote')+' · '+eur(Math.abs(Number(t.spent||0)))+(buy?'':' · '+(Number(t.realized)>=0?'+':'')+eur(Number(t.realized||0))+' realizzati')+'</div></div></div><button type="button" class="btn" data-history-ledger="'+svgEscape(t.asset)+'">Dettagli</button></div>';
+  return '<div class="transaction-history-row" data-fh8-cat="'+svgEscape(t.cat)+'"><div class="fh1015-entry-ident"><div class="fh1015-entry-badges">'+issuerIcon(t.asset)+categoryGlyph(t.cat)+'</div><div class="fh1015-entry-details"><strong style="color:'+(buy?'#55d5b0':'#efb76e')+'">'+(buy?'＋ Acquisto':'− Vendita')+'</strong> · '+shortDate(t.date)+' · '+svgEscape(name)+(t.assumedDate?' *':'')+'<div class="sub">'+entryDecimal(Number(t.quantity))+' '+(t.cat==='Obbligazioni'?'€ nominali':'quote')+' · '+eur(Math.abs(Number(t.spent||0)))+(buy?'':' · '+(Number(t.realized)>=0?'+':'')+eur(Number(t.realized||0))+' realizzati')+'</div></div></div><button type="button" class="btn" data-history-ledger="'+svgEscape(t.asset)+'">Dettagli</button></div>';
  }).join('')+'<p class="hint">* Le posizioni importate senza data sono attribuite al 03/11/2026. Le modifiche ai movimenti non ricreano prezzi di mercato storici che non erano stati rilevati.</p>':'<p class="hint">Ancora nessuna operazione registrata.</p>';
  renderTransactionTimeline(completed);
 }
