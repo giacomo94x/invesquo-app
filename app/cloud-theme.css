@@ -1,0 +1,30 @@
+/* Finholdra 10.1.0: Lens follows the selected theme, rather than a fixed teal palette. */
+#finInvestIntelligence.fin-insight-panel{
+  background:var(--panel)!important;color:var(--text)!important;
+  border:1px solid var(--border)!important;box-shadow:none!important;
+}
+#finInvestIntelligence.fin-insight-panel::before{background:var(--blue)!important}
+#finInvestIntelligence .fin-tag,
+#finInvestIntelligence .fin-insight-head h3,
+#finInvestIntelligence .fh70-card-title{color:var(--text)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card{
+  background:var(--panel2)!important;
+  color:var(--text)!important;
+  border:1px solid var(--border)!important;
+  box-shadow:none!important;
+}
+#finInvestIntelligence #fh70LensGrid .fh70-card-value{color:var(--text)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card-sub{color:var(--muted)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card-value.fh70-good{color:var(--green)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card-value.fh70-bad{color:var(--red)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card-value.fh70-mid{color:var(--text)!important}
+#finInvestIntelligence .fh70-fill,
+#finInvestIntelligence .fh70-marker{background:var(--blue)!important}
+body[data-theme="goldblue"] #finInvestIntelligence .fin-tag{color:var(--blue)!important}
+.fh101-sync .fh101AutoLabel{margin:14px 0 8px}
+.fh101-sync .field input{width:100%;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text)}
+.fh101-sync .field{margin-bottom:9px}
+.fh101-sync .field label{display:block;color:var(--muted);margin:0 0 6px}
+.fh101-sync .fh101-error{color:var(--red)!important}
+.fh101-sync .foot{margin:10px 0 0;line-height:1.55}
+.fh101-sync button[hidden]{display:none!important}

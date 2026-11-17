@@ -1,4 +1,4 @@
-FINHOLDRA BETA 8.4 — GOOGLE DRIVE
+FINHOLDRA BETA 10.0.1 — GOOGLE DRIVE
 
 1. Apri https://console.cloud.google.com/ e crea/seleziona un progetto.
 2. In API e servizi, abilita Google Drive API.
