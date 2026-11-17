@@ -110,19 +110,26 @@ body.fh8-sleep-4 #performanceFace{animation:fh81Dream 10s ease-in-out infinite!i
 body.fh8-sleep-3 #faceButton{position:relative}
 body.fh8-sleep-3 #faceButton:after{content:'⏰';position:absolute;right:-9px;top:-16px;font-size:18px;pointer-events:none;animation:fh81Alarm 12s ease-in-out infinite}
 
-/* Beta 8.2: Giallo e Blu section buttons, in EVERY interface style. */
-body[data-theme="goldblue"] .top .new-header-nav button.gear-btn,
-body[data-theme="goldblue"] .top .new-header-nav .nav-tool,
-body[data-theme="goldblue"] .top .new-header-nav .nav-btn,
-body[data-theme="goldblue"] .top .new-header-nav .nav-item{
- background:#e8bc3d!important;color:#102345!important;border:1px solid #efd070!important;
- box-shadow:none!important;
+/* Beta 8.3: only the currently selected section is yellow, consistently in every style. */
+body[data-theme="goldblue"] .top .new-header-nav button.gear-btn:not(.active):not(.selected),
+body[data-theme="goldblue"] .top .new-header-nav .nav-tool:not(.active):not(.selected){
+ background:var(--panel2)!important;color:var(--text)!important;
+ border:1px solid var(--border)!important;box-shadow:none!important;
 }
-body[data-theme="goldblue"] .top .new-header-nav button.gear-btn svg,
-body[data-theme="goldblue"] .top .new-header-nav button.gear-btn svg *{stroke:#102345!important;}
+body[data-theme="goldblue"] .top .new-header-nav button.gear-btn:not(.active):not(.selected) svg,
+body[data-theme="goldblue"] .top .new-header-nav button.gear-btn:not(.active):not(.selected) svg *{
+ stroke:currentColor!important;
+}
 body[data-theme="goldblue"] .top .new-header-nav button.gear-btn.active,
 body[data-theme="goldblue"] .top .new-header-nav button.gear-btn.selected{
- background:#f5d568!important;border-color:#fff0b5!important;color:#091b37!important;
+ background:#e8bc3d!important;border-color:#f2d67c!important;color:#102345!important;
+ box-shadow:none!important;
+}
+body[data-theme="goldblue"] .top .new-header-nav button.gear-btn.active svg,
+body[data-theme="goldblue"] .top .new-header-nav button.gear-btn.active svg *,
+body[data-theme="goldblue"] .top .new-header-nav button.gear-btn.selected svg,
+body[data-theme="goldblue"] .top .new-header-nav button.gear-btn.selected svg *{
+ stroke:currentColor!important;
 }
 #fh82PanLeft,#fh82PanRight{min-width:36px!important;font-size:18px!important;line-height:1!important;padding:8px 10px!important;}
 #fh82PanLeft:disabled,#fh82PanRight:disabled{opacity:.35!important;cursor:default!important}
