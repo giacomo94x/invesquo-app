@@ -90,11 +90,10 @@ function drawWorld(){
 }
 function setupMap(){const shell=$('.finholdra-news-shell');if(!shell||$('#fh8Exposure'))return;const sec=document.createElement('section');sec.id='fh8Exposure';shell.append(sec);const btn=$('#finholdraBrandTrigger');btn?.addEventListener('click',()=>setTimeout(drawWorld,40));drawWorld();}
 function setupArchiveIcons(){
- const root=$('#tradeEventList');if(!root)return;
- const decorate=()=>{root.querySelectorAll('.transaction-history-row').forEach(row=>{if(row.dataset.fh8Icon)return;row.dataset.fh8Icon='1';const label=row.textContent||'',cat=row.dataset.fh8Cat||'';const cls=cat==='ETF'||cat==='ETF monetari'?'📊':cat==='Crypto'?'₿':cat==='Obbligazioni'?'🏛️':cat==='Azioni'?'📈':cat==='Oro'?'🟡':cat==='Risparmio postale'?'🏤':cat==='Futures'?'📉':cat==='Conto deposito'?'🏦':cat==='Valute'?'💱':cat==='ETC/ETN'?'📜':'💼';const ico=document.createElement('span');ico.textContent=cls;ico.style.cssText='display:inline-grid;place-items:center;width:28px;height:28px;font-size:18px;float:left;margin:4px 9px 0 0;border-radius:7px;background:var(--panel2)';row.prepend(ico);});};
- // Observe only trade list additions, not document or its text nodes.
- const observer=new MutationObserver(decorate);observer.observe(root,{childList:true});decorate();
+ // Archive logos are rendered by issuerIcon(), the same source used by Investments.
+ // Do not prepend a second category emoji.
 }
+
 function setupHistory(){
  const select=$('#historyCategory');if(select){[...select.options].filter(o=>o.value==='Crypto'||o.text.toLowerCase()==='crypto').forEach(o=>o.remove());if(select.value==='Crypto'){select.value='ETF';select.dispatchEvent(new Event('change',{bubbles:true}));}}
  const h=$('#historyView .sub-screen-head p');if(h)h.textContent='Rendimento · Ultimo giorno · Archivio';
