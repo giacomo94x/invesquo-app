@@ -23,21 +23,8 @@ function setupSettings(){
 }
 function setupSources(){
  const sel=$('#assetDetailProvider');if(!sel)return;
- // The main app reconstructs this select on every instrument open.
- const refresh=()=>{
-   for(const o of [...sel.options])if(o.value==='saved')o.remove();
-   if(![...sel.options].some(o=>o.value==='twelvedata'))sel.add(new Option('Twelve Data · API personale','twelvedata'));
- };
- const parent=sel.closest('.asset-source-picker');
- if(parent&&!$('#fh81ApiConfig')){
-   const panel=document.createElement('div');panel.id='fh81ApiConfig';panel.style.cssText='display:none;margin-top:10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--panel2)';
-   panel.innerHTML='<label for="fh81ApiKey">Chiave API Twelve Data</label><input id="fh81ApiKey" type="password" autocomplete="off" style="width:100%;padding:10px;margin:5px 0;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:10px" placeholder="La tua chiave API personale"><label for="fh81ApiSymbol">Ticker alternativo (facoltativo)</label><input id="fh81ApiSymbol" type="text" style="width:100%;padding:10px;margin:5px 0;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:10px" placeholder="Es. VWCE / AAPL"><p style="font-size:11px;color:var(--muted)">L’API può non coprire tutti i titoli o tutti i periodi. La chiave resta memorizzata su questo dispositivo ed è inviata a Twelve Data quando selezioni la fonte.</p>';
-   parent.appendChild(panel);panel.querySelector('#fh81ApiKey').value=localStorage.getItem('fh81_twelve_api_key')||'';
-   panel.querySelector('#fh81ApiKey').addEventListener('change',e=>localStorage.setItem('fh81_twelve_api_key',e.target.value.trim()));
-   panel.querySelector('#fh81ApiSymbol').addEventListener('change',()=>{if(sel.value==='twelvedata')sel.dispatchEvent(new Event('change',{bubbles:false}))});
- }
- const sync=()=>{refresh();const pane=$('#fh81ApiConfig');if(pane)pane.style.display=sel.value==='twelvedata'?'block':'none';};
- new MutationObserver(sync).observe(sel,{childList:true});sel.addEventListener('change',sync);sync();
+ const sync=()=>{for(const o of [...sel.options])if(o.value==='twelvedata'||o.value==='saved')o.remove();};
+ new MutationObserver(sync).observe(sel,{childList:true});sync();
 }
 
 function setupHome(){
@@ -115,7 +102,7 @@ function setupHistory(){
 
 function setupChart(){
  const detail=$('#assetDetailChart');if(!detail||detail.dataset.fh8ChartInit)return;detail.dataset.fh8ChartInit='1';
- const modal=document.createElement('section');modal.id='fh8ChartModal';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.innerHTML='<div class="fh8-chart-head"><strong>Grafico interattivo</strong><button id="fh8Close" type="button">× Chiudi</button></div><div id="fh8ChartArea"></div><div id="fh8ChartStatus">Muovi il dito sul grafico per vedere prezzo e data</div><small id="fh8BuysInfo"></small><div id="fh8ChartActions"><button id="fh8Minus">− Zoom</button><button id="fh8Reset">Ripristina</button><button id="fh8Plus">+ Zoom</button><button id="fh8AB">A↔B</button></div>';
+ const modal=document.createElement('section');modal.id='fh8ChartModal';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.innerHTML='<div class="fh8-chart-head"><strong>Grafico interattivo</strong><button id="fh8Close" type="button">× Chiudi</button></div><div id="fh8ChartArea"></div><div id="fh8ChartStatus">Muovi il dito sul grafico per vedere prezzo e data</div><small id="fh8BuysInfo"></small><div id="fh8ChartActions"><button id="fh82PanLeft" type="button" aria-label="Sposta grafico a sinistra">←</button><button id="fh8Minus">− Zoom</button><button id="fh8Reset">Ripristina</button><button id="fh8Plus">+ Zoom</button><button id="fh82PanRight" type="button" aria-label="Sposta grafico a destra">→</button><button id="fh8AB">A↔B</button></div>';
  document.body.append(modal);
  const area=$('#fh8ChartArea'),status=$('#fh8ChartStatus'),info=$('#fh8BuysInfo');
  let values=[],rawXs=[],markers=[],currency='EUR',lo=0,hi=0,drawn=[],selected=[],isAB=false,pressId=null,pressed=false,lastIndex=-1,previousBodyOverflow='';
@@ -159,6 +146,7 @@ function setupChart(){
    }).join('');
   area.innerHTML=`<svg id="fh8Svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="Grafico ingrandito con acquisti"><defs><linearGradient id="fh8Fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity=".23"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient></defs><rect width="${W}" height="${H}" fill="#081a2d"/>${yAxis}<path d="${path} L ${last.x} ${H-B} L ${first.x} ${H-B}Z" fill="url(#fh8Fill)"/>${pmcMarkup}<path d="${path}" fill="none" stroke="${color}" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>${buys}<text x="${L}" y="${H-7}" font-size="11" fill="#a9bacd">${esc(first.point.date)}</text><text x="${W-R}" y="${H-7}" text-anchor="end" font-size="11" fill="#a9bacd">${esc(last.point.date)}</text><g id="fh8Cursor"></g></svg>`;
   info.textContent=`Acquisti nel periodo: ${markers.filter(m=>m.i>=lo&&m.i<=hi).length} · ${markers.length} marker nel grafico originale`;
+  const leftButton=$('#fh82PanLeft'),rightButton=$('#fh82PanRight');if(leftButton)leftButton.disabled=lo<=0;if(rightButton)rightButton.disabled=hi>=values.length-1;
   lastIndex=-1;
  }
  // Screen-space projection is orientation-aware. In CSS-rotated Safari portrait,
@@ -189,6 +177,19 @@ function setupChart(){
  function close(){modal.classList.remove('open');document.body.style.overflow=previousBodyOverflow;pressed=false;selected=[];}
  $('#fh8Close').onclick=close;
  const zoom=scale=>{if(values.length<2)return;const length=hi-lo+1,target=clamp(Math.round(length*scale),Math.min(8,values.length),values.length),mid=Math.round((lo+hi)/2);lo=clamp(mid-Math.floor(target/2),0,values.length-target);hi=lo+target-1;plot();};
+ function pan(dir){
+  const length=hi-lo+1;
+  if(length>=values.length)return;
+  const step=Math.max(1,Math.round(length*.22));
+  const next=clamp(lo+dir*step,0,values.length-length);
+  if(next===lo)return;
+  lo=next;hi=next+length-1;
+  // Keep A/B markers only if they remain in the window.
+  plot();
+ }
+ const panLeft=$('#fh82PanLeft'),panRight=$('#fh82PanRight');
+ if(panLeft)panLeft.onclick=()=>pan(-1);
+ if(panRight)panRight.onclick=()=>pan(1);
  $('#fh8Plus').onclick=()=>zoom(.7);$('#fh8Minus').onclick=()=>zoom(1.45);$('#fh8Reset').onclick=()=>{lo=0;hi=values.length-1;selected=[];isAB=false;$('#fh8AB').classList.remove('is-active');plot();};
  $('#fh8AB').onclick=e=>{isAB=!isAB;selected=[];e.currentTarget.classList.toggle('is-active',isAB);status.textContent=isAB?'Muovi il dito su A e sollevalo; ripeti per B.':'Sposta il dito sul grafico.';plot()};
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))close()});
