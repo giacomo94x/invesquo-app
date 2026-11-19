@@ -116,7 +116,7 @@ function setupChart(){
   const allBuys=src.getAttribute('data-fh81-buys');
   if(allBuys){try{
    const listed=JSON.parse(decodeURIComponent(allBuys));
-   markers=listed.map(item=>{let idx=0,dist=Infinity;for(let j=0;j<values.length;j++){const delta=Math.abs(values[j].x-Number(item.x));if(delta<dist){dist=delta;idx=j;}}return {i:idx,label:item.label||'Acquisto registrato'};});
+   markers=listed.map(item=>{let idx=0,dist=Infinity;for(let j=0;j<values.length;j++){const delta=Math.abs(values[j].x-Number(item.x));if(delta<dist){dist=delta;idx=j;}}return {i:idx,label:item.label||'Acquisto registrato',quantity:Number(item.quantity||0)};});
   }catch(e){markers=[];}}
   else markers=Array.from(src.querySelectorAll('g.fh-buy-marker')).map(g=>{
    const c=g.querySelector('circle');if(!c)return null;const cx=Number(c.getAttribute('cx'));if(!Number.isFinite(cx))return null;
@@ -140,8 +140,8 @@ function setupChart(){
   // Fullscreen is a detailed view: display individual labels, no clustering into one B.
   const perPoint=new Map();const buys=visibleMarkers.map((m,j)=>{
     const dp=drawn[m.i-lo];const ordinal=perPoint.get(m.i)||0;perPoint.set(m.i,ordinal+1);
-    const markerX=dp.x+Math.min(ordinal,4)*11, markerY=T+ordinal*23;
-    return `<g class="fh8-buy"><line x1="${dp.x}" y1="${dp.y}" x2="${markerX}" y2="${markerY+8}" stroke="#31d2b2" stroke-dasharray="4 6" opacity=".6"/><circle cx="${dp.x}" cy="${dp.y}" r="4.5" fill="#31d2b2" stroke="#092038" stroke-width="1.5"/><circle cx="${markerX}" cy="${markerY}" r="10" fill="#30d5b6"/><text x="${markerX}" y="${markerY+4}" text-anchor="middle" font-size="11" fill="#062639" font-weight="800">B</text><title>${esc(m.label)}</title></g>`;
+    const label=Number(m.quantity||1).toLocaleString("it-IT",{maximumFractionDigits:6});const radius=Math.max(10,label.length*3.4+4);const markerX=Math.max(L+radius,Math.min(W-R-radius,dp.x+Math.min(ordinal,4)*11)), markerY=T+ordinal*23;
+    return `<g class="fh8-buy"><line x1="${dp.x}" y1="${dp.y}" x2="${markerX}" y2="${markerY+8}" stroke="#31d2b2" stroke-dasharray="4 6" opacity=".6"/><circle cx="${dp.x}" cy="${dp.y}" r="4.5" fill="#31d2b2" stroke="#092038" stroke-width="1.5"/><circle cx="${markerX}" cy="${markerY}" r="${radius}" fill="#30d5b6"/><text x="${markerX}" y="${markerY+4}" text-anchor="middle" font-size="11" fill="#062639" font-weight="800">${esc(label)}</text><title>${esc(m.label)}</title></g>`;
    }).join('');
   area.innerHTML=`<svg id="fh8Svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="Grafico ingrandito con acquisti"><defs><linearGradient id="fh8Fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity=".23"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient></defs><rect width="${W}" height="${H}" fill="#081a2d"/>${yAxis}<path d="${path} L ${last.x} ${H-B} L ${first.x} ${H-B}Z" fill="url(#fh8Fill)"/>${pmcMarkup}<path d="${path}" fill="none" stroke="${color}" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>${buys}<text x="${L}" y="${H-7}" font-size="11" fill="#a9bacd">${esc(first.point.date)}</text><text x="${W-R}" y="${H-7}" text-anchor="end" font-size="11" fill="#a9bacd">${esc(last.point.date)}</text><g id="fh8Cursor"></g></svg>`;
   info.textContent=`Acquisti nel periodo: ${markers.filter(m=>m.i>=lo&&m.i<=hi).length} · ${markers.length} marker nel grafico originale`;
