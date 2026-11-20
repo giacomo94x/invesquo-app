@@ -1,2 +1,1 @@
-/* Imposta qui il Client ID OAuth web di Finholdra (pubblico, NON un client secret). */
-window.FINHOLDRA_GOOGLE_CLIENT_ID = '';
+window.FINHOLDRA_GOOGLE_CLIENT_ID='349857833980-rtmr17im8fu38ih8ucsr6m5014tapft8.apps.googleusercontent.com';

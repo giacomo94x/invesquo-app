@@ -14,3 +14,22 @@ body.fh-home-active:is([data-favorite-tint="up"],[data-favorite-tint="down"]) #d
 #radarView .mr-source-table{width:100%;border-collapse:collapse}#radarView .mr-source-table td{padding:9px 4px;border-bottom:1px solid var(--border)}
 .fh-radar-active #performanceFace .mr-cap{display:none!important}.fh-radar-active .expression-radar .mr-lens{animation-duration:6s!important}
 body[data-motion="off"].fh-radar-active #performanceFace,body[data-motion="off"].fh-radar-active #performanceFace *{animation:none!important}
+
+/* 10.5.3: consistent allocation switch and independent Home reactions. */
+body.fh-home-active:is([data-favorite-tint="up"],[data-favorite-tint="down"]) #dashboardView .seg:has(#modeNow){background:var(--bg)!important;border-color:var(--border)!important;box-shadow:none!important}
+body.fh-home-active:is([data-favorite-tint="up"],[data-favorite-tint="down"]) #dashboardView .seg :is(#modeNow,#modeCost){background:var(--panel)!important;border-color:var(--border)!important;color:var(--text)!important;box-shadow:none!important}
+body.fh-home-active:is([data-favorite-tint="up"],[data-favorite-tint="down"]) #dashboardView .seg :is(#modeNow,#modeCost).selected{background:var(--panel2)!important;border-color:var(--blue)!important;color:var(--text)!important;box-shadow:inset 0 0 0 1px var(--border)!important}
+body.fh-home-active:is([data-favorite-tint="up"],[data-favorite-tint="down"]) #performanceFace{animation:none}
+body.fh-home-active[data-favorite-tint="down"] #performanceFace.expression-concerned .candle-character{animation:fhConcern 2.9s ease-in-out infinite}
+body.fh-home-active[data-favorite-tint="down"] #performanceFace.expression-scared .candle-character{animation:fhScared 1.25s ease-in-out infinite}
+body.fh-home-active[data-favorite-tint="down"] #performanceFace.expression-sweating .fh-sweat{animation:fhSweat 1.6s ease-in infinite}
+body.fh-home-active[data-favorite-tint="down"] #performanceFace.expression-sweating .fh-sweat-two{animation-delay:.65s}
+body.fh-home-active[data-favorite-tint="up"] #performanceFace.expression-positive .candle-character{animation:fhJoy 2.4s ease-in-out infinite}
+body.fh-home-active[data-favorite-tint="up"] #performanceFace.expression-celebrate .candle-character{animation:fhJoy .85s ease-in-out infinite}
+body.fh-home-active[data-favorite-tint="up"] #performanceFace.expression-satisfied .candle-character{animation:happyNod 2.5s ease-in-out infinite}
+@keyframes fhConcern{0%,100%{transform:rotate(0)}40%{transform:rotate(-4deg)}70%{transform:rotate(4deg)}}
+@keyframes fhScared{0%,100%{transform:translateX(0)}25%{transform:translateX(-1.8px) rotate(-2deg)}75%{transform:translateX(1.8px) rotate(2deg)}}
+@keyframes fhSweat{0%{opacity:0;transform:translateY(-2px)}25%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translateY(10px)}}
+@keyframes fhJoy{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+body.motion-off.fh-home-active #performanceFace,body.motion-off.fh-home-active #performanceFace *{animation:none!important}
+@media(prefers-reduced-motion:reduce){body.fh-home-active #performanceFace,body.fh-home-active #performanceFace *{animation:none!important}}

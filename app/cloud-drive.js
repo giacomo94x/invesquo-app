@@ -1,134 +1,18 @@
-/* Finholdra Beta 8.4 — Google Drive backup via Google Identity Services.
-   Explicit opt-in, no token persistence, no background uploads. */
+/* Google Drive private appDataFolder. Access tokens remain in memory. */
 (()=>{'use strict';
- const byId=id=>document.getElementById(id);
- const root=byId('finCloudSettings');if(!root)return;
- const inp=byId('fhGoogleClientId'),status=byId('fhCloudStatus'),badge=byId('fhCloudBadge'),list=byId('fhCloudFiles');
- const connect=byId('fhCloudConnect'),find=byId('fhCloudList'),save=byId('fhCloudSave'),disconnect=byId('fhCloudDisconnect');
- const ID_KEY='finholdra_google_oauth_client_id_v84';
- const KEY_PREFIX='finholdra_drive_binding_v84_';
- const SCOPE='https://www.googleapis.com/auth/drive.file';
- const API='https://www.googleapis.com/drive/v3/files';
- const UPLOAD='https://www.googleapis.com/upload/drive/v3/files';
- let access='',expires=0,tokenClient=null,busy=false,files=[],oauthTimer=null;
- const profile=()=>String(window.invesquoLocalAccount?.name||'Profilo').replace(/[<>:"/\\|?*\x00-\x1f]/g,'').trim().slice(0,50)||'Profilo';
- const profileId=()=>String(window.INVESQUO_ACCOUNT_ID||'local');
- const bindingKey=()=>KEY_PREFIX+profileId();
- const savedBinding=()=>{try{return JSON.parse(localStorage.getItem(bindingKey())||'null')}catch(_){return null}};
- const setBinding=v=>localStorage.setItem(bindingKey(),JSON.stringify(v));
- const fmtDate=t=>{try{return new Date(t).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(_){return '—'}};
- const note=(s,error=false)=>{status.textContent=s;status.style.color=error?'#ff8a9a':''};
- const ui=()=>{const connected=!!access&&Date.now()<expires;badge.textContent=connected?'Collegato':'Non collegato';find.disabled=save.disabled=disconnect.disabled=!connected;connect.textContent=connected?'Ricollega Google':'Collega Google Drive';};
- const conf=String(window.FINHOLDRA_GOOGLE_CLIENT_ID||'').trim();
- inp.value=conf||localStorage.getItem(ID_KEY)||'';
- const getClientId=()=>inp.value.trim();
- inp.addEventListener('change',()=>{const id=getClientId();localStorage.setItem(ID_KEY,id);tokenClient=null;access='';expires=0;ui();note('Configurazione aggiornata: collega nuovamente Google Drive.')});
- function ensureOAuth(){
-  if(!window.google?.accounts?.oauth2)throw Error('Google Identity Services non è disponibile. Controlla la connessione e riprova.');
-  const clientId=getClientId();
-  if(!/^\d+-[a-z0-9_-]+\.apps\.googleusercontent\.com$/i.test(clientId))throw Error('Inserisci un Client ID OAuth web valido nelle Impostazioni.');
-  return clientId;
- }
- // Preload early to avoid popup blocking after a network-await on click.
- const googleScript=document.createElement('script');googleScript.src='https://accounts.google.com/gsi/client';googleScript.async=true;document.head.appendChild(googleScript);
- connect.addEventListener('click',()=>{
-  try{
-   const clientId=ensureOAuth();
-   if(!tokenClient)tokenClient=window.google.accounts.oauth2.initTokenClient({client_id:clientId,scope:SCOPE,
-    callback:res=>{clearTimeout(oauthTimer);if(!res?.access_token){note('Accesso Google non completato.',true);return}access=res.access_token;expires=Date.now()+Math.max(60,Number(res.expires_in)||3599)*1000-30000;ui();note('Google Drive collegato. Puoi cercare o salvare i backup.');void refreshFiles()},
-    error_callback:e=>{clearTimeout(oauthTimer);note('Autorizzazione non riuscita: '+String(e?.type||'finestra chiusa'),true)}
-   });
-   localStorage.setItem(ID_KEY,clientId);
-   tokenClient.requestAccessToken({prompt:'select_account'});
-   note('Completa l’autorizzazione nella finestra Google.');
-   oauthTimer=setTimeout(()=>{if(!access)note('Nessuna autorizzazione ricevuta. Se il popup è bloccato, abilitalo e riprova.',true)},45000);
-  }catch(e){note(e.message,true)}
- });
- disconnect.addEventListener('click',()=>{if(access&&window.google?.accounts?.oauth2?.revoke)try{window.google.accounts.oauth2.revoke(access,()=>{})}catch(_){}access='';expires=0;tokenClient=null;files=[];list.replaceChildren();ui();note('Google Drive disconnesso. Nessun file eliminato.')});
- const check=()=>{if(!access||Date.now()>=expires){access='';ui();throw Error('Sessione Google scaduta: premi Collega Google Drive.')}return access};
- async function api(url,options={}){
-  const headers={Authorization:'Bearer '+check(),...(options.headers||{})};
-  let response;try{response=await fetch(url,{...options,headers})}catch(_){throw Error('Google Drive non raggiungibile dal browser. Controlla la connessione.')}
-  if(!response.ok){let err={};try{err=await response.json()}catch(_){}if(response.status===401){access='';ui()}throw Error(err.error?.message||('Google Drive: errore '+response.status))}
-  if(options.raw)return response;
-  return response.json();
- }
- function safeName(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
- function renderList(){
-  list.replaceChildren();if(!files.length){list.textContent='Nessun backup Finholdra trovato in questo account Google.';return}
-  const t=document.createElement('p');t.className='sub';t.textContent=files.length+' backup sul tuo Drive';list.appendChild(t);
-  for(const f of files){
-   const row=document.createElement('div');row.className='fh-cloud-file';
-   const meta=document.createElement('div');meta.style.minWidth='0';meta.innerHTML='<strong>'+safeName(f.name)+'</strong><small>'+safeName(fmtDate(f.modifiedTime))+' · '+(Math.round((+f.size||0)/1024))+' KB</small>';
-   const open=document.createElement('button');open.type='button';open.className='btn';open.textContent='Carica';open.addEventListener('click',()=>void downloadFile(f));
-   const use=document.createElement('button');use.type='button';use.className='btn';use.textContent='Seleziona';use.title='Imposta questa copia come destinazione dei prossimi salvataggi';use.addEventListener('click',()=>{setBinding({id:f.id,modifiedTime:f.modifiedTime,name:f.name});note('Destinazione selezionata: '+f.name+'. Prima di sovrascrivere, importa il backup se questo dispositivo non è aggiornato.')});
-   row.append(meta,open,use);list.appendChild(row);
-  }
- }
- async function refreshFiles(){
-  if(busy)return;busy=true;try{
-   let token='',found=[];do{
-    const params=new URLSearchParams({q:"name contains 'Finholdra - ' and trashed = false",fields:'nextPageToken,files(id,name,modifiedTime,mimeType,md5Checksum,size)',pageSize:'100',orderBy:'modifiedTime desc'});
-    if(token)params.set('pageToken',token);
-    const data=await api(API+'?'+params.toString());found.push(...(data.files||[]));token=data.nextPageToken||'';
-   }while(token&&found.length<500);
-   files=found.filter(f=>f.name.startsWith('Finholdra - ')&&f.name.endsWith('.json')&&f.mimeType==='application/json');renderList();
-   note('Elenco aggiornato: '+files.length+' backup disponibile/i.');
-  }catch(e){note(e.message,true)}finally{busy=false}
- }
- find.addEventListener('click',()=>void refreshFiles());
- function validate(data){if(!data||!Array.isArray(data.assets)||!Array.isArray(data.trades)||!Array.isArray(data.snapshots))throw Error('Il file non è un backup Finholdra valido.');return data}
- async function downloadFile(f){
-  if(busy)return;
-  if(!confirm('Caricare «'+f.name+'»? Il portafoglio locale sarà sostituito dal backup Google Drive. Scarica prima un JSON locale se vuoi conservare una copia.'))return;
-  busy=true;note('Caricamento da Drive in corso…');
-  try{
-   const r=await api(API+'/'+encodeURIComponent(f.id)+'?alt=media',{raw:true});
-   const raw=await r.text();if(raw.length>25*1024*1024)throw Error('Backup oltre 25 MB.');const data=validate(JSON.parse(raw));
-   // Import only after full JSON validation: keep local portfolio intact on network/parsing errors.
-   applyPortableBundle(data);
-   setBinding({id:f.id,modifiedTime:f.modifiedTime,name:f.name});
-   note('Backup importato: '+data.assets.length+' strumenti, '+data.trades.length+' transazioni. Ora questo dispositivo usa la copia selezionata.');
-  }catch(e){note('Importazione non riuscita: '+e.message,true)}finally{busy=false}
- }
- function multipart(metadata,content){
-  const boundary='finholdra_'+Math.random().toString(36).slice(2);
-  const body=new Blob(['--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n',JSON.stringify(metadata),'\r\n--'+boundary+'\r\nContent-Type: application/json\r\n\r\n',content,'\r\n--'+boundary+'--'],{type:'multipart/related; boundary='+boundary});
-  return {boundary,body};
- }
- async function saveCloud(){
-  if(busy)return;let content,bundle;
-  try{bundle=makePortableBundle();content=JSON.stringify(bundle);if(content.length>20*1024*1024)throw Error('Backup troppo grande (oltre 20 MB).')}catch(e){note(e.message,true);return}
-  const current=savedBinding(),name='Finholdra - '+profile()+'.json';
-  if(!confirm('Salvare '+bundle.assets.length+' strumenti e '+bundle.trades.length+' transazioni su Google Drive? Il file contiene i tuoi dati finanziari in JSON non cifrato.'))return;
-  busy=true;note('Salvataggio su Google Drive in corso…');
-  try{
-   let result;
-   if(current?.id){
-    // Optimistic concurrency: if another device has modified the file, never overwrite silently.
-    let remote;try{remote=await api(API+'/'+encodeURIComponent(current.id)+'?fields=id,name,modifiedTime,mimeType,trashed')}catch(e){if(/404|not found/i.test(e.message))remote=null;else throw e}
-    if(remote?.trashed)remote=null;
-    if(remote&&current.modifiedTime&&remote.modifiedTime!==current.modifiedTime){
-     if(!confirm('Il backup su Drive è stato modificato da un altro dispositivo ('+fmtDate(remote.modifiedTime)+'). Per proteggere le modifiche, creerò una NUOVA copia anziché sovrascriverlo. Continuare?'))return;
-     remote=null;
-    }
-    if(remote){result=await api(UPLOAD+'/'+encodeURIComponent(current.id)+'?uploadType=media&fields=id,name,modifiedTime,mimeType,size',{method:'PATCH',headers:{'Content-Type':'application/json'},body:content});result.name=remote.name}
-   }
-   if(!result){const data=multipart({name,mimeType:'application/json'},content);
-    result=await api(UPLOAD+'?uploadType=multipart&fields=id,name,modifiedTime,mimeType,size',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+data.boundary},body:data.body});}
-   if(!result.id)throw Error('Drive non ha restituito l’ID del file.');
-   setBinding({id:result.id,modifiedTime:result.modifiedTime,name:result.name||name});
-   note('Backup salvato su Google Drive · '+fmtDate(result.modifiedTime)+'.');
-  }catch(e){note('Salvataggio non riuscito: '+e.message,true)}finally{busy=false}
- }
- save.addEventListener('click',()=>void saveCloud());
- const style=document.createElement('style');style.textContent=`
- .fh-cloud-card .fh-cloud-file{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 0;border-top:1px solid rgba(120,160,194,.20)}
- .fh-cloud-card .fh-cloud-file>div{flex:1 1 170px;overflow-wrap:anywhere;display:grid;gap:3px}
- .fh-cloud-card .fh-cloud-file strong{font-size:13px}.fh-cloud-card .fh-cloud-file small{font-size:11px;color:var(--muted)}
- .fh-cloud-card .fh-cloud-file .btn{white-space:nowrap}.fh-cloud-card .fh-cloud-list{margin-top:10px}
- .fh-cloud-card #fhGoogleClientId{width:100%;min-width:0;font-size:13px}
- .fh-cloud-card .actions{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0}
- .fh-cloud-card .actions .btn{flex:1 1 150px}
- `;document.head.appendChild(style);ui();
+const scope='https://www.googleapis.com/auth/drive.appdata',api='https://www.googleapis.com/drive/v3/files',upload='https://www.googleapis.com/upload/drive/v3/files';
+let token='',expiry=0,busy=false,client=null,ready=false,activeStatus=null;
+const $=id=>document.getElementById(id),gate=$('accountGate')?.querySelector('.account-panel');
+const note=(el,text)=>{if(el)el.textContent=text};
+const script=document.createElement('script');script.src='https://accounts.google.com/gsi/client';script.async=true;script.onload=()=>{ready=true};document.head.appendChild(script);
+async function request(url,opts={}){if(!token||Date.now()>=expiry)throw Error('Sessione Google scaduta. Riprova.');const r=await fetch(url,{...opts,signal:AbortSignal.timeout(30000),headers:{Authorization:'Bearer '+token,...opts.headers}});if(!r.ok){if(r.status===401){token='';expiry=0}throw Error('Google Drive: '+r.status+' '+(await r.json().catch(()=>({}))).error?.message)}return r;}
+async function find(){let files=[],page='';do{const q=new URLSearchParams({spaces:'appDataFolder',q:"name contains 'Finholdra - ' and trashed = false",fields:'nextPageToken,files(id,name,modifiedTime,size)',orderBy:'modifiedTime desc',pageSize:'100'});if(page)q.set('pageToken',page);const j=await (await request(api+'?'+q)).json();files.push(...(j.files||[]));page=j.nextPageToken||''}while(page);return files;}
+function authorize(status,work){if(busy)return;activeStatus=status;if(!ready&&!window.google?.accounts?.oauth2){note(status,'Google non ancora disponibile: controlla la connessione e riprova.');return}busy=true;note(status,'Seleziona il tuo account Google…');const finish=async()=>{try{await work()}catch(e){note(status,'Operazione non riuscita: '+e.message)}finally{busy=false}};try{client=google.accounts.oauth2.initTokenClient({client_id:window.FINHOLDRA_GOOGLE_CLIENT_ID,scope,include_granted_scopes:false,callback:r=>{if(!r.access_token||!google.accounts.oauth2.hasGrantedAllScopes(r,scope)){busy=false;note(status,'Autorizzazione a Google Drive non concessa.');return}token=r.access_token;expiry=Date.now()+Number(r.expires_in||3600)*1000-30000;void finish()},error_callback:e=>{busy=false;note(status,'Accesso Google interrotto: '+(e.type||'riprova'))}});client.requestAccessToken({prompt:'select_account'});}catch(e){busy=false;note(status,e.message)}}
+function date(v){return new Date(v).toLocaleString('it-IT')}
+async function restore(f,status,targetId){if(busy)return;busy=true;try{if(!confirm('Ripristinare '+f.name+' del '+date(f.modifiedTime)+'?'))return;note(status,'Scaricamento backup…');if(Number(f.size)>40*1024*1024)throw Error('Backup oltre 40 MB.');const blob=await(await request(api+'/'+encodeURIComponent(f.id)+'?alt=media')).blob();if(blob.size>40*1024*1024)throw Error('Backup oltre 40 MB.');await window.finholdraRestoreLoginFile(new File([blob],f.name,{type:'application/json'}),targetId);note(status,'Ripristino terminato. Se non si è aperta la Home, controlla il messaggio di importazione.');}catch(e){note(status,e.message)}finally{busy=false}}
+async function list(status,box,targetId){const files=await find();box.replaceChildren();note(status,files.length?files.length+' backup disponibili':'Nessun backup trovato su questo account Google.');for(const f of files){const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=f.name+' · '+date(f.modifiedTime);b.onclick=()=>restore(f,status,targetId);box.append(b)}}
+async function save(status){const bridge=window.FINHOLDRA_CLOUD_BRIDGE;if(!bridge?.accountId())throw Error('Accedi al profilo prima di salvare.');const bundle=bridge.exportBundle(),content=JSON.stringify(bundle);if(new Blob([content]).size>40*1024*1024)throw Error('Backup oltre 40 MB.');const name='Finholdra - '+bridge.profileName().replace(/[\\/]/g,'-')+'.json';const files=await find(),old=files.find(f=>f.name===name);if(!confirm(old?'Esiste un backup del '+date(old.modifiedTime)+'. Sostituirlo con i dati di questo dispositivo?':'Salvare il portafoglio nel tuo Google Drive privato?')){note(status,'Salvataggio annullato.');return}let r;if(old){r=await request(upload+'/'+encodeURIComponent(old.id)+'?uploadType=media&fields=id,modifiedTime',{method:'PATCH',headers:{'Content-Type':'application/json'},body:content})}else{const boundary='fh_'+crypto.randomUUID();const body=new Blob(['--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n',JSON.stringify({name,mimeType:'application/json',parents:['appDataFolder']}),'\r\n--'+boundary+'\r\nContent-Type: application/json\r\n\r\n',content,'\r\n--'+boundary+'--\r\n']);r=await request(upload+'?uploadType=multipart&fields=id,modifiedTime',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+boundary},body})}const result=await r.json();if(!result.id)throw Error('Salvataggio non confermato da Google.');note(status,'Backup salvato · '+date(result.modifiedTime||Date.now()));try{localStorage.setItem('fh_drive_last_'+bridge.accountId(),result.modifiedTime||new Date().toISOString())}catch(_){}}
+if(gate){const section=document.createElement('section');section.className='fh103-transfer';section.innerHTML='<h2>Backup Google Drive</h2><button type="button" class="account-primary" id="fhDriveLogin">Ripristina da Google Drive</button><p class="hint" id="fhDriveLoginStatus" role="status"></p><div class="actions" id="fhDriveLoginList"></div>';gate.insertBefore(section,gate.querySelector('.account-error'));$('fhDriveLogin').onclick=()=>authorize($('fhDriveLoginStatus'),()=>list($('fhDriveLoginStatus'),$('fhDriveLoginList')));}
+function setup(){const root=$('finholdraCloudSync');if(!root||root.dataset.fh106)return;root.dataset.fh106='1';root.innerHTML='<h2>Backup Google Drive</h2><p class="hint">Salva e ripristina il JSON nello spazio privato Finholdra del tuo account Google. Nessuna sincronizzazione automatica.</p><div class="actions"><button class="btn primary" id="fhDriveSave" type="button">☁ Salva su Google Drive</button><button class="btn" id="fhDriveRestore" type="button">Ripristina da Google Drive</button></div><p class="hint" id="fhDriveStatus" role="status"></p><div class="actions" id="fhDriveList"></div><p class="foot">Backup locale disponibile qui sotto. Il JSON non è cifrato dall’app.</p>';const status=$('fhDriveStatus');try{const t=localStorage.getItem('fh_drive_last_'+window.INVESQUO_ACCOUNT_ID);if(t)note(status,'Ultimo salvataggio da questo dispositivo: '+date(t))}catch(_){};$('fhDriveSave').onclick=()=>authorize(status,()=>save(status));$('fhDriveRestore').onclick=()=>authorize(status,()=>list(status,$('fhDriveList'),window.INVESQUO_ACCOUNT_ID));}
+setup();document.addEventListener('DOMContentLoaded',setup,{once:true});setTimeout(setup,700);
 })();
