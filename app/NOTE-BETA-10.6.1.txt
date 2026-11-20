@@ -1,0 +1,1 @@
+Accesso con Google Drive visibile in entrambe le schede iniziali. Recupera i backup privati tramite il flusso OAuth già configurato in 10.6.0. Il login locale e da JSON sono invariati.
