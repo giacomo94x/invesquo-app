@@ -1,0 +1,5 @@
+Finholdra Beta 10.9.3
+- Finn City: corretto ID pulsante ftaRide -> ftaInteract che causava crash in status() e impediva il rendering.
+- SVG renderer indipendente per mappa e minimappa iPhone; test sintetico browser con contenuti grafici verificati.
+- Dashboard: Patrimonio e Capitale/Valore a schermo intero orizzontale, con zoom e confronto A/B per Patrimonio.
+- Restano le correzioni FinnSolid 15-16 della Beta 10.9.2.

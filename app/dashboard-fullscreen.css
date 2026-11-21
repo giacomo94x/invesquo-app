@@ -1,0 +1,23 @@
+/* Dashboard full-screen charts: same 90-degree portrait rotation used by Investments. */
+.fh1093-expand{display:block;margin:8px 0 10px auto;background:#315b9c!important;color:#fff!important;border:1px solid #789fe8!important;font-weight:750}
+.fh1093-modal-open{overflow:hidden!important}
+#fhWealthFullscreen{display:none;position:fixed;inset:0;z-index:2147483100;background:#071629;color:#f0f7ff;overflow:hidden}
+#fhWealthFullscreen.open{display:block}
+#fhWealthFullscreen .fh1093-landscape{position:relative;display:flex;flex-direction:column;gap:6px;width:100%;height:100%;padding:max(8px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));box-sizing:border-box}
+#fhWealthFullscreen header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none}#fhWealthFullscreen header strong{font-size:15px}
+#fhWealthFullscreen header button,#fhWealthFullscreen .fh1093-tools button{color:white;background:#21476b;border:1px solid #7294b2;border-radius:9px;padding:8px 12px;font-weight:700}
+#fhWealthFullscreen .fh1093-plot{flex:1;min-height:0;min-width:0;overflow:hidden;display:flex;justify-content:center;align-items:center;background:#0b2238;border:1px solid #385773;border-radius:12px;touch-action:none}
+#fhWealthFullscreen .fh1093-full-svg{width:100%!important;height:100%!important;max-height:none!important;max-width:none!important;display:block;overflow:visible;touch-action:none}
+#fhWealthFullscreen .fh1093-readout{flex:none;text-align:center;min-height:22px;font-size:12px;color:#bce6d6}
+#fhWealthFullscreen .fh1093-tools{display:flex;gap:8px;justify-content:center;flex:none}#fhWealthFullscreen .fh1093-tools .selected{background:#277e6f!important}
+@media(max-width:767px) and (orientation:portrait){#fhWealthFullscreen .fh1093-landscape{position:absolute;left:100dvw;top:0;width:100dvh;height:100dvw;transform:rotate(90deg);transform-origin:top left;padding:6px max(8px,env(safe-area-inset-bottom)) 6px max(8px,env(safe-area-inset-top))}}
+/* Capital/value existing dialog, now truly immersive and landscape on iPhone. */
+#fhHomeCapitalOverlay.open{position:fixed!important;inset:0!important;padding:0!important;overflow:hidden!important;display:block!important;background:#071629!important;z-index:2147483101!important}
+#fhHomeCapitalOverlay .fh1084-capital-dialog{position:relative!important;width:100%!important;height:100%!important;max-height:none!important;max-width:none!important;box-sizing:border-box!important;border:0!important;border-radius:0!important;display:flex!important;flex-direction:column!important;gap:6px!important;overflow:hidden!important;padding:12px!important}
+#fhHomeCapitalOverlay .fh1084-capital-dialog-head{flex:0 0 auto!important;margin:0!important}
+#fhHomeCapitalOverlay .fh1084-capital-dialog-head strong{font-size:clamp(12px,2.3vw,18px)!important}
+#fhHomeCapitalFullPlot{flex:1 1 auto!important;min-height:0!important;min-width:0!important;display:flex!important;align-items:stretch!important;justify-content:center!important;overflow:hidden!important}
+#fhHomeCapitalFullPlot .fh1084-capital-svg{width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;object-fit:fill!important;touch-action:none!important}
+#fhHomeCapitalOverlay .fh1084-capital-readout{min-height:38px!important;margin:0!important;flex:0 0 auto!important;font-size:12px!important}
+#fhHomeCapitalOverlay .fh1084-capital-legend{flex:0 0 auto!important;margin:0!important}
+@media(max-width:767px) and (orientation:portrait){#fhHomeCapitalOverlay .fh1084-capital-dialog{position:absolute!important;left:100dvw!important;top:0!important;width:100dvh!important;height:100dvw!important;transform-origin:top left!important;transform:rotate(90deg)!important;padding:6px 12px!important}#fhHomeCapitalOverlay .fh1084-capital-dialog-head strong{font-size:12px!important}}

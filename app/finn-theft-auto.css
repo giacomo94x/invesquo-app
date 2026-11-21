@@ -38,3 +38,10 @@
 #finnTheftAuto .fta-overmap,#finnTheftAuto .fta-message,#finnTheftAuto .fta-street{z-index:2}
 #finnTheftAuto .fta-overmap{overflow:hidden}
 #finnTheftAuto #ftaMini{display:block!important;opacity:1!important;visibility:visible!important}
+
+/* 10.9.3: independent visible SVG scene, including the minimap. */
+#finnTheftAuto #ftaCitySvg{position:absolute!important;inset:0;width:100%!important;height:100%!important;display:block!important;z-index:1!important;opacity:1!important;pointer-events:none;overflow:hidden;background:#344958}
+#finnTheftAuto #ftaMiniSvg{position:absolute;inset:3px;width:calc(100% - 6px);height:calc(100% - 6px);display:block!important;z-index:3;pointer-events:none}
+#finnTheftAuto .fta-overmap{width:min(115px,25vw);height:min(115px,25vw)}
+#finnTheftAuto .fta-overmap #ftaMini{opacity:0!important}
+#finnTheftAuto .fta-overmap,#finnTheftAuto .fta-message,#finnTheftAuto .fta-street{z-index:4}
