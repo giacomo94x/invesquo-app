@@ -2071,7 +2071,7 @@ body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.1</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.4</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -3356,6 +3356,8 @@ function donutArcPath(cx,cy,outer,inner,startDeg,endDeg){
  const a=point(outer,startDeg),b=point(outer,endDeg),c=point(inner,endDeg),d=point(inner,startDeg),large=endDeg-startDeg>180?1:0;
  return `M ${a[0].toFixed(3)} ${a[1].toFixed(3)} A ${outer} ${outer} 0 ${large} 1 ${b[0].toFixed(3)} ${b[1].toFixed(3)} L ${c[0].toFixed(3)} ${c[1].toFixed(3)} A ${inner} ${inner} 0 ${large} 0 ${d[0].toFixed(3)} ${d[1].toFixed(3)} Z`;
 }
+function donutOutlineColor(){const tone=finnHomeTone();return tone==='weekend'?'#6f6020':tone==='up'?'#1d6d57':tone==='down'?'#7a3241':'#203f63';}
+function applyDonutOutline(){const donut=$('donut');if(!donut)return;const col=donutOutlineColor();donut.style.boxShadow='0 0 0 6px '+col;donut.style.border='0';}
 function renderInteractiveDonut(full,den){
  const donut=$('donut');if(!donut)return;
  let offset=0;
@@ -3366,7 +3368,7 @@ function renderInteractiveDonut(full,den){
   return `<path class="donut-slice${selected?' is-selected':''}" d="${donutArcPath(130,130,selected?128:125,63,from,Math.min(to,359.99999))}" fill="${g.color}" stroke="none" stroke-width="0"/>`;
  });
  let svg=donut.querySelector('.donut-slices');if(!svg){svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 260 260');svg.setAttribute('class','donut-slices');svg.setAttribute('aria-hidden','true');donut.insertBefore(svg,donut.firstChild)}
- svg.innerHTML=slices.join('');donut.style.setProperty('--donut-rotation',donutRotationDeg+'deg');
+ svg.innerHTML=slices.join('');donut.style.setProperty('--donut-rotation',donutRotationDeg+'deg');applyDonutOutline();
 }
 function donutCategoryAt(clientX,clientY){
  const rect=$('donut').getBoundingClientRect(),dx=clientX-(rect.left+rect.width/2),dy=clientY-(rect.top+rect.height/2),radius=Math.min(rect.width,rect.height)/2,dist=Math.hypot(dx,dy);
@@ -3983,8 +3985,14 @@ let wealthRange='30';
 let wealthSelectedDate=null;
 function wealthSeriesForCurrentFilters(){
  const {cats,records,start}=fh102CalendarSeries();
- // Missing a single held title invalidates that day's whole-portfolio total.
- return {cats,records:records.filter(p=>p.valid),start,allRecords:records};
+ const filled=[];let lastValid=null;
+ for(const rec of records){
+  if(rec.valid){lastValid={...rec};filled.push(rec);continue;}
+  if(lastValid&&rec.held>0){
+   filled.push({...rec,value:lastValid.value,valid:true,estimated:true,provisional:(Number(rec.provisional)||0)+1,filledFrom:lastValid.date,missing:rec.missing||[]});
+  }
+ }
+ return {cats,records:filled,start,allRecords:records};
 }
 function renderWealthGraph(){
  try{window.renderHomeCapitalChart?.()}catch(err){console.warn('Grafico capitale / valore:',err)}
@@ -5761,7 +5769,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.1';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.4';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -6895,17 +6903,20 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
 #finnSolid .fs-overlay h2{margin:0 0 8px;font-size:23px;color:#a9f1c4}
 #finnSolid .fs-overlay p{font-size:12px;color:#c0d3e3;line-height:1.6}
 #finnSolid .fs-overlay button{background:#19c76d;border:0;color:#082623;border-radius:11px;font-weight:800;padding:12px 20px;min-height:44px}
+#finnSolid .fs-overlay .fs-overlay-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px}
+#finnSolid .fs-overlay .fs-overlay-actions button{min-width:148px}
+#finnSolid #fsNew{background:#173854;color:#eef7ff;border:1px solid #4f89a4}
 @media(max-width:380px){#finnSolid .fs-dpad{grid-template-columns:repeat(3,58px);grid-template-rows:repeat(2,54px)}#finnSolid .fs-action-row button{min-width:98px;min-height:46px}}
 </style>
 <div id="finnGamePicker" role="dialog" aria-modal="true" aria-label="Scegli il gioco di Finn"><div class="fgp-panel">
  <h2>Finn</h2><p>Scegli un gioco.</p>
- <div class="fgp-options"><button type="button" id="fgpAstro"><span class="ico">🚀</span><strong>AstroFinn</strong><small>Arcade spaziale.</small></button><button type="button" id="fgpSolid"><span class="ico">🕵️</span><strong>FinnSolid</strong><small>16 missioni · fuga sulla neve.</small></button><button type="button" id="fgpPong"><span class="ico">🏓</span><strong>FinnPong</strong><small>Sfida arcade.</small></button><button type="button" id="fgpTheftAuto"><span class="ico">🚗</span><strong>FinnTheftAuto</strong><small>Finn City · free roaming finanziario.</small></button></div>
+ <div class="fgp-options"><button type="button" id="fgpAstro"><span class="ico">🚀</span><strong>AstroFinn</strong><small>Arcade spaziale.</small></button><button type="button" id="fgpSolid"><span class="ico">🕵️</span><strong>FinnSolid</strong><small>16 missioni · fuga sulla neve.</small></button><button type="button" id="fgpPong"><span class="ico">🏓</span><strong>FinnPong</strong><small>Sfida arcade.</small></button><button type="button" id="fgpTheftAuto"><span class="ico">🚗</span><strong>Finn City</strong><small>Mondo aperto top-down · free roaming finanziario.</small></button></div>
  <button type="button" class="fgp-close" id="fgpClose">Annulla</button>
 </div></div>
 <div id="finnSolid" role="dialog" aria-modal="true" aria-label="FinnSolid: infiltrazione">
  <div class="fs-header"><div><strong id="fsLevel">FINNSOLID · DEPOSITO 01</strong><small id="fsMission">Missione: raggiungi l’ascensore senza essere visto</small></div><button type="button" class="fs-exit" id="fsClose">✕ Esci</button></div>
  <div class="fs-difficulty-bar"><label for="fsDifficulty">Difficoltà</label><select id="fsDifficulty" aria-label="Difficoltà FinnSolid"><option value="easy">Facile · energia progressiva</option><option value="hard">Difficile · avvistamento fatale</option></select></div><div class="fs-stats"><button type="button" id="fsAlert" class="fs-briefing-trigger" title="Rileggi il briefing della missione" aria-label="Radar: rileggi il messaggio iniziale della missione">📡 NON INDIVIDUATO</button><span id="fsTime">00:00</span><span id="fsRecord">Migliore —</span><span id="fsAmmo">🕵️ Stealth</span></div>
- <div class="fs-world" id="fsWorld"><canvas id="fsCanvas" aria-label="Area vista dall'alto con coni visivi delle guardie"></canvas><div class="fs-overlay" id="fsOverlay"><h2>FINNSOLID</h2><p>16 missioni stealth, duelli, codec e fuga finale sulla neve. La campagna salva automaticamente il livello sbloccato.</p><button type="button" id="fsStart">Infiltrati</button></div></div>
+ <div class="fs-world" id="fsWorld"><canvas id="fsCanvas" aria-label="Area vista dall'alto con coni visivi delle guardie"></canvas><div class="fs-overlay" id="fsOverlay"><h2>FINNSOLID</h2><p>16 missioni stealth, duelli, codec e fuga finale sulla neve. La campagna salva automaticamente il livello sbloccato.</p><div class="fs-overlay-actions"><button type="button" id="fsStart">Continua</button><button type="button" id="fsNew">Nuova partita</button></div></div></div>
  <div class="fs-pad"><div class="fs-controls"><div class="fs-dpad" aria-label="Direzione Finn"><span></span><button type="button" data-fs-dir="up" aria-label="Su">▲</button><span></span><button type="button" data-fs-dir="left" aria-label="Sinistra">◀</button><button type="button" data-fs-dir="down" aria-label="Giù">▼</button><button type="button" data-fs-dir="right" aria-label="Destra">▶</button></div><div class="fs-inventory" aria-label="Oggetti raccolti"><button type="button" id="fsBox" aria-label="Usa scatolone" title="Scatolone (non è un fumogeno)" style="display:none">📦<small id="fsBoxLabel">0</small></button><button type="button" id="fsGadget" title="Usa impulso EMP" style="display:none" data-kind="emp">⚡<small>EMP 0</small></button><button type="button" id="fsSmoke" title="Lancia fumogeno" style="display:none" data-kind="smoke">🌫️<small>FUMO 0</small></button><button type="button" id="fsDecoy" title="Attiva esca sonora" style="display:none" data-kind="decoy">🔔<small>ESCA 0</small></button><div class="fs-grenade" id="fsGrenade" aria-live="polite" style="display:none">💣<small id="fsGrenadeQty">0</small></div><div class="fs-ammo-count" id="fsAmmoCount">🔫 0</div></div><div class="fs-fire-col"><button type="button" id="fsFire" aria-label="Spara un colpo" title="Spara">🎯<small id="fsFireText">FUOCO</small></button></div></div><div class="fs-help">🟥 sentinelle · 🟧 telecamere · 🎯 fuoco · 📦 scatolone · ⚡ EMP · 🌫️ fumo · 🔔 esca · G gadget</div></div>
 </div>
 <style id="fh1072-finnsolid-fixes">
@@ -6972,7 +6983,7 @@ function resize(){const b=stage.getBoundingClientRect(),dpr=Math.min(2,window.de
 function scoreboard(){ $('fsTime').textContent=timeText(elapsed);$('fsRecord').textContent='Migliore '+(best[level]?timeText(best[level]):'—');const s=$('fsAmmo');if(s){if(level===1)s.textContent=fsDifficulty==='easy'?'❤️ '+playerHP+'/5 · Stealth':'🕵️ Stealth';else if(level===7)s.textContent=`❤️ ${playerHP}/5 · ⚔️ Profit Specter ${bossHP}/8 · 🔫 ${ammo}`;else if(level===8)s.textContent=`❤️ ${playerHP}/5 · 🐻 Cava · 🔫 ${ammo}`;else if(level>=9)s.textContent=`❤️ ${playerHP}/5 · 🔫 ${ammo} · ${config().boss?('⚔️ '+bossHP+'/'+config().bossMaxHP+' · '):''}🎯 ${(config().requires||[]).filter(x=>objectives.has(x)).length}/${(config().requires||[]).length}`;else if(level===6)s.textContent=powerOff?'✅ Corrente OFF':(bazooka?'🚀 Missile guidato':'⚡ Pavimento attivo');else s.textContent=`🔫 ${ammo} · 📦 ${boxCharges}`+(invisibleFor>0?` · ${invisibleFor.toFixed(1)}s`:'');}const fire=$('fsFire'),box=$('fsBox');if(fire){fire.style.display=level===1?'none':'inline-flex';fire.disabled=!running||(level===6?(!bazooka||!!guidedMissile):(level===5?(ammo<=0&&grenades<=0):ammo<=0));fire.setAttribute('aria-disabled',String(fire.disabled));$('fsFireText').textContent=level===6?'MISSILE':level===5&&grenades>0?'GRANATA':'FUOCO';}if(box){box.style.display=level>=3?'inline-flex':'none';box.disabled=!running||boxCharges<=0||invisibleFor>0;$('fsBoxLabel').textContent=String(boxCharges);}const inv=$('fsGrenade');if(inv){inv.style.display=level===5?'flex':'none';$('fsGrenadeQty').textContent=String(grenades)}$('fsAmmoCount').textContent=level===6?(bazooka?'🚀 1':'🚀 0'):'🔫 '+ammo;const allyBtn=$('fsAlly');if(allyBtn){allyBtn.style.display=miraAlly?'inline-flex':'none';allyBtn.disabled=!running||!miraAlly||miraSupportUsed;allyBtn.innerHTML='🎧<small>'+(!miraAlly?'MIRA':miraSupportUsed?'AIUTO USATO':'CHIAMA MIRA')+'</small>';} for(const [kind,buttonId,label,icon] of [['emp','fsGadget','EMP','⚡'],['smoke','fsSmoke','FUMO','🌫️'],['decoy','fsDecoy','ESCA','🔔']]){const g=$(buttonId);if(!g)continue;const quantity=Math.max(0,gadgets[kind]||0);g.style.display=level>=9&&quantity>0?'flex':'none';g.dataset.kind=kind;g.disabled=!running||quantity<=0;g.innerHTML='<span aria-hidden="true">'+icon+'</span><small>'+label+' · '+quantity+'</small>';g.setAttribute('aria-label',label+', '+quantity+' disponibili');}}
 function relocatePickups(){const c=config(),cell=20,cols=Math.ceil(W/cell),rows=Math.ceil(H/cell);const walk=(gx,gy)=>{const x=gx*cell+cell/2,y=gy*cell+cell/2;return ![...commonShell,...c.walls].some(b=>collide(x,y,15,b));};const sx=Math.floor(c.start.x/cell),sy=Math.floor(c.start.y/cell),queue=[[sx,sy]],visited=new Set([sx+','+sy]),reachable=[];for(let i=0;i<queue.length;i++){const [x,y]=queue[i];if(!walk(x,y))continue;reachable.push([x*cell+cell/2,y*cell+cell/2]);for(const [dx,dy] of [[0,-1],[0,1],[-1,0],[1,0]]){const xx=x+dx,yy=y+dy,k=xx+','+yy;if(xx>=0&&yy>=0&&xx<cols&&yy<rows&&!visited.has(k)&&walk(xx,yy)){visited.add(k);queue.push([xx,yy])}}}for(const p of pickups){if(!reachable.length)break;const nearest=reachable.reduce((a,b)=>Math.hypot(b[0]-p.x,b[1]-p.y)<Math.hypot(a[0]-p.x,a[1]-p.y)?b:a);p.x=nearest[0];p.y=nearest[1];}}
 function textStatus(t,color='#9debc0'){ $('fsAlert').textContent=t.startsWith('📡')?t:'📡 '+t.replace(/^●\s*/, '');$('fsAlert').style.color=color;}
-function overlay(h,p,b){$('fsOverlay').style.display='block';$('fsOverlay').querySelector('h2').textContent=h;$('fsOverlay').querySelector('p').textContent=p;$('fsStart').textContent=b;}
+function overlay(h,p,b,mode='single'){const panel=$('fsOverlay'),start=$('fsStart'),alt=$('fsNew');panel.style.display='block';panel.querySelector('h2').textContent=h;panel.querySelector('p').textContent=p;start.textContent=mode==='choice'?'Continua':b;if(alt)alt.style.display=mode==='choice'?'inline-flex':'none';}
 function radio(line,seconds=5){talk=line;talkFor=seconds;textStatus('📡 '+line.slice(0,45),'#a7d8ff');}
 function showBriefing(){const msg=config().dialogue||storyBeats[level]||config().subtitle||'Raggiungi il tuo obiettivo.';const old=root.querySelector('#fsBriefingPanel');if(old){old.remove();return;}const panel=document.createElement('div');panel.id='fsBriefingPanel';panel.className='fs-briefing-panel';const header=document.createElement('strong');header.textContent='📡 BRIEFING · '+config().name;const body=document.createElement('p');body.textContent=msg;const sub=document.createElement('p');sub.textContent='OBIETTIVO: '+config().subtitle;const close=document.createElement('button');close.type='button';close.textContent='Chiudi ×';close.addEventListener('click',()=>panel.remove());panel.append(header,body,sub,close);stage.appendChild(panel);}
 $('fsAlert')?.addEventListener('click',showBriefing);
@@ -6987,8 +6998,8 @@ function reset(levelNumber){root.querySelector('#fsCodecScene')?.remove();root.q
  guards=c.patrols.map(p=>({...p,x:p.path[0][0],y:p.path[0][1],idx:1,face:-Math.PI/2,current:-Math.PI/2,disabled:0}));
  cameras=c.cameras.map(q=>({...q,disabled:0,current:q.face}));
  $('fsLevel').textContent=`FINNSOLID · ${c.name}`;$('fsMission').textContent=c.subtitle;root.dataset.level=String(level);textStatus('● NON INDIVIDUATO');scoreboard();}
-function setGameOpen(){previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';open=true;running=false;root.classList.add('is-open');reset(unlocked);resize();root.dataset.next=String(unlocked);overlay('FINNSOLID · CAMPAGNA COMPLETA',`16 missioni, dal radar alla fuga nella neve. Livello sbloccato: ${unlocked}/${CAMPAIGN_LAST}. Salvataggio automatico dei progressi.
-${config().dialogue||storyBeats[unlocked]||''}`,unlocked>1?'Continua la campagna':'Infiltrati');render();}
+function setGameOpen(){previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';open=true;running=false;root.classList.add('is-open');reset(unlocked);resize();root.dataset.next=String(unlocked);overlay('FINNSOLID · CAMPAGNA COMPLETA',`16 missioni, dal radar alla fuga nella neve. Livello sbloccato: ${unlocked}/${CAMPAIGN_LAST}. Vuoi continuare la campagna dal livello disponibile o iniziare una nuova partita dal livello 1?
+${config().dialogue||storyBeats[unlocked]||''}`,unlocked>1?'Continua la campagna':'Continua','choice');render();}
 function leave(){open=false;running=false;cancelAnimationFrame(raf);keys.clear();drag=null;root.classList.remove('is-open');document.body.style.overflow=previousOverflow;window.__finnArcadeLongHold=false;}
 function pickerOpen(){if(open)return;previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';picker.classList.add('is-open');window.__finnArcadeLongHold=true;}
 function pickerClose(){picker.classList.remove('is-open');document.body.style.overflow=previousOverflow;setTimeout(()=>{window.__finnArcadeLongHold=false},60);}
@@ -6997,7 +7008,7 @@ $('fgpAstro').addEventListener('click',()=>{pickerClose();window.finholdraOpenAr
 const codecLines={
  1:['NEXUS','Finn, sei vicino al deposito. Procedi con cautela: la prima guardia controlla il corridoio.','FINN','Ricevuto. Prima osservo le ronde, poi raggiungo l’ascensore.'],
  2:['NEXUS','L’eliporto è sorvegliato. Sfrutta le coperture e non attraversare i fasci dei sensori.','FINN','Passerò dietro le casse. Nessuno mi vedrà arrivare.'],
- 3:['NEXUS','Questa zona è piena di telecamere. Lo scatolone può aiutarti a nasconderti.','FINN','Perfetto. Ma tengo il fumo separato dall’equipaggiamento di copertura.'],
+ 3:['NEXUS','Questa zona è piena di telecamere. Lo scatolone può aiutarti a nasconderti.','FINN','Perfetto. Userò la copertura mobile per passare senza farmi notare.'],
  4:['NEXUS','C’è un tiratore esperto nei pressi dell’uscita. Non restare fermo sulla sua linea di tiro.','FINN','Mi muovo da una copertura all’altra. Non avrà un bersaglio facile.'],
  5:['NEXUS','Il canyon è presidiato. Una granata può aprire il passaggio, ma attirerà attenzione.','FINN','Userò il minimo indispensabile. Il silenzio vale più delle munizioni.'],
  6:['NEXUS','Il pavimento è elettrificato. Recupera il lanciatore e disattiva il generatore.','FINN','Guiderò il missile fino al pannello di alimentazione.'],
@@ -7027,7 +7038,7 @@ function showCodecBeforeLevel(){
  $('fsWorld').append(host);
 }
 let introBriefingVisible=false;function start(){resize();reset(level);running=true;$('fsOverlay').style.display='none';cancelAnimationFrame(raf);radio(config().dialogue||storyBeats[level]||'FINN: «Procediamo con cautela.»',8);introBriefingVisible=true;raf=requestAnimationFrame(frame);scoreboard();}
-$('fsStart').addEventListener('click',()=>{const next=Number(root.dataset.next);if(Number.isInteger(next)&&next>=1&&next<=CAMPAIGN_LAST)level=next;root.dataset.next='';showCodecBeforeLevel()});
+$('fsStart').addEventListener('click',()=>{const next=Number(root.dataset.next);if(Number.isInteger(next)&&next>=1&&next<=CAMPAIGN_LAST)level=next;root.dataset.next='';showCodecBeforeLevel()});$('fsNew')?.addEventListener('click',()=>{level=1;root.dataset.next='1';showCodecBeforeLevel()});
 function end(win){if(missionFinished)return;missionFinished=true;running=false;cancelAnimationFrame(raf);
  if(win){if(!best[level]||elapsed<best[level]){best[level]=elapsed;try{localStorage.setItem('finholdra_finnsolid_record_v'+level,String(elapsed))}catch(_){}}
   unlocked=Math.max(unlocked,Math.min(CAMPAIGN_LAST,level+1));try{localStorage.setItem('finholdra_finnsolid_unlocked',String(unlocked))}catch(_){}
@@ -7103,7 +7114,7 @@ else if(c.decor==='jeep'){drawSnow();ctx.fillStyle='#41536a';ctx.fillRect(145,0,
  ctx.fillStyle='#fff';ctx.font='bold 15px system-ui';ctx.textAlign='center';ctx.fillText(c.goalLabel,0,-79);if(!(c.requires||[]).every(x=>objectives.has(x))){ctx.strokeStyle='#6decfb';ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,-8,74,0,TAU);ctx.stroke();}ctx.restore();rr(85,96,350,12,5,'#333047');rr(85,96,350*bossHP/c.bossMaxHP,12,5,'#f06f84');ctx.fillStyle='#fff';ctx.font='bold 13px system-ui';ctx.textAlign='center';ctx.fillText('BOSS '+bossHP+'/'+c.bossMaxHP,260,91);}
  if(level===7&&bossAlive){ctx.save();ctx.translate(foxX,foxY);rr(-22,-29,44,61,8,'#536b80');rr(-16,-37,32,29,7,'#b7c7d7');ctx.strokeStyle='#ee465c';ctx.lineWidth=8;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(15,0);ctx.lineTo(52+Math.sin(foxSwing)*13,-80);ctx.stroke();ctx.font='bold 14px Montserrat,system-ui';ctx.textAlign='center';ctx.fillStyle='#ff8b9a';ctx.fillText('PROFIT SPECTER',0,-63);ctx.restore();}
  if(level===7){rr(12,91,155,12,5,'#4d2436');rr(12,91,155*Math.max(0,bossHP)/8,12,5,'#f55d72');rr(353,91,155,12,5,'#254b42');rr(353,91,155*Math.max(0,playerHP)/5,12,5,'#48e1a5');ctx.font='bold 12px system-ui';ctx.textAlign='left';ctx.fillStyle='#fff';ctx.fillText('BOSS '+bossHP+'/8',14,85);ctx.textAlign='right';ctx.fillText('FINN '+playerHP+'/5',506,85)}
- if(level===8||level>=9){rr(16,91,175,12,5,'#362a31');rr(16,91,175*Math.max(0,playerHP)/5,12,5,'#48e1a5');ctx.fillStyle='#fff';ctx.font='bold 11px system-ui';ctx.textAlign='left';ctx.fillText('FINN · VITA '+playerHP+'/5',18,85)}if(noise){ctx.strokeStyle='#edbd60';ctx.lineWidth=3;ctx.beginPath();ctx.arc(noise.x,noise.y,26+Math.sin(elapsed*7)*8,0,TAU);ctx.stroke();}
+ if(level!==7){rr(16,91,175,12,5,'#362a31');rr(16,91,175*Math.max(0,playerHP)/5,12,5,'#48e1a5');ctx.fillStyle='#fff';ctx.font='bold 11px system-ui';ctx.textAlign='left';ctx.fillText('FINN · VITA '+playerHP+'/5',18,85)}if(noise){ctx.strokeStyle='#edbd60';ctx.lineWidth=3;ctx.beginPath();ctx.arc(noise.x,noise.y,26+Math.sin(elapsed*7)*8,0,TAU);ctx.stroke();}
  for(const b of config().walls){rect(b.x+7,b.y+7,b.w,b.h,'#0003');rr(b.x,b.y,b.w,b.h,5,level===1?'#48667d':(level===2?'#5d7587':'#506173'));ctx.strokeStyle=level===2?'#d5e7f2':'#8ea6b8';ctx.lineWidth=2;ctx.strokeRect(b.x+7,b.y+7,b.w-14,b.h-14)}
  drawPickups();if(level===6&&guidedMissile){ctx.save();ctx.fillStyle='#fce48d';ctx.shadowColor='#ffca48';ctx.shadowBlur=14;ctx.beginPath();ctx.arc(guidedMissile.x,guidedMissile.y,9,0,TAU);ctx.fill();ctx.restore();}guards.forEach(g=>cone(g,'rgba(245,89,107,.23)','rgba(244,95,114,.55)'));cameras.forEach(g=>cone(g,'rgba(255,141,74,.19)','rgba(255,162,92,.5)'));
  guards.forEach(g=>{if(level===8){ctx.save();ctx.translate(g.x,g.y);rr(-15,-11,30,26,8,'#e85f71');rr(-13,-17,8,11,3,'#e85f71');rr(5,-17,8,11,3,'#e85f71');ctx.fillStyle='#172435';ctx.fillRect(-9,-3,5,4);ctx.fillRect(4,-3,5,4);ctx.font='bold 13px system-ui';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.fillText('▼',0,15);ctx.restore();return;}rr(g.x-12,g.y-16,24,33,7,g.disabled>0?'#7f8ea5':'#ef5a71');rr(g.x-9,g.y-18,18,11,4,'#e9f2f5');rect(g.x-7,g.y-15,14,4,'#193348');ctx.strokeStyle='#fce6e6';ctx.beginPath();ctx.moveTo(g.x,g.y);ctx.lineTo(g.x+Math.cos(g.face)*14,g.y+Math.sin(g.face)*14);ctx.stroke();if(g.disabled>0){ctx.fillStyle='#f7eb9a';ctx.font='bold 11px system-ui';ctx.fillText('Z',g.x-3,g.y-22)}});
@@ -7833,20 +7844,19 @@ header.top .new-header-brand #finholdraLogo{
 }
 </style>
 <link rel="stylesheet" href="./home-capital-chart.css?v=10.9.1"><script src="./home-capital-chart.js?v=10.9.1"></script>
-<link rel="stylesheet" href="./finn-theft-auto.css?v=10.9.3">
+<link rel="stylesheet" href="./finn-theft-auto.css?v=10.9.4">
 <style id="fh1091-gamepicker-layout">
 /* Four games in two tidy columns even on a phone. */
 #finnGamePicker .fgp-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
 #finnGamePicker .fgp-options button{min-height:122px!important;padding:12px!important}
-#finnGamePicker .fgp-options #fgpTheftAuto{border-color:#64cda7;background:linear-gradient(145deg,#1b4659,#15324f)}
 @media(max-width:360px){#finnGamePicker .fgp-options button{min-height:112px!important;padding:9px!important}}
 </style>
-<div id="finnTheftAuto" role="dialog" aria-modal="true" aria-label="FinnTheftAuto · Finn City" aria-hidden="true">
- <div class="fta-header"><div><strong>FINNTHEFTAUTO</strong><small>Finn City · Un mondo aperto, nessuna missione</small></div><button id="ftaExit" class="fta-exit" type="button">✕ Esci</button></div>
+<div id="finnTheftAuto" role="dialog" aria-modal="true" aria-label="Finn City" aria-hidden="true">
+ <div class="fta-header"><div><strong>FINN CITY</strong><small>Mondo aperto top-down · Finn, NPC e polizia nella city</small></div><button id="ftaExit" class="fta-exit" type="button">✕ Esci</button></div>
  <div class="fta-hud"><span id="ftaHealth" class="fta-heart">♥ 100/100</span><span id="ftaStars" class="fta-stars" aria-label="Livello di ricercato">☆☆☆☆☆</span><span id="ftaCash" class="fta-cash">€ 120 · 🔫 55</span></div>
  <div class="fta-stage"><canvas id="ftaCanvas" aria-label="Mappa dall'alto di Finn City; usa i pulsanti per esplorare"></canvas><div class="fta-overmap"><canvas id="ftaMini" width="224" height="224" aria-label="Minimappa della città"></canvas></div><div id="ftaMessage" class="fta-message" role="status"></div><div id="ftaStreet" class="fta-street">Piazza Affari</div></div>
  <div class="fta-controls"><div class="fta-dpad" aria-label="Movimento"><span></span><button type="button" data-fta-dir="up" aria-label="Vai su">▲</button><span></span><button type="button" data-fta-dir="left" aria-label="Vai a sinistra">◀</button><button type="button" data-fta-dir="down" aria-label="Vai giù">▼</button><button type="button" data-fta-dir="right" aria-label="Vai a destra">▶</button></div><div class="fta-actions"><button type="button" id="ftaInteract"><span>🚙</span>Entra</button><button type="button" id="ftaAttack"><span>👊</span>Colpisci</button><button type="button" id="ftaWeapon"><span>🔄</span>Arma</button><button type="button" id="ftaTips" onclick="document.getElementById('ftaMessage').textContent='PC: WASD / frecce · E veicolo · F attacco · Q arma. Su smartphone usa i pulsanti.';document.getElementById('ftaMessage').classList.add('show')"><span>ℹ️</span>Comandi</button></div></div>
  <div class="fta-footnote">In auto usa le frecce per guidare. I crimini fanno salire le stelle: la polizia ti insegue finché non sfuggi. Free roaming illustrato e originale.</div>
 </div>
-<script src="./finn-theft-auto.js?v=10.9.3"></script>
-<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.3"><script src="./dashboard-fullscreen.js?v=10.9.3"></script></body></html>
+<script src="./finn-theft-auto.js?v=10.9.4"></script>
+<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.4"><script src="./dashboard-fullscreen.js?v=10.9.4"></script></body></html>
