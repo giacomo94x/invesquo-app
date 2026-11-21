@@ -58,3 +58,6 @@
 .fhstats-metric b{font-variant-numeric:tabular-nums}
 .fhstats-ranges{margin:7px 0 16px}
 @media(max-width:520px){.fhstats-overlay{padding:9px}.fhstats-dialog{border-radius:14px}#fhStatsChartBody svg{min-height:235px}.fhstats-grid{gap:7px}.fhstats-metric{padding:10px}}
+
+/* 10.6.12: no blank statistics panel after a history refresh */
+#fh1067StatsView:not(.hidden){min-height:170px}

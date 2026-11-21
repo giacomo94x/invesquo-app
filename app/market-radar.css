@@ -34,10 +34,10 @@ body.fh-home-active[data-favorite-tint="up"] #performanceFace.expression-satisfi
 body.motion-off.fh-home-active #performanceFace,body.motion-off.fh-home-active #performanceFace *{animation:none!important}
 @media(prefers-reduced-motion:reduce){body.fh-home-active #performanceFace,body.fh-home-active #performanceFace *{animation:none!important}}
 
-/* Beta 10.6.8 — weekend resting mode and borderless category rows. */
+/* Beta 10.6.12 — weekend resting mode and borderless category rows. */
 body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"]{
- --bg:#322704!important;--panel:#53400b!important;--panel2:#715719!important;--border:#a8872c!important;
- --muted:#ecdba3!important;--blue:#f6d34d!important;--fh-header-surface:#322704!important;--fh-header-scrolled:#53400b!important;
+ --bg:#473809!important;--panel:#6f5511!important;--panel2:#8b6a17!important;--border:#c49a2b!important;
+ --muted:#ffe8ab!important;--blue:#ffdb38!important;--fh-header-surface:#473809!important;--fh-header-scrolled:#6f5511!important;
  background:var(--bg)!important;
 }
 body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="weekend"]{

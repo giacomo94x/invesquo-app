@@ -1,4 +1,4 @@
-/* Finholdra Beta 10.6.9 · Asset statistics. Read-only; no fabricated quotes. */
+/* Finholdra Beta 10.6.12 · Asset statistics. Read-only; no fabricated quotes. */
 (function(){
  'use strict';
  const root=document.getElementById('fh1067StatsView');if(!root)return;
@@ -114,6 +114,7 @@
   const displayed=all.filter(p=>dayNum(p.date)>=cutoff),first=displayed[0],finish=displayed.at(-1);
   const afterDate=lastContributionDate(events),after=all.filter(p=>!afterDate||p.date>=afterDate).filter(p=>Number.isFinite(p.value)&&p.qty>0);
   const values=after.map(p=>p.value),peak=values.length?Math.max(...values):null,trough=values.length?Math.min(...values):null;
+  const currentDiff=last&&Number.isFinite(last.value)&&Number.isFinite(last.capital)?last.value-last.capital:null;
   const performance=after.map(p=>pctOfPosition(p)).filter(Number.isFinite);
   const maxProfit=performance.length?Math.max(0,...performance):null,maxLoss=performance.length?Math.min(0,...performance):null;
   const gains=after.filter(p=>Number.isFinite(p.capital)).map(p=>p.value-p.capital);
@@ -134,5 +135,5 @@
  }
  root.addEventListener('change',e=>{if(e.target?.id==='fhStatsAsset'){selectedId=e.target.value;renderHistoryStatistics();}});
  root.addEventListener('click',e=>{const spanBtn=e.target.closest('[data-fhstats-span]');if(spanBtn){span=spanBtn.dataset.fhstatsSpan;renderHistoryStatistics();return;}if(e.target.closest('#fhStatsOpenChart'))openChart();});
- window.renderHistoryStatistics=renderHistoryStatistics;
+ window.renderHistoryStatistics=function(){try{renderHistoryStatistics()}catch(err){console.error('Statistiche Finholdra:',err);root.innerHTML='<div class="fhstats-note">Impossibile elaborare le statistiche per questo portafoglio. Controlla le operazioni e le quotazioni archiviate.</div>';}};
 })();
