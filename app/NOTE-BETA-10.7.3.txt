@@ -1,0 +1,2 @@
+Finholdra Beta 10.7.3
+Statistiche: intervalli e ambito massimo/minimo selezionati ora in oro con testo scuro e bordo visibile.

@@ -1,0 +1,1 @@
+Finholdra Beta 10.7.2 - Versione corretta in app; FinnSolid selezione livelli come overlay senza ridimensionare canvas; pulsante radar per rileggere il briefing; icone gadget EMP, fumo ed esca ridisegnate.

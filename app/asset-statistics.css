@@ -61,3 +61,34 @@
 
 /* 10.6.12: no blank statistics panel after a history refresh */
 #fh1067StatsView:not(.hidden){min-height:170px}
+
+
+/* Beta 10.7.4 — clearly visible active filters in Statistics. */
+#fh1067StatsView .fhstats-ranges .btn,
+#fh1067StatsView .fhstats-history-switch .btn{
+  transition:background-color .15s ease,color .15s ease,border-color .15s ease,box-shadow .15s ease;
+  border:1.5px solid var(--border,#47617c)!important;
+  background:var(--panel2,#1b3b60)!important;
+  color:var(--text,#fff)!important;
+  opacity:1!important;
+  box-shadow:none!important;
+}
+#fh1067StatsView .fhstats-ranges .btn.selected,
+#fh1067StatsView .fhstats-ranges .btn[aria-pressed="true"],
+#fh1067StatsView .fhstats-history-switch .btn.selected,
+#fh1067StatsView .fhstats-history-switch .btn[aria-pressed="true"]{
+  background:#efc13e!important;
+  color:#14233c!important;
+  border-color:#ffe184!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.36),0 0 0 1px rgba(239,193,62,.3)!important;
+  font-weight:850!important;
+}
+#fh1067StatsView .fhstats-ranges .btn:focus-visible,
+#fh1067StatsView .fhstats-history-switch .btn:focus-visible{
+  outline:3px solid #ffe184!important;
+  outline-offset:2px;
+}
+#fh1067StatsView .fhstats-history-switch{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0;
+}
+#fh1067StatsView .fhstats-history-switch .btn{min-width:0;white-space:normal;padding:11px 7px!important}
