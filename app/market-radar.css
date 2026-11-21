@@ -36,13 +36,13 @@ body.motion-off.fh-home-active #performanceFace,body.motion-off.fh-home-active #
 
 /* Beta 10.6.8 — weekend resting mode and borderless category rows. */
 body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"]{
- --bg:#241d0e!important;--panel:#352910!important;--panel2:#463619!important;--border:#725a2d!important;
- --muted:#dbcbab!important;--blue:#ebcc7d!important;--fh-header-surface:#241d0e!important;--fh-header-scrolled:#352910!important;
+ --bg:#322704!important;--panel:#53400b!important;--panel2:#715719!important;--border:#a8872c!important;
+ --muted:#ecdba3!important;--blue:#f6d34d!important;--fh-header-surface:#322704!important;--fh-header-scrolled:#53400b!important;
  background:var(--bg)!important;
 }
 body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="weekend"]{
- --bg:#f8efd8!important;--panel:#fff8e9!important;--panel2:#f1dfb5!important;--border:#d7bf83!important;
- --muted:#756342!important;--blue:#9c7226!important;--fh-header-surface:#f8efd8!important;--fh-header-scrolled:#fff8e9!important;
+ --bg:#fff0b8!important;--panel:#fff5d1!important;--panel2:#f8dd82!important;--border:#d7ae39!important;
+ --muted:#765b21!important;--blue:#a97508!important;--fh-header-surface:#fff0b8!important;--fh-header-scrolled:#fff5d1!important;
 }
 body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] header.top{background:transparent!important}
 body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView :is(.card,.hero,.metric,.favorite-row,.allocation-detail-item){background:var(--panel)!important;border-color:var(--border)!important}

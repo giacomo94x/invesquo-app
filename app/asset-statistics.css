@@ -43,3 +43,18 @@
 .fhstats-dialog header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 #fhStatsChartBody svg{max-height:65dvh;touch-action:none}
 #fhStatsChartReadout{padding:9px 0;font-size:13px;min-height:38px}
+
+/* Beta 10.6.11: visible signed returns, readable enlarged charts and scroll-safe modal. */
+#fh1067StatsView .fhstats-positive b,#fh1067StatsView .fhstats-positive .fhstats-secondary,.fhstats-positive{color:var(--green,#44d9a0)!important}
+#fh1067StatsView .fhstats-negative b,#fh1067StatsView .fhstats-negative .fhstats-secondary,.fhstats-negative{color:var(--red,#f47c8a)!important}
+#fhStatsChartReadout{display:flex;align-items:flex-start;flex-wrap:wrap;gap:7px 18px;font-size:clamp(14px,3.7vw,18px);line-height:1.6;min-height:55px}
+#fhStatsChartReadout strong{display:block;font-weight:800}
+.fhstats-dialog{width:min(1100px,100%);padding:clamp(12px,3vw,24px)}
+.fhstats-dialog header{gap:10px;flex-wrap:wrap}
+.fhstats-dialog header strong{font-size:clamp(17px,4.4vw,22px)}
+#fhStatsChartBody{width:100%;overflow:hidden}
+#fhStatsChartBody svg{display:block;width:100%;height:auto;max-height:68dvh;overflow:visible;touch-action:none;cursor:crosshair}
+#fhStatsChartBody svg text{paint-order:stroke;stroke:var(--panel,#122d50);stroke-width:1.3px}
+.fhstats-metric b{font-variant-numeric:tabular-nums}
+.fhstats-ranges{margin:7px 0 16px}
+@media(max-width:520px){.fhstats-overlay{padding:9px}.fhstats-dialog{border-radius:14px}#fhStatsChartBody svg{min-height:235px}.fhstats-grid{gap:7px}.fhstats-metric{padding:10px}}
