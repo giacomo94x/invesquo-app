@@ -1,0 +1,2 @@
+Finholdra Beta 10.8.1
+Nexus ora usa il volto e gli occhiali della seconda proposta con cappello a tesa della terza. Nuovo ritratto in Radar e in tutte le comunicazioni codec di FinnSolid. Aggiunte risorse nexus-portrait.webp e nexus-full.webp.

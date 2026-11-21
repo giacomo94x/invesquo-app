@@ -1,1 +1,5 @@
-{"version": "10.7.4", "channel": "beta"}
+{
+  "version": "10.8.1",
+  "channel": "beta",
+  "app": "Finholdra"
+}
