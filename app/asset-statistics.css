@@ -27,3 +27,19 @@
 .fhstats-list button[aria-pressed="true"]{outline:2px solid var(--green);outline-offset:0}
 .fhstats-list strong{font-size:12px;display:block}.fhstats-list small{color:var(--muted);font-size:10px;display:block;margin-top:4px}
 .fhstats-explain{border-left:3px solid var(--green);padding:10px 12px;background:var(--panel2);border-radius:8px;margin-top:12px;line-height:1.5;font-size:12px}
+
+/* 10.6.9 — compact, comparable analytics */
+.fhstats-section-label{font-size:12px;font-weight:750;letter-spacing:.02em;color:var(--muted);margin:15px 0 6px}
+.fhstats-metric .fhstats-icon{display:none}
+.fhstats-secondary{display:block;font-size:10px;color:var(--muted);margin-top:5px}
+.fhstats-ranges{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+.fhstats-ranges .btn{padding:10px 2px!important;min-width:0!important;text-align:center}
+.fhstats-chart-button{width:100%;color:var(--text);font:inherit;text-align:left;display:block;cursor:pointer;background:var(--panel2);border:1px solid var(--border);padding:12px;border-radius:14px}
+.fhstats-chart-button>strong{font-size:14px}.fhstats-chart-button>span{float:right;color:var(--muted);font-size:11px}
+.fhstats-svg{display:block;width:100%;height:auto;max-height:290px;margin-top:6px;touch-action:pan-y}
+.fhstats-overlay{display:none;position:fixed;z-index:999999;inset:0;background:rgba(0,8,18,.88);padding:15px;align-items:center;justify-content:center}
+.fhstats-overlay.open{display:flex}
+.fhstats-dialog{background:var(--panel,#13294a);color:var(--text,#fff);border:1px solid var(--border,#47617c);border-radius:14px;padding:16px;width:min(950px,100%);max-height:92dvh;overflow:auto}
+.fhstats-dialog header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+#fhStatsChartBody svg{max-height:65dvh;touch-action:none}
+#fhStatsChartReadout{padding:9px 0;font-size:13px;min-height:38px}

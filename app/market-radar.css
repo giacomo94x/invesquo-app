@@ -33,3 +33,34 @@ body.fh-home-active[data-favorite-tint="up"] #performanceFace.expression-satisfi
 @keyframes fhJoy{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 body.motion-off.fh-home-active #performanceFace,body.motion-off.fh-home-active #performanceFace *{animation:none!important}
 @media(prefers-reduced-motion:reduce){body.fh-home-active #performanceFace,body.fh-home-active #performanceFace *{animation:none!important}}
+
+/* Beta 10.6.8 — weekend resting mode and borderless category rows. */
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"]{
+ --bg:#241d0e!important;--panel:#352910!important;--panel2:#463619!important;--border:#725a2d!important;
+ --muted:#dbcbab!important;--blue:#ebcc7d!important;--fh-header-surface:#241d0e!important;--fh-header-scrolled:#352910!important;
+ background:var(--bg)!important;
+}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="weekend"]{
+ --bg:#f8efd8!important;--panel:#fff8e9!important;--panel2:#f1dfb5!important;--border:#d7bf83!important;
+ --muted:#756342!important;--blue:#9c7226!important;--fh-header-surface:#f8efd8!important;--fh-header-scrolled:#fff8e9!important;
+}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] header.top{background:transparent!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView :is(.card,.hero,.metric,.favorite-row,.allocation-detail-item){background:var(--panel)!important;border-color:var(--border)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] :is(.new-header-nav button:not(.active),#dashboardView button:not(.active):not(.selected):not(.primary),#dashboardView select){background:var(--panel2)!important;border-color:var(--border)!important;color:var(--text)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView :is(.donut-hole,.donut-center){background:var(--panel)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView .seg:has(#modeNow){background:var(--bg)!important;border-color:var(--border)!important;box-shadow:none!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView .seg :is(#modeNow,#modeCost){background:var(--panel)!important;border-color:var(--border)!important;color:var(--text)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView .seg :is(#modeNow,#modeCost).selected{background:var(--panel2)!important;border-color:var(--blue)!important}
+/* Keep the category rows as uninterrupted separators, not inset colored tiles. */
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint] #dashboardView #legend .legend-row{
+ background:transparent!important;background-image:none!important;border-radius:0!important;
+ border-left:0!important;border-right:0!important;border-top:0!important;
+ border-bottom:1px solid var(--border)!important;box-shadow:none!important;outline-offset:0;
+}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint] #dashboardView #legend .legend-row[aria-expanded="true"]{background:transparent!important;box-shadow:none!important}
+body.fh-home-active[data-favorite-tint="weekend"] #performanceFace .candle-character{animation:fhWeekendBreathe 4.8s ease-in-out infinite}
+body.fh-home-active[data-favorite-tint="weekend"] #performanceFace.expression-thinking .candle-character{animation:fhWeekendThink 3s ease-in-out infinite}
+@keyframes fhWeekendBreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(1.5px)}}
+@keyframes fhWeekendThink{0%,100%{transform:rotate(0)}45%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}}
+body.motion-off.fh-home-active #performanceFace,body.motion-off.fh-home-active #performanceFace *{animation:none!important}
+@media(prefers-reduced-motion:reduce){body.fh-home-active[data-favorite-tint="weekend"] #performanceFace *{animation:none!important}}

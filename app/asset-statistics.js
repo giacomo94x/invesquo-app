@@ -1,4 +1,4 @@
-/* Finholdra Beta 10.6.7 · Asset statistics. Read-only; no fabricated quotes. */
+/* Finholdra Beta 10.6.9 · Asset statistics. Read-only; no fabricated quotes. */
 (function(){
  'use strict';
  const root=document.getElementById('fh1067StatsView');if(!root)return;
@@ -67,8 +67,27 @@
    return '<path d="'+coords.map((v,i)=>(i?'L':'M')+v.join(' ')).join(' ')+'" fill="none" stroke="'+color+'" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>';
  }
  function miniChart(points){
-   if(points.length<2)return '<p class="fhstats-note">Grafico non disponibile: servono almeno due valutazioni con prezzi documentati.</p>';
-   return '<div class="fhstats-chart"><strong>📈 Capitale e valore nel tempo</strong><svg viewBox="0 0 430 188" role="img" aria-label="Andamento osservato del valore e del capitale investito">'+[36,98,160].map(y=>'<line x1="35" y1="'+y+'" x2="405" y2="'+y+'" stroke="currentColor" opacity=".1" stroke-dasharray="4 4"/>').join('')+line(points,'value','#4ddbb3')+line(points,'capital','#ecbc55')+'<text x="36" y="181" fill="currentColor" opacity=".6" font-size="10">'+esc(dayLabel(points[0].date))+'</text><text x="405" y="181" text-anchor="end" fill="currentColor" opacity=".6" font-size="10">'+esc(dayLabel(points.at(-1).date))+'</text></svg><div class="fhstats-legend"><span><i class="fhstats-dot" style="background:#4ddbb3"></i>Valore della posizione</span><span><i class="fhstats-dot" style="background:#ecbc55"></i>Capitale ancora investito</span></div><p class="fhstats-note">Tracciati basati soltanto sulle date e quotazioni disponibili; variazioni dovute agli acquisti e alle vendite sono comprese. I periodi senza prezzi non vengono ricostruiti.</p></div>';
+   if(points.filter(p=>Number.isFinite(p.value)).length<2)return '<p class="fhstats-note">Servono almeno due valutazioni documentate per il grafico.</p>';
+   return '<button type="button" id="fhStatsOpenChart" class="fhstats-chart-button" aria-label="Apri il grafico interattivo"><strong>Andamento capitale / valore</strong><span>Ingrandisci ↗</span>'+chartSvg(points,430,190)+'</button><div class="fhstats-legend"><span><i class="fhstats-dot" style="background:#4ddbb3"></i>Valore</span><span><i class="fhstats-dot" style="background:#ecbc55"></i>Capitale investito</span></div>';
+ }
+ function chartSvg(points,w,h){
+   const valid=points.filter(p=>Number.isFinite(p.value)&&Number.isFinite(p.capital));if(valid.length<2)return '';
+   const all=valid.flatMap(p=>[p.value,p.capital]),lo=Math.min(...all),hi=Math.max(...all),pad=Math.max((hi-lo)*.12,1),min=lo-pad,max=hi+pad;
+   const xmin=dayNum(valid[0].date),xmax=dayNum(valid.at(-1).date),L=42,R=12,T=16,B=28;
+   const X=p=>L+(dayNum(p.date)-xmin)/Math.max(86400000,xmax-xmin)*(w-L-R),Y=v=>T+(max-v)/(max-min)*(h-T-B);
+   const lines=key=>valid.map((p,i)=>(i?'L':'M')+X(p).toFixed(2)+' '+Y(p[key]).toFixed(2)).join(' ');
+   const axes=[0,.5,1].map(fr=>{const value=max-(max-min)*fr,y=T+fr*(h-T-B);return '<line x1="'+L+'" x2="'+(w-R)+'" y1="'+y+'" y2="'+y+'" stroke="currentColor" stroke-dasharray="3 5" opacity=".14"/><text x="'+(L-5)+'" y="'+(y+3)+'" fill="currentColor" text-anchor="end" font-size="10" opacity=".6">'+(Math.round(value)).toLocaleString('it-IT')+'</text>';}).join('');
+   const coords=valid.map(p=>({x:X(p),valueY:Y(p.value),capitalY:Y(p.capital),...p}));
+   return '<svg class="fhstats-svg" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="Confronto tra capitale investito e valore della posizione">'+axes+'<path d="'+lines('value')+'" fill="none" stroke="#4ddbb3" stroke-width="2.7" stroke-linejoin="round"/><path d="'+lines('capital')+'" fill="none" stroke="#ecbc55" stroke-width="2.4" stroke-linejoin="round"/><text x="'+L+'" y="'+(h-5)+'" font-size="10" fill="currentColor" opacity=".65">'+esc(dayLabel(valid[0].date))+'</text><text x="'+(w-R)+'" y="'+(h-5)+'" text-anchor="end" font-size="10" fill="currentColor" opacity=".65">'+esc(dayLabel(valid.at(-1).date))+'</text><g id="fhStatsSvgFocus" style="display:none"><line id="fhStatsSvgGuide" y1="'+T+'" y2="'+(h-B)+'" stroke="currentColor" stroke-dasharray="4 4" opacity=".6"/><circle id="fhStatsSvgValue" r="5" fill="#4ddbb3"/><circle id="fhStatsSvgCapital" r="5" fill="#ecbc55"/></g></svg><script type="application/json" class="fhstats-points">'+JSON.stringify(coords).replace(/</g,'\u003c')+'</script>';
+ }
+ function statsMetric(label,value,secondary=''){return '<div class="fhstats-metric"><small>'+esc(label)+'</small><b>'+esc(value)+'</b>'+(secondary?'<span class="fhstats-secondary">'+esc(secondary)+'</span>':'')+'</div>';}
+ function pctOfPosition(point){return point?.capital>0&&Number.isFinite(point.value)?(point.value-point.capital)/point.capital*100:null;}
+ function lastContributionDate(events){return events.filter(e=>e.kind==='buy').map(e=>e.date).sort().at(-1)||null;}
+ function openChart(){const a=getAssets().find(x=>x.id===selectedId);if(!a)return;let archive={assets:{}};try{archive=fh102Read()}catch(_){}const all=historyFor(a,archive).points,cutoff=span==='all'?0:Date.now()-Number(span)*86400000,pts=all.filter(x=>dayNum(x.date)>=cutoff);
+ let overlay=document.getElementById('fhStatsChartOverlay');if(!overlay){overlay=document.createElement('div');overlay.id='fhStatsChartOverlay';overlay.className='fhstats-overlay';overlay.innerHTML='<div class="fhstats-dialog" role="dialog" aria-modal="true" aria-label="Grafico capitale e valore"><header><strong>Capitale e valore</strong><button id="fhStatsChartClose" class="btn" type="button">Chiudi ✕</button></header><div id="fhStatsChartBody"></div><div id="fhStatsChartReadout">Tocca o trascina sul grafico per leggere i valori.</div></div>';document.body.appendChild(overlay);overlay.addEventListener('click',e=>{if(e.target===overlay||e.target.closest('#fhStatsChartClose'))overlay.classList.remove('open');});}
+ const body=overlay.querySelector('#fhStatsChartBody');body.innerHTML=chartSvg(pts,740,365);overlay.classList.add('open');const svg=body.querySelector('svg'),raw=body.querySelector('.fhstats-points');if(!svg||!raw)return;
+ const points=JSON.parse(raw.textContent);const move=e=>{let x=0;try{const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;x=p.matrixTransform(svg.getScreenCTM().inverse()).x;}catch(_){const r=svg.getBoundingClientRect();x=(e.clientX-r.left)/r.width*740;}
+ const near=points.reduce((best,p)=>Math.abs(p.x-x)<Math.abs(best.x-x)?p:best,points[0]);const focus=svg.querySelector('#fhStatsSvgFocus');focus.style.display='';const guide=svg.querySelector('#fhStatsSvgGuide');guide.setAttribute('x1',near.x);guide.setAttribute('x2',near.x);for(const [sel,y] of [['#fhStatsSvgValue',near.valueY],['#fhStatsSvgCapital',near.capitalY]]){const el=svg.querySelector(sel);el.setAttribute('cx',near.x);el.setAttribute('cy',y);}overlay.querySelector('#fhStatsChartReadout').textContent=dayLabel(near.date)+' · Valore '+euro(near.value)+' · Capitale '+euro(near.capital)+' · Differenza '+euro(near.value-near.capital);};svg.addEventListener('pointerdown',move);svg.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'||e.buttons)move(e)});svg.addEventListener('pointerup',move);
  }
  function suggestion(a){
    const c=String(a.cat||'').toLowerCase();
@@ -85,40 +104,31 @@
    return n?percent(total/n):'n.d.';
  }
  function renderHistoryStatistics(){
-   if(!root)return;
-   const assets=getAssets();if(!assets.length){root.innerHTML='<p class="history-empty">Ancora nessuno strumento posseduto o venduto.</p>';return;}
-   if(!assets.some(a=>a.id===selectedId))selectedId=assets[0].id;
-   let archive={assets:{}};try{archive=fh102Read()}catch(_){}
-   const a=assets.find(x=>x.id===selectedId),result=historyFor(a,archive),all=result.points;
-   const cutoff=span==='all'?0:Date.now()-Number(span)*86400000;
-   const displayed=all.filter(p=>dayNum(p.date)>=cutoff);
-   const latest=all.at(-1),previous=displayed[0],last=displayed.at(-1),values=displayed.map(p=>p.value).filter(Number.isFinite);
-   const historicalValues=all.map(p=>p.value).filter(Number.isFinite);
-   const historicalMax=historicalValues.length?Math.max(...historicalValues):null,historicalMin=historicalValues.length?Math.min(...historicalValues):null;
-   const resultInterval=previous&&last&&Number.isFinite(previous.pnl)&&Number.isFinite(last.pnl)?last.pnl-previous.pnl:null;
-   const currentHolding=(a.q&&Number(a.q)>0),sold=!currentHolding&&result.events.some(e=>e.kind==='sale');
-   const validHistory=all.length>=2;
-   const displayName=a.name||a.symbol||a.id;
-   root.innerHTML='<div class="fhstats-bar"><label>🔎 Seleziona lo strumento (inclusi quelli venduti)<select id="fhStatsAsset">'+assets.map(x=>'<option value="'+esc(x.id)+'"'+(x.id===a.id?' selected':'')+'>'+esc(x.name||x.symbol||x.id)+(Number(x.q)>0?'':' · non in portafoglio')+'</option>').join('')+'</select></label></div>'+
-    '<div class="fhstats-name"><h3>'+esc(displayName)+'</h3><div class="fhstats-chips"><span class="fhstats-chip">'+esc(a.cat||'Strumento')+'</span><span class="fhstats-chip">'+(sold?'✅ Venduto':currentHolding?'💼 In portafoglio':'📁 Storico')+'</span><span class="fhstats-chip">'+result.events.length+' operazioni</span></div></div>'+
-    '<div class="fhstats-ranges" aria-label="Periodo statistiche">'+[['7','1S'],['30','1M'],['90','3M'],['180','6M'],['365','1A'],['all','MAX']].map(v=>'<button type="button" class="btn '+(span===v[0]?'selected':'')+'" data-fhstats-span="'+v[0]+'" aria-pressed="'+(span===v[0])+'">'+v[1]+'</button>').join('')+'</div>'+
-    '<div class="fhstats-grid">'+
-    metric('💰','Capitale ancora investito',latest?euro(latest.capital):Number(a.q)>0?euro(cap(a)):'0,00 €')+
-    metric('💼','Valore alla data più recente',latest?euro(latest.value):Number(a.q)>0?euro(val(a)):'n.d.')+
-    metric('🏔️','Massimo valore osservato nello storico',historicalMax===null?'n.d.':euro(historicalMax))+
-    metric('🏞️','Minimo valore osservato nello storico',historicalMin===null?'n.d.':euro(historicalMin))+
-    metric('📊','Risultato nel periodo (incluse compravendite)',resultInterval===null?'n.d.':(resultInterval>0?'+':'')+euro(resultInterval))+
-    metric('🏁','Risultato complessivo documentato',latest?.pnl===null||!latest?'n.d.':(latest.pnl>0?'+':'')+euro(latest.pnl))+
-    metric('📆','Media variazioni giornaliere · 7 giorni',averageReturns(all,7))+
-    metric('🗓️','Media variazioni giornaliere · 30 giorni',averageReturns(all,30))+
-    metric('📅','Media variazioni giornaliere · 90 giorni',averageReturns(all,90))+
-    metric('🗂️','Media variazioni giornaliere · 365 giorni',averageReturns(all,365))+
-    '</div>'+miniChart(displayed)+
-    '<div class="fhstats-explain">'+esc(suggestion(a))+'</div>'+
-    '<p class="fhstats-note">Massimo e minimo si riferiscono soltanto alle valutazioni archiviate nell’intero storico disponibile, non ai massimi/minimi di borsa assoluti. I rendimenti medi sono medie delle variazioni tra sedute registrate, non previsioni. I risultati ignorano commissioni, tasse, dividendi, cedole e cambi non documentati; in caso di cronologia incompleta potrebbero essere non confrontabili. '+(result.noLedger?'⚠️ Non risultano acquisti datati: la serie precedente non può essere ricostruita con certezza. ':'')+(validHistory?'Prime/ultime date disponibili: '+esc(dayLabel(all[0].date))+' — '+esc(dayLabel(all.at(-1).date))+'.':'Poche rilevazioni disponibili.')+'</p>'+
-    '<h3 style="margin-top:18px">🗂️ Tutti gli strumenti seguiti nella storia</h3><div class="fhstats-list">'+assets.map(x=>'<button type="button" data-fhstats-id="'+esc(x.id)+'" aria-pressed="'+(x.id===a.id)+'"><span><strong>'+esc(x.name||x.id)+'</strong><small>'+esc(x.cat||'')+' · '+(Number(x.q)>0?'posizione aperta':'posizione non più attiva')+'</small></span><span aria-hidden="true">📈</span></button>').join('')+'</div>';
+  const assets=getAssets();if(!assets.length){root.innerHTML='<p class="fhstats-note">Nessuno strumento registrato.</p>';return;}
+  if(!assets.some(a=>a.id===selectedId))selectedId=assets[0].id;
+  let archive={assets:{}};try{archive=fh102Read()}catch(_){}
+  const a=assets.find(x=>x.id===selectedId),{points:all,events,noLedger}=historyFor(a,archive),last=all.at(-1);
+  const cutoff=span==='all'?0:Date.now()-Number(span)*86400000;
+  const displayed=all.filter(p=>dayNum(p.date)>=cutoff),first=displayed[0],finish=displayed.at(-1);
+  const afterDate=lastContributionDate(events),after=all.filter(p=>!afterDate||p.date>=afterDate).filter(p=>Number.isFinite(p.value)&&p.qty>0);
+  const values=after.map(p=>p.value),peak=values.length?Math.max(...values):null,trough=values.length?Math.min(...values):null;
+  const performance=after.map(p=>pctOfPosition(p)).filter(Number.isFinite);
+  const maxProfit=performance.length?Math.max(...performance):null,maxLoss=performance.length?Math.min(...performance):null;
+  const intervalPnL=first&&finish&&Number.isFinite(first.pnl)&&Number.isFinite(finish.pnl)?finish.pnl-first.pnl:null;
+  const previousBuy=events.filter(x=>x.kind==='buy').at(-1),priorBuy=events.filter(x=>x.kind==='buy').at(-2);
+  const avgUnit=last?.qty>0&&last?.capital>0?last.capital/last.qty:null;
+  const prevUnit=priorBuy&&Number(priorBuy.price)>0?Number(priorBuy.price):null;
+  const pmcChange=avgUnit&&prevUnit?(avgUnit/prevUnit-1)*100:null;
+  const priceVsPmc=avgUnit&&last?.price>0?(last.price/avgUnit-1)*100:null;
+  root.innerHTML='<div class="fhstats-bar"><label>Seleziona un titolo<select id="fhStatsAsset">'+assets.map(x=>'<option value="'+esc(x.id)+'"'+(x.id===a.id?' selected':'')+'>'+esc(x.name||x.symbol||x.id)+(Number(x.q)>0?'':' · venduto/non attivo')+'</option>').join('')+'</select></label></div>'+
+   '<div class="fhstats-ranges" aria-label="Periodo statistiche">'+[['7','1S'],['30','1M'],['90','3M'],['180','6M'],['365','1A'],['all','MAX']].map(v=>'<button type="button" class="btn '+(span===v[0]?'selected':'')+'" data-fhstats-span="'+v[0]+'" aria-pressed="'+(span===v[0])+'">'+v[1]+'</button>').join('')+'</div>'+
+   '<div class="fhstats-section-label">Situazione attuale</div><div class="fhstats-grid">'+statsMetric('Capitale investito',last?euro(last.capital):'n.d.')+statsMetric('Valore attuale',last?euro(last.value):'n.d.')+'</div>'+
+   '<div class="fhstats-section-label">Dall’ultimo acquisto'+(afterDate?' · '+esc(dayLabel(afterDate)):'')+'</div><div class="fhstats-grid">'+statsMetric('Valore massimo registrato',peak===null?'n.d.':euro(peak))+statsMetric('Valore minimo registrato',trough===null?'n.d.':euro(trough))+statsMetric('Massimo guadagno sul capitale',maxProfit===null?'n.d.':percent(maxProfit))+statsMetric('Massima perdita sul capitale',maxLoss===null?'n.d.':percent(maxLoss))+'</div>'+
+   '<div class="fhstats-section-label">Quanto è cambiato?</div><div class="fhstats-grid">'+statsMetric('Risultato nel periodo',intervalPnL===null?'n.d.':euro(intervalPnL),'Al netto degli acquisti e delle vendite registrati')+statsMetric('Prezzo rispetto al tuo PMC',priceVsPmc===null?'n.d.':percent(priceVsPmc))+statsMetric('Tuo PMC per quota',avgUnit===null?'n.d.':euro(avgUnit))+statsMetric('Variazione PMC dall’acquisto precedente',pmcChange===null?'n.d.':percent(pmcChange))+'</div>'+
+   miniChart(displayed)+
+   '<p class="fhstats-note">Le valutazioni si riferiscono alle sole date archiviate e agli acquisti documentati. Massimo e minimo sono quelli della posizione dopo l’ultimo acquisto, non i massimi e minimi assoluti del titolo. Il rendimento in % confronta valore e capitale residuo alla stessa data, non neutralizza tutti i flussi. '+(noLedger?'Cronologia di acquisto non disponibile: le statistiche passate potrebbero essere incomplete.':'')+'</p>';
  }
  root.addEventListener('change',e=>{if(e.target?.id==='fhStatsAsset'){selectedId=e.target.value;renderHistoryStatistics();}});
- root.addEventListener('click',e=>{const spanBtn=e.target.closest('[data-fhstats-span]');if(spanBtn){span=spanBtn.dataset.fhstatsSpan;renderHistoryStatistics();return;}const assetBtn=e.target.closest('[data-fhstats-id]');if(assetBtn){selectedId=assetBtn.dataset.fhstatsId;renderHistoryStatistics();}});
+ root.addEventListener('click',e=>{const spanBtn=e.target.closest('[data-fhstats-span]');if(spanBtn){span=spanBtn.dataset.fhstatsSpan;renderHistoryStatistics();return;}if(e.target.closest('#fhStatsOpenChart'))openChart();});
  window.renderHistoryStatistics=renderHistoryStatistics;
 })();
