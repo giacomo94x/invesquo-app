@@ -1,4 +1,4 @@
-Finholdra Beta 10.8.7
+Finholdra Beta 10.9.1
 - Nexus in Radar: rimossi i comandi News.
 - Nuovi comandi: Mercato selezionato, Titoli del Paese, Insight esclusivo, Come leggere i dati.
 - Nexus ora commenta i titoli del paese selezionato e fornisce una sintesi extra basata sulle righe caricate nel Radar.
