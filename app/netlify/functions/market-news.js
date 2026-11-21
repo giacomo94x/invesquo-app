@@ -1,7 +1,37 @@
-/* Finholdra 9.9.19: Italian-language news RSS only, no fabricated headlines. */
-'use strict';
-const xmlDecode=s=>String(s||'').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1').replace(/&(#x[\da-f]+|#\d+|amp|lt|gt|quot|apos|nbsp);/gi,(all,term)=>{let v=term.toLowerCase();const vals={amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",nbsp:' '};if(vals[v])return vals[v];if(v[0]==='#'){let n=v[1]==='x'?parseInt(v.slice(2),16):parseInt(v.slice(1),10);return n>0&&n<=0x10ffff?String.fromCodePoint(n):''}return all}).replace(/<[^>]+>/g,'').trim();
-const getTag=(source,tag)=>{const match=source.match(new RegExp('<'+tag+'(?:\\s[^>]*)?>([\\s\\S]*?)<\\/'+tag+'>','i'));return match?xmlDecode(match[1]):''};
-function entries(xml,provider){let items=[],re=/<item(?:\s[^>]*)?>[\s\S]*?<\/item>/gi,m;while((m=re.exec(xml))&&items.length<35){let raw=m[0],title=getTag(raw,'title'),url=getTag(raw,'link'),date=getTag(raw,'pubDate');let stamp=Date.parse(date);if(!title||!Number.isFinite(stamp)||stamp>Date.now()+3600000||stamp<Date.now()-14*86400000)continue;try{let u=new URL(url);if(u.protocol!=='https:'||!(provider==='investing'?/^(it\.)?investing\.com$/.test(u.hostname):/^(it\.)?finance\.yahoo\.com$/.test(u.hostname)||/^(?:www\.)?yahoo\.com$/.test(u.hostname)))continue;}catch(_){continue;}items.push({title,url,publishedAt:new Date(stamp).toISOString(),source:provider==='investing'?'Investing.com Italia':'Yahoo Finanza Italia'});}return items;}
-async function fetchFeed(url,source){let controller=new AbortController(),timer=setTimeout(()=>controller.abort(),5500);try{let res=await fetch(url,{signal:controller.signal,headers:{Accept:'application/rss+xml, application/xml, text/xml;q=0.9','User-Agent':'Finholdra/1.0'}});if(!res.ok)throw Error('Feed '+res.status);let str=await res.text();if(str.length>900000)throw Error('Too large');return entries(str,source);}finally{clearTimeout(timer)}}
-exports.handler=async function(event){const provider=event?.queryStringParameters?.source==='investing'?'investing':'yahoo';const feeds=provider==='investing'?['https://it.investing.com/rss/news.rss','https://it.investing.com/rss/news_25.rss','https://it.investing.com/rss/news_1.rss','https://it.investing.com/rss/news_14.rss','https://it.investing.com/rss/news_1065.rss']:['https://feeds.finance.yahoo.com/rss/2.0/headline?s=%5EFTSEMIB,%5EGSPC,%5EIXIC&region=IT&lang=it-IT','https://feeds.finance.yahoo.com/rss/2.0/headline?s=ENI.MI,ISP.MI,STLAM.MI&region=IT&lang=it-IT','https://feeds.finance.yahoo.com/rss/2.0/headline?s=%5EDJI,%5EN225,%5EGDAXI&region=IT&lang=it-IT','https://feeds.finance.yahoo.com/rss/2.0/headline?s=AAPL,MSFT,NVDA&region=IT&lang=it-IT','https://feeds.finance.yahoo.com/rss/2.0/headline?s=VWCE.MI,SPY,QQQ&region=IT&lang=it-IT'];let values=(await Promise.allSettled(feeds.map(url=>fetchFeed(url,provider)))).filter(r=>r.status==='fulfilled').flatMap(r=>r.value);let seen=new Set(),articles=values.filter(v=>{let k=v.url;if(seen.has(k))return false;seen.add(k);return true}).sort((a,b)=>Date.parse(b.publishedAt)-Date.parse(a.publishedAt)).slice(0,4);return {statusCode:200,headers:{'content-type':'application/json; charset=utf-8','cache-control':'public, max-age=120, s-maxage=300'},body:JSON.stringify({source:provider,articles})}};
+// Finholdra Beta 10.9.1: trusted server-side RSS retrieval for public market news.
+// Only fixed news providers are called; user input is used solely as a bounded search term.
+const sources = [
+  q => `https://news.google.com/rss/search?q=${encodeURIComponent(q + ' when:7d')}&hl=it&gl=IT&ceid=IT:it`,
+  q => `https://www.bing.com/news/search?q=${encodeURIComponent(q)}&format=rss&setlang=it`
+];
+const decode = s => String(s || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1').replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Math.min(Number(n),0x10ffff))).replace(/&#x([\da-f]+);/gi,(_,n)=>String.fromCodePoint(Math.min(parseInt(n,16),0x10ffff))).replace(/&(?:amp|lt|gt|quot|apos|nbsp);/g,m=>({ '&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'",'&nbsp;':' ' }[m]||m)).replace(/<[^>]+>/g,'').trim();
+const field=(block,tag)=>{
+  const match=block.match(new RegExp('<'+tag+'(?:\\s[^>]*)?>([\\s\\S]*?)<\\/'+tag+'>','i'));
+  return match?decode(match[1]):'';
+};
+const parse = xml => {
+  const blocks=xml.match(/<item\b[^>]*>[\s\S]*?<\/item>/gi)||[];
+  return blocks.slice(0,24).map(b=>{
+    const link=field(b,'link');let safe='';
+    try{const u=new URL(link);if(u.protocol==='https:'||u.protocol==='http:')safe=u.href;}catch{}
+    return {title:field(b,'title').slice(0,350),url:safe,source:field(b,'source').slice(0,120),date:field(b,'pubDate')};
+  }).filter(x=>x.title&&x.url).slice(0,10);
+};
+exports.handler=async event=>{
+  const q=String(event.queryStringParameters?.q||'').trim().slice(0,100);
+  const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'public, max-age=180, s-maxage=300','Access-Control-Allow-Origin':'*'};
+  if(q.length<2)return {statusCode:400,headers,body:JSON.stringify({articles:[],error:'Inserisci almeno due caratteri.'})};
+  let articles=[];let source='';
+  for(const makeUrl of sources){
+    const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),6000);
+    try{
+      const response=await fetch(makeUrl(q),{signal:controller.signal,headers:{'User-Agent':'Finholdra/10.9.1 (news RSS reader)','Accept':'application/rss+xml, application/xml, text/xml'}});
+      if(!response.ok)continue;
+      const xml=await response.text();
+      if(xml.length>1500000)continue;
+      articles=parse(xml);
+      if(articles.length){source=makeUrl===sources[0]?'Google News':'Bing News';break;}
+    }catch(_){}finally{clearTimeout(timer);}
+  }
+  return {statusCode:200,headers,body:JSON.stringify({articles,source,query:q})};
+};
