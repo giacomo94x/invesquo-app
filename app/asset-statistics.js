@@ -1,8 +1,8 @@
-/* Finholdra Beta 10.6.12 · Asset statistics. Read-only; no fabricated quotes. */
+/* Finholdra Beta 10.7.1 · Asset statistics. Read-only; no fabricated quotes. */
 (function(){
  'use strict';
  const root=document.getElementById('fh1067StatsView');if(!root)return;
- let selectedId='',span='90';
+ let selectedId='',span='90',historicalScope='last';
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const euro=n=>Number.isFinite(n)?new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(n):'n.d.';
  const tone=n=>Number.isFinite(n)?(n>0?'fhstats-positive':n<0?'fhstats-negative':'fhstats-flat'):'';
@@ -114,11 +114,20 @@
   const displayed=all.filter(p=>dayNum(p.date)>=cutoff),first=displayed[0],finish=displayed.at(-1);
   const afterDate=lastContributionDate(events),after=all.filter(p=>!afterDate||p.date>=afterDate).filter(p=>Number.isFinite(p.value)&&p.qty>0);
   const values=after.map(p=>p.value),peak=values.length?Math.max(...values):null,trough=values.length?Math.min(...values):null;
+  const full=all.filter(p=>Number.isFinite(p.value)&&p.qty>0);
+  const fullValues=full.map(p=>p.value),fullPeak=fullValues.length?Math.max(...fullValues):null,fullTrough=fullValues.length?Math.min(...fullValues):null;
+  const fullPerform=full.map(p=>pctOfPosition(p)).filter(Number.isFinite),fullGains=full.filter(p=>Number.isFinite(p.capital)).map(p=>p.value-p.capital);
   const currentDiff=last&&Number.isFinite(last.value)&&Number.isFinite(last.capital)?last.value-last.capital:null;
   const performance=after.map(p=>pctOfPosition(p)).filter(Number.isFinite);
   const maxProfit=performance.length?Math.max(0,...performance):null,maxLoss=performance.length?Math.min(0,...performance):null;
   const gains=after.filter(p=>Number.isFinite(p.capital)).map(p=>p.value-p.capital);
   const peakGain=gains.length?Math.max(0,...gains):null,peakLoss=gains.length?Math.min(0,...gains):null;
+  const useAll=historicalScope==='all';
+  const shownPeak=useAll?fullPeak:peak,shownTrough=useAll?fullTrough:trough;
+  const shownMaxProfit=useAll?(fullPerform.length?Math.max(0,...fullPerform):null):maxProfit;
+  const shownMaxLoss=useAll?(fullPerform.length?Math.min(0,...fullPerform):null):maxLoss;
+  const shownPeakGain=useAll?(fullGains.length?Math.max(0,...fullGains):null):peakGain;
+  const shownPeakLoss=useAll?(fullGains.length?Math.min(0,...fullGains):null):peakLoss;
   const intervalPnL=first&&finish&&Number.isFinite(first.pnl)&&Number.isFinite(finish.pnl)?finish.pnl-first.pnl:null;
   const previousBuy=events.filter(x=>x.kind==='buy').at(-1),priorBuy=events.filter(x=>x.kind==='buy').at(-2);
   const avgUnit=last?.qty>0&&last?.capital>0?last.capital/last.qty:null;
@@ -127,13 +136,15 @@
   const priceVsPmc=avgUnit&&last?.price>0?(last.price/avgUnit-1)*100:null;
   root.innerHTML='<div class="fhstats-bar"><label>Seleziona un titolo<select id="fhStatsAsset">'+assets.map(x=>'<option value="'+esc(x.id)+'"'+(x.id===a.id?' selected':'')+'>'+esc(x.name||x.symbol||x.id)+(Number(x.q)>0?'':' · venduto/non attivo')+'</option>').join('')+'</select></label></div>'+
 
-   '<div class="fhstats-section-label">Situazione attuale</div><div class="fhstats-grid">'+statsMetric('Capitale investito',last?euro(last.capital):'n.d.','Risultato '+signedEuro(currentDiff),tone(currentDiff))+statsMetric('Valore attuale',last?euro(last.value):'n.d.','Rispetto al capitale: '+signedEuro(currentDiff),tone(currentDiff))+'</div>'+
-   '<div class="fhstats-section-label">Dall’ultimo acquisto'+(afterDate?' · '+esc(dayLabel(afterDate)):'')+'</div><div class="fhstats-grid">'+statsMetric('Valore massimo registrato',peak===null?'n.d.':euro(peak))+statsMetric('Valore minimo registrato',trough===null?'n.d.':euro(trough))+statsMetric('Massimo guadagno sul capitale',maxProfit===null?'n.d.':percent(maxProfit),peakGain===null?'':signedEuro(peakGain),'fhstats-positive')+statsMetric('Massima perdita sul capitale',maxLoss===null?'n.d.':percent(maxLoss),peakLoss===null?'':signedEuro(peakLoss),'fhstats-negative')+'</div>'+
+   '<div class="fhstats-section-label">Situazione attuale</div><div class="fhstats-grid">'+statsMetric('Capitale investito',last?euro(last.capital):'n.d.','','fhstats-invested')+statsMetric('Valore attuale',last?euro(last.value):'n.d.','Rispetto al capitale: '+signedEuro(currentDiff),tone(currentDiff))+'</div>'+
+   '<div class="fhstats-section-label">Massimi e minimi registrati</div>'+
+   '<div class="fhstats-history-switch" role="group" aria-label="Periodo dei massimi e minimi"><button type="button" class="btn '+(historicalScope==='last'?'selected':'')+'" data-fhstats-scope="last" aria-pressed="'+(historicalScope==='last')+'">Dall’ultimo acquisto</button><button type="button" class="btn '+(historicalScope==='all'?'selected':'')+'" data-fhstats-scope="all" aria-pressed="'+(historicalScope==='all')+'">Dall’inizio</button></div>'+
+   '<div class="fhstats-grid">'+statsMetric('Valore massimo registrato',shownPeak===null?'n.d.':euro(shownPeak),'','fhstats-high')+statsMetric('Valore minimo registrato',shownTrough===null?'n.d.':euro(shownTrough),'','fhstats-low')+statsMetric('Massimo guadagno sul capitale',shownMaxProfit===null?'n.d.':percent(shownMaxProfit),shownPeakGain===null?'':signedEuro(shownPeakGain),'fhstats-positive')+statsMetric('Massima perdita sul capitale',shownMaxLoss===null?'n.d.':percent(shownMaxLoss),shownPeakLoss===null?'':signedEuro(shownPeakLoss),'fhstats-negative')+'</div>'+
    '<div class="fhstats-section-label">Quanto è cambiato?</div><p class="fhstats-secondary">Scegli un periodo per confrontare il risultato e il grafico.</p><div class="fhstats-ranges" aria-label="Periodo statistiche">'+[['7','1S'],['30','1M'],['90','3M'],['180','6M'],['365','1A'],['all','MAX']].map(v=>'<button type="button" class="btn '+(span===v[0]?'selected':'')+'" data-fhstats-span="'+v[0]+'" aria-pressed="'+(span===v[0])+'">'+v[1]+'</button>').join('')+'</div><div class="fhstats-grid">'+statsMetric('Risultato nel periodo',intervalPnL===null?'n.d.':signedEuro(intervalPnL),'Al netto degli acquisti e delle vendite registrati',tone(intervalPnL))+statsMetric('Prezzo rispetto al tuo PMC',priceVsPmc===null?'n.d.':percent(priceVsPmc),'',tone(priceVsPmc))+statsMetric('Tuo PMC per quota',avgUnit===null?'n.d.':euro(avgUnit))+statsMetric('Variazione PMC dall’acquisto precedente',pmcChange===null?'n.d.':percent(pmcChange),'',tone(pmcChange))+'</div>'+
    miniChart(displayed)+
-   '<p class="fhstats-note">Le valutazioni si riferiscono alle sole date archiviate e agli acquisti documentati. Massimo e minimo sono quelli della posizione dopo l’ultimo acquisto, non i massimi e minimi assoluti del titolo. Il rendimento in % confronta valore e capitale residuo alla stessa data, non neutralizza tutti i flussi. '+(noLedger?'Cronologia di acquisto non disponibile: le statistiche passate potrebbero essere incomplete.':'')+'</p>';
+   '<p class="fhstats-note">Le valutazioni si riferiscono alle sole date archiviate e agli acquisti documentati. Massimo e minimo riguardano il valore della posizione nel periodo selezionato, non il prezzo massimo o minimo del titolo. Il rendimento in % confronta valore e capitale residuo alla stessa data, non neutralizza tutti i flussi. '+(noLedger?'Cronologia di acquisto non disponibile: le statistiche passate potrebbero essere incomplete.':'')+'</p>';
  }
  root.addEventListener('change',e=>{if(e.target?.id==='fhStatsAsset'){selectedId=e.target.value;renderHistoryStatistics();}});
- root.addEventListener('click',e=>{const spanBtn=e.target.closest('[data-fhstats-span]');if(spanBtn){span=spanBtn.dataset.fhstatsSpan;renderHistoryStatistics();return;}if(e.target.closest('#fhStatsOpenChart'))openChart();});
+ root.addEventListener('click',e=>{const scopeBtn=e.target.closest('[data-fhstats-scope]');if(scopeBtn){historicalScope=scopeBtn.dataset.fhstatsScope;renderHistoryStatistics();return;}const spanBtn=e.target.closest('[data-fhstats-span]');if(spanBtn){span=spanBtn.dataset.fhstatsSpan;renderHistoryStatistics();return;}if(e.target.closest('#fhStatsOpenChart'))openChart();});
  window.renderHistoryStatistics=function(){try{renderHistoryStatistics()}catch(err){console.error('Statistiche Finholdra:',err);root.innerHTML='<div class="fhstats-note">Impossibile elaborare le statistiche per questo portafoglio. Controlla le operazioni e le quotazioni archiviate.</div>';}};
 })();
