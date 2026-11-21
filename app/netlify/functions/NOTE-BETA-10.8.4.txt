@@ -1,0 +1,4 @@
+Finholdra Beta 10.8.4
+- Grafico capitale e valore per le categorie attive in fondo alla Dashboard, con dettaglio interattivo e ingrandimento.
+- Mira resta presente nei dialoghi codec di FinnSolid, ma non appare sul campo né come pulsante alleato.
+- Zoom sul ritratto di Finn nel codec; Nexus in Radar con inquadratura meno ravvicinata e frame uguale a Mira.

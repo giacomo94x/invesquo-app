@@ -1,0 +1,1 @@
+Correzione desktop/orizzontale: sfondo header a piena larghezza identico allo sfondo della pagina anche durante lo scroll. Nessuna modifica alle funzioni o ai backup.

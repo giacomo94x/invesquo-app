@@ -1,0 +1,19 @@
+/* Finholdra 10.8.4 – Dashboard selected category capital & value */
+.fh1084-capital-card{margin-top:12px}
+.fh1084-capital-ranges{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin:14px 0}
+.fh1084-capital-ranges button{min-width:0;padding:9px 2px;font-size:12px;font-weight:750}
+.fh1084-capital-ranges .selected{background:#eac044!important;color:#13213a!important;border-color:#f6dd7b!important}
+.fh1084-capital-expand{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;margin:0 0 5px;background:var(--panel2);border:1px solid var(--border);border-radius:12px;color:var(--text);font:inherit;font-weight:700;text-align:left;cursor:pointer}
+.fh1084-capital-expand span:last-child{font-size:12px;white-space:nowrap;color:var(--muted)}
+.fh1084-capital-svg{width:100%;max-width:100%;height:auto;display:block;touch-action:pan-y;cursor:crosshair;overflow:visible}
+.fh1084-capital-readout{min-height:50px;margin:8px 0;padding:8px 12px;border:1px solid var(--border);border-radius:10px;display:flex;gap:6px;flex-wrap:wrap;justify-content:space-between;align-items:center;font-size:13px;background:var(--panel2)}
+.fh1084-capital-readout strong{font-size:15px}
+.fh1084-capital-legend{display:flex;gap:15px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--muted);margin:8px 2px}
+.fh1084-capital-legend span{display:inline-flex;align-items:center;gap:6px}.fh1084-legend-dot{width:10px;height:10px;display:inline-block;border-radius:50%}.fh1084-legend-dot.value{background:#4ddbb3}.fh1084-legend-dot.capital{background:#ecbc55}
+.fh1084-capital-overlay{display:none;position:fixed;inset:0;z-index:2147482000;background:rgba(3,15,30,.85);padding:clamp(8px,3vw,24px);align-items:center;justify-content:center;overflow-y:auto}
+.fh1084-capital-overlay.open{display:flex}body.fh1084-modal-open{overflow:hidden}
+.fh1084-capital-dialog{width:min(100%,1000px);max-height:94dvh;overflow-y:auto;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:18px;padding:clamp(12px,3vw,24px);box-shadow:0 25px 80px #0008}
+.fh1084-capital-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.fh1084-capital-dialog-head strong{font-size:clamp(16px,3vw,22px)}
+#fhHomeCapitalFullPlot .fh1084-capital-svg{width:100%;min-height:190px}#fhHomeCapitalOverlay .fh1084-capital-readout{font-size:clamp(13px,2.2vw,17px)}
+@media(max-width:390px){.fh1084-capital-ranges{gap:3px}.fh1084-capital-ranges button{font-size:11px;padding:8px 0}.fh1084-capital-expand{font-size:12px;padding:10px}}
+@media(prefers-reduced-motion:reduce){.fh1084-capital-overlay{scroll-behavior:auto}}

@@ -1,0 +1,1 @@
+Finholdra Beta 10.6.7: Statistiche per tutti gli strumenti (inclusi quelli liquidati), grafici di valore/ capitale osservato, rendimenti calcolabili e intervalli; nuovi 1S e 3M per azioni ed ETC/ETN. Le statistiche segnalano dati storici mancanti e non offrono previsioni di profitto.

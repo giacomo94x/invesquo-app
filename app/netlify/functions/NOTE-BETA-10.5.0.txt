@@ -1,0 +1,1 @@
+10.5.0 — Finn Radar: classifiche Yahoo, news RSS Google, filtri geografici, animazioni. Fonti browser best effort; nessun dato fittizio. Controvalore stimato. Nessun backend richiesto.

@@ -1,0 +1,4 @@
+Finholdra Beta 10.9.1
+
+- Corretto il wordmark Finholdra nell'header: stessa grafica della sezione News, stessa scala percepita ma senza il taglio in basso a sinistra.
+- Aggiornato il numero di beta visualizzato a 10.9.1.

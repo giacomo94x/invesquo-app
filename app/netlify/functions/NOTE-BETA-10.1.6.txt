@@ -1,0 +1,2 @@
+Finholdra Beta 10.1.6
+- Storico > Archivio: aggiunta la piccola icona categoria (Azioni/ETF/Obbligazioni ecc.) accanto al logo del titolo, in linea con la sezione Investimenti.

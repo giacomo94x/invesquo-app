@@ -1,0 +1,5 @@
+FINHOLDRA BETA 10.9.2
+- FinnTheftAuto: canvas disegnato subito all’apertura, ridimensionamento iOS, rendering resiliente e fallback grafico.
+- FinnSolid: menu segreto con tutte le 16 missioni, pulsanti su 4 colonne.
+- FinnSolid missioni 15 e 16: pattuglie attive, mantenuto boss Liquid Leverage e la fuga in jeep.
+- Messaggio introduttivo missione: sparisce appena Finn inizia a muoversi; dialoghi successivi restano normali.

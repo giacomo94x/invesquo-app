@@ -1,0 +1,1 @@
+Beta 10.6.4: palette mercato più intense, ambito configurabile, riferimento chiusura precedente nei grafici 1G quando disponibile.
