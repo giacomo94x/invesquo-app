@@ -31,3 +31,10 @@
 @media(max-width:375px){#finnTheftAuto .fta-controls{grid-template-columns:1fr 1fr;gap:6px;padding:6px 6px calc(env(safe-area-inset-bottom,0px) + 6px)}#finnTheftAuto .fta-dpad{grid-template-rows:repeat(2,46px)}#finnTheftAuto .fta-actions button{min-height:41px;font-size:10px}#finnTheftAuto .fta-footnote{font-size:9px}}
 @media(min-width:800px){#finnTheftAuto .fta-controls{grid-template-columns:260px 275px;justify-content:center}#finnTheftAuto .fta-dpad{grid-template-rows:repeat(2,49px)}#finnTheftAuto #ftaMini{width:128px;height:128px}}
 @media(prefers-reduced-motion:reduce){#finnTheftAuto .fta-message{transition:none}}
+
+/* 10.9.2: force a composited, fully sized paint surface on iOS Safari/PWA. */
+#finnTheftAuto .fta-stage{isolation:isolate;min-width:0;min-height:160px}
+#finnTheftAuto #ftaCanvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block!important;opacity:1!important;visibility:visible!important;z-index:0;transform:translateZ(0);-webkit-transform:translateZ(0)}
+#finnTheftAuto .fta-overmap,#finnTheftAuto .fta-message,#finnTheftAuto .fta-street{z-index:2}
+#finnTheftAuto .fta-overmap{overflow:hidden}
+#finnTheftAuto #ftaMini{display:block!important;opacity:1!important;visibility:visible!important}

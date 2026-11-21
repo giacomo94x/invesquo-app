@@ -3,7 +3,7 @@
 const $=id=>document.getElementById(id);
 const root=$('finnTheftAuto'),canvas=$('ftaCanvas'),mini=$('ftaMini');
 if(!root||!canvas||!mini)return;
-const c=canvas.getContext('2d',{alpha:false}),mc=mini.getContext('2d');if(!c||!mc)return;
+const c=canvas.getContext('2d',{alpha:true}),mc=mini.getContext('2d');if(!c||!mc)return;
 const WORLD=4032,GRID=448,ROAD=112,SIDE=16,BLOCKS=WORLD/GRID,TAU=Math.PI*2;
 const rngSeed=20261121;let seed=rngSeed;const rand=()=>{seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296};
 const r=(a,b)=>a+(b-a)*rand(),pick=arr=>arr[Math.floor(rand()*arr.length)],clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -52,9 +52,9 @@ function attack(){if(!active||fireCooldown>0)return;fireCooldown=hero.weapon==='
  if(hero.weapon==='fire')raise(hit?.45:.22);else if(!hit)note('Nessuno a portata di mano.',1.2);
  if(hero.weapon==='fire')particles.push({x:hero.x+Math.cos(hero.dir)*22,y:hero.y+Math.sin(hero.dir)*22,life:.3,text:'✦'});status();}
 function rotateControl(key,down){if(down)held.add(key);else held.delete(key)}
-function update(dt){worldTime+=dt;fireCooldown=Math.max(0,fireCooldown-dt);rideCooldown=Math.max(0,rideCooldown-dt);hero.invuln=Math.max(0,hero.invuln-dt);
+let introVisible=false;function update(dt){worldTime+=dt;fireCooldown=Math.max(0,fireCooldown-dt);rideCooldown=Math.max(0,rideCooldown-dt);hero.invuln=Math.max(0,hero.invuln-dt);
  if(toastTime>0){toastTime-=dt;if(toastTime<=0)$('ftaMessage')?.classList.remove('show')}
- const dx=Number(has('right'))-Number(has('left')),dy=Number(has('down'))-Number(has('up'));
+ const dx=Number(has('right'))-Number(has('left')),dy=Number(has('down'))-Number(has('up'));if(introVisible&&(dx||dy)){introVisible=false;toastTime=0;$('ftaMessage')?.classList.remove('show');}
  if(hero.car){const car=hero.car;const move=Math.hypot(dx,dy);if(move>0){const d=Math.atan2(dy,dx);let delta=Math.atan2(Math.sin(d-car.heading),Math.cos(d-car.heading));car.heading+=clamp(delta,-dt*2.7,dt*2.7);const speed=290*dt;const nx=car.x+Math.cos(car.heading)*speed,ny=car.y+Math.sin(car.heading)*speed;if(!blocked(nx,ny,23)){car.x=nx;car.y=ny;}else{hero.hp=clamp(hero.hp-8,0,100);raise(.18);note('Attenzione ai palazzi!');}car.speed=220;}else car.speed=0;hero.x=car.x;hero.y=car.y;hero.dir=car.heading;}
  else if(dx||dy){const mag=Math.hypot(dx,dy),vx=dx/mag*126*dt,vy=dy/mag*126*dt;[hero.x,hero.y]=walk(hero.x,hero.y,vx,vy,13);hero.dir=Math.atan2(dy,dx);hero.step+=dt*10;}
  for(const car of cars){if(car.occupied)continue;if(car.police){if(heat>0.2){const targetX=hero.x,targetY=hero.y;const a=Math.atan2(targetY-car.y,targetX-car.x);let diff=Math.atan2(Math.sin(a-car.heading),Math.cos(a-car.heading));car.heading+=clamp(diff,-dt*1.3,dt*1.3);const vx=Math.cos(car.heading)*car.speed*dt,vy=Math.sin(car.heading)*car.speed*dt;let [x,y]=walk(car.x,car.y,vx,vy,21);car.x=x;car.y=y;if(Math.hypot(car.x-hero.x,car.y-hero.y)<45&&hero.invuln<=0){hero.hp=Math.max(0,hero.hp-(hero.car?12:8));hero.invuln=1.5;note('🚨 La pattuglia ti ha raggiunto!');}}continue}
@@ -68,7 +68,7 @@ function update(dt){worldTime+=dt;fireCooldown=Math.max(0,fireCooldown-dt);rideC
  if(hero.hp<=0){hero.hp=100;heat=0;hero.car&&(hero.car.occupied=false);hero.car=null;hero.x=GRID*4;hero.y=GRID*4+GRID/2;hero.cash=Math.max(0,hero.cash-30);note('Rientro dalla centrale · cauzione €30',4)}
  miniTick+=dt;if(miniTick>.12){miniTick=0;status();$('ftaStreet').textContent=district();renderMini()}
 }
-function roundedRect(ctx,x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+function roundedRect(ctx,x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();if(typeof ctx.roundRect==='function')ctx.roundRect(x,y,w,h,r);else ctx.rect(x,y,w,h);ctx.fill()}
 function drawStreet(){const minx=camX,maxx=camX+viewW/zoom,miny=camY,maxy=camY+viewH/zoom;
  c.fillStyle='#354653';c.fillRect(camX,camY,viewW/zoom,viewH/zoom);
  const startx=Math.max(0,Math.floor(minx/GRID)-1),endx=Math.min(BLOCKS,Math.ceil(maxx/GRID)+1),starty=Math.max(0,Math.floor(miny/GRID)-1),endy=Math.min(BLOCKS,Math.ceil(maxy/GRID)+1);
@@ -104,8 +104,9 @@ function renderMini(){const w=112,h=112;mini.width=w*2;mini.height=h*2;mc.setTra
  mc.fillStyle='#3c9c74';for(const p of parks)mc.fillRect(p.x*s,p.y*s,p.w*s,p.h*s);
  mc.fillStyle='#ef7e65';for(const car of cars)if(car.police)mc.fillRect(car.x*s-1.2,car.y*s-1.2,3,3);
  mc.fillStyle='#77fdb5';mc.beginPath();mc.arc(hero.x*s,hero.y*s,4,0,TAU);mc.fill();mc.strokeStyle='#fff';mc.lineWidth=1.5;mc.stroke();}
-function loop(now){if(!active)return;const dt=last?Math.min(.046,(now-last)/1000):0;last=now;update(dt);draw();raf=requestAnimationFrame(loop)}
-function open(){if(active)return;$('finnGamePicker')?.classList.remove('is-open');saveOverflow=document.body.style.overflow;document.body.style.overflow='hidden';root.classList.add('fta-open');root.setAttribute('aria-hidden','false');active=true;last=0;held.clear();note('Benvenuto a Finn City! Esplora liberamente Piazza Affari.',4);status();renderMini();raf=requestAnimationFrame(loop)}
+function loop(now){if(!active)return;const dt=last?Math.min(.046,(now-last)/1000):0;last=now;try{update(dt)}catch(err){console.error('[Finn City] update',err)}try{draw()}catch(err){console.error('[Finn City] draw',err);drawFallback()}raf=requestAnimationFrame(loop)}
+function drawFallback(){const dpr=Math.min(window.devicePixelRatio||1,2),w=Math.max(240,canvas.clientWidth),h=Math.max(240,canvas.clientHeight);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);c.setTransform(dpr,0,0,dpr,0,0);c.fillStyle='#345364';c.fillRect(0,0,w,h);c.strokeStyle='#7f99a2';c.lineWidth=34;for(let x=-w;x<w*2;x+=105){c.beginPath();c.moveTo(x,0);c.lineTo(x,h);c.stroke()}for(let y=35;y<h;y+=125){c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke()}c.fillStyle='#79e6a6';c.beginPath();c.arc(w/2,h/2,13,0,TAU);c.fill();c.fillStyle='#fff';c.font='bold 13px system-ui';c.fillText('FINN',w/2-16,h/2-20)}
+function open(){if(active)return;$('finnGamePicker')?.classList.remove('is-open');saveOverflow=document.body.style.overflow;document.body.style.overflow='hidden';root.classList.add('fta-open');root.setAttribute('aria-hidden','false');active=true;last=0;held.clear();note('Benvenuto a Finn City! Esplora liberamente Piazza Affari.',4);introVisible=true;status();renderMini();try{draw()}catch(err){console.error('[Finn City] first draw',err);drawFallback()}raf=requestAnimationFrame(loop)}
 function close(){if(!active)return;active=false;cancelAnimationFrame(raf);raf=0;root.classList.remove('fta-open');root.setAttribute('aria-hidden','true');document.body.style.overflow=saveOverflow;held.clear()}
 function setHeldButton(b,dir){const down=e=>{if(!active)return;e.preventDefault();try{b.setPointerCapture(e.pointerId)}catch(_){}rotateControl(dir,true);b.classList.add('fta-held')};const up=e=>{e.preventDefault();rotateControl(dir,false);b.classList.remove('fta-held')};b.addEventListener('pointerdown',down);for(const ev of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(ev,up)}
 root.querySelectorAll('[data-fta-dir]').forEach(b=>setHeldButton(b,b.dataset.ftaDir));
@@ -114,6 +115,6 @@ $('fgpTheftAuto')?.addEventListener('click',open);
 const keyDir={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right',W:'up',S:'down',A:'left',D:'right'};
 window.addEventListener('keydown',e=>{if(!active)return;if(keyDir[e.key]){e.preventDefault();rotateControl(keyDir[e.key],true)}else if(e.key==='e'||e.key==='E'){e.preventDefault();if(!e.repeat)toggleRide()}else if(e.key==='f'||e.key==='F'){e.preventDefault();if(!e.repeat)attack()}else if(e.key==='q'||e.key==='Q'){e.preventDefault();if(!e.repeat)$('ftaWeapon')?.click()}else if(e.key==='Escape')close()});
 window.addEventListener('keyup',e=>{if(!active)return;if(keyDir[e.key]){e.preventDefault();rotateControl(keyDir[e.key],false)}});
-window.addEventListener('blur',()=>held.clear());document.addEventListener('visibilitychange',()=>{if(document.hidden)held.clear()});
+window.addEventListener('resize',()=>{if(active){try{draw();renderMini()}catch(err){console.error('[Finn City] resize',err)}}});window.addEventListener('blur',()=>held.clear());document.addEventListener('visibilitychange',()=>{if(document.hidden)held.clear()});
 window.FinnTheftAuto={open,close,getState:()=>({active,hero:{x:hero.x,y:hero.y,hp:hero.hp,inCar:!!hero.car},vehicles:cars.length,people:people.length,wanted:Math.ceil(heat-.01),world:WORLD})};
 })();
