@@ -2,6 +2,12 @@
 
 Tutte le note delle precedenti beta sono raccolte qui. Lo storico più recente è in alto.
 
+## Beta 10.9.23 — 22 novembre 2026
+
+- **Home · Patrimonio e valore:** rimossa la ripetizione del titolo vicino a Ingrandisci; pulsante compatto, allineato a destra.
+- **Calendario:** il campo nativo della data ora occupa l’intera icona ed è direttamente toccabile anche su Safari iPhone. Resta possibile modificare il periodo tramite i pulsanti.
+- **Stabilità:** intatti ricostruzione dei prezzi, cursore e grafico a schermo intero.
+
 ## Beta 10.9.22 — 22 novembre 2026
 
 - **Grafico Patrimonio e valore:** corretto tracciamento del cursore in fullscreen ruotato su iPhone con coordinate dell'area SVG realmente disegnata, compresi i margini di adattamento.
