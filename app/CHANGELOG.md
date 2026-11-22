@@ -2,6 +2,12 @@
 
 Tutte le note delle precedenti beta sono raccolte qui. Lo storico più recente è in alto.
 
+## Beta 10.9.24 — 22 novembre 2026
+
+- **Grafico Home:** calendario identico nel funzionamento alla sezione Investimenti: al tocco apre due campi visibili Dal/Al e il comando Mostra, senza usare il picker nativo nascosto che su iOS non si attivava.
+- **Date storiche:** intervallo personalizzato applicato ai dati di Patrimonio e valore; le selezioni standard restano disponibili.
+- **Conservazione:** nessun cambiamento al calcolo, al cursore o al fullscreen.
+
 ## Beta 10.9.23 — 22 novembre 2026
 
 - **Home · Patrimonio e valore:** rimossa la ripetizione del titolo vicino a Ingrandisci; pulsante compatto, allineato a destra.
