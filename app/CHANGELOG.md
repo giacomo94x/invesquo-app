@@ -1,6 +1,18 @@
+## Beta 10.9.26
+
+- Home: il grafico "Patrimonio e valore" in verticale è ora più alto e visivamente più vicino a quello della sezione Investimenti.
+- Home: pulsante "Ingrandisci" reso più piccolo e allineato a destra.
+- Home: migliorate proporzioni del grafico principale su iPhone in portrait, con maggiore spazio utile per il tracciato e le date.
+
 # Finholdra — Changelog cumulativo
 
 Tutte le note delle precedenti beta sono raccolte qui. Lo storico più recente è in alto.
+
+## Beta 10.9.25 — 22 novembre 2026
+
+- **Home · Patrimonio e valore:** ridimensionati il pannello di selezione date e i campi Dal/Al. Campi e pulsante Mostra ora occupano una sola riga sui display iPhone comuni, con altezza ridotta e una disposizione adattiva per schermi più stretti.
+- **Comportamento invariato:** mantenuto il calendario Dal/Al/Mostra della Beta 10.9.24, senza modifiche al grafico, ai cursori o ai calcoli.
+- **Versione:** aggiornati interfaccia, `version.json`, manifest e changelog unico a 10.9.25.
 
 ## Beta 10.9.24 — 22 novembre 2026
 

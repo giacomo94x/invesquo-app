@@ -83,3 +83,75 @@
 .fh115-custom-dates label{display:flex;flex:1 1 110px;min-width:0;flex-direction:column;gap:5px;font-size:12px;color:var(--muted);font-weight:700}
 .fh115-custom-dates input[type=date]{display:block;width:100%;min-width:0;min-height:43px;font-size:16px;color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:8px 6px;opacity:1!important;pointer-events:auto!important;position:static!important;appearance:auto!important;-webkit-appearance:auto!important}
 .fh115-custom-dates .btn{min-height:43px;flex:0 1 96px}
+
+/* Beta 10.9.25 — compact date selection; retain the working Dal/Al/Mostra logic. */
+#fhHomeCapitalCard .fh115-custom-dates,
+#dashboardWealthCard .fh115-custom-dates{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr) minmax(0,1fr) 70px;
+ align-items:end;
+ gap:6px;
+ padding:7px 8px;
+ margin:5px 0 8px;
+ border-radius:11px;
+}
+#fhHomeCapitalCard .fh115-custom-dates label,
+#dashboardWealthCard .fh115-custom-dates label{
+ display:flex;
+ min-width:0;
+ width:100%;
+ flex:none;
+ gap:3px;
+ font-size:11px;
+ line-height:1.2;
+}
+#fhHomeCapitalCard .fh115-custom-dates input[type=date],
+#dashboardWealthCard .fh115-custom-dates input[type=date]{
+ box-sizing:border-box;
+ width:100%;
+ min-width:0;
+ min-height:34px;
+ height:34px;
+ padding:3px 2px;
+ font-size:13px;
+ line-height:1.15;
+ border-radius:8px;
+}
+#fhHomeCapitalCard .fh115-custom-dates .btn,
+#dashboardWealthCard .fh115-custom-dates .btn{
+ min-width:0;
+ width:70px;
+ min-height:34px;
+ height:34px;
+ padding:4px 6px;
+ font-size:12px;
+ border-radius:8px;
+ flex:none;
+}
+@media(max-width:355px){
+ #fhHomeCapitalCard .fh115-custom-dates,
+ #dashboardWealthCard .fh115-custom-dates{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ #fhHomeCapitalCard .fh115-custom-dates .btn,
+ #dashboardWealthCard .fh115-custom-dates .btn{grid-column:2;justify-self:end}
+}
+
+
+/* 10.9.26 — Home chart in portrait matches Investments more closely. */
+#fhHomeCapitalCard .fh115-range{margin:10px 0 8px}
+#fhHomeCapitalCard .fh115-actions{display:flex;justify-content:flex-end;align-items:center;margin:6px 0 10px}
+#fhHomeCapitalCard .fh115-actions button{width:auto;min-width:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;margin:0;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1;white-space:nowrap}
+#fhHomeCapitalCard .fh115-actions button span{font-size:13px;color:inherit}
+#fhHomeCapitalCard .fh115-plot{min-height:250px;border:1px solid var(--border);border-radius:18px;padding:8px 7px 4px;background:rgba(10,31,56,.16);display:flex;align-items:stretch}
+#fhHomeCapitalCard .fh115-plot .fh115-svg{height:100%;flex:1 1 auto}
+#fhHomeCapitalCard .fh115-readout{margin:10px 0 8px}
+#fhHomeCapitalCard .fh115-tools{margin-top:8px;gap:10px;align-items:flex-start}
+#fhHomeCapitalCard .fh115-tools span{line-height:1.45}
+@media(max-width:560px){
+ #fhHomeCapitalCard .fh115-plot{min-height:288px;padding:9px 6px 4px}
+ #fhHomeCapitalCard .fh115-actions button{padding:9px 12px;font-size:12px;border-radius:13px}
+ #fhHomeCapitalCard .fh115-readout strong{font-size:16px}
+}
+@media(max-width:390px){
+ #fhHomeCapitalCard .fh115-plot{min-height:302px}
+ #fhHomeCapitalCard .fh115-tools{font-size:10px}
+}
