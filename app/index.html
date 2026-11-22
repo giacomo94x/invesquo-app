@@ -2071,7 +2071,7 @@ body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.4</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.5</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -3356,8 +3356,7 @@ function donutArcPath(cx,cy,outer,inner,startDeg,endDeg){
  const a=point(outer,startDeg),b=point(outer,endDeg),c=point(inner,endDeg),d=point(inner,startDeg),large=endDeg-startDeg>180?1:0;
  return `M ${a[0].toFixed(3)} ${a[1].toFixed(3)} A ${outer} ${outer} 0 ${large} 1 ${b[0].toFixed(3)} ${b[1].toFixed(3)} L ${c[0].toFixed(3)} ${c[1].toFixed(3)} A ${inner} ${inner} 0 ${large} 0 ${d[0].toFixed(3)} ${d[1].toFixed(3)} Z`;
 }
-function donutOutlineColor(){const tone=finnHomeTone();return tone==='weekend'?'#6f6020':tone==='up'?'#1d6d57':tone==='down'?'#7a3241':'#203f63';}
-function applyDonutOutline(){const donut=$('donut');if(!donut)return;const col=donutOutlineColor();donut.style.boxShadow='0 0 0 6px '+col;donut.style.border='0';}
+function applyDonutOutline(){const donut=$('donut');if(!donut)return;donut.style.removeProperty('box-shadow');donut.style.removeProperty('border');}
 function renderInteractiveDonut(full,den){
  const donut=$('donut');if(!donut)return;
  let offset=0;
@@ -3829,13 +3828,13 @@ function fh102HistoricFx(archive,currency,date){
 }
 async function fh102FetchForex(archive,currency){
  if(!currency||currency==='EUR')return false;
- const symbol='EUR'+currency+'=X';const url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol)+'?range=1y&interval=1d';
+ const symbol='EUR'+currency+'=X',from=Math.floor(Date.parse('2026-01-01T00:00:00Z')/1000),to=Math.floor(Date.parse(today()+'T00:00:00Z')/1000)+86400;const url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol)+'?period1='+from+'&period2='+to+'&interval=1d';
  for(const uri of [url,...relayUrls(url)]){try{
   const payload=JSON.parse(await readUrl(uri,6500)),item=payload?.chart?.result?.[0];
   if(String(item?.meta?.symbol||'').toUpperCase()!==symbol.toUpperCase())continue;
   const list=archive.forex||(archive.forex={});const pairs=list[currency]||(list[currency]={});
   const times=item.timestamp||[],closes=item.indicators?.quote?.[0]?.close||[];
-  times.forEach((t,i)=>{const price=Number(closes[i]),day=new Date(Number(t)*1000).toISOString().slice(0,10);if(price>0&&day<today())pairs[day]=price});
+  times.forEach((t,i)=>{const price=Number(closes[i]),day=new Date(Number(t)*1000).toISOString().slice(0,10);if(price>0&&day>='2026-01-01'&&day<today())pairs[day]=price});
   return Object.keys(pairs).length>0;
  }catch(_){}}return false;
 }
@@ -3881,7 +3880,8 @@ function fh1089ChartFirstDay(archive,cats){
  // Include non-trade historical positions only when their historical quotes are documented;
  // use at most the last year to keep rendering responsive on older devices.
  const earliest=candidates.sort()[0]||fh102FirstDay();
- return earliest<yearAgo?yearAgo:earliest;
+ // Requested 2026 calendar, without falsely showing assets before first documented ownership.
+ return earliest<'2026-01-01'?'2026-01-01':earliest;
 }
 function fh102CalendarSeries(){
   const archive=fh102Read();fh102ImportKnown(archive);const cats=CAT.filter(([cat])=>filter[cat]).map(([cat])=>cat),start=fh1089ChartFirstDay(archive,cats),end=today();
@@ -3892,23 +3892,32 @@ function fh102CalendarSeries(){
   return {cats,records,start,archive};
 }
 async function fh102FetchRemote(a){
-  if(a.cat==='Conto deposito'||a.cat==='Risparmio postale')return new Map();
-  if(a.cat==='Obbligazioni'&&a.isin)return historicBondCloses(a.isin);
-  if(!a.symbol)return new Map();
-  const url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(a.symbol)+'?range=1y&interval=1d&includePrePost=false';
-  const urls=['/.netlify/functions/history?symbol='+encodeURIComponent(a.symbol)+'&range=1y&currency='+encodeURIComponent(currencyOf(a)),url,...relayUrls(url)];
-  for(const uri of urls){try{
-    const payload=JSON.parse(await readUrl(uri,6500)),item=payload?.chart?.result?.[0];
-    if(!item||String(item.meta?.symbol||'').toUpperCase()!==String(a.symbol).toUpperCase()||String(item.meta?.currency||'').toUpperCase()!==currencyOf(a))continue;
-    const times=item.timestamp||[],closes=item.indicators?.quote?.[0]?.close||[],map=new Map();
-    times.forEach((t,i)=>{const price=Number(closes[i]);if(price>0&&Number(t)>0){
-      const date=new Date(Number(t)*1000).toISOString().slice(0,10);
-      // The current day's candle is unfinished and is not a verified close.
-      if(date<today())map.set(date,price);
-    }});
-    if(map.size)return map;
-  }catch(_){}}
-  return new Map();
+ if(a.cat==='Conto deposito'||a.cat==='Risparmio postale')return new Map();
+ if(a.cat==='Obbligazioni'&&a.isin)return historicBondCloses(a.isin);
+ if(!a.symbol)return new Map();
+ const symbol=a.symbol,currency=currencyOf(a),from=Math.floor(Date.parse('2026-01-01T00:00:00Z')/1000);
+ const through=Math.floor((Date.parse(today()+'T00:00:00Z')+86400000)/1000);
+ const base='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol);
+ const year='period1='+from+'&period2='+through+'&interval=1d&includePrePost=false';
+ const direct=base+'?'+year;
+ const remotePaths=[
+   '/.netlify/functions/history?symbol='+encodeURIComponent(symbol)+'&currency='+encodeURIComponent(currency)+'&range=1y',
+   direct,...relayUrls(direct)
+ ];
+ let best=new Map();
+ for(const uri of remotePaths){try{
+  const payload=JSON.parse(await readUrl(uri,8000)),item=payload?.chart?.result?.[0];
+  if(!item||String(item.meta?.symbol||'').toUpperCase()!==String(symbol).toUpperCase()||String(item.meta?.currency||'').toUpperCase()!==currency)continue;
+  const times=item.timestamp||[],closes=item.indicators?.quote?.[0]?.close||[],map=new Map();
+  times.forEach((t,i)=>{const price=Number(closes[i]);if(!(price>0&&Number.isFinite(price)&&Number(t)>0))return;
+   // Trading session date in the exchange timezone, not UTC date, matters for US markets.
+   let date;try{const parts=new Intl.DateTimeFormat('en-GB',{timeZone:item.meta?.exchangeTimezoneName||'UTC',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(Number(t)*1000));const get=key=>parts.find(x=>x.type===key)?.value;date=get('year')+'-'+get('month')+'-'+get('day');}catch(_){date=new Date(Number(t)*1000).toISOString().slice(0,10)}
+   if(date>='2026-01-01'&&date<today())map.set(date,price);
+  });
+  if(map.size>best.size)best=map;
+  if(best.size>160)break;
+ }catch(_){}}
+ return best;
 }
 function fh102Deadline(p,ms){let timer;return Promise.race([p,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Tempo di attesa scaduto')),ms)})]).finally(()=>clearTimeout(timer));}
 function fh102SafeRender(){try{fh102RenderArchive()}catch(e){console.warn('Archivio:',e);const el=document.getElementById('fh102CloseList');if(el)el.textContent='Archivio non disponibile: '+String(e.message||e)}try{renderWealthGraph()}catch(e){console.warn('Patrimonio:',e);const el=document.getElementById('wealthGraph');if(el)el.textContent='Grafico non disponibile: '+String(e.message||e)}}
@@ -3922,15 +3931,15 @@ async function fh102Refresh(force=false){
  try{
   const archive=fh102Read();imported=fh102ImportKnown(archive);if(imported)fh102Write(archive);fh102SafeRender();
   if(!force&&Date.now()-Number(store.getItem(FH102_REFRESH_KEY)||0)<18*3600000)return;
-  controls.forEach(b=>b.disabled=true);message('Chiusure locali disponibili · aggiornamento online…');
+  controls.forEach(b=>b.disabled=true);message('Recupero chiusure 2026 dal 01/01 a ieri · aggiornamento online…');
   const assets=state.assets.filter(a=>!['Conto deposito','Risparmio postale'].includes(a.cat));
   const currencies=[...new Set(assets.map(currencyOf).filter(c=>c!=='EUR'))];
   const jobs=currencies.map(c=>async()=>{try{await fh102Deadline(fh102FetchForex(archive,c),12000)}catch(e){missing.push('Cambio '+c)}}).concat(assets.map(a=>async()=>{
     try{const remote=await fh102Deadline(fh102FetchRemote(a),16000);for(const [day,price] of remote){if(fh102Put(archive,a,day,price,a.cat==='Obbligazioni'?'Quotazione storica MOT':'Yahoo Finance · chiusura giornaliera',a.cat==='Obbligazioni'?'observed':'close'))fetched++}if(!remote.size)missing.push(a.symbol||a.name)}catch(e){missing.push(a.symbol||a.name)}
   }));
-  let completed=0;for(let i=0;i<jobs.length;i+=3){await Promise.allSettled(jobs.slice(i,i+3).map(f=>f()));completed+=Math.min(3,jobs.length-i);fh102Write(archive);fh102SafeRender();message('Aggiornamento '+completed+'/'+jobs.length+' · '+fetched+' nuove rilevazioni');}
+  let completed=0;for(let i=0;i<jobs.length;i+=3){await Promise.allSettled(jobs.slice(i,i+3).map(f=>f()));completed+=Math.min(3,jobs.length-i);fh102Write(archive);fh102SafeRender();message('Recupero 2026 '+completed+'/'+jobs.length+' fonti · '+fetched+' nuove chiusure. Mancanti: '+missing.length);}
   if(fetched||!missing.length)store.setItem(FH102_REFRESH_KEY,String(Date.now()));
-  message((imported+fetched)+' rilevazioni aggiornate'+(missing.length?' · fonti non disponibili: '+missing.join(', '):''));
+  const years=state.assets.filter(a=>!['Conto deposito','Risparmio postale'].includes(a.cat));const coverage=years.map(a=>({name:a.symbol||a.name,n:Object.keys(archive.assets?.[a.id]?.days||{}).filter(d=>d>='2026-01-01'&&d<today()).length}));const noHistory=coverage.filter(x=>!x.n).map(x=>x.name);message('Archivio 2026: '+(imported+fetched)+' nuove chiusure/rilevazioni · '+coverage.map(x=>x.name+' '+x.n+' giorni').join(' · ')+(missing.length||noHistory.length?' · Fonti mancanti: '+[...new Set([...missing,...noHistory])].join(', '):' · Dati disponibili salvati.'));
  }catch(e){message('Dati locali disponibili · recupero online non riuscito: '+String(e.message||e))}
  finally{fh102Busy=false;controls.forEach(b=>b.disabled=false);fh102SafeRender()}
 }
@@ -3985,14 +3994,9 @@ let wealthRange='30';
 let wealthSelectedDate=null;
 function wealthSeriesForCurrentFilters(){
  const {cats,records,start}=fh102CalendarSeries();
- const filled=[];let lastValid=null;
- for(const rec of records){
-  if(rec.valid){lastValid={...rec};filled.push(rec);continue;}
-  if(lastValid&&rec.held>0){
-   filled.push({...rec,value:lastValid.value,valid:true,estimated:true,provisional:(Number(rec.provisional)||0)+1,filledFrom:lastValid.date,missing:rec.missing||[]});
-  }
- }
- return {cats,records:filled,start,allRecords:records};
+ // Never copy an earlier portfolio total over a day missing one or more holdings.
+ // Non-trading days are carried per instrument by fh102Closest(), and remain labelled provisional.
+ return {cats,records:records.filter(p=>p.valid),start,allRecords:records};
 }
 function renderWealthGraph(){
  try{window.renderHomeCapitalChart?.()}catch(err){console.warn('Grafico capitale / valore:',err)}
@@ -5769,7 +5773,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.4';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.5';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -6483,7 +6487,7 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
  // New feature: concentration of the selected/active positions, using the same valuation as Home.
  const concentration=document.createElement('section');concentration.className='card fh10-concentration';concentration.innerHTML='<div class="section-head"><h2>Concentrazione del portafoglio</h2><button type="button" class="btn" id="fh10RefreshConcentration">Aggiorna</button></div><p class="hint">Pesi calcolati sui valori attuali delle categorie selezionate.</p><div id="fh10ConcentrationResult" aria-live="polite"></div>';
  portfolio.prepend(concentration);
- const closeCard=document.createElement('section');closeCard.className='card fh102-archive';closeCard.id='fh102CloseArchive';closeCard.innerHTML='<div class="section-head"><h2>Archivio chiusure giornaliere</h2><button class="btn" type="button" id="fh102RefreshCloses">↻ Recupera</button></div><p class="hint">Prezzi di chiusura per giorno, separati da quantità e operazioni. Le giornate di borsa chiusa usano l’ultima chiusura disponibile.</p><label class="fh102-close-date">Data <input type="date" id="fh102CloseDay"></label><label class="fh102-close-import">Importa chiusure storiche (.json) <input id="fh102CloseImport" type="file" accept=".json,application/json"></label><div class="fh102-close-list" id="fh102CloseList"></div><p class="foot" id="fh102CloseStatus">Le quotazioni già verificate vengono recuperate dal tuo archivio; le altre sono scaricate quando disponibili.</p>';
+ const closeCard=document.createElement('section');closeCard.className='card fh102-archive';closeCard.id='fh102CloseArchive';closeCard.innerHTML='<div class="section-head"><h2>Archivio chiusure giornaliere</h2><button class="btn" type="button" id="fh102RefreshCloses">↻ Recupera</button></div><p class="hint">Recupera le quotazioni giornaliere dal 1° gennaio 2026. Sabati, domeniche e festività usano l’ultima chiusura verificata per ciascun titolo; eventuali giorni mancanti restano esplicitati.</p><label class="fh102-close-date">Data <input type="date" id="fh102CloseDay"></label><label class="fh102-close-import">Importa chiusure storiche (.json) <input id="fh102CloseImport" type="file" accept=".json,application/json"></label><div class="fh102-close-list" id="fh102CloseList"></div><p class="foot" id="fh102CloseStatus">Recupera tenta le chiusure reali del 2026 per tutti gli strumenti. I giorni o titoli senza fonte restano segnalati, senza valori inventati.</p>';
  portfolio.appendChild(closeCard);
 
  const output=concentration.querySelector('#fh10ConcentrationResult');
@@ -6874,6 +6878,15 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
 #finnSolid #fsFire:disabled{opacity:.48}
 #finnSolid .fs-help{max-width:none!important;font-size:10px;text-align:center;line-height:1.25}
 @media(max-width:380px){#finnSolid .fs-controls{grid-template-columns:minmax(0, 3fr) minmax(45px,.9fr) minmax(59px,1fr);gap:4px!important}#finnSolid .fs-dpad button{min-height:52px!important}#finnSolid .fs-dpad{grid-template-rows:repeat(2,52px)!important}}
+</style>
+<style id="fh1095-donut-dynamic">
+/* Live color follows the ACTUAL Home surface, including weekend yellow, positive green,
+   negative red, blue neutral, and theme switches. Avoid stale inline blue outlines. */
+#dashboardView #donut{
+ background:color-mix(in srgb,var(--bg) 75%,#000 25%)!important;
+ box-shadow:0 0 0 6px color-mix(in srgb,var(--bg) 75%,#000 25%)!important;
+ border:none!important;
+}
 </style>
 <style id="finnSolidStyles">
 #finnGamePicker,#finnSolid{position:fixed;inset:0;z-index:15500;display:none;color:#eaf5ff;background:#061426;font-family:Montserrat,-apple-system,BlinkMacSystemFont,sans-serif;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
@@ -7844,7 +7857,7 @@ header.top .new-header-brand #finholdraLogo{
 }
 </style>
 <link rel="stylesheet" href="./home-capital-chart.css?v=10.9.1"><script src="./home-capital-chart.js?v=10.9.1"></script>
-<link rel="stylesheet" href="./finn-theft-auto.css?v=10.9.4">
+<link rel="stylesheet" href="./finn-theft-auto.css?v=10.9.5">
 <style id="fh1091-gamepicker-layout">
 /* Four games in two tidy columns even on a phone. */
 #finnGamePicker .fgp-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
@@ -7858,5 +7871,5 @@ header.top .new-header-brand #finholdraLogo{
  <div class="fta-controls"><div class="fta-dpad" aria-label="Movimento"><span></span><button type="button" data-fta-dir="up" aria-label="Vai su">▲</button><span></span><button type="button" data-fta-dir="left" aria-label="Vai a sinistra">◀</button><button type="button" data-fta-dir="down" aria-label="Vai giù">▼</button><button type="button" data-fta-dir="right" aria-label="Vai a destra">▶</button></div><div class="fta-actions"><button type="button" id="ftaInteract"><span>🚙</span>Entra</button><button type="button" id="ftaAttack"><span>👊</span>Colpisci</button><button type="button" id="ftaWeapon"><span>🔄</span>Arma</button><button type="button" id="ftaTips" onclick="document.getElementById('ftaMessage').textContent='PC: WASD / frecce · E veicolo · F attacco · Q arma. Su smartphone usa i pulsanti.';document.getElementById('ftaMessage').classList.add('show')"><span>ℹ️</span>Comandi</button></div></div>
  <div class="fta-footnote">In auto usa le frecce per guidare. I crimini fanno salire le stelle: la polizia ti insegue finché non sfuggi. Free roaming illustrato e originale.</div>
 </div>
-<script src="./finn-theft-auto.js?v=10.9.4"></script>
-<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.4"><script src="./dashboard-fullscreen.js?v=10.9.4"></script></body></html>
+<script src="./finn-theft-auto.js?v=10.9.5"></script>
+<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.5"><script src="./dashboard-fullscreen.js?v=10.9.5"></script></body></html>
