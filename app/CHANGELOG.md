@@ -1,3 +1,10 @@
+## Beta 10.9.28
+
+- Home: corretto definitivamente il conflitto CSS che rendeva sempre visibile il selettore date. Il pannello è nascosto anche tramite attributo HTML e appare solo su richiesta.
+- Home: eliminato lo spazio vuoto artificiale nel grafico e ripristinata una dimensione proporzionata al tracciato, più vicina alla sezione Investimenti.
+- Home: aggiunta una leggera sfumatura sotto la linea del patrimonio, mantenendo i tratti verdi e rossi e il capitale giallo.
+- Nessuna modifica ai calcoli delle quantità, alle quotazioni o all'archivio storico.
+
 ## Beta 10.9.27
 
 - Home: il selettore date del grafico "Patrimonio e valore" è ora nascosto di default e si apre solo toccando il calendario.
