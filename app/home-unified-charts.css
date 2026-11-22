@@ -54,3 +54,6 @@
 #fh115Fullscreen .fh119-ab-read{display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px 8px;}
 #fh115Fullscreen .fh119-ab-read b{font-size:11px;}
 #fh115Fullscreen .fh115-svg text{font-family:Montserrat,system-ui,sans-serif;}
+
+/* 10.9.20: keep dragging inside the plot in rotated iPhone fullscreen. */
+#fh115Fullscreen .fh115-modal-plot, #fh115Fullscreen svg.fh115-svg{touch-action:none!important;overscroll-behavior:contain!important;-webkit-user-select:none!important;user-select:none!important;}

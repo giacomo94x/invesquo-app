@@ -2,6 +2,18 @@
 
 Tutte le note delle precedenti beta sono raccolte qui. Lo storico più recente è in alto.
 
+## Beta 10.9.21 — 22 novembre 2026
+
+- **Mercati chiusi:** aggiunta l'opzione “Predefinito del tema” nel sottomenu del colore neutro. Preserva la palette di base del tema attivo anche nei weekend, lasciando Finn a riposo; disponibili ancora i colori dedicati e la tavolozza libera.
+- **Compatibilità:** nessun intervento sui grafici o sui calcoli. Versione aggiornata nei file di rilascio.
+
+## Beta 10.9.20 — 22 novembre 2026
+
+- **Grafico Patrimonio e valore:** eliminata la regressione dei cursori in fullscreen: i movimenti non ricreano più l’intero SVG, ma aggiornano soltanto i marcatori e i dati selezionati.
+- **Fullscreen e touch:** impedita la chiusura accidentale dopo il primo trascinamento. La cattura del puntatore rimane stabile anche con lo schermo ruotato su iPhone.
+- **A↔B:** verificati trascinamenti ripetuti e indipendenti dei due cursori, con differenza in euro e percentuale aggiornata.
+- **Altre funzioni:** mantenuti 1S predefinito, zoom, acquisti, linee del patrimonio, capitale e storico esistenti. Versione app, manifest e `version.json` aggiornati.
+
 ## Beta 10.9.19 — 22 novembre 2026
 
 - **Grafico Patrimonio e valore a schermo intero:** ripristinate proporzioni corrette dello SVG (senza stretching) e adattamento alla superficie realmente disponibile su iPhone ruotato.
