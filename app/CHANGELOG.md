@@ -1,5 +1,16 @@
 # Finholdra — Changelog cumulativo
 
+Tutte le note delle precedenti beta sono raccolte qui. Lo storico più recente è in alto.
+
+## Beta 10.9.18 — 22 novembre 2026
+
+- **Home, Patrimonio e valore:** periodo predefinito 1S (7 giorni), modificabile con gli altri selettori.
+- **Grafico fullscreen:** riadattata la disposizione al modello della sezione Investimenti, lasciando il massimo spazio possibile al grafico.
+- **Touch iOS:** corretto il trascinamento del cursore nel fullscreen ruotato: asse delle date interpretato sull’asse verticale dello schermo fisico; SVG mantenuto stabile durante il movimento, per non perdere la cattura del tocco.
+- **Versione:** aggiornati interfaccia, manifest e `version.json` alla Beta 10.9.18.
+
+# Finholdra — Changelog cumulativo
+
 Tutte le modifiche, dalla versione più recente.
 
 ## Beta 10.9.17 — 22 novembre 2026

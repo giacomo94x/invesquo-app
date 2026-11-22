@@ -1,4 +1,4 @@
-/* Finholdra 10.9.17 — shared investment-style Home charts. Historic valuations stay in existing source. */
+/* Finholdra 10.9.18 — shared investment-style Home charts. Historic valuations stay in existing source. 10.9.18 fullscreen / touch fix. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id),EUR=new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'});
 const euros=n=>Number.isFinite(n)?EUR.format(n):'n.d.';
@@ -13,7 +13,7 @@ function capitalData(){if(typeof state==='undefined'||typeof fh102CalendarSeries
  // Mark dated purchase events without recomputing the valuation.
  const buys=new Map();for(const t of trades||[]){if(t.kind!=='buy'||!cats.includes(t.cat))continue;const date=typeof fh1099EffectiveTradeDate==='function'?fh1099EffectiveTradeDate(t):t.date;if(/^\d{4}-\d{2}-\d{2}$/.test(date))buys.set(date,(buys.get(date)||0)+Math.abs(Number(t.spent)||0))}
  const wealthByDate=new Map(wealthData().map(p=>[p.date,p]));return dated.map((p,i)=>({...p,buys:buys.get(p.date)||0,gain:wealthByDate.get(p.date)?.gain??(i? p.value-dated[i-1].value-(p.capital-dated[i-1].capital):null)}));}
-const states={capital:{id:'capital',card:$('fhHomeCapitalCard'),data:capitalData,range:90,from:'',selected:null,ab:false,A:null,B:null,zoom:1,scroll:0}};
+const states={capital:{id:'capital',card:$('fhHomeCapitalCard'),data:capitalData,range:7,from:'',selected:null,ab:false,A:null,B:null,zoom:1,scroll:0}};
 let expanded=null,full=null,lastFocus=null;
 function filtered(s){let all=s.data();if(!Array.isArray(all))return [];all=all.slice().sort((a,b)=>a.date.localeCompare(b.date));if(s.from)all=all.filter(p=>p.date>=s.from);else if(s.range!=='all'&&all.length){const end=dt(all.at(-1).date),start=end-Number(s.range)*86400000;all=all.filter(p=>dt(p.date)>=start);if(all.length===1&&s.range===1){const prev=s.data().filter(p=>p.date<all[0].date).at(-1);if(prev)all.unshift(prev);}}
  if(s.zoom>1&&all.length>2){const len=Math.max(2,Math.ceil(all.length/s.zoom)),start=Math.max(0,Math.round(s.scroll*(all.length-len)));all=all.slice(start,start+len)}return all;}
@@ -26,7 +26,7 @@ function chartSvg(s,all,large){if(!all.length)return '<p class="hint">Nessuna qu
  const marks=all.filter(p=>p.buys>0).map(p=>`<text x="${x(p)}" y="${Math.max(T+10,y(p.value)-13)}" text-anchor="middle" font-size="15">💰</text>`).join('');
  const chosen=all.find(p=>p.date===s.selected)||all.at(-1),cross=chosen?`<line x1="${x(chosen)}" x2="${x(chosen)}" y1="${T}" y2="${H-B}" stroke="currentColor" opacity=".65" stroke-dasharray="5 6"/><circle cx="${x(chosen)}" cy="${y(chosen.value)}" r="7" fill="#f78197" stroke="white" stroke-width="3"/>`:'';
  const abMarks=[s.A,s.B].filter(Boolean).map((p,i)=>`<g><line x1="${x(p)}" x2="${x(p)}" y1="${T}" y2="${H-B}" stroke="#f2c65b" stroke-dasharray="3 5" stroke-width="2"/><text x="${x(p)+6}" y="${T+16}" fill="#f4cd68" font-size="17" font-weight="800">${i?'B':'A'}</text></g>`).join('');
- return `<svg class="fh115-svg" role="img" tabindex="0" aria-label="Grafico interattivo; tocca e trascina per leggere la data" viewBox="0 0 ${W} ${H}">${ticks}${lines}${marks}${cross}${abMarks}<text x="${L}" y="${H-9}" fill="currentColor" opacity=".85" font-size="15">${fmt(all[0].date)}</text><text x="${W-R}" y="${H-9}" text-anchor="end" fill="currentColor" opacity=".85" font-size="15">${fmt(all.at(-1).date)}</text></svg>`;
+ return `<svg class="fh115-svg" preserveAspectRatio="none" role="img" tabindex="0" aria-label="Grafico interattivo; tocca e trascina per leggere la data" viewBox="0 0 ${W} ${H}">${ticks}${lines}${marks}${cross}${abMarks}<text x="${L}" y="${H-9}" fill="currentColor" opacity=".85" font-size="15">${fmt(all[0].date)}</text><text x="${W-R}" y="${H-9}" text-anchor="end" fill="currentColor" opacity=".85" font-size="15">${fmt(all.at(-1).date)}</text></svg>`;
 }
 function readout(s,all){const p=all.find(p=>p.date===s.selected)||all.at(-1);if(!p)return 'Nessun dato storico';if(s.ab&&s.A&&s.B){const delta=s.B.value-s.A.value;return `<span>${fmt(s.A.date)} A → ${fmt(s.B.date)} B</span><strong style="color:${delta>=0?'#54d5ad':'#f78299'}">Δ ${delta>0?'+':''}${euros(delta)}</strong>`;}
  if(s.ab&&s.A)return `<span>A: ${fmt(s.A.date)} · ${euros(s.A.value)}</span><strong>Seleziona B</strong>`;
@@ -35,14 +35,39 @@ function controls(s){return `<div class="fh115-range" role="group" aria-label="P
 function mount(){const report=$('dashboardReports'),home=$('dashboardView');if(report&&home){let reportCard=$('fh117ReportCard');if(!reportCard){reportCard=document.createElement('section');reportCard.id='fh117ReportCard';reportCard.className='card fh117-report';home.append(reportCard);}reportCard.append(report);}const cap=$('fhHomeCapitalCard');if(cap){cap.querySelector('.section-head h2').textContent='Patrimonio e valore';const sub=cap.querySelector('.section-head .sub');if(sub)sub.textContent='Capitale investito e valore nel tempo';}for(const s of Object.values(states)){if(!s.card)continue;const original=s.card.querySelector('.section-head');let host=s.card.querySelector('.fh115-host');if(!host){host=document.createElement('div');host.className='fh115-host';original?.after(host);}s.host=host;} full=document.createElement('div');full.id='fh115Fullscreen';full.innerHTML='<div class="fh115-modal fh117-investment-style" role="dialog" aria-modal="true" aria-label="Patrimonio e valore a schermo intero"><div class="fh115-modal-head"><strong id="fh115Title">Patrimonio e valore</strong><button class="btn" type="button" data-fh115-close="1">✕ Chiudi</button></div><div class="fh115-modal-plot"></div><div class="fh115-modal-readout"></div><div class="fh115-zoom"><button type="button" data-fh115-tool="prev" aria-label="Punto precedente">↑</button><button type="button" data-fh115-tool="minus">− Zoom</button><button type="button" data-fh115-tool="reset">Ripristina</button><button type="button" data-fh115-tool="plus">+ Zoom</button><button type="button" data-fh115-tool="next" aria-label="Punto successivo">↓</button><button type="button" data-fh115-tool="ab">A↔B</button></div></div>';document.body.append(full);}
 function paint(s){if(!s.host)return;let all=filtered(s);if(!all.find(p=>p.date===s.selected))s.selected=all.at(-1)?.date||null;
  const inner=`${controls(s)}<div class="fh115-actions"><button type="button" data-fh115-open="1">Patrimonio e valore <span>⛶ Ingrandisci</span></button></div><div class="fh115-plot">${chartSvg(s,all,false)}</div><div class="fh115-readout">${readout(s,all)}</div><div class="fh115-tools"><button type="button" data-fh115-tool="ab" class="${s.ab?'selected':''}">A↔B</button><span><i class="fh115-dot green"></i> Positivo <i class="fh115-dot red"></i> Negativo <i class="fh115-dot gold"></i> Capitale · 💰 Acquisti</span></div>`;
+ // Preserve SVG roots and the active pointer target while dragging. Replacing the
+ // whole plot on every pointermove breaks touch tracking on WebKit/iOS.
+ function updatePlot(container, svgMarkup){
+  const existing=container.querySelector('svg.fh115-svg');
+  if(existing && svgMarkup.startsWith('<svg')){
+    const template=document.createElement('template');template.innerHTML=svgMarkup;
+    const fresh=template.content.querySelector('svg');
+    if(fresh){existing.setAttribute('viewBox',fresh.getAttribute('viewBox'));existing.innerHTML=fresh.innerHTML;return;}
+  }
+  container.innerHTML=svgMarkup;
+ }
  s.host.innerHTML=inner;
  s.card?.classList.toggle('fh116-active', all.length>0 && !!s.host.querySelector('svg.fh115-svg'));
- if(expanded===s&&full){full.querySelector('#fh115Title').textContent='Patrimonio e valore';full.querySelector('.fh115-modal-plot').innerHTML=chartSvg(s,all,true);full.querySelector('.fh115-modal-readout').innerHTML=readout(s,all);full.querySelector('[data-fh115-tool="ab"]').classList.toggle('selected',s.ab);}
+ if(expanded===s&&full){full.querySelector('#fh115Title').textContent='Patrimonio e valore';updatePlot(full.querySelector('.fh115-modal-plot'),chartSvg(s,all,true));full.querySelector('.fh115-modal-readout').innerHTML=readout(s,all);full.querySelector('[data-fh115-tool="ab"]').classList.toggle('selected',s.ab);}
 }
 function schedule(){if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;for(const s of Object.values(states)){try{paint(s)}catch(err){s.card?.classList.remove('fh116-active');console.warn('[Finholdra Home chart]',s.id,err)}}})}
 function show(s){expanded=s;lastFocus=document.activeElement;full.classList.add('open');document.body.classList.add('fh115-modal-open');paint(s);full.querySelector('[data-fh115-close]')?.focus()}
 function hide(){expanded=null;full.classList.remove('open');document.body.classList.remove('fh115-modal-open');lastFocus?.focus?.()}
-function nearest(svg,e,s){const data=filtered(s);if(!data.length)return null;let x;try{const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;x=pt.matrixTransform(svg.getScreenCTM().inverse()).x}catch(_){const b=svg.getBoundingClientRect();x=(e.clientX-b.left)*760/b.width}const f=Math.max(0,Math.min(1,(x-70)/(760-70-23))),target=dt(data[0].date)+f*(dt(data.at(-1).date)-dt(data[0].date));return data.reduce((best,p)=>Math.abs(dt(p.date)-target)<Math.abs(dt(best.date)-target)?p:best,data[0]);}
+function nearest(svg,e,s){
+ const data=filtered(s);if(!data.length)return null;
+ // The fullscreen is a 90deg CSS-rotated landscape panel on portrait iPhones.
+ // SVG getScreenCTM() is inconsistent with CSS-rotated elements on iOS Safari.
+ // In that mode, the chart's horizontal time axis is screen Y, not screen X.
+ const bounds=svg.getBoundingClientRect();
+ const landscapeRotated=!!(expanded===s&&full?.classList.contains('open')&&
+      window.matchMedia('(orientation: portrait) and (max-width: 800px)').matches);
+ let axis=landscapeRotated?(e.clientY-bounds.top)/Math.max(1,bounds.height):(e.clientX-bounds.left)/Math.max(1,bounds.width);
+ axis=Math.max(0,Math.min(1,axis));
+ const chartX=axis*760;
+ const fraction=Math.max(0,Math.min(1,(chartX-70)/(760-70-23)));
+ const target=dt(data[0].date)+fraction*(dt(data.at(-1).date)-dt(data[0].date));
+ return data.reduce((best,p)=>Math.abs(dt(p.date)-target)<Math.abs(dt(best.date)-target)?p:best,data[0]);
+}
 function pick(s,e){const svg=e.target.closest?.('svg.fh115-svg')||((expanded===s&&full?.classList.contains('open')&&full.contains(e.target))?full.querySelector('svg.fh115-svg'):s.host?.querySelector('svg.fh115-svg'));if(!svg)return;const p=nearest(svg,e,s);if(!p)return;s.selected=p.date;if(s.ab&&e.type==='pointerdown'){if(!s.A||s.B){s.A=p;s.B=null;}else if(p.date!==s.A.date)s.B=p;}paint(s)}
 function action(s,e){const b=e.target.closest('button');if(!b)return;
  if(b.hasAttribute('data-fh115-range')){s.range=b.dataset.fh115Range==='all'?'all':Number(b.dataset.fh115Range);s.from='';s.zoom=1;s.scroll=0;s.A=s.B=null;s.selected=null;paint(s);return}
@@ -55,8 +80,16 @@ for(const s of Object.values(states)){s.card?.addEventListener('click',e=>{if(e.
 let touch=null;
 full.addEventListener('click',e=>{if(e.target===full||e.target.closest('[data-fh115-close]')){hide();return}if(expanded)action(expanded,e)});
 full.addEventListener('change',e=>{if(expanded&&e.target.matches('.fh115-date')){expanded.from=e.target.value;expanded.A=expanded.B=null;expanded.zoom=1;paint(expanded)}});
-full.addEventListener('pointerdown',e=>{if(!expanded||!e.target.closest('svg.fh115-svg'))return;touch={x:e.clientX,y:e.clientY,time:Date.now()};try{full.setPointerCapture(e.pointerId)}catch(_){}pick(expanded,e)});
-full.addEventListener('pointermove',e=>{if(!expanded||!touch)return;if(Math.abs(e.clientX-touch.x)>65&&expanded.zoom>1){expanded.scroll=Math.max(0,Math.min(1,expanded.scroll-(e.clientX-touch.x)/400/expanded.zoom));touch.x=e.clientX;paint(expanded);}else pick(expanded,e)});
+full.addEventListener('pointerdown',e=>{if(!expanded||!e.target.closest('svg.fh115-svg'))return;
+ touch={id:e.pointerId,x:e.clientX,y:e.clientY};
+ try{full.setPointerCapture(e.pointerId)}catch(_){}
+ pick(expanded,e);
+});
+full.addEventListener('pointermove',e=>{if(!expanded||!touch||touch.id!==e.pointerId)return;
+ // Move the date selector on every touch position; scrolling is handled by
+ // explicit zoom/period controls, avoiding competition with one-finger reading.
+ e.preventDefault();pick(expanded,e);
+});
 full.addEventListener('pointerup',()=>touch=null);full.addEventListener('pointercancel',()=>touch=null);
 full.addEventListener('wheel',e=>{if(!expanded)return;e.preventDefault();expanded.zoom=Math.max(1,Math.min(12,expanded.zoom*(e.deltaY<0?1.15:1/1.15)));paint(expanded)},{passive:false});
 let pinchDistance=0;full.addEventListener('touchstart',e=>{if(e.touches.length===2)pinchDistance=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)},{passive:true});full.addEventListener('touchmove',e=>{if(!expanded||e.touches.length!==2)return;e.preventDefault();const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);if(pinchDistance>10){expanded.zoom=Math.max(1,Math.min(12,expanded.zoom*dist/pinchDistance));paint(expanded)}pinchDistance=dist},{passive:false});full.addEventListener('touchend',e=>{if(e.touches.length<2)pinchDistance=0},{passive:true});window.addEventListener('keydown',e=>{if(e.key==='Escape'&&expanded)hide();if(expanded&&['ArrowLeft','ArrowRight'].includes(e.key)){const data=filtered(expanded);const at=data.findIndex(p=>p.date===expanded.selected),next=data[Math.max(0,Math.min(data.length-1,at+(e.key==='ArrowRight'?1:-1)))];if(next){expanded.selected=next.date;paint(expanded)}e.preventDefault()}});
