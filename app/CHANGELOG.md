@@ -2,6 +2,18 @@
 
 Tutte le note delle precedenti beta sono raccolte qui. Lo storico più recente è in alto.
 
+## Beta 10.9.15 — 22 novembre 2026
+
+- **Home · allocazione:** Oggi/Investito e filtri delle categorie seguono il colore dinamico effettivo della Home, anche durante la chiusura dei mercati; eliminati blu fissi.
+- **Grafici Home:** nuovo motore visivo condiviso fra Patrimonio e Capitale/Valore, con periodi 1G, 1S, 1M, 3M, 6M, 1A e MAX, selettore calendario a icona, lettura precisa sul tocco, selezione A↔B, zoom e apertura orizzontale a pieno schermo. Le valutazioni e quantità continuano a provenire dall'archivio già verificato.
+- **Finn City:** sprite Finn copiato proporzionalmente dalla geometria di gioco di FinnSolid, anche per NPC e agenti, cambiandone palette, sia su Canvas sia SVG per iPhone.
+- **Natale:** cappello riallineato sopra la testa di Finn e ornamenti, pulsanti e banner festivi.
+- **Liquid Glass:** pannelli traslucidi, effetto sfocato/saturato, riflessi e pulsanti pill più vicini alla grafica iOS; Flat e Moderno invariati.
+- **Stili:** Studio, Fiducia e Tradizionale differenziati; introdotti Arcade ed Editoriale.
+- **Temi:** aggiunti Rame, Artico e Neon.
+- **Impostazioni:** scelta colore neutro spostata dentro un sottomenu del colore dinamico.
+- **Build:** changelog unico; interfaccia, manifest e version.json aggiornati a 10.9.15.
+
 ## Beta 10.9.14 — 22 novembre 2026
 
 - **Allocazione Home:** corretto il bordo esterno del donut. Non usa più una tinta troppo scura: ora riprende il colore di fondo della schermata Home, cioè la stessa superficie visibile tra un banner e l’altro.

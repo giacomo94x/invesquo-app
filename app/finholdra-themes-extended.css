@@ -1,0 +1,50 @@
+/* Beta 10.9.15 — thematic palettes and iOS-like glass. Flat/Moderno unchanged. */
+body[data-theme="copper"]{--bg:#1f1a17;--panel:#352923;--panel2:#4b382c;--border:#8e6652;--text:#fdf0e4;--muted:#ddc4b2;--blue:#f0ae73;--green:#80d4a0;--red:#ff9292}
+body[data-theme="arctic"]{--bg:#102736;--panel:#1c4354;--panel2:#2b5869;--border:#77a3b0;--text:#effbff;--muted:#c3dbe2;--blue:#a3e2fa;--green:#76dfc4;--red:#ffa6bd}
+body[data-theme="neon"]{--bg:#0e1020;--panel:#1b2040;--panel2:#2d3158;--border:#5f57ba;--text:#f2f2ff;--muted:#bfc4ef;--blue:#70d5ff;--green:#49fbc4;--red:#ff70bf}
+body[data-theme="copper"] .hero{background:linear-gradient(125deg,#62422a,#2c1b1d)}
+body[data-theme="arctic"] .hero{background:linear-gradient(125deg,#164a63,#1c3d54)}
+body[data-theme="neon"] .hero{background:linear-gradient(120deg,#25245a,#0d1830)}
+/* All allocation controls use the real live home palette, not static investment blue. */
+#dashboardView #modeNow,#dashboardView #modeCost{background:var(--panel2)!important;color:var(--text)!important;border:1px solid var(--border)!important;border-radius:12px!important;box-shadow:none!important}
+#dashboardView #modeNow.selected,#dashboardView #modeCost.selected{background:var(--blue)!important;color:var(--bg)!important;border-color:var(--blue)!important}
+#dashboardView #filters .chip{background:color-mix(in srgb,var(--panel2) 88%,var(--bg))!important;border:1px solid var(--border)!important;color:var(--text)!important;text-decoration:none;opacity:1}
+#dashboardView #filters .chip.off{opacity:.58!important;background:color-mix(in srgb,var(--bg) 70%,var(--panel2))!important;color:var(--muted)!important}
+#dashboardView #filters .chip:not(.off){background:color-mix(in srgb,var(--blue) 22%,var(--panel2))!important;border-color:var(--blue)!important;color:var(--text)!important}
+#dashboardView #filters .chip .dot{flex:none}
+#dashboardView #legend .legend-row[aria-expanded="true"]{background:color-mix(in srgb,var(--blue) 15%,var(--panel))!important;border-color:var(--border)!important}
+/* iOS-inspired Liquid Glass: layered optical highlight, material blur and pill controls. */
+body[data-appearance="glass"] :is(.card,.hero,.setting-group,.favorite-row,.box,.asset-detail-card,.fin-insight-panel){background:color-mix(in srgb,var(--panel) 37%,transparent)!important;-webkit-backdrop-filter:blur(32px) saturate(210%) brightness(1.12)!important;backdrop-filter:blur(32px) saturate(210%) brightness(1.12)!important;border:1px solid rgba(225,242,255,.32)!important;border-radius:28px!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.30),inset 0 -1px 1px rgba(255,255,255,.10),0 12px 30px rgba(0,0,0,.15),0 0 0 1px rgba(255,255,255,.06)!important}
+body[data-appearance="glass"] :is(.btn,.gear-btn,.nav-tool,.chip,.seg button,.fh115-range button,.fh115-tools button){border-radius:999px!important;background:color-mix(in srgb,var(--panel2) 52%,transparent)!important;-webkit-backdrop-filter:blur(24px) saturate(195%)!important;backdrop-filter:blur(24px) saturate(195%)!important;border:1px solid rgba(243,250,255,.34)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.32),0 2px 6px rgba(0,0,0,.12)!important}
+body[data-appearance="glass"] :is(.btn,.gear-btn,.nav-tool,.chip){transition:transform .22s ease,background-color .22s ease,box-shadow .22s ease!important}
+body[data-appearance="glass"] :is(.btn,.gear-btn,.nav-tool,.chip):active{transform:scale(.95)}
+body[data-appearance="glass"] .hero{background:linear-gradient(135deg,rgba(255,255,255,.19),rgba(255,255,255,.035)),color-mix(in srgb,var(--panel) 36%,transparent)!important}
+/* Different visual languages for existing styles; Flat / Moderno deliberately untouched. */
+body[data-appearance="studio"] .card{border-left:4px solid var(--blue)!important;background:var(--panel)!important;border-radius:7px!important;box-shadow:8px 8px 0 color-mix(in srgb,var(--bg) 70%,var(--blue) 30%)!important}
+body[data-appearance="studio"] :is(.btn,.gear-btn,.chip){border-radius:3px!important;text-transform:uppercase;letter-spacing:.035em}
+body[data-appearance="fiducia"] .hero{background:linear-gradient(110deg,color-mix(in srgb,var(--panel) 73%,#0b5885),var(--panel))!important;border-left:5px solid #d6b655!important}
+body[data-appearance="fiducia"] .card{border-top:2px solid color-mix(in srgb,var(--border) 65%,#d6b655)!important}
+body[data-appearance="tradizionale"] .hero{border-top:5px double #b19b69!important;background:linear-gradient(to right,var(--panel),color-mix(in srgb,var(--panel) 85%,#b59a60))!important}
+body[data-appearance="tradizionale"] :is(.card,.setting-group,.box){border-radius:5px!important;border-width:2px!important}
+body[data-appearance="tradizionale"] :is(.btn,.chip,.gear-btn){border-radius:3px!important}
+body[data-appearance="arcade"] .card,body[data-appearance="arcade"] .hero,body[data-appearance="arcade"] .box{border:2px solid var(--blue)!important;border-radius:5px!important;box-shadow:4px 4px 0 color-mix(in srgb,var(--blue) 43%,var(--bg))!important}
+body[data-appearance="arcade"] :is(.btn,.chip,.gear-btn){border-radius:5px!important;letter-spacing:.04em;border:2px solid var(--border)!important}
+body[data-appearance="editorial"] :is(.card,.hero,.box,.setting-group){border-radius:0!important;border:0!important;border-top:1px solid var(--blue)!important;background:var(--panel)!important;box-shadow:none!important}
+body[data-appearance="editorial"] :is(h2,h3,.hero strong){font-weight:750!important;letter-spacing:-.05em}
+body[data-appearance="editorial"] :is(.btn,.chip,.gear-btn){border-radius:0!important}
+/* Holidays: ornament band, candy-cane touches, warm cards and snow; no overlays on values. */
+body[data-appearance="natale"] .hero{background:linear-gradient(126deg,#14513c,#631b30)!important;border:2px solid #dbb76c!important;box-shadow:0 9px 25px #001a1470,inset 0 1px 0 #ffefb488!important}
+body[data-appearance="natale"] .hero::before{content:"❄  ✦  ❄  ✦"!important;position:absolute!important;right:12px!important;top:9px!important;color:#fff2ca!important;opacity:.85!important;font-size:13px!important;letter-spacing:8px!important}
+body[data-appearance="natale"] .card:not(.hero){border-color:color-mix(in srgb,#c5a461 60%,var(--border))!important;background-image:linear-gradient(160deg,rgba(20,102,72,.09),rgba(157,31,52,.10))!important}
+body[data-appearance="natale"] :is(.btn.primary,.seg button.selected,.nav-tool.active,.fh115-range button.selected){background:linear-gradient(125deg,#165f45,#b63248)!important;border:1px solid #d6b267!important;color:#fff!important}
+body[data-appearance="natale"] :is(.gear-btn,.nav-tool){border:1px solid #d5ae64!important;box-shadow:inset 0 1px #ffe4ad55!important}
+body[data-appearance="natale"] #filters .chip:not(.off){border-color:#cda864!important}
+body[data-appearance="natale"] .section-head h2::before{content:"✦ ";color:#dab46c;font-size:.64em;vertical-align:middle}
+body[data-appearance="natale"] #performanceFace{filter:drop-shadow(0 2px 5px rgba(208,56,73,.28))}
+@media(prefers-reduced-transparency:reduce){body[data-appearance="glass"] :is(.card,.box,.hero,.setting-group){-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--panel)!important}}
+@media(prefers-reduced-motion:reduce){body[data-appearance="glass"] :is(.btn,.gear-btn,.nav-tool,.chip){transition:none!important}}
+/* Neutral market palette is an expandable subgroup of dynamic market colors. */
+.fh115-closed-submenu{border:1px solid var(--border);border-radius:14px;background:color-mix(in srgb,var(--panel2) 55%,transparent);padding:8px 10px}
+.fh115-closed-submenu summary{cursor:pointer;font-weight:750;color:var(--text);font-size:13px;list-style:inside disclosure-closed}
+.fh115-closed-submenu[open] summary{margin-bottom:10px}
+.fh115-closed-submenu .setting-field{padding:0!important;margin:0!important}
