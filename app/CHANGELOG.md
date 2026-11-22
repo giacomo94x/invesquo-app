@@ -2,6 +2,13 @@
 
 Tutte le note delle precedenti beta sono raccolte qui. Lo storico più recente è in alto.
 
+## Beta 10.9.19 — 22 novembre 2026
+
+- **Grafico Patrimonio e valore a schermo intero:** ripristinate proporzioni corrette dello SVG (senza stretching) e adattamento alla superficie realmente disponibile su iPhone ruotato.
+- **Confronto A↔B:** due marcatori indipendenti trascinabili, date e valori dei due punti più differenza assoluta e percentuale.
+- **Precisione touch:** coordinate convertite con la matrice grafica reale, inclusa la rotazione dell'interfaccia; lettura aggiornata senza rimuovere il grafico durante il trascinamento.
+- **Versione:** allineati interfaccia, manifest e version.json a 10.9.19.
+
 ## Beta 10.9.18 — 22 novembre 2026
 
 - **Home, Patrimonio e valore:** periodo predefinito 1S (7 giorni), modificabile con gli altri selettori.

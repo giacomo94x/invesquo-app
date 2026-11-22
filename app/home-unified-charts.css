@@ -46,3 +46,11 @@
  #fh115Fullscreen .fh117-investment-style{left:100dvw!important;top:0!important;width:100dvh!important;height:100dvw!important;transform:rotate(90deg)!important;transform-origin:top left!important;padding:4px max(8px,env(safe-area-inset-bottom)) 4px max(8px,env(safe-area-inset-top))!important}
  #fh115Fullscreen .fh117-investment-style .fh115-modal-plot{flex:1 1 0!important;min-height:0!important;}
 }
+
+/* 10.9.19 — unwarped SVG in landscape and precise A/B markers. */
+#fh115Fullscreen .fh117-investment-style .fh115-modal-plot svg.fh115-svg{object-fit:contain!important;aspect-ratio:auto!important;transform:none!important;}
+#fh115Fullscreen .fh117-investment-style .fh115-modal-plot{align-items:center!important;justify-content:center!important;}
+#fh115Fullscreen .fh117-investment-style .fh115-modal-readout{max-height:none!important;min-height:42px!important;overflow:visible!important;white-space:normal!important;}
+#fh115Fullscreen .fh119-ab-read{display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px 8px;}
+#fh115Fullscreen .fh119-ab-read b{font-size:11px;}
+#fh115Fullscreen .fh115-svg text{font-family:Montserrat,system-ui,sans-serif;}
