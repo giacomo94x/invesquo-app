@@ -1,4 +1,4 @@
-/* Finholdra 10.9.15 — shared investment-style Home charts. Historic valuations stay in existing source. */
+/* Finholdra 10.9.16 — shared investment-style Home charts. Historic valuations stay in existing source. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id),EUR=new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'});
 const euros=n=>Number.isFinite(n)?EUR.format(n):'n.d.';
@@ -36,9 +36,10 @@ function mount(){for(const s of Object.values(states)){if(!s.card)continue;const
 function paint(s){if(!s.host)return;let all=filtered(s);if(!all.find(p=>p.date===s.selected))s.selected=all.at(-1)?.date||null;
  const inner=`${controls(s)}<div class="fh115-actions"><button type="button" data-fh115-open="1">${s.id==='wealth'?'Valore totale nel tempo':'Capitale e valore'} <span>⛶ Ingrandisci</span></button></div><div class="fh115-plot">${chartSvg(s,all,false)}</div><div class="fh115-readout">${readout(s,all)}</div><div class="fh115-tools"><button type="button" data-fh115-tool="ab" class="${s.ab?'selected':''}">A↔B</button><span>${s.id==='wealth'?'Verde: positivo · Rosso: negativo · 💰 acquisti':'<i class="fh115-dot green"></i> Valore <i class="fh115-dot gold"></i> Capitale'}</span></div>`;
  s.host.innerHTML=inner;
+ s.card?.classList.toggle('fh116-active', all.length>0 && !!s.host.querySelector('svg.fh115-svg'));
  if(expanded===s&&full){full.querySelector('#fh115Title').textContent=s.id==='wealth'?'Andamento del patrimonio':'Capitale e valore';full.querySelector('.fh115-modal-controls').innerHTML=controls(s);full.querySelector('.fh115-modal-plot').innerHTML=chartSvg(s,all,true);full.querySelector('.fh115-modal-readout').innerHTML=readout(s,all);full.querySelector('[data-fh115-tool="ab"]').classList.toggle('selected',s.ab);}
 }
-function schedule(){if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;for(const s of Object.values(states))paint(s);})}
+function schedule(){if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;for(const s of Object.values(states)){try{paint(s)}catch(err){s.card?.classList.remove('fh116-active');console.warn('[Finholdra Home chart]',s.id,err)}}})}
 function show(s){expanded=s;lastFocus=document.activeElement;full.classList.add('open');document.body.classList.add('fh115-modal-open');paint(s);full.querySelector('[data-fh115-close]')?.focus()}
 function hide(){expanded=null;full.classList.remove('open');document.body.classList.remove('fh115-modal-open');lastFocus?.focus?.()}
 function nearest(svg,e,s){const data=filtered(s);if(!data.length)return null;let x;try{const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;x=pt.matrixTransform(svg.getScreenCTM().inverse()).x}catch(_){const b=svg.getBoundingClientRect();x=(e.clientX-b.left)*760/b.width}const f=Math.max(0,Math.min(1,(x-70)/(760-70-23))),target=dt(data[0].date)+f*(dt(data.at(-1).date)-dt(data[0].date));return data.reduce((best,p)=>Math.abs(dt(p.date)-target)<Math.abs(dt(best.date)-target)?p:best,data[0]);}
@@ -49,6 +50,7 @@ function action(s,e){const b=e.target.closest('button');if(!b)return;
  if(b.hasAttribute('data-fh115-open')){show(s);return;}
  if(b.hasAttribute('data-fh115-tool')){const tool=b.dataset.fh115Tool;if(tool==='ab'){s.ab=!s.ab;s.A=s.B=null;}else if(tool==='reset'){s.zoom=1;s.scroll=0;}else s.zoom=Math.max(1,Math.min(12,s.zoom*(tool==='plus'?1.65:1/1.65)));paint(s);}
 }
+mount();
 for(const s of Object.values(states)){s.card?.addEventListener('click',e=>{if(e.target.closest('.fh115-host'))action(s,e)});s.card?.addEventListener('change',e=>{if(e.target.matches('.fh115-date')){s.from=e.target.value;s.zoom=1;s.A=s.B=null;paint(s)}});s.card?.addEventListener('pointerdown',e=>{if(e.target.closest('svg.fh115-svg')){try{s.card.setPointerCapture(e.pointerId)}catch(_){}pick(s,e)}});s.card?.addEventListener('pointermove',e=>{if(e.buttons>0&&e.target.closest('.fh115-host,svg.fh115-svg,#dashboardWealthCard,#fhHomeCapitalCard'))pick(s,e)})}
 let touch=null;
 full.addEventListener('click',e=>{if(e.target===full||e.target.closest('[data-fh115-close]')){hide();return}if(expanded)action(expanded,e)});
@@ -58,5 +60,5 @@ full.addEventListener('pointermove',e=>{if(!expanded||!touch)return;if(Math.abs(
 full.addEventListener('pointerup',()=>touch=null);full.addEventListener('pointercancel',()=>touch=null);
 full.addEventListener('wheel',e=>{if(!expanded)return;e.preventDefault();expanded.zoom=Math.max(1,Math.min(12,expanded.zoom*(e.deltaY<0?1.15:1/1.15)));paint(expanded)},{passive:false});
 let pinchDistance=0;full.addEventListener('touchstart',e=>{if(e.touches.length===2)pinchDistance=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)},{passive:true});full.addEventListener('touchmove',e=>{if(!expanded||e.touches.length!==2)return;e.preventDefault();const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);if(pinchDistance>10){expanded.zoom=Math.max(1,Math.min(12,expanded.zoom*dist/pinchDistance));paint(expanded)}pinchDistance=dist},{passive:false});full.addEventListener('touchend',e=>{if(e.touches.length<2)pinchDistance=0},{passive:true});window.addEventListener('keydown',e=>{if(e.key==='Escape'&&expanded)hide();if(expanded&&['ArrowLeft','ArrowRight'].includes(e.key)){const data=filtered(expanded);const at=data.findIndex(p=>p.date===expanded.selected),next=data[Math.max(0,Math.min(data.length-1,at+(e.key==='ArrowRight'?1:-1)))];if(next){expanded.selected=next.date;paint(expanded)}e.preventDefault()}});
-mount();window.renderHomeCapitalChart=schedule;const wealthEl=$('wealthGraph');if(wealthEl)new MutationObserver(schedule).observe(wealthEl,{childList:true,attributes:true,attributeFilter:['data-wealth-points']});schedule();
+window.renderHomeCapitalChart=schedule;const wealthEl=$('wealthGraph');if(wealthEl)new MutationObserver(schedule).observe(wealthEl,{childList:true,attributes:true,attributeFilter:['data-wealth-points']});schedule();
 })();

@@ -2,6 +2,13 @@
 
 Tutte le note delle precedenti beta sono raccolte qui. Lo storico più recente è in alto.
 
+## Beta 10.9.16 — 22 novembre 2026
+
+- **Home:** risolto blocco di inizializzazione del componente grafici (listener fullscreen registrati prima della creazione della finestra). Ripristinata la visualizzazione di Patrimonio e Capitale/Valore.
+- **Affidabilità:** i grafici originali restano visibili se il componente nuovo non restituisce dati o si verifica un errore. Nessuna modifica ai calcoli e alle quotazioni storiche.
+- **Interfaccia:** grafici con periodi, calendario, selezione date, confronto A↔B e fullscreen; sostituite le descrizioni tecniche con una frase breve per grafico.
+- **Versione:** Beta 10.9.16 nei file di rilascio.
+
 ## Beta 10.9.15 — 22 novembre 2026
 
 - **Home · allocazione:** Oggi/Investito e filtri delle categorie seguono il colore dinamico effettivo della Home, anche durante la chiusura dei mercati; eliminati blu fissi.
