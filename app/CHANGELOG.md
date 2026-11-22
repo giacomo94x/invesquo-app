@@ -1,6 +1,14 @@
 # Finholdra — Changelog cumulativo
 
-Tutte le note delle precedenti beta sono raccolte qui. Lo storico più recente è in alto.
+Tutte le modifiche, dalla versione più recente.
+
+## Beta 10.9.17 — 22 novembre 2026
+
+- **Dashboard:** fusi i grafici Andamento patrimonio e Capitale/Valore nel singolo grafico **Patrimonio e valore**, con capitale investito (giallo), valore del patrimonio (segmenti verdi e rossi in funzione del rendimento netto flussi) e marcatori degli acquisti. La serie storica e le quantità restano ricostruite dall'Archivio.
+- **Schermo intero:** layout più ampio ispirato al grafico Investimenti, grafico dominante, lettura per data, frecce per muoversi fra i punti, zoom, Ripristina e confronto A↔B. Su iPhone resta la vista orizzontale.
+- **Home:** Fotografia del patrimonio (report PDF) spostata alla fine della Dashboard. Rimossi dalla vista i due grafici separati.
+- **Aspetto:** nel sottomenu dei mercati chiusi aggiunta l'opzione Personalizzato con tavolozza cromatica; tonalità salvata nelle preferenze locali.
+- **Versione:** interfaccia, manifest, version.json e changelog allineati alla 10.9.17.
 
 ## Beta 10.9.16 — 22 novembre 2026
 
