@@ -155,3 +155,25 @@
  #fhHomeCapitalCard .fh115-plot{min-height:302px}
  #fhHomeCapitalCard .fh115-tools{font-size:10px}
 }
+
+
+/* 10.9.27 — Home chart closer to Investments, compact hidden date selector. */
+.fh115-custom-dates.hidden{display:none!important}
+#fhHomeCapitalCard .fh115-custom-dates{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:10px;align-items:end;margin:10px 0 8px;padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--panel2)}
+#fhHomeCapitalCard .fh115-custom-dates label{display:flex;flex-direction:column;gap:6px;font:700 12px Montserrat,system-ui;color:var(--muted)}
+#fhHomeCapitalCard .fh115-custom-dates input{min-width:0;height:48px;border-radius:12px;border:1px solid var(--border);background:rgba(10,31,56,.32);color:var(--text);padding:0 14px;font:700 15px Montserrat,system-ui}
+#fhHomeCapitalCard .fh115-custom-dates .btn{height:48px;padding:0 18px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);font:800 14px Montserrat,system-ui;white-space:nowrap}
+#fhHomeCapitalCard .fh115-actions{margin:8px 0 8px}
+#fhHomeCapitalCard .fh115-plot{min-height:0;height:auto;padding:10px 10px 8px;border-radius:18px;background:#0b2140;border:1px solid var(--border);overflow:hidden}
+#fhHomeCapitalCard .fh115-plot .fh115-svg{display:block;width:100%;height:auto;aspect-ratio:760 / 360}
+#fhHomeCapitalCard .fh115-readout{padding:14px 16px;border-radius:16px;font-size:13px}
+#fhHomeCapitalCard .fh115-readout strong{font-size:18px}
+#fhHomeCapitalCard .fh115-tools{margin-top:10px;align-items:center}
+#fhHomeCapitalCard .fh115-tools button{min-height:44px;padding:10px 16px;border-radius:16px}
+@media(max-width:560px){
+ #fhHomeCapitalCard .fh115-custom-dates{grid-template-columns:1fr;gap:8px}
+ #fhHomeCapitalCard .fh115-custom-dates .btn{width:100%}
+ #fhHomeCapitalCard .fh115-plot .fh115-svg{aspect-ratio:760 / 420}
+}
+
+#fhHomeCapitalCard .fh115-plot{min-height:0!important}

@@ -1,3 +1,10 @@
+## Beta 10.9.27
+
+- Home: il selettore date del grafico "Patrimonio e valore" è ora nascosto di default e si apre solo toccando il calendario.
+- Home: il pannello date si richiude dopo aver applicato l'intervallo.
+- Home: il grafico in verticale è stato riallineato alla resa dei grafici della sezione Investimenti, con area visiva più alta e più piena.
+- Home: readout e pulsanti del grafico rifiniti per una gerarchia più vicina alla sezione Investimenti.
+
 ## Beta 10.9.26
 
 - Home: il grafico "Patrimonio e valore" in verticale è ora più alto e visivamente più vicino a quello della sezione Investimenti.
