@@ -57,3 +57,10 @@
 
 /* 10.9.20: keep dragging inside the plot in rotated iPhone fullscreen. */
 #fh115Fullscreen .fh115-modal-plot, #fh115Fullscreen svg.fh115-svg{touch-action:none!important;overscroll-behavior:contain!important;-webkit-user-select:none!important;user-select:none!important;}
+
+/* 10.9.22 — protect chart symbols and controls from iOS landscape stretching. */
+#fh115Fullscreen .fh115-modal-plot svg.fh115-svg{preserve-aspect-ratio:xMidYMid meet!important;aspect-ratio:auto!important;object-fit:contain!important;min-width:0!important;min-height:0!important;}
+#fh115Fullscreen .fh115-zoom button{flex:0 0 auto!important;min-width:35px;line-height:1.2;transform:none!important;}
+#fh115Fullscreen .fh115-modal-plot svg.fh115-svg text{font-stretch:normal!important;letter-spacing:normal!important;}
+.fh115-calendar-btn svg{width:20px!important;height:20px!important;flex:none!important;display:block!important;aspect-ratio:1!important;}
+#fh115Fullscreen .fh115-modal-plot,#fh115Fullscreen .fh115-modal{overscroll-behavior:none!important;touch-action:none!important;}

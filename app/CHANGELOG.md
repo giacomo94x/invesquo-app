@@ -2,6 +2,13 @@
 
 Tutte le note delle precedenti beta sono raccolte qui. Lo storico più recente è in alto.
 
+## Beta 10.9.22 — 22 novembre 2026
+
+- **Grafico Patrimonio e valore:** corretto tracciamento del cursore in fullscreen ruotato su iPhone con coordinate dell'area SVG realmente disegnata, compresi i margini di adattamento.
+- **Touch Safari:** introdotta gestione touch dedicata quando gli eventi pointer non vengono recapitati stabilmente.
+- **Icone:** indicatori degli acquisti disegnati come simboli vettoriali e dimensioni dei comandi protette dalle deformazioni della vista orizzontale.
+- **Dati finanziari:** invariati.
+
 ## Beta 10.9.21 — 22 novembre 2026
 
 - **Mercati chiusi:** aggiunta l'opzione “Predefinito del tema” nel sottomenu del colore neutro. Preserva la palette di base del tema attivo anche nei weekend, lasciando Finn a riposo; disponibili ancora i colori dedicati e la tavolozza libera.

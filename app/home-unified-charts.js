@@ -23,7 +23,7 @@ function chartSvg(s,all,large){if(!all.length)return '<p class="hint">Nessuna qu
  const ticks=[0,.5,1].map(q=>{const yy=T+q*(H-B-T),v=max-q*(max-min);return `<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="currentColor" opacity=".18" stroke-dasharray="5 8"/><text x="${L-9}" y="${yy+5}" text-anchor="end" fill="currentColor" opacity=".75" font-size="14">${Math.round(v).toLocaleString('it-IT')}</text>`}).join('');
  const rangeColor=p=>p.gain==null?'#9aabc4':p.gain>=0?'#54d5ad':'#f78299';
  const lines=`<path d="${all.map((p,i)=>(i?'L':'M')+x(p)+' '+y(p.capital)).join(' ')}" stroke="#f1c464" stroke-width="3.2" fill="none" stroke-linejoin="round"/>`+all.slice(1).map((p,i)=>`<path d="M${x(all[i])} ${y(all[i].value)}L${x(p)} ${y(p.value)}" stroke="${rangeColor(p)}" stroke-width="3.6" fill="none" stroke-linecap="round"${dt(p.date)-dt(all[i].date)>86400000?' stroke-dasharray="5 6"':''}/>`).join('');
- const marks=all.filter(p=>p.buys>0).map(p=>`<text x="${x(p)}" y="${Math.max(T+10,y(p.value)-13)}" text-anchor="middle" font-size="15">💰</text>`).join('');
+ const marks=all.filter(p=>p.buys>0).map(p=>`<g transform="translate(${x(p)} ${Math.max(T+13,y(p.value)-17)})"><circle r="9" fill="#eec057" stroke="#8f6a1e" stroke-width="1.5"/><text y="4.4" text-anchor="middle" fill="#283446" font-size="13" font-weight="900">€</text></g>`).join('');
  const chosen=all.find(p=>p.date===s.selected)||all.at(-1),cross=chosen?`<line x1="${x(chosen)}" x2="${x(chosen)}" y1="${T}" y2="${H-B}" stroke="currentColor" opacity=".65" stroke-dasharray="5 6"/><circle cx="${x(chosen)}" cy="${y(chosen.value)}" r="7" fill="#f78197" stroke="white" stroke-width="3"/>`:'';
  const abMarks=s.ab?[['A',s.A,'#47d8bd'],['B',s.B,'#f9b85b']].filter(v=>v[1]).map(([label,p,color])=>`<g class="fh119-ab-marker"><line x1="${x(p)}" x2="${x(p)}" y1="${T}" y2="${H-B}" stroke="${color}" stroke-dasharray="4 5" stroke-width="2"/><circle cx="${x(p)}" cy="${y(p.value)}" r="9" fill="${color}" stroke="#eff8ff" stroke-width="2.6"/><rect x="${Math.max(L,x(p)-17)}" y="${T+3}" rx="11" width="27" height="23" fill="${color}"/><text x="${Math.max(L,x(p)-17)+13.5}" y="${T+20}" text-anchor="middle" fill="#071a2d" font-size="16" font-weight="800">${label}</text></g>`).join(''):'';
  return `<svg class="fh115-svg" preserveAspectRatio="xMidYMid meet" role="img" tabindex="0" aria-label="Grafico interattivo; tocca e trascina per leggere la data" viewBox="0 0 ${W} ${H}">${ticks}${lines}${marks}<g data-fh115-cursors="1">${cross}${abMarks}</g><text x="${L}" y="${H-9}" fill="currentColor" opacity=".85" font-size="15">${fmt(all[0].date)}</text><text x="${W-R}" y="${H-9}" text-anchor="end" fill="currentColor" opacity=".85" font-size="15">${fmt(all.at(-1).date)}</text></svg>`;
@@ -55,24 +55,17 @@ function schedule(){if(pending)return;pending=true;requestAnimationFrame(()=>{pe
 function show(s){expanded=s;lastFocus=document.activeElement;full.classList.add('open');document.body.classList.add('fh115-modal-open');paint(s);full.querySelector('[data-fh115-close]')?.focus()}
 function hide(){expanded=null;full.classList.remove('open');document.body.classList.remove('fh115-modal-open');lastFocus?.focus?.()}
 function pointerSvgX(svg,e){
- // Use the SVG's own coordinate matrix: correctly handles portrait iOS rotation,
- // contain/letterboxing and an SVG viewBox of any aspect ratio.
- try{
-  const matrix=svg.getScreenCTM();
-  if(matrix){
-   const inverse=matrix.inverse();
-   let point;
-   if(typeof DOMPoint==='function')point=new DOMPoint(e.clientX,e.clientY).matrixTransform(inverse);
-   else {const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;point=p.matrixTransform(inverse)}
-   if(Number.isFinite(point.x))return point.x;
-  }
- }catch(err){}
- // Rect fallback for older WebKit. 90-degree CSS rotations map touch Y -> SVG X.
- const rect=svg.getBoundingClientRect();
- const rotated=expanded&&full?.classList.contains('open')&&window.matchMedia('(orientation: portrait) and (max-width: 800px)').matches;
- const axis=rotated?(e.clientY-rect.top)/Math.max(rect.height,1):(e.clientX-rect.left)/Math.max(rect.width,1);
- const viewBox=svg.viewBox.baseVal;
- return viewBox.x+Math.max(0,Math.min(1,axis))*viewBox.width;
+ // The landscape modal is CSS-rotated on iPhone: screen Y is the chart's X.
+ // Compute actual painted content (SVG preserveAspectRatio="meet"), not just
+ // the bounding rectangle or a stale CTM from WebKit.
+ const rect=svg.getBoundingClientRect(), vb=svg.viewBox.baseVal;
+ const rotated=!!(expanded&&full?.classList.contains('open')&&window.matchMedia('(orientation: portrait) and (max-width: 800px)').matches);
+ const localW=rotated?rect.height:rect.width;
+ const localH=rotated?rect.width:rect.height;
+ const scale=Math.min(localW/Math.max(vb.width,1),localH/Math.max(vb.height,1));
+ const letterboxX=(localW-vb.width*scale)/2;
+ const localX=(rotated?e.clientY-rect.top:e.clientX-rect.left)-letterboxX;
+ return vb.x+Math.max(0,Math.min(vb.width,localX/Math.max(scale,.0001)));
 }
 function nearest(svg,e,s){
  const data=filtered(s);if(!data.length)return null;
@@ -135,6 +128,21 @@ function releaseTouch(e){if(touch&&(e.pointerId===undefined||touch.id===e.pointe
 full.addEventListener('pointerup',releaseTouch);
 full.addEventListener('pointercancel',releaseTouch);
 full.addEventListener('lostpointercapture',releaseTouch);
+// iOS Safari sometimes does not dispatch pointermove to a CSS-rotated SVG
+// after capture. Use native touch events on the plot as a primary fallback.
+let finger=null;
+const plotElement=()=>full?.querySelector('.fh115-modal-plot');
+function locateFinger(e){if(!expanded||!finger)return;const t=Array.from(e.changedTouches||e.touches||[]).find(t=>t.identifier===finger.id);if(!t)return;pick(expanded,{clientX:t.clientX,clientY:t.clientY},finger.handle);}
+full.addEventListener('touchstart',e=>{
+ if(!expanded||!e.target.closest('.fh115-modal-plot')||e.touches.length!==1)return;
+ const t=e.changedTouches[0],s=expanded,svg=full.querySelector('svg.fh115-svg');if(!svg)return;
+ const near=nearest(svg,{clientX:t.clientX,clientY:t.clientY},s);if(!near)return;
+ const da=s.A?Math.abs(dt(s.A.date)-dt(near.date)):Infinity, db=s.B?Math.abs(dt(s.B.date)-dt(near.date)):Infinity;
+ finger={id:t.identifier,handle:s.ab?(da<=db?'A':'B'):null};e.preventDefault();locateFinger(e);
+},{passive:false});
+full.addEventListener('touchmove',e=>{if(!finger||e.touches.length!==1)return;e.preventDefault();locateFinger(e);},{passive:false});
+function releaseFinger(e){if(!finger)return;if(Array.from(e.changedTouches||[]).some(t=>t.identifier===finger.id))finger=null;}
+full.addEventListener('touchend',releaseFinger,{passive:true});full.addEventListener('touchcancel',releaseFinger,{passive:true});
 full.addEventListener('wheel',e=>{if(!expanded)return;e.preventDefault();expanded.zoom=Math.max(1,Math.min(12,expanded.zoom*(e.deltaY<0?1.15:1/1.15)));paint(expanded)},{passive:false});
 let pinchDistance=0;full.addEventListener('touchstart',e=>{if(e.touches.length===2)pinchDistance=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)},{passive:true});full.addEventListener('touchmove',e=>{if(!expanded||e.touches.length!==2)return;e.preventDefault();const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);if(pinchDistance>10){expanded.zoom=Math.max(1,Math.min(12,expanded.zoom*dist/pinchDistance));paint(expanded)}pinchDistance=dist},{passive:false});full.addEventListener('touchend',e=>{if(e.touches.length<2)pinchDistance=0},{passive:true});window.addEventListener('keydown',e=>{if(e.key==='Escape'&&expanded)hide();if(expanded&&['ArrowLeft','ArrowRight'].includes(e.key)){const data=filtered(expanded);const at=data.findIndex(p=>p.date===expanded.selected),next=data[Math.max(0,Math.min(data.length-1,at+(e.key==='ArrowRight'?1:-1)))];if(next){expanded.selected=next.date;paint(expanded)}e.preventDefault()}});
 window.addEventListener('resize',()=>{if(expanded)paint(expanded)},{passive:true});window.renderHomeCapitalChart=schedule;const wealthEl=$('wealthGraph');if(wealthEl)new MutationObserver(schedule).observe(wealthEl,{childList:true,attributes:true,attributeFilter:['data-wealth-points']});schedule();
