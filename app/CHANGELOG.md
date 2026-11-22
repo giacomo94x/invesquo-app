@@ -1,4 +1,7 @@
-## Beta 10.9.28
+## 10.9.29
+- Donut Home: il tondino esterno usa ora lo stesso colore del centro del donut (stessa superficie dietro "Patrimonio oggi"), così segue correttamente tema e colore dinamico.
+
+## Beta 10.9.29
 
 - Home: corretto definitivamente il conflitto CSS che rendeva sempre visibile il selettore date. Il pannello è nascosto anche tramite attributo HTML e appare solo su richiesta.
 - Home: eliminato lo spazio vuoto artificiale nel grafico e ripristinata una dimensione proporzionata al tracciato, più vicina alla sezione Investimenti.
