@@ -9,22 +9,11 @@ const signed=n=>Number.isFinite(n)?(n>0?'+':'')+fmt(n):'n.d.';
 const color=n=>n>0?'#4ddbb3':n<0?'#f57f91':'var(--text)';
 const dateLabel=d=>new Date(d+'T12:00:00Z').toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'2-digit'});
 function costAt(a,date){
- const q=fh102QtyAt(a,date);if(!Number.isFinite(q))return null;if(q<=1e-7)return 0;
- let cost=Number(cap(a));if(!Number.isFinite(cost))return null;
- const future=trades.filter(t=>t.asset===a.id&&t.date>date&&/^\d{4}-\d{2}-\d{2}$/.test(t.date)&&['buy','sale'].includes(t.kind));
- for(const t of future){
-  const amount=Number(t.spent),quantity=Number(t.quantity),unit=Number(t.price);
-  if(t.kind==='buy'){
-   const paid=amount>0?amount:quantity>0&&unit>0?quantity*unit:NaN;
-   if(!Number.isFinite(paid))return null;
-   cost-=paid;
-  }else{
-   const basis=t.costBasis===undefined||t.costBasis===null?NaN:Number(t.costBasis);
-   if(!(basis>=0&&Number.isFinite(basis)))return null;
-   cost+=basis;
-  }
- }
- return cost>=-0.02?Math.max(0,cost):null;
+ const pos=fh1096PositionAt(a,date);
+ if(pos.qty===null)return null;
+ if(pos.qty<=1e-7)return 0;
+ if(!Number.isFinite(Number(pos.capital)))return null;
+ return Math.max(0,Number(pos.capital));
 }
 function build(){
  if(typeof fh102CalendarSeries!=='function')return [];

@@ -2071,7 +2071,7 @@ body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.8</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.9</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -3773,27 +3773,49 @@ function fh102ImportKnown(archive){
 /* Build historical holdings from Storico > Archivio, not from past screenshots.
    Legacy opening lots dated 03/11 by migration are NOT actual evidence of ownership
    before that day; require the real transaction date for reliable earlier points. */
+/* Beta 10.9.9: holdings are dated purchases minus sales. A legacy opening
+   is not proof of a holding before its presumed import day. If earlier actual
+   observations exist, retain them; avoid forcing unowned assets into totals. */
+function fh1099ObservedPosition(a,date){
+ const candidates=snapshots.filter(sn=>sn.date<=date&&sn.byAsset?.[a.id]&&Number.isFinite(Number(sn.byAsset[a.id].quantity)))
+  .sort((x,y)=>y.date.localeCompare(x.date)||Number(y.stamp||0)-Number(x.stamp||0));
+ const sn=candidates[0],row=sn?.byAsset?.[a.id];
+ if(!row)return null;
+ const qty=Number(row.quantity);return qty>=0?{qty,capital:Number(row.capital||row.cost||0),source:'Rilevazione storica portafoglio',estimated:true}:null;
+}
 function fh1096PositionAt(a,date){
  const ledger=trades.filter(t=>t.asset===a.id&&['buy','sale'].includes(t.kind)).slice()
   .sort((x,y)=>String(x.date).localeCompare(String(y.date))||Number(!!y.legacyOpening)-Number(!!x.legacyOpening));
- const dated=ledger.filter(t=>fh102ValidDay(t.date)&&Number(t.quantity)>0);
- const unknown=ledger.filter(t=>!fh102ValidDay(t.date)||!(Number(t.quantity)>0));
- if(unknown.length)return {qty:null,reason:'Movimenti senza data o quantità verificabile'};
- const assumed=dated.filter(t=>t.assumedDate||t.legacyOpening);
- const earliestAssumed=assumed.map(t=>t.date).sort()[0];
- if(earliestAssumed&&date<earliestAssumed)return {qty:null,reason:'Data di apertura importata come '+earliestAssumed+' (presunta): correggila in Storico → Archivio per ricostruire il periodo precedente'};
- if(!dated.length){
-  if(Number(a.q)>0)return {qty:null,reason:'Acquisto iniziale assente nello Storico → Archivio'};
-  return {qty:0,source:'Nessun movimento documentato'};
+ const valid=ledger.filter(t=>fh102ValidDay(t.date)&&Number(t.quantity)>0);
+ const assumed=valid.filter(t=>t.assumedDate||t.legacyOpening);
+ const actual=valid.filter(t=>!t.assumedDate&&!t.legacyOpening);
+ const bad=ledger.filter(t=>!fh102ValidDay(t.date)||!(Number(t.quantity)>0));
+ if(bad.length)return {qty:null,reason:'Operazione con data o quantità non valida'};
+ // For this subscribed BTP the user confirms ownership in October 2026.
+ // Subscription closed 23 October and MOT opened 27 October: use 23 Oct only as
+ // a display anchor for an imported opening, never change the stored trade date.
+ const isOctBtp=(a.isin==='IT0005735227'||a.id==='btp');
+ const adjusted=valid.map(t=>(isOctBtp&&(t.assumedDate||t.legacyOpening)&&t.kind==='buy'&&t.date>='2026-10-27')?
+  {...t,date:'2026-10-23',_graphAnchor:true}:t).sort((x,y)=>x.date.localeCompare(y.date));
+ if(!adjusted.length){const observed=fh1099ObservedPosition(a,date);return observed||{qty:0,capital:0,source:'Nessuna operazione documentata'};}
+ let qty=0,capital=0,estimated=false;
+ for(const t of adjusted){if(t.date>date)break;const n=Number(t.quantity);
+  if(t.kind==='buy'){qty+=n;const cost=Number(t.spent);capital+=Number.isFinite(cost)?Math.abs(cost):0;}
+  else{if(n>qty+1e-7)return {qty:null,reason:'Vendita superiore alle quote registrate'};
+   const before=qty;qty=Math.max(0,qty-n);capital=before>0?capital*qty/before:0;}
+  if(t._graphAnchor)estimated=true;
  }
- let qty=0,capital=0;
- for(const t of dated){if(t.date>date)break;const n=Number(t.quantity);
-  if(t.kind==='buy'){qty+=n;capital+=Math.abs(Number(t.spent)||0)}
-  else{if(n>qty+1e-7)return {qty:null,reason:'Vendita superiore alle quote documentate'};
-   const prior=qty;qty=Math.max(0,qty-n);capital=prior>0?capital*qty/prior:0;}
- }
- if(qty< -1e-7)return {qty:null,reason:'Movimenti incompatibili'};
- return {qty:qty<1e-7?0:qty,capital,source:'Storico → Archivio',assumed:!!assumed.length};
+ // Prior to an imported opening, only a real historical observation can
+ // justify a positive holding; otherwise its contribution is zero, not missing.
+ const earliest=adjusted[0]?.date;
+ if(date<earliest){const observed=fh1099ObservedPosition(a,date);return observed||{qty:0,capital:0,source:'Nessuna posizione alla data'};}
+ return {qty:qty<1e-7?0:qty,capital:Math.max(0,capital),source:'Storico → Archivio',estimated,
+  note:estimated?'BTP: data iniziale ricostruita dal collocamento; verifica la data acquisto effettiva':''};
+}
+function fh1099EffectiveTradeDate(t){
+ const a=state.assets.find(x=>x.id===t.asset);
+ if(a?.isin==='IT0005735227'&&t.kind==='buy'&&(t.legacyOpening||t.assumedDate)&&t.date>='2026-10-27')return '2026-10-23';
+ return t.date;
 }
 function fh102QtyAt(a,date){return fh1096PositionAt(a,date).qty}
 function fh102Closest(archive,a,date){
@@ -3869,10 +3891,17 @@ function fh102Valuation(archive,date,selectedCats){
   if(!quote&&date===today()&&Number(a.p)>0){quote={value:val(a),quality:'observed',source:'Quotazione attuale'};}
   if(!quote){
    const close=fh102Closest(archive,a,date);
-   if(!close){missing.push(a.name+': chiusura storica mancante');continue}
+   if(!close){
+    if(a.cat==='Obbligazioni'&&a.isin==='IT0005735227'){
+     quote={value:qty,quality:'estimated',source:'Valore nominale del BTP, in assenza della chiusura storica',nominalFallback:true};
+    }else{missing.push(a.name+': quotazione mancante');continue}
+   }
+   if(quote){ /* nominal BTP fallback already calculated */ }
+   else{
    const fx=currencyOf(a)==='EUR'?1:fh102HistoricFx(archive,currencyOf(a),date);
    if(!(Number.isFinite(fx)&&fx>0)){missing.push(a.name+': cambio storico '+currencyOf(a)+' mancante');continue}
    quote={value:qty*close.price*fx/(a.cat==='Obbligazioni'?100:1),quality:close.quality,source:close.source,marketDate:close.marketDate,carried:!!close.carried};
+   }
   }
   if(!Number.isFinite(quote.value)){missing.push(a.name+': valore non valido');continue}
   if(quote.quality!=='close'||quote.carried)provisional++;
@@ -3887,7 +3916,8 @@ function fh1089ChartFirstDay(archive,cats){
  const dates=trades.filter(t=>cats.includes(t.cat)&&t.kind==='buy'&&fh102ValidDay(t.date)&&!t.assumedDate&&!t.legacyOpening).map(t=>t.date).sort();
  // Only dated transactions are evidence of when holdings started. Imported
  // legacy entries may hide older investments, which the UI flags separately.
- const first=dates[0]||fh102FirstDay();
+ const btpAnchor=trades.some(t=>t.kind==='buy'&&fh1099EffectiveTradeDate(t)==='2026-10-23')?'2026-10-23':null;
+ const first=[dates[0],btpAnchor,fh102FirstDay()].filter(Boolean).sort()[0]||today();
  return first<'2026-01-01'?'2026-01-01':first;
 }
 function fh102CalendarSeries(){
@@ -4020,7 +4050,7 @@ function renderWealthGraph(){
  const lo=mn-pad,hi=mx+pad,W=340,H=165,L=14,R=14,T=14,B=30;
  const first=days(arr[0].date),last=days(arr.at(-1).date);
  const x=p=>L+(W-L-R)*(days(p.date)-first)/Math.max(1,last-first),y=v=>T+(H-T-B)*(hi-v)/(hi-lo);
- const flowFor=(a,b)=>{const ops=trades.filter(t=>cats.includes(t.cat)&&t.date>a&&t.date<=b&&['buy','sale'].includes(t.kind));const valid=ops.every(t=>Number.isFinite(Number(t.spent)));const buys=ops.filter(t=>t.kind==='buy').reduce((n,t)=>n+Math.abs(Number(t.spent)||0),0),sales=ops.filter(t=>t.kind==='sale').reduce((n,t)=>n+Math.abs(Number(t.spent)||0),0);return {buys,sales,net:buys-sales,valid};};
+ const flowFor=(a,b)=>{const ops=trades.filter(t=>cats.includes(t.cat)&&fh1099EffectiveTradeDate(t)>a&&fh1099EffectiveTradeDate(t)<=b&&['buy','sale'].includes(t.kind));const valid=ops.every(t=>Number.isFinite(Number(t.spent)));const buys=ops.filter(t=>t.kind==='buy').reduce((n,t)=>n+Math.abs(Number(t.spent)||0),0),sales=ops.filter(t=>t.kind==='sale').reduce((n,t)=>n+Math.abs(Number(t.spent)||0),0);return {buys,sales,net:buys-sales,valid};};
  const intervals=arr.map((p,i)=>{const prev=i?arr[i-1]:null,f=flowFor(prev?prev.date:'',p.date);return {...f,gain:prev&&f.valid?p.value-prev.value-f.net:null,delta:prev?p.value-prev.value:null};});
  const segmentColor=i=>intervals[i].gain===null?'#a9b9ce':intervals[i].gain>=0?'#45dbae':'#fa8090';
  const path=arr.slice(1).map((p,j)=>{const a=arr[j],i=j+1;return '<path d="M'+x(a)+' '+y(a.value)+' L'+x(p)+' '+y(p.value)+'" fill="none" stroke="'+segmentColor(i)+'" stroke-width="2.6" stroke-linecap="round"'+(days(p.date)-days(a.date)>1?' stroke-dasharray="4 4"':'')+'/>';}).join('');
@@ -4029,10 +4059,8 @@ function renderWealthGraph(){
  const chosen=arr.find(p=>p.date===wealthSelectedDate)||arr.at(-1);const ci=arr.indexOf(chosen),iv=intervals[ci];const signed=n=>(n>=0?'+':'')+eur(n);
  const indicativeCount=arr.filter(p=>p.provisional>0).length;
  const gaps=arr.slice(1).reduce((n,p,i)=>n+(days(p.date)-days(arr[i].date)>1?days(p.date)-days(arr[i].date)-1:0),0);
- const missingDays=allRecords.filter(p=>!p.valid&&p.missing.length>0&&(customFrom?p.date>=customFrom:(wealthRange==='all'||end-days(p.date)<=Number(wealthRange))));
- const missingPreview=missingDays.slice(-12).reverse().map(p=>'<li><strong>'+shortDate(p.date)+'</strong>: '+svgEscape(p.missing.slice(0,2).join(' · '))+'</li>').join('');
- const issueSummary=missingDays.length?'<details class="fh1096-issues"><summary>⚠ '+missingDays.length+' giorni da completare · mostra cause</summary><p class="hint">Ricostruzione da movimenti datati e prezzi di chiusura. Correggi prima le date presunte nello Storico → Archivio.</p><ul>'+missingPreview+'</ul>'+(missingDays.length>12?'<p class="hint">Altri '+(missingDays.length-12)+' giorni con dati mancanti.</p>':'')+'</details>':'';
- target.innerHTML='<svg class="history-plot wealth-plot"'+abSeriesAttribute(arr.map(p=>({x:x(p),y:y(p.value),value:p.value,label:shortDate(p.date)})),'wealth')+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Valore giornaliero del patrimonio da '+shortDate(arr[0].date)+' a '+shortDate(arr.at(-1).date)+'">'+path+''+dots+moneyMarks+'<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+shortDate(arr[0].date)+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+shortDate(arr.at(-1).date)+'</text></svg><div class="wealth-day-focus"><span>'+shortDate(chosen.date)+(chosen.estimated?' · indicativo':'')+'</span><strong>'+eur(chosen.value)+'</strong></div>'+(ci>0?'<div class="fh103-flow"><span>Variazione patrimonio <b>'+signed(iv.delta)+'</b></span><span>💰 Acquisti <b>'+eur(iv.buys)+'</b></span><span>Vendite <b>'+eur(iv.sales)+'</b></span><span>Risultato al netto dei movimenti <b style="color:'+segmentColor(ci)+'">'+(iv.gain===null?'n.d.':signed(iv.gain))+'</b></span></div>':'')+'<div class="sub">Verde: risultato positivo · Rosso: negativo · 💰 acquisti registrati · tratteggi: date mancanti.</div><div class="sub wealth-days-note">'+arr.length+' giornate rilevate'+(indicativeCount?' · '+indicativeCount+' indicative: ultimo prezzo noto riportato, non chiusura verificata':'')+(gaps?' · '+gaps+' giornate non rilevate':'')+' · Quantità da Storico → Archivio, prezzi da Archivio quotazioni. Nessun totale parziale. Tocca un punto per leggere il valore.</div>'+issueSummary;
+ // Detailed diagnostics stay in Settings → Archivio quotazioni, never in Home.
+ target.innerHTML='<svg class="history-plot wealth-plot"'+abSeriesAttribute(arr.map(p=>({x:x(p),y:y(p.value),value:p.value,label:shortDate(p.date)})),'wealth')+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Valore giornaliero del patrimonio da '+shortDate(arr[0].date)+' a '+shortDate(arr.at(-1).date)+'">'+path+''+dots+moneyMarks+'<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+shortDate(arr[0].date)+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+shortDate(arr.at(-1).date)+'</text></svg><div class="wealth-day-focus"><span>'+shortDate(chosen.date)+(chosen.provisional?' · indicativo':'')+'</span><strong>'+eur(chosen.value)+'</strong></div>'+(ci>0?'<div class="fh103-flow"><span>Variazione patrimonio <b>'+signed(iv.delta)+'</b></span><span>💰 Acquisti <b>'+eur(iv.buys)+'</b></span><span>Vendite <b>'+eur(iv.sales)+'</b></span><span>Risultato al netto dei movimenti <b style="color:'+segmentColor(ci)+'">'+(iv.gain===null?'n.d.':signed(iv.gain))+'</b></span></div>':'')+'<div class="sub">Verde: rendimento positivo · Rosso: negativo · 💰 acquisti.</div>';
 }
 document.getElementById('wealthRanges').addEventListener('click',e=>{const b=e.target.closest('button[data-wealth-range]');if(!b)return;wealthRange=b.dataset.wealthRange;document.getElementById('wealthFromDate').value='';wealthSelectedDate=null;renderWealthGraph()});
 document.getElementById('wealthFromDate').addEventListener('change',e=>{if(e.target.value>today())e.target.value=today();wealthSelectedDate=null;renderWealthGraph()});
@@ -5783,7 +5811,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.8';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.9';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -7056,7 +7084,7 @@ function showCodecBeforeLevel(){
  const host=document.createElement('div');host.id='fsCodecScene';host.className='fs-codec-scene';
  const heading=document.createElement('h2');heading.textContent='CODEC · MISSIONE '+String(level).padStart(2,'0');host.append(heading);
  const art=document.createElement('div');art.className='fs-codec-art';
- function avatar(person){const div=document.createElement('div');div.className='fs-codec-avatar wise';const actors={NEXUS:['./nexus-portrait.webp?v=10.9.8','Nexus, mentore di Finn'],MIRA:['./mira-operative.webp?v=10.9.8','Mira, alleata di Finn'],FINN:['./finn-operative.webp?v=10.9.8','Finn con bandana da infiltrazione']};const [src,alt]=actors[person]||actors.NEXUS;const img=document.createElement('img');img.className='fs-nexus-image';img.src=src;img.alt=alt;img.width=100;img.height=118;div.append(img);if(person==='MIRA'){div.classList.add('fs-mira-avatar');div.setAttribute('role','button');div.setAttribute('tabindex','0');div.setAttribute('aria-label','Tocca Mira per una reazione segreta');const blush=document.createElement('span');blush.className='fs-mira-blush';blush.setAttribute('aria-hidden','true');blush.textContent='♥';div.append(blush);let pose=0;const react=()=>{pose=(pose%3)+1;div.classList.remove('fs-mira-pose-1','fs-mira-pose-2','fs-mira-pose-3');void div.offsetWidth;div.classList.add('fs-mira-pose-'+pose);blush.textContent=['♥','💕','💗'][pose-1];};div.addEventListener('click',e=>{e.stopPropagation();react()});div.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();react()}});}return div;}
+ function avatar(person){const div=document.createElement('div');div.className='fs-codec-avatar wise';const actors={NEXUS:['./nexus-portrait.webp?v=10.9.9','Nexus, mentore di Finn'],MIRA:['./mira-operative.webp?v=10.9.9','Mira, alleata di Finn'],FINN:['./finn-operative.webp?v=10.9.9','Finn con bandana da infiltrazione']};const [src,alt]=actors[person]||actors.NEXUS;const img=document.createElement('img');img.className='fs-nexus-image';img.src=src;img.alt=alt;img.width=100;img.height=118;div.append(img);if(person==='MIRA'){div.classList.add('fs-mira-avatar');div.setAttribute('role','button');div.setAttribute('tabindex','0');div.setAttribute('aria-label','Tocca Mira per una reazione segreta');const blush=document.createElement('span');blush.className='fs-mira-blush';blush.setAttribute('aria-hidden','true');blush.textContent='♥';div.append(blush);let pose=0;const react=()=>{pose=(pose%3)+1;div.classList.remove('fs-mira-pose-1','fs-mira-pose-2','fs-mira-pose-3');void div.offsetWidth;div.classList.add('fs-mira-pose-'+pose);blush.textContent=['♥','💕','💗'][pose-1];};div.addEventListener('click',e=>{e.stopPropagation();react()});div.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();react()}});}return div;}
  art.append(avatar(c[0]),avatar(c[2]));host.append(art);
  const dialogue=document.createElement('div');dialogue.className='fs-codec-lines';for(let k=0;k<4;k+=2){const item=document.createElement('p');const name=document.createElement('strong');name.textContent=c[k]+': ';item.append(name,document.createTextNode(c[k+1]));dialogue.append(item);}host.append(dialogue);
  const proceed=document.createElement('button');proceed.className='fs-codec-start';proceed.type='button';proceed.textContent='Inizia missione ▶';proceed.onclick=e=>{e.stopPropagation();host.remove();start()};host.append(proceed);
@@ -7838,7 +7866,7 @@ chat.addEventListener('click',event=>{
 /* The codec displays Finn's tactical portrait at a tighter crop. */
 #finnSolid .fs-codec-avatar:has(img[alt*="Finn con bandana"]){overflow:hidden!important}
 #finnSolid .fs-codec-avatar img[alt*="Finn con bandana"]{object-fit:cover!important;object-position:50% 47%!important;scale:1.22;}
-/* FinnSolid 10.9.8 · one universal three-heart shield; boss energy remains separate */
+/* FinnSolid 10.9.9 · one universal three-heart shield; boss energy remains separate */
 #finnSolid .fs-stats{grid-template-columns:minmax(0,1.5fr) auto auto auto minmax(0,1.3fr)!important;align-items:center}
 #finnSolid #fsLives{display:inline-flex;align-items:center;gap:2px;white-space:nowrap;justify-content:center}
 #finnSolid .fs-heart{font-size:clamp(13px,3.4vw,19px);color:#ff6079;text-shadow:0 1px 5px #dc31585c}
@@ -7883,7 +7911,7 @@ header.top .new-header-brand #finholdraLogo{
 }
 </style>
 <link rel="stylesheet" href="./home-capital-chart.css?v=10.9.1"><script src="./home-capital-chart.js?v=10.9.1"></script>
-<link rel="stylesheet" href="./finn-theft-auto.css?v=10.9.8">
+<link rel="stylesheet" href="./finn-theft-auto.css?v=10.9.9">
 <style id="fh1091-gamepicker-layout">
 /* Four games in two tidy columns even on a phone. */
 #finnGamePicker .fgp-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
@@ -7897,5 +7925,5 @@ header.top .new-header-brand #finholdraLogo{
  <div class="fta-controls"><div class="fta-dpad" aria-label="Movimento"><span></span><button type="button" data-fta-dir="up" aria-label="Vai su">▲</button><span></span><button type="button" data-fta-dir="left" aria-label="Vai a sinistra">◀</button><button type="button" data-fta-dir="down" aria-label="Vai giù">▼</button><button type="button" data-fta-dir="right" aria-label="Vai a destra">▶</button></div><div class="fta-actions"><button type="button" id="ftaInteract"><span>🚙</span>Entra</button><button type="button" id="ftaAttack"><span>👊</span>Colpisci</button><button type="button" id="ftaWeapon"><span>🔄</span>Arma</button><button type="button" id="ftaTips" onclick="document.getElementById('ftaMessage').textContent='PC: WASD / frecce · E veicolo · F attacco · Q arma. Su smartphone usa i pulsanti.';document.getElementById('ftaMessage').classList.add('show')"><span>ℹ️</span>Comandi</button></div></div>
  <div class="fta-footnote">In auto usa le frecce per guidare. I crimini fanno salire le stelle: la polizia ti insegue finché non sfuggi. Free roaming illustrato e originale.</div>
 </div>
-<script src="./finn-theft-auto.js?v=10.9.8"></script>
-<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.8"><script src="./dashboard-fullscreen.js?v=10.9.8"></script></body></html>
+<script src="./finn-theft-auto.js?v=10.9.9"></script>
+<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.9"><script src="./dashboard-fullscreen.js?v=10.9.9"></script></body></html>
