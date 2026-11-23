@@ -1,3 +1,7 @@
+## Beta 10.9.33
+- Investimenti, grafico 1G: selezionando un punto viene mostrata la variazione in euro e in percentuale dalla chiusura precedente, nel tooltip e nel pannello inferiore. Per il punto di chiusura precedente la variazione è zero.
+- Finn Radar: nuova prima sezione «Cerca titolo», basata sullo stesso motore di ricerca usato in Investimenti e Preferiti. Selezionando un risultato apre la scheda grafico in sola consultazione, senza quote, PMC o registrazioni sul portafoglio.
+
 ## 10.9.31
 - Home, grafico "Patrimonio e valore": la superficie del grafico segue ora il colore dinamico della Home (come i titoli preferiti), invece di restare fissa in blu.
 
