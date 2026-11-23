@@ -1817,7 +1817,7 @@ header.top .new-header-nav{margin-bottom:0!important}
 #tradeEventList .transaction-history-row{flex-wrap:nowrap}
 @media(max-width:430px){#tradeEventList .fh1015-entry-ident{gap:8px}#tradeEventList .transaction-history-row>.btn{flex-shrink:0}}
 </style>
-<link rel="stylesheet" href="./market-radar.css?v=10.9.39">
+<link rel="stylesheet" href="./market-radar.css?v=10.9.40">
 <link rel="stylesheet" href="finholdra-refinements.css?v=10.9.25"/>
 <style id="fh1071-fixes">
 /* Beta 10.9.25: selectable neutral/closed-market palette. */
@@ -1928,7 +1928,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
    if(!k?.startsWith(prefix))continue;
    const short=k.slice(prefix.length);
    if(short.startsWith('invesquo_sim_')||['invesquo_auto_recovery_b712','invesquo_reset_undo_v74'].includes(short))continue;
-   data[short]=localStorage.getItem(k);
+   data[short]=window.FinholdraCompact.decode(localStorage.getItem(k));
   }
   const parsed=(k,f)=>{try{return JSON.parse(data[k]||'null')??f}catch(_){return f}};
   const base={format:'invesquo-portable',version:5,createdAt:new Date().toISOString(),
@@ -2360,15 +2360,28 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
   header.top .new-header-nav > button.gear-btn { height: 39px !important; min-height: 39px !important; }
 }
 </style>
-</main><script>
+</main><script src="./storage-compact.js?v=10.9.40"></script><script>
 'use strict';
 const SIM_MODE=new URLSearchParams(location.search).get('simulation')==='1';
 // v7.5: strictly isolated local portfolios; legacy anonymous keys are never read.
 const ACCOUNT_ID=window.INVESQUO_ACCOUNT_ID||null;
 const ACCOUNT_PREFIX=ACCOUNT_ID?'invesquo_account_'+ACCOUNT_ID+'_':null;
 const store={
- getItem:k=>ACCOUNT_PREFIX?localStorage.getItem(ACCOUNT_PREFIX+(SIM_MODE?'invesquo_sim_':'')+k):null,
- setItem:(k,v)=>{if(ACCOUNT_PREFIX)localStorage.setItem(ACCOUNT_PREFIX+(SIM_MODE?'invesquo_sim_':'')+k,v)},
+ getItem:k=>{
+  if(!ACCOUNT_PREFIX)return null;
+  const raw=localStorage.getItem(ACCOUNT_PREFIX+(SIM_MODE?'invesquo_sim_':'')+k);
+  return raw===null?null:window.FinholdraCompact.decode(raw);
+ },
+ setItem:(k,v)=>{
+  if(!ACCOUNT_PREFIX)return;
+  const full=ACCOUNT_PREFIX+(SIM_MODE?'invesquo_sim_':'')+k;
+  const old=localStorage.getItem(full);
+  const compactMode=localStorage.getItem(ACCOUNT_PREFIX+'finholdra_compact_mode_v1')==='1';
+  // Do not start converting an existing portfolio without prior explicit backup.
+  const value=(old?.startsWith(window.FinholdraCompact.PREFIX)||compactMode)&&window.FinholdraCompact.matches(k)
+   ?window.FinholdraCompact.encode(k,v,true):v;
+  localStorage.setItem(full,value);
+ },
  removeItem:k=>{if(ACCOUNT_PREFIX)localStorage.removeItem(ACCOUNT_PREFIX+(SIM_MODE?'invesquo_sim_':'')+k)}
 };
 const STORAGE='patrimonio_iphone_v2',OLD_STORAGE='patrimonio_iphone_v1',FILTER_KEY='patrimonio_filters_v2',HISTORY_KEY='patrimonio_history_v36',TRADES_KEY='patrimonio_trades_v36';
@@ -2546,7 +2559,7 @@ function commitLedger(assetId,changedTrades){const r=computeLedger(assetId,chang
 }
 
 function saveTimeline(){try{store.setItem(HISTORY_KEY,JSON.stringify(snapshots));store.setItem(TRADES_KEY,JSON.stringify(trades));window.dispatchEvent(new Event('finholdra:changed'))}catch(e){notice('Impossibile salvare storico o acquisti: spazio sul dispositivo esaurito.',true)}}
-// Beta 10.9.39: financial transactions are never acknowledged without a durable,
+// Beta 10.9.40: financial transactions are never acknowledged without a durable,
 // read-back-verified write of both portfolio and ledger in the active account.
 function persistVerifiedPurchase(nextAssets,nextTrades,expectedTrade){
  if(!ACCOUNT_PREFIX)throw new Error('Profilo non attivo: accedi prima di registrare acquisti.');
@@ -2574,7 +2587,7 @@ function persistVerifiedPurchase(nextAssets,nextTrades,expectedTrade){
   throw new Error('Acquisto NON registrato: '+(err?.message||'scrittura non riuscita')+'. Verifica lo spazio disponibile e riprova.');
  }
 }
-/* 10.9.39 — Profile storage quota recovery. No financial history is deleted.
+/* 10.9.40 — Profile storage quota recovery. No financial history is deleted.
    The only cleanup target is the optional local auto-recovery DUPLICATE;
    backup export and explicit user approval are mandatory. */
 function localStorageUsedBytes(){
@@ -2586,41 +2599,48 @@ function localStorageUsedBytes(){
 }
 function purchaseQuotaRecovery(box){
  if(!box)return;
- const copyKey='invesquo_auto_recovery_b712';
- const duplicate=store.getItem(copyKey)||'';
+ box.querySelector('.fh10939-recovery')?.remove();
  const used=localStorageUsedBytes();
  const wrap=document.createElement('div');wrap.className='fh10939-recovery';
- wrap.innerHTML='<strong>Spazio locale insufficiente</strong><p>Il browser ha bloccato l’acquisto. Esporta un JSON completo prima di intervenire. Non cancellare i dati del sito.</p><div class="fh10939-buttons"><button type="button" class="btn primary" data-fh10939="backup">↓ Esporta backup completo</button><button type="button" class="btn" data-fh10939="cleanup" disabled>Libera copia automatica duplicata</button></div><p class="sub" data-fh10939="info"></p>';
+ wrap.innerHTML='<strong>Spazio browser esaurito: recupero sicuro</strong><p>Non è stato registrato alcun acquisto. Scarica prima una copia JSON normale, poi ottimizza senza cancellare posizioni, transazioni, chiusure o prezzi.</p><div class="fh10939-buttons"><button type="button" class="btn primary" data-fh10939="backup">1 · Scarica backup JSON</button><button type="button" class="btn" data-fh10939="compact" disabled>2 · Comprimi archivi senza eliminarli</button></div><p class="sub" data-fh10939="info" role="status" aria-live="polite"></p>';
  const info=wrap.querySelector('[data-fh10939="info"]');
- const cleanup=wrap.querySelector('[data-fh10939="cleanup"]');
- const size=(duplicate.length*2/1024/1024).toLocaleString('it-IT',{maximumFractionDigits:2});
- info.textContent=(used!==null?'Archivio locale stimato: '+(used/1024/1024).toLocaleString('it-IT',{maximumFractionDigits:2})+' MB. ':'')+(duplicate?'Copia automatica duplicata: circa '+size+' MB.':'Nessuna copia automatica ridondante trovata. Non c’è nulla da rimuovere in sicurezza.');
- let exportRequested=false;
+ const compact=wrap.querySelector('[data-fh10939="compact"]');
+ info.textContent=used!==null?'Spazio locale stimato: '+(used/1048576).toLocaleString('it-IT',{maximumFractionDigits:2})+' MB.':'Spazio locale non misurabile.';
+ let downloaded=false;
  wrap.querySelector('[data-fh10939="backup"]').addEventListener('click',()=>{
   try{
-   const bundle=makePortableBundle();
-   const file=JSON.stringify(bundle,null,2);
-   // Confirm that we produced a self-contained representation of portfolio and ledger.
-   const check=JSON.parse(file);
-   if(!Array.isArray(check.assets)||!Array.isArray(check.trades)||!Array.isArray(check.snapshots))throw Error('JSON incompleto');
-   const blob=new Blob([file],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
-   link.href=url;link.download='finholdra-backup-prima-di-liberare-spazio-'+today()+'.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
-   exportRequested=true;cleanup.disabled=!duplicate;
-   info.textContent='Download avviato: verifica che il file JSON sia effettivamente nella cartella Download prima di procedere.';
-  }catch(err){info.textContent='Impossibile esportare il backup: '+(err?.message||err);cleanup.disabled=true;}
+   const text=JSON.stringify(makePortableBundle(),null,2),check=JSON.parse(text);
+   if(!Array.isArray(check.assets)||!Array.isArray(check.trades)||!Array.isArray(check.snapshots))throw Error('Backup non valido');
+   const blob=new Blob([text],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+   a.href=url;a.download='finholdra-backup-integrale-'+today()+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+   downloaded=true;compact.disabled=false;
+   info.textContent='Download richiesto. Controlla in File → Download che il JSON sia presente, poi usa il secondo pulsante.';
+  }catch(e){compact.disabled=true;info.textContent='Backup non riuscito: '+String(e?.message||e)}
  });
- cleanup.addEventListener('click',()=>{
-  if(!exportRequested||!duplicate)return;
-  if(!confirm('Hai verificato che il backup JSON sia stato scaricato e conservato fuori da Finholdra? Sarà rimossa soltanto la copia automatica locale duplicata, NON portafoglio, movimenti, storico o quotazioni.'))return;
-  try{
-   store.removeItem(copyKey);
-   if(store.getItem(copyKey)!==null)throw Error('Rimozione non confermata');
-   cleanup.disabled=true;
-   info.textContent='Copia automatica duplicata rimossa ('+size+' MB circa). Le transazioni non sono state modificate. Controlla data e prezzo e poi riprova a registrare l’acquisto una sola volta.';
-   updateBackupControls();
-  }catch(err){info.textContent='Impossibile liberare la copia ridondante: '+(err?.message||err);}
+ compact.addEventListener('click',()=>{
+  if(!downloaded||!ACCOUNT_PREFIX)return;
+  if(!confirm('Confermi di avere un backup JSON completo fuori dall’app? Ottimizzerò i dati esistenti senza eliminarli. I backup sono leggibili anche da altre versioni, ma per aprire i dati compressi direttamente in questo browser sarà necessaria la Beta 10.9.40 o successiva.'))return;
+  compact.disabled=true;info.textContent='Ottimizzazione in corso. Non chiudere l’app.';
+  // Allow the status text to render before CPU-intensive lossless compaction.
+  setTimeout(()=>{
+   try{
+    const result=window.FinholdraCompact.compact(ACCOUNT_PREFIX);
+    if(result.count){localStorage.setItem(ACCOUNT_PREFIX+'finholdra_compact_mode_v1','1');}
+    const freed=(result.freed/1048576).toLocaleString('it-IT',{maximumFractionDigits:2});
+    info.textContent=(result.count?`Ottimizzati ${result.count} archivi, liberati circa ${freed} MB. `:'Nessun archivio comprimibile trovato. ')+(result.failed.length?'Alcuni archivi non sono stati ottimizzati. ':'')+'Controlla le quote e riprova UNA volta l’acquisto. Nessuna transazione è stata eliminata.';
+    // A write/read check using the existing holdings and trades, not a fabricated purchase.
+    const checkAssets=JSON.parse(store.getItem(STORAGE)||'null');
+    const checkTrades=JSON.parse(store.getItem(TRADES_KEY)||'null');
+    if(!checkAssets||!Array.isArray(checkAssets.assets)||!Array.isArray(checkTrades))throw Error('Verifica archivio non superata. Conserva il backup esterno.');
+    updateBackupControls();
+   }catch(e){info.textContent='Ottimizzazione non completata: '+String(e?.message||e)+'. Conserva il JSON scaricato.'}
+   finally{compact.disabled=false}
+  },30);
  });
  box.appendChild(wrap);
+ // On iPhone the recovery panel lives at the bottom of a long purchase form.
+ // Reveal it instead of leaving the user staring at an alert without actions.
+ requestAnimationFrame(()=>wrap.scrollIntoView({behavior:'smooth',block:'center'}));
 }
 function showVerifiedPurchaseInHistory(){
  try{renderHistory()}catch(err){console.warn('Storico non aggiornato',err)}
@@ -4226,7 +4246,7 @@ function accountDataForBundle(){
   const k=localStorage.key(i);if(!k?.startsWith(ACCOUNT_PREFIX))continue;
   const short=k.slice(ACCOUNT_PREFIX.length);
   if(short.startsWith('invesquo_sim_')||['invesquo_auto_recovery_b712','invesquo_reset_undo_v74'].includes(short))continue;
-  result[short]=localStorage.getItem(k);
+  result[short]=window.FinholdraCompact.decode(localStorage.getItem(k));
  }
  return result;
 }
@@ -5005,7 +5025,7 @@ $('buyCommit').onclick=()=>{
   trackSnapshot();refreshBuyOptions();render();showVerifiedPurchaseInHistory();if(editing)renderEditor();
   $('buyVerify').checked=false;renderBuy();
   status.classList.remove('warn');status.textContent='✓ Acquisto salvato e verificato nel dispositivo: '+shortDate(purchaseDate)+' · '+entryDecimal(t.count)+' quote di '+latest.name+' · '+eur(t.spent)+'. Presente in Storico → Archivio.';
- }catch(err){status.classList.add('warn');status.textContent=err.message;if(/quota|spazio|storage|exceed/i.test(err.message||''))purchaseQuotaRecovery(status);alert(err.message)}
+ }catch(err){status.classList.add('warn');status.textContent=err.message;if(/quota|spazio|storage|exceed/i.test(err.message||''))purchaseQuotaRecovery(status);else alert(err.message)}
  finally{if($('buyVerify').checked)renderBuy()}
 };
 function syncHistoryRangeButtons(){document.querySelectorAll('#historyRanges button[data-range]').forEach(b=>{const active=b.dataset.range===historyRange;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))})}
@@ -8054,7 +8074,7 @@ body[data-theme="light"] .fh102-close-date input{color-scheme:light}
  body main > .app-view { padding-inline:0!important; }
  body main > .app-view > .sub-screen-head { padding-inline:0!important; }
 }
-</style><style id="fh104-radar-css">.top .new-header-nav{grid-template-columns:repeat(8,minmax(0,1fr))!important}.fh-radar-active #faceButton{position:relative;overflow:visible!important}@keyframes fhRadarLens{0%,100%{transform:translate(0,5px) rotate(0)}40%,65%{transform:translate(-8px,-5px) rotate(-12deg)}}.fh-radar-tabs{display:flex;gap:5px;flex-wrap:wrap;margin:12px 0}.fh-radar-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:10px 0}.fh-radar-summary>div,.fh-radar-item{background:var(--panel2,var(--panel));border:1px solid var(--border);border-radius:12px;padding:12px;margin:8px 0}.fh-radar-summary strong{display:block;font-size:19px}.fh-radar-item a,#radarView a{color:var(--text);text-decoration:underline}.fh-radar-query{display:flex;gap:8px;align-items:center}.fh-radar-query input{min-width:0;flex:1;font-size:16px}.fh-radar-item p{margin:7px 0}.fh-radar-item .sub{overflow-wrap:anywhere}@media(prefers-reduced-motion:reduce){}@media(min-width:680px),(orientation:landscape){body main > header.top .new-header-nav{grid-template-columns:repeat(8,minmax(0,1fr))!important}}</style><style id="fh10939-storage-recovery-css">.fh10939-recovery{margin-top:14px;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--panel2);color:var(--text)}.fh10939-recovery p{margin:7px 0;line-height:1.5}.fh10939-buttons{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.fh10939-buttons button{flex:1 1 180px;min-height:46px}.fh10939-buttons button:disabled{opacity:.5}</style><script src="./finn-radar.js"?v=10.9.39"></script><style id="fh1041-radar">#radarView .fh-radar-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}#radarView .fh-radar-top h2{margin:0}#radarView .fh-radar-top p{margin:4px 0}#radarView .fh-radar-medal{font-size:30px;background:var(--panel2);padding:10px;border-radius:14px}#radarView .fh-radar-chip{font-size:11px;border:1px solid var(--border);border-radius:20px;padding:5px 9px;margin-left:auto}#radarView .fh-radar-summary>div{margin:0;padding:10px;min-width:0}#radarView .fh-radar-summary small{display:block;overflow-wrap:anywhere}#radarView .fh-radar-summary strong{font-size:24px;margin-top:4px}#radarView .fh-radar-import,#radarView .fh-radar-shortcuts{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}#radarView .fh-radar-import label{cursor:pointer}#radarView .fh-radar-item{position:relative;overflow:hidden;border-left:3px solid var(--border)}#radarView .fh-radar-item.buy{border-left-color:#28b58d}#radarView .fh-radar-item.sell{border-left-color:#e76c75}#radarView .fh-radar-item.cluster{border-left-color:#d7ad40}#radarView .fh-radar-item .radar-amount{font-size:22px;font-weight:800}#radarView .fh-radar-item .radar-meta{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}#radarView .radar-meta span{padding:4px 7px;border:1px solid var(--border);border-radius:8px;font-size:11px}#radarView .radar-progress{height:7px;border-radius:8px;background:var(--border);overflow:hidden;margin:8px 0}#radarView .radar-progress i{display:block;height:100%;background:#d7ad40}#radarView .fh-radar-sources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#radarView .fh-radar-sources a{padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;font-size:12px;text-decoration:none}#radarView .radar-empty{text-align:center;padding:24px 8px;color:var(--muted)}#radarView .radar-empty b{display:block;color:var(--text);margin:8px}#radarView .radar-empty span{font-size:32px}</style>
+</style><style id="fh104-radar-css">.top .new-header-nav{grid-template-columns:repeat(8,minmax(0,1fr))!important}.fh-radar-active #faceButton{position:relative;overflow:visible!important}@keyframes fhRadarLens{0%,100%{transform:translate(0,5px) rotate(0)}40%,65%{transform:translate(-8px,-5px) rotate(-12deg)}}.fh-radar-tabs{display:flex;gap:5px;flex-wrap:wrap;margin:12px 0}.fh-radar-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:10px 0}.fh-radar-summary>div,.fh-radar-item{background:var(--panel2,var(--panel));border:1px solid var(--border);border-radius:12px;padding:12px;margin:8px 0}.fh-radar-summary strong{display:block;font-size:19px}.fh-radar-item a,#radarView a{color:var(--text);text-decoration:underline}.fh-radar-query{display:flex;gap:8px;align-items:center}.fh-radar-query input{min-width:0;flex:1;font-size:16px}.fh-radar-item p{margin:7px 0}.fh-radar-item .sub{overflow-wrap:anywhere}@media(prefers-reduced-motion:reduce){}@media(min-width:680px),(orientation:landscape){body main > header.top .new-header-nav{grid-template-columns:repeat(8,minmax(0,1fr))!important}}</style><style id="fh10939-storage-recovery-css">.fh10939-recovery{margin-top:14px;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--panel2);color:var(--text)}.fh10939-recovery p{margin:7px 0;line-height:1.5}.fh10939-buttons{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.fh10939-buttons button{flex:1 1 180px;min-height:46px}.fh10939-buttons button:disabled{opacity:.5}</style><script src="./finn-radar.js"?v=10.9.40"></script><style id="fh1041-radar">#radarView .fh-radar-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}#radarView .fh-radar-top h2{margin:0}#radarView .fh-radar-top p{margin:4px 0}#radarView .fh-radar-medal{font-size:30px;background:var(--panel2);padding:10px;border-radius:14px}#radarView .fh-radar-chip{font-size:11px;border:1px solid var(--border);border-radius:20px;padding:5px 9px;margin-left:auto}#radarView .fh-radar-summary>div{margin:0;padding:10px;min-width:0}#radarView .fh-radar-summary small{display:block;overflow-wrap:anywhere}#radarView .fh-radar-summary strong{font-size:24px;margin-top:4px}#radarView .fh-radar-import,#radarView .fh-radar-shortcuts{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}#radarView .fh-radar-import label{cursor:pointer}#radarView .fh-radar-item{position:relative;overflow:hidden;border-left:3px solid var(--border)}#radarView .fh-radar-item.buy{border-left-color:#28b58d}#radarView .fh-radar-item.sell{border-left-color:#e76c75}#radarView .fh-radar-item.cluster{border-left-color:#d7ad40}#radarView .fh-radar-item .radar-amount{font-size:22px;font-weight:800}#radarView .fh-radar-item .radar-meta{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}#radarView .radar-meta span{padding:4px 7px;border:1px solid var(--border);border-radius:8px;font-size:11px}#radarView .radar-progress{height:7px;border-radius:8px;background:var(--border);overflow:hidden;margin:8px 0}#radarView .radar-progress i{display:block;height:100%;background:#d7ad40}#radarView .fh-radar-sources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#radarView .fh-radar-sources a{padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;font-size:12px;text-decoration:none}#radarView .radar-empty{text-align:center;padding:24px 8px;color:var(--muted)}#radarView .radar-empty b{display:block;color:var(--text);margin:8px}#radarView .radar-empty span{font-size:32px}</style>
 <style id="fh1065-header-fade">
 /* One continuous viewport-wide surface; fade extends below the navigation. */
 body,body.fh-header-scrolled{--fh-header-surface:var(--bg)!important;--fh-header-scrolled:var(--bg)!important}
@@ -8215,7 +8235,7 @@ header.top .new-header-brand #finholdraLogo{
   header.top .new-header-brand .finholdra-wordmark{padding:2px 0 5px 3px!important;}
 }
 </style>
-<link rel="stylesheet" href="./home-capital-chart.css?v=10.9.39">
+<link rel="stylesheet" href="./home-capital-chart.css?v=10.9.40">
 <link rel="stylesheet" href="./finn-theft-auto.css?v=10.9.25">
 <style id="fh1091-gamepicker-layout">
 /* Four games in two tidy columns even on a phone. */
@@ -8282,4 +8302,4 @@ header.top .new-header-brand #finholdraLogo{
 #radarView #mrRows .mr-row[data-radar-chart]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media(max-width:600px){#radarView #mrModes{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}#radarView #mrModes>button{min-width:0;width:100%;min-height:42px}}
 </style>
-<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.39"><link rel="stylesheet" href="./finholdra-themes-extended.css?v=10.9.39"><link rel="stylesheet" href="./home-unified-charts.css?v=10.9.39"><script src="./home-unified-charts.js?v=10.9.39"></script></body></html>
+<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.40"><link rel="stylesheet" href="./finholdra-themes-extended.css?v=10.9.40"><link rel="stylesheet" href="./home-unified-charts.css?v=10.9.40"><script src="./home-unified-charts.js?v=10.9.40"></script></body></html>

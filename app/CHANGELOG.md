@@ -1,3 +1,9 @@
+## Beta 10.9.40
+- Recupero spazio: dopo backup JSON esterno obbligatorio, compressione senza perdita degli archivi locali grandi (portafoglio, transazioni, prezzi, quotazioni e storico) con verifica di rilettura.
+- Registrazione: il pannello di recupero ora è visibile subito quando il browser rifiuta un acquisto; non viene mostrato un semplice alert senza soluzione.
+- Backup: gli export JSON dei profili contengono dati non compressi, anche quando il salvataggio locale è ottimizzato.
+- Compatibilità: per i dati ottimizzati nel browser è richiesta questa beta o successiva; il backup JSON resta portabile.
+
 ## Beta 10.9.39
 
 - Acquisti: quando il browser esaurisce lo spazio locale, la conferma resta bloccata e viene offerta una procedura guidata per esportare un backup JSON completo.
