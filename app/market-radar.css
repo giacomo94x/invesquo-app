@@ -64,3 +64,13 @@ body.fh-home-active[data-favorite-tint="weekend"] #performanceFace.expression-th
 @keyframes fhWeekendThink{0%,100%{transform:rotate(0)}45%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}}
 body.motion-off.fh-home-active #performanceFace,body.motion-off.fh-home-active #performanceFace *{animation:none!important}
 @media(prefers-reduced-motion:reduce){body.fh-home-active[data-favorite-tint="weekend"] #performanceFace *{animation:none!important}}
+
+
+/* 10.9.31 — Home "Patrimonio e valore" graph surface follows the dynamic Home tint like favorite titles. */
+body.fh-home-active{--fh-home-chart-surface:#091b30;--fh-home-chart-border:var(--border)}
+body.fh-home-active[data-favorite-tint="up"]{--fh-home-chart-surface:#022f1d;--fh-home-chart-border:#2f7f4b}
+body.fh-home-active[data-favorite-tint="down"]{--fh-home-chart-surface:#330f16;--fh-home-chart-border:#8f4650}
+body.fh-home-active[data-favorite-tint="weekend"]{--fh-home-chart-surface:#11314b;--fh-home-chart-border:#3d6589}
+body.fh-home-active:is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="up"]{--fh-home-chart-surface:#e0f5e4;--fh-home-chart-border:#b7d0bd}
+body.fh-home-active:is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="down"]{--fh-home-chart-surface:#fae3e5;--fh-home-chart-border:#debec0}
+body.fh-home-active:is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="weekend"]{--fh-home-chart-surface:#e7eff8;--fh-home-chart-border:#c1cedc}

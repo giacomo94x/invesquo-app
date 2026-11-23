@@ -1817,7 +1817,7 @@ header.top .new-header-nav{margin-bottom:0!important}
 #tradeEventList .transaction-history-row{flex-wrap:nowrap}
 @media(max-width:430px){#tradeEventList .fh1015-entry-ident{gap:8px}#tradeEventList .transaction-history-row>.btn{flex-shrink:0}}
 </style>
-<link rel="stylesheet" href="./market-radar.css?v=10.9.25">
+<link rel="stylesheet" href="./market-radar.css?v=10.9.31">
 <link rel="stylesheet" href="finholdra-refinements.css?v=10.9.25"/>
 <style id="fh1071-fixes">
 /* Beta 10.9.25: selectable neutral/closed-market palette. */
@@ -4716,7 +4716,12 @@ function plotAssetDetail(points,a,opts={}){
   const textDate=document.createElementNS('http://www.w3.org/2000/svg','text');
   let dateText=dot.querySelector('#detailTipDate');if(!dateText){dateText=textDate;dateText.id='detailTipDate';dateText.setAttribute('class','chart-tooltip-label');dateText.setAttribute('text-anchor','middle');dot.appendChild(dateText)}
   dateText.setAttribute('x',tipX);dateText.setAttribute('y',tipY+26);dateText.textContent=(closest.priorClose?'Chiusura precedente':detailDate(closest.t,intraday||!!closest.live))+(closest.live?' · quotazione':'');
-  $('assetDetailSelected').textContent=(closest.priorClose?'Chiusura precedente':detailDate(closest.t,intraday||!!closest.live))+(closest.live?' · quotazione'+(closest.delayed?' differita':''):'')+' · '+(a.cat==='Obbligazioni'?number(closest.p)+'/100 '+currencyOf(a):localMoney(closest.p,currencyOf(a)));
+  const detailLabel=(closest.priorClose?'Chiusura precedente':detailDate(closest.t,intraday||!!closest.live))+(closest.live?' · quotazione'+(closest.delayed?' differita':''):'');
+  const detailValue=(a.cat==='Obbligazioni'?number(closest.p)+'/100 '+currencyOf(a):localMoney(closest.p,currencyOf(a)));
+  if(Number.isFinite(pmc)&&pmc>0){
+   const diff=closest.p-pmc,diffPct=diff/pmc,deltaValue=(a.cat==='Obbligazioni'?((diff>=0?'+':'')+number(diff)+'/100 '+currencyOf(a)):(diff>=0?'+':'')+localMoney(diff,currencyOf(a)));
+   $('assetDetailSelected').innerHTML=svgEscape(detailLabel)+' · '+svgEscape(detailValue)+' <span class="'+(diff>=0?'gain':'loss')+'">· Δ vs PMC '+svgEscape(deltaValue)+' · '+(diffPct>=0?'+':'')+pct(diffPct)+'</span>';
+  }else $('assetDetailSelected').textContent=detailLabel+' · '+detailValue;
  }
  const chartSvg=chart.querySelector('#detailSvg');
  chartSvg?.addEventListener('pointerdown',ev=>{if(ev.cancelable)ev.preventDefault();try{chartSvg.setPointerCapture?.(ev.pointerId)}catch(_){}onPoint(ev)});
@@ -7702,7 +7707,10 @@ function ensureZoomModal(){
     }
     const bubbleWidth=160,bx=Math.max(12,Math.min(vb.width-bubbleWidth-12,x-bubbleWidth/2)),by=Math.max(12,y-65);
     overlay.innerHTML=`<line x1="${x}" x2="${x}" y1="20" y2="${vb.height-28}" stroke="#9ccbef" stroke-dasharray="5 7" stroke-width="1.6"/><line x1="48" x2="${vb.width-20}" y1="${y}" y2="${y}" stroke="#8bb8d5" stroke-dasharray="5 7" opacity=".55"/><circle cx="${x}" cy="${y}" r="7" fill="#ff8598" stroke="#fff" stroke-width="2.5"/><foreignObject x="${bx}" y="${by}" width="${bubbleWidth}" height="57"><div xmlns="http://www.w3.org/1999/xhtml" style="box-sizing:border-box;background:#17314d;border:1px solid #76a9ff;border-radius:10px;padding:7px;text-align:center;font:700 12px system-ui;color:white;"><div>${formatValue(pt.p.v)}</div><small style="font-size:10px">${pt.p.label}</small></div></foreignObject>`;
-    readout.textContent=`${pt.p.label} · ${formatValue(pt.p.v)}`;
+    if(Number.isFinite(pmc)&&pmc>0){
+      const delta=pt.p.v-pmc,pc=100*delta/pmc;
+      readout.innerHTML=`<span>${svgEscape(pt.p.label)} · ${svgEscape(formatValue(pt.p.v))}</span> · <strong class="${delta>=0?'fh-ab-positive':'fh-ab-negative'}">Δ vs PMC ${(delta>=0?'+':'')+fmt(delta,2)} ${svgEscape(currency)} · ${(pc>=0?'+':'')+pct(pc)}</strong>`;
+    }else readout.textContent=`${pt.p.label} · ${formatValue(pt.p.v)}`;
   }
   function schedule(idx){if(frameReq)cancelAnimationFrame(frameReq);frameReq=requestAnimationFrame(()=>{frameReq=0;renderCursor(idx)})}
   function open(){ if(!parseSeries()) return; document.body.style.overflow='hidden'; modal.classList.add('open'); setTimeout(()=>draw(),20); }
@@ -7961,7 +7969,7 @@ header.top .new-header-brand #finholdraLogo{
   header.top .new-header-brand .finholdra-wordmark{padding:2px 0 5px 3px!important;}
 }
 </style>
-<link rel="stylesheet" href="./home-capital-chart.css?v=10.9.25">
+<link rel="stylesheet" href="./home-capital-chart.css?v=10.9.31">
 <link rel="stylesheet" href="./finn-theft-auto.css?v=10.9.25">
 <style id="fh1091-gamepicker-layout">
 /* Four games in two tidy columns even on a phone. */
@@ -7977,4 +7985,4 @@ header.top .new-header-brand #finholdraLogo{
  <div class="fta-footnote">In auto usa le frecce per guidare. I crimini fanno salire le stelle: la polizia ti insegue finché non sfuggi. Free roaming illustrato e originale.</div>
 </div>
 <script src="./finn-theft-auto.js?v=10.9.25"></script>
-<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.28"><link rel="stylesheet" href="./finholdra-themes-extended.css?v=10.9.28"><link rel="stylesheet" href="./home-unified-charts.css?v=10.9.28"><script src="./home-unified-charts.js?v=10.9.28"></script></body></html>
+<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.31"><link rel="stylesheet" href="./finholdra-themes-extended.css?v=10.9.31"><link rel="stylesheet" href="./home-unified-charts.css?v=10.9.31"><script src="./home-unified-charts.js?v=10.9.31"></script></body></html>

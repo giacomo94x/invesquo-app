@@ -172,7 +172,7 @@
 /* The Investments chart gets a filled, contained viewport; Home uses the same sizing principle. */
 #fhHomeCapitalCard .fh115-actions{display:flex;justify-content:flex-end;align-items:center;margin:7px 0 9px}
 #fhHomeCapitalCard .fh115-actions button{width:auto!important;min-width:0!important;padding:9px 13px!important;font-size:12px!important;border-radius:13px!important}
-#fhHomeCapitalCard .fh115-plot{display:block!important;min-height:0!important;height:auto!important;max-height:none!important;padding:9px 7px 5px!important;overflow:hidden!important;border:1px solid var(--border)!important;border-radius:18px!important;background:#091b30!important}
+#fhHomeCapitalCard .fh115-plot{display:block!important;min-height:0!important;height:auto!important;max-height:none!important;padding:9px 7px 5px!important;overflow:hidden!important;border:1px solid var(--fh-home-chart-border,var(--border))!important;border-radius:18px!important;background:var(--fh-home-chart-surface,#091b30)!important}
 #fhHomeCapitalCard .fh115-plot svg.fh115-svg{display:block!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important;flex:none!important;object-fit:contain!important}
 #fhHomeCapitalCard .fh115-readout{margin:10px 0 8px;padding:12px 13px;font-size:12px;border-radius:14px}
 #fhHomeCapitalCard .fh115-readout strong{font-size:16px}

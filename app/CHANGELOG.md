@@ -1,3 +1,10 @@
+## 10.9.31
+- Home, grafico "Patrimonio e valore": la superficie del grafico segue ora il colore dinamico della Home (come i titoli preferiti), invece di restare fissa in blu.
+
+## 10.9.30
+- Grafici: in ogni rilevazione del pannello in basso di "Patrimonio e valore" vengono mostrati anche differenza in euro e differenza percentuale tra valore e capitale, colorate in verde o rosso in base al segno.
+- Grafici: stessa logica cromatica e informativa estesa ai confronti A↔B e ai grafici della sezione Investimenti, inclusa la differenza rispetto al PMC durante la lettura dei punti.
+
 ## 10.9.29
 - Donut Home: il tondino esterno usa ora lo stesso colore del centro del donut (stessa superficie dietro "Patrimonio oggi"), così segue correttamente tema e colore dinamico.
 

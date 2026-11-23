@@ -2,6 +2,8 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),EUR=new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'});
 const euros=n=>Number.isFinite(n)?EUR.format(n):'n.d.';
+const signedEuros=n=>Number.isFinite(n)?`${n>0?'+':''}${euros(n)}`:'n.d.';
+const signedPct=n=>Number.isFinite(n)?`${n>0?'+':''}${n.toFixed(2).replace('.',',')}%`:'n.d.';
 const dt=d=>new Date(d+'T12:00:00Z').getTime();
 const fmt=d=>{try{return new Date(d+'T12:00:00Z').toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit'})}catch(_){return d}};
 const ranges=[['1G',1],['1S',7],['1M',30],['3M',90],['6M',183],['1A',365],['MAX','all']];
@@ -31,7 +33,7 @@ function chartSvg(s,all,large){if(!all.length)return '<p class="hint">Nessuna qu
 }
 function readout(s,all){const p=all.find(p=>p.date===s.selected)||all.at(-1);if(!p)return 'Nessun dato storico';if(s.ab&&s.A&&s.B){const delta=s.B.value-s.A.value,base=s.A.value,pct=base?delta/Math.abs(base)*100:0;return `<span class="fh119-ab-read"><b style="color:#47d8bd">A · ${fmt(s.A.date)}</b> ${euros(s.A.value)} <b style="color:#f9b85b">B · ${fmt(s.B.date)}</b> ${euros(s.B.value)}</span><strong style="color:${delta>=0?'#54d5ad':'#f78299'}">Δ ${delta>0?'+':''}${euros(delta)} (${pct>0?'+':''}${pct.toFixed(2).replace('.',',')}%)</strong>`;}
  if(s.ab&&s.A)return `<span>A: ${fmt(s.A.date)} · ${euros(s.A.value)}</span><strong>Seleziona B</strong>`;
- return `<span>${fmt(p.date)}${p.provisional?' · indicativo':''}</span><strong>Valore ${euros(p.value)}</strong><small>Capitale ${euros(p.capital)}</small>`;}
+ const delta=p.value-p.capital,pctBase=p.capital?delta/Math.abs(p.capital)*100:null;return `<span>${fmt(p.date)}${p.provisional?' · indicativo':''}</span><strong>Valore ${euros(p.value)}</strong><small>Capitale ${euros(p.capital)}</small><small style="color:${delta>=0?'#54d5ad':'#f78299'};font-weight:800">Differenza ${signedEuros(delta)} · ${signedPct(pctBase)}</small>`;}
 function controls(s){
  const today=new Date().toISOString().slice(0,10);
  const start=s.data().map(p=>p.date).filter(d=>/^\d{4}-\d{2}-\d{2}$/.test(d)).sort()[0]||today;
