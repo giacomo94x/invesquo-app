@@ -1,3 +1,14 @@
+## Beta 10.9.34
+
+- Finn Radar ETF: la ricerca non si arresta più quando lo screener restituisce solo 1-2 ETF; unisce anche quotazioni verificate di altri ETF monitorati, senza inventare prezzi o volumi.
+- Classifica ETF: filtri mercato corretti, dati parziali segnalati e aggiornamento dei risultati incompleti anche in presenza di cache recente.
+- Ricerca titoli: i risultati pertinenti restituiti da Yahoo e TradingView vengono uniti e deduplicati, anziché fermarsi alla prima fonte disponibile.
+
+- Radar, Preferiti e Aggiungi investimento: ricerca per parole chiave sul nome, ticker e ISIN in un unico motore condiviso.
+- Rimossa l'esclusione dei titoli quotati fuori dalla regione preferita: la regione ora determina solo la priorità dei risultati.
+- Ricerca online più ampia con Yahoo Finance e ricerca alternativa TradingView; aggiunta funzione Netlify `search` per le pubblicazioni da repository con build Netlify.
+- Ordinamento basato sulla pertinenza della parola cercata, prima del mercato; non sono inventate quotazioni.
+
 ## Beta 10.9.33
 - Investimenti, grafico 1G: selezionando un punto viene mostrata la variazione in euro e in percentuale dalla chiusura precedente, nel tooltip e nel pannello inferiore. Per il punto di chiusura precedente la variazione è zero.
 - Finn Radar: nuova prima sezione «Cerca titolo», basata sullo stesso motore di ricerca usato in Investimenti e Preferiti. Selezionando un risultato apre la scheda grafico in sola consultazione, senza quote, PMC o registrazioni sul portafoglio.
