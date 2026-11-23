@@ -1,3 +1,26 @@
+## Beta 10.9.38 — Registrazione acquisti affidabile
+
+- Acquisti di titoli già in portafoglio: portafoglio e registro transazioni vengono salvati insieme e riletti prima di mostrare una conferma.
+- Inserimento nuovo titolo con acquisto iniziale: stessa verifica di salvataggio prima di chiudere il modulo.
+- Se la scrittura non riesce, compare un errore esplicito e i dati persistenti vengono ripristinati, senza una falsa conferma.
+- Lo Storico viene aggiornato subito dopo il salvataggio verificato, incluso il registro Archivio.
+- Gli acquisti sono associati al profilo locale effettivamente aperto e identificati da ID univoci.
+
+## Beta 10.9.37
+- Sotto la lente: aggiunto confronto ultimo acquisto e PMC con la quotazione attuale, in euro e percentuale, mantenendo i confronti sui minimi verificati.
+- Grafico 1G: marcatori al prezzo effettivo di acquisto; il tempo è esatto solo se registrato, altrimenti il posizionamento orizzontale è indicativo rispetto ai prezzi intraday verificati.
+- Impostazioni: scelta fra colore dinamico basato sul primo preferito e quello basato sulla performance totale con le soglie di Finn.
+- Mobile: il dettaglio investimenti usa tutta la larghezza dello schermo senza angoli laterali tagliati.
+
+## Beta 10.9.36
+- Investimenti: eliminato il secondo pulsante duplicato Rettifica dati. Il primo e la relativa funzione restano invariati.
+
+## Beta 10.9.35
+
+- Finn Radar: un tocco o Invio su un titolo delle classifiche apre il grafico corrispondente senza richiedere un acquisto; il pulsante Notizie resta indipendente.
+- Radar mobile: Rialzi e Ribassi affiancati nella seconda riga della barra classifiche.
+- Ricerca generale: priorità alle quotazioni italiane/GEM fra i risultati pertinenti, conservando ticker, sede e valuta reali e la possibilità di scegliere mercati esteri.
+
 ## Beta 10.9.34
 
 - Finn Radar ETF: la ricerca non si arresta più quando lo screener restituisce solo 1-2 ETF; unisce anche quotazioni verificate di altri ETF monitorati, senza inventare prezzi o volumi.
