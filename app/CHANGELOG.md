@@ -392,3 +392,4 @@ IMPORTANTE: richiedere il link e aprirlo nello stesso browser; Safari e l’app 
 Non eliminare i backup JSON locali finche` un ripristino reale su due dispositivi non ha avuto successo.
 
 Beta 10.1.3: rimossa la prima voce duplicata e vuota 'Finn · Mascotte e giochi' nelle impostazioni Portafoglio. Mantenuta la voce funzionante e la sezione Gioca con Finn.
+Beta 10.9.32: aumentato il padding interno dei banner dei titoli nella vista Home espansa, cosi i bordi non restano troppo a filo con il testo.
