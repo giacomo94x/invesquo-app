@@ -1,3 +1,10 @@
+## Beta 10.9.39
+
+- Acquisti: quando il browser esaurisce lo spazio locale, la conferma resta bloccata e viene offerta una procedura guidata per esportare un backup JSON completo.
+- Dopo la richiesta di backup e una conferma esplicita, è possibile eliminare soltanto la copia automatica ridondante salvata sul dispositivo per recuperare spazio. Posizioni, acquisti, archivio e quotazioni non vengono toccati.
+- Backup automatico: evita di creare un altro duplicato molto grande quando lo spazio locale è vicino al limite; invita all'esportazione esterna.
+- Nessuna modifica retroattiva alle date delle transazioni.
+
 ## Beta 10.9.38 — Registrazione acquisti affidabile
 
 - Acquisti di titoli già in portafoglio: portafoglio e registro transazioni vengono salvati insieme e riletti prima di mostrare una conferma.
