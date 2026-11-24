@@ -1,3 +1,26 @@
+## Beta 10.9.44
+
+- Rendering HD: canvas dei giochi a risoluzione Retina fino a 3× (anziché 2×) sugli schermi compatibili.
+- Ricerca favicon ad alta risoluzione (256 px, se disponibili dal fornitore).
+- SVG, icone e tipografia con rendering più nitido, senza modificare dati, layout, colori o funzionalità.
+- Le favicon la cui sorgente resta di bassa qualità non possono diventare realmente vettoriali con il solo CSS.
+
+## Beta 10.9.43 — Backup cronologia finanziaria integrale
+
+- Backup JSON Google Drive e locale: inventario esplicito di movimenti, rilevazioni del portafoglio, chiusure giornaliere, osservazioni e cache prezzi associate al profilo, senza duplicare pesanti serie nel file.
+- Ripristino da Drive e file JSON: verifica completezza degli archivi, rilettura di tutte le chiavi; nessuna conferma se il browser non ha spazio per memorizzare anche i dati storici.
+- Importazione da Impostazioni: stesso flusso completo e verificato dell’accesso con JSON, senza saltare silenziosamente archivi per un errore di scrittura.
+- Gli storici mai registrati sul dispositivo sorgente non possono essere inventati dal backup; controllare presenza di storico prima di sovrascrivere il file remoto.
+
+## Beta 10.9.42
+- Backup Google Drive in alto nelle Impostazioni: salva subito se collegato, altrimenti porta alle opzioni di collegamento.
+
+## Beta 10.9.41 — 24 novembre 2026
+
+- Acquisti e nuovi strumenti: prezzo suggerito basato sulla chiusura della data effettiva dell’operazione (ad esempio acquisto del 23/11 → chiusura del 23/11).
+- Per acquisti datati oggi, prima delle 17:30 italiane si propone l’ultima chiusura verificata disponibile della seduta precedente; dopo le 17:30 si prova la chiusura odierna, senza inventare valori se non è ancora pubblicata.
+- La data effettiva della chiusura usata è dichiarata; prezzo del broker sempre modificabile.
+
 ## Beta 10.9.40
 - Recupero spazio: dopo backup JSON esterno obbligatorio, compressione senza perdita degli archivi locali grandi (portafoglio, transazioni, prezzi, quotazioni e storico) con verifica di rilettura.
 - Registrazione: il pannello di recupero ora è visibile subito quando il browser rifiuta un acquisto; non viene mostrato un semplice alert senza soluzione.
