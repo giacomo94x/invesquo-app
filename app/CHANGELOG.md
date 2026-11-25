@@ -1,3 +1,18 @@
+## Beta 10.9.57
+- Grafico Patrimonio e valore in modalità Ingrandisci: ridotti i marcatori delle rilevazioni, le icone € degli acquisti e i contrassegni A/B, senza modificare la visualizzazione normale o i calcoli.
+
+## Beta 10.9.56
+
+- Finn Store: 32 costumi e 32 gadget (64 oggetti totali) con disegni vettoriali originali applicati alla mascotte.
+- Oggetti sbloccabili gratuitamente, in due passaggi: sblocco e poi equipaggiamento, senza crediti consumati.
+- Filtri per categoria (sport, stagioni, mestieri, fantasy, accessori, tecnologia e altri).
+- Sblocchi e oggetti equipaggiati persistono nelle preferenze e nei backup JSON.
+
+## Beta 10.9.55
+
+- Impostazioni: spostato lo Store dalla sezione Portafoglio a Giochi di Finn.
+- Il riquadro del negozio si chiama ora «Finn», lasciando invariati costumi, gadget, equipaggiamento e dati salvati.
+
 ## Beta 10.9.54
 
 - Buoni fruttiferi postali: corretta la registrazione per euro investiti o quote nominali, senza obbligare al prezzo di mercato.

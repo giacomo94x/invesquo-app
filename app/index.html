@@ -930,6 +930,7 @@ body.finn-header-hidden .top .new-header-status{grid-column:2!important}
 .finn-store-emoji{font-size:25px;line-height:1.2}
 .finn-store-price{font-size:11px;color:var(--muted);margin-top:auto}
 .finn-store-equip{font-size:11px;font-weight:800;color:#65dfaf}
+.finn-store-filters{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0 12px}.finn-store-filter{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:30px;padding:7px 12px;font:700 12px Montserrat,system-ui;cursor:pointer}.finn-store-filter.active{border-color:#60dda9;background:color-mix(in srgb,var(--panel2),#21bd85 18%)}
 @media(max-width:420px){.finn-store-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.finn-store-item{padding:10px;min-height:112px}}
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
@@ -2197,7 +2198,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.54</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.57</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -2225,11 +2226,11 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <label class="toggle"><input id="settingShowReconstructed" type="checkbox" checked> Includi i prezzi storici ricostruiti nei grafici</label><label class="toggle"><input id="settingShowBackfill" type="checkbox" checked> Mostra «Recupera prezzi» nei grafici</label>
 <p class="hint">Mostra solo rilevazioni osservate nei grafici.</p>
 <div class="setting-field"><label for="settingSearchRegion">Borse da cercare per prime</label><select id="settingSearchRegion"><option value="world">Tutto il mondo</option><option value="it">Solo Italia</option><option value="eu">Europa</option><option value="us">Solo USA</option></select><p class="hint">Filtra per mercato di quotazione. Cerca obbligazioni anche per ISIN.</p></div></section><section class="card settings-card" id="favoriteSettings"><h2>Titoli preferiti</h2><label class="toggle"><input type="checkbox" id="favoriteEnabled"> Mostra preferiti nella Home</label><div id="favoriteSettingsBody"><div class="field"><label for="favoriteQuery">Cerca per nome, ticker, ISIN o futures</label><div class="flex"><input id="favoriteQuery" class="order-select" placeholder="Es. VWCE, ES=F, oro, Nasdaq futures"><button type="button" class="btn" id="favoriteSearch">Cerca</button></div></div><section class="browse-categories" id="favoriteBrowse" aria-label="Esplora preferiti per categoria"><div class="browse-head"><strong>Esplora per categoria</strong><span class="sub">Seleziona un titolo e verifica mercato e valuta</span></div><div class="browse-tabs" id="favoriteBrowseTabs" role="group" aria-label="Categorie titoli preferiti"></div><div class="browse-list" id="favoriteBrowseList" aria-live="polite"></div></section><div class="search-results" id="favoriteSearchResults"></div><div id="favoriteSelected" class="favorites-selected"></div><p class="sub">Massimo 3 titoli, anche non posseduti. Futures: la quotazione è indicativa della serie continua e non rappresenta un contratto specifico.</p></div></section>
-<section class="card settings-card finn-store-card" id="finnStoreSettings"><div class="section-head"><h2>🛍️ Finn Store</h2><span class="sub">Costumi e gadget</span></div>
-<p class="hint">Personalizza Finn. Per ora tutto è gratuito: nessun acquisto reale e nessun credito scalato.</p>
+<section class="card settings-card finn-store-card" id="finnStoreSettings"><div class="section-head"><h2>🛍️ Finn</h2><span class="sub">Costumi e gadget</span></div>
+<p class="hint">Personalizza Finn. Tutti gli oggetti sono sbloccabili gratis. Nessun acquisto reale e nessun credito scalato.</p>
 <div class="finn-store-banner"><div class="finn-store-preview"><div class="finn-store-preview-art" id="finnStorePreview" aria-label="Anteprima Finn"></div><div><strong>Il tuo Finn</strong><div class="sub" id="finnStoreEquipped">Look classico</div></div></div><strong>🪙 Crediti: ∞</strong></div>
-<h3>Costumi</h3><div class="finn-store-grid" id="finnStoreCostumes"></div><h3>Gadget</h3><div class="finn-store-grid" id="finnStoreGadgets"></div>
-<p class="hint">Un costume e un gadget alla volta. Le scelte vengono salvate nel profilo ed esportate nel backup JSON.</p></section>
+<h3>Costumi</h3><div class="finn-store-filters" id="finnStoreCostumeFilters" role="group" aria-label="Filtra costumi"></div><div class="finn-store-grid" id="finnStoreCostumes"></div><h3>Gadget</h3><div class="finn-store-filters" id="finnStoreGadgetFilters" role="group" aria-label="Filtra gadget"></div><div class="finn-store-grid" id="finnStoreGadgets"></div>
+<p class="hint">Sblocca gratis con un tocco, poi equipaggia l’oggetto. Un costume e un gadget alla volta. Le scelte sono incluse nel backup JSON.</p></section>
 <section class="card settings-card" id="settingsSection">
 <div class="section-head"><h2>Preferenze</h2><span class="sub">Le modifiche si salvano automaticamente</span></div>
 <details class="setting-group" open=""><summary>Aspetto e colori</summary><div class="setting-field"><label for="finholdraLanguageSetting">Lingua / Language</label><select id="finholdraLanguageSetting"><option value="it">Italiano</option><option value="en">English</option></select></div>
@@ -3776,29 +3777,186 @@ function finnSceneStart(type,emotion,ms,followUp){
  finnScene={type,emotion};finnUpdateFigure();
  finnSceneTimer=setTimeout(()=>{if(token!==finnSceneToken)return;finnScene=null;finnUpdateFigure();if(followUp)followUp()},ms);
 }
-const FINN_STORE_COSTUMES=[{id:'none',name:'Look classico',emoji:'✨'},{id:'cap',name:'Cappellino',emoji:'🧢'},{id:'crown',name:'Corona',emoji:'👑'},{id:'cowboy',name:'Cowboy',emoji:'🤠'},{id:'wizard',name:'Mago',emoji:'🧙'},{id:'scarf',name:'Sciarpa',emoji:'🧣'},{id:'beanie',name:'Berretto invernale',emoji:'❄️'}];
-const FINN_STORE_GADGETS=[{id:'none',name:'Nessuno',emoji:'✨'},{id:'glasses',name:'Occhiali',emoji:'🕶️'},{id:'bowtie',name:'Papillon',emoji:'🎀'},{id:'coffee',name:'Caffè',emoji:'☕'},{id:'star',name:'Stella',emoji:'⭐'},{id:'headset',name:'Cuffie',emoji:'🎧'}];
+const FINN_STORE_COSTUMES=[
+{id:'none',name:'Look classico',emoji:'✨',group:'Base'},
+{id:'cap',name:'Cappellino',emoji:'🧢',group:'Sport'},
+{id:'crown',name:'Corona',emoji:'👑',group:'Fantasy'},
+{id:'cowboy',name:'Cowboy',emoji:'🤠',group:'Mestieri'},
+{id:'wizard',name:'Mago',emoji:'🧙',group:'Fantasy'},
+{id:'scarf',name:'Sciarpa',emoji:'🧣',group:'Stagioni'},
+{id:'beanie',name:'Berretto invernale',emoji:'❄️',group:'Stagioni'},
+{id:'santa',name:'Babbo Natale',emoji:'🎅',group:'Stagioni'},
+{id:'pirate',name:'Pirata',emoji:'🏴‍☠️',group:'Fantasy'},
+{id:'astronaut',name:'Astronauta',emoji:'🚀',group:'Mestieri'},
+{id:'chef',name:'Chef',emoji:'👨‍🍳',group:'Mestieri'},
+{id:'graduate',name:'Laureato',emoji:'🎓',group:'Mestieri'},
+{id:'detective',name:'Detective',emoji:'🕵️',group:'Mestieri'},
+{id:'viking',name:'Vichingo',emoji:'⚔️',group:'Fantasy'},
+{id:'knight',name:'Cavaliere',emoji:'🛡️',group:'Fantasy'},
+{id:'ninja',name:'Ninja',emoji:'🥷',group:'Fantasy'},
+{id:'sailor',name:'Marinaio',emoji:'⚓',group:'Mestieri'},
+{id:'surfer',name:'Surfista',emoji:'🏄',group:'Sport'},
+{id:'cyclist',name:'Ciclista',emoji:'🚴',group:'Sport'},
+{id:'football',name:'Calciatore',emoji:'⚽',group:'Sport'},
+{id:'pilot',name:'Pilota',emoji:'✈️',group:'Mestieri'},
+{id:'gardener',name:'Giardiniere',emoji:'🌱',group:'Mestieri'},
+{id:'party',name:'Festa',emoji:'🥳',group:'Eventi'},
+{id:'pumpkin',name:'Halloween',emoji:'🎃',group:'Stagioni'},
+{id:'bunny',name:'Coniglietto',emoji:'🐰',group:'Eventi'},
+{id:'flower',name:'Primavera',emoji:'🌸',group:'Stagioni'},
+{id:'summer',name:'Estate',emoji:'☀️',group:'Stagioni'},
+{id:'winter',name:'Neve',emoji:'⛄',group:'Stagioni'},
+{id:'royal',name:'Principino',emoji:'💎',group:'Fantasy'},
+{id:'robot',name:'Cyber Finn',emoji:'🤖',group:'Fantasy'},
+{id:'beret',name:'Artista',emoji:'🎨',group:'Mestieri'},
+{id:'fedora',name:'Jazz',emoji:'🎷',group:'Eventi'}
+];
+const FINN_STORE_GADGETS=[
+{id:'none',name:'Nessuno',emoji:'✨',group:'Base'},
+{id:'glasses',name:'Occhiali da sole',emoji:'🕶️',group:'Accessori'},
+{id:'bowtie',name:'Papillon',emoji:'🎀',group:'Accessori'},
+{id:'coffee',name:'Caffè',emoji:'☕',group:'Oggetti'},
+{id:'star',name:'Stella',emoji:'⭐',group:'Effetti'},
+{id:'headset',name:'Cuffie',emoji:'🎧',group:'Tecnologia'},
+{id:'monocle',name:'Monocolo',emoji:'🧐',group:'Accessori'},
+{id:'reading',name:'Occhiali da lettura',emoji:'👓',group:'Accessori'},
+{id:'tie',name:'Cravatta',emoji:'👔',group:'Accessori'},
+{id:'medal',name:'Medaglia',emoji:'🏅',group:'Accessori'},
+{id:'diamond',name:'Diamante',emoji:'💎',group:'Effetti'},
+{id:'heart',name:'Cuore',emoji:'❤️',group:'Effetti'},
+{id:'sparkles',name:'Scintille',emoji:'✨',group:'Effetti'},
+{id:'music',name:'Note musicali',emoji:'🎵',group:'Effetti'},
+{id:'book',name:'Libro',emoji:'📖',group:'Oggetti'},
+{id:'phone',name:'Smartphone',emoji:'📱',group:'Tecnologia'},
+{id:'laptop',name:'Laptop',emoji:'💻',group:'Tecnologia'},
+{id:'controller',name:'Controller',emoji:'🎮',group:'Tecnologia'},
+{id:'camera',name:'Fotocamera',emoji:'📷',group:'Tecnologia'},
+{id:'umbrella',name:'Ombrello',emoji:'☂️',group:'Oggetti'},
+{id:'icecream',name:'Gelato',emoji:'🍦',group:'Oggetti'},
+{id:'pizza',name:'Pizza',emoji:'🍕',group:'Oggetti'},
+{id:'flowerpot',name:'Pianta',emoji:'🪴',group:'Oggetti'},
+{id:'trophy',name:'Trofeo',emoji:'🏆',group:'Oggetti'},
+{id:'shield',name:'Scudo',emoji:'🛡️',group:'Oggetti'},
+{id:'compass',name:'Bussola',emoji:'🧭',group:'Oggetti'},
+{id:'coin',name:'Moneta',emoji:'🪙',group:'Oggetti'},
+{id:'butterfly',name:'Farfalla',emoji:'🦋',group:'Effetti'},
+{id:'balloon',name:'Palloncino',emoji:'🎈',group:'Eventi'},
+{id:'gift',name:'Regalo',emoji:'🎁',group:'Eventi'},
+{id:'confetti',name:'Coriandoli',emoji:'🎊',group:'Eventi'},
+{id:'candy',name:'Caramella',emoji:'🍬',group:'Oggetti'}
+];
 function finnStoreDecorations(){
  const costume=FINN_STORE_COSTUMES.some(i=>i.id===prefs.finnStoreCostume)?prefs.finnStoreCostume:'none';
  const gadget=FINN_STORE_GADGETS.some(i=>i.id===prefs.finnStoreGadget)?prefs.finnStoreGadget:'none';
- const hats={cap:'<path d="M28 22Q30 4 50 5Q69 6 72 22Z" fill="#f1bd40" stroke="#10263c" stroke-width="3"/><path d="M51 20Q75 14 83 20Q75 28 51 25" fill="#dca42c" stroke="#10263c" stroke-width="2.5"/>',crown:'<path d="M30 23L27 3L39 12L50 0L61 12L73 3L70 23Z" fill="#f9cd55" stroke="#10263c" stroke-width="2.5"/><circle cx="50" cy="15" r="3" fill="#ff618c"/>',cowboy:'<path d="M33 18L37 2Q50 10 63 2L67 18Z" fill="#9d673a" stroke="#10263c" stroke-width="2.8"/><path d="M16 19Q50 29 84 19" stroke="#10263c" stroke-width="8" fill="none"/><path d="M16 19Q50 27 84 19" stroke="#bc8955" stroke-width="5" fill="none"/>',wizard:'<path d="M33 23L51 -8L70 23Z" fill="#7757c9" stroke="#10263c" stroke-width="3"/><path d="M27 22Q50 16 75 22" fill="none" stroke="#dcbcfb" stroke-width="6"/><path d="M51 5l2 4l4 1l-4 3l-2 4l-3 -4l-4 -3l5 -1z" fill="#ffdc66"/>',scarf:'<path d="M31 75Q49 83 70 74" fill="none" stroke="#e66d83" stroke-width="9"/><path d="M58 78L66 103L77 100L71 77" fill="#e66d83" stroke="#10263c" stroke-width="2"/>',beanie:'<path d="M28 22Q28 2 49 2Q71 2 72 22Z" fill="#5aa9e8" stroke="#10263c" stroke-width="3"/><rect x="27" y="18" width="46" height="8" rx="3" fill="#2a6baf" stroke="#10263c" stroke-width="2"/><circle cx="50" cy="1" r="6" fill="#f9d77c"/>',none:''};
- const gadgets={glasses:'<path d="M32 44h15m6 0h15" stroke="#10263c" stroke-width="2"/><rect x="34" y="39" width="14" height="12" rx="4" fill="#10263c" opacity=".86"/><rect x="52" y="39" width="14" height="12" rx="4" fill="#10263c" opacity=".86"/>',bowtie:'<path d="M36 78L50 82L64 78L64 91L50 86L36 91Z" fill="#ef597e" stroke="#10263c" stroke-width="2"/><circle cx="50" cy="84" r="4" fill="#ffdd87"/>',coffee:'<path d="M81 67v18h14V67Z" fill="#fff6e8" stroke="#10263c" stroke-width="2"/><path d="M94 71h5v9h-5" fill="none" stroke="#10263c" stroke-width="2"/><path d="M85 64q-3 -5 0 -9m6 9q-3 -5 0 -9" stroke="#e3b887" fill="none" stroke-width="2"/>',star:'<path d="M87 13l4 9l10 1l-8 7l2 10l-8 -5l-9 5l3 -10l-7 -7l10 -1z" fill="#ffce4e" stroke="#10263c" stroke-width="2"/>',headset:'<path d="M27 52Q23 20 50 20Q77 20 73 52" fill="none" stroke="#10263c" stroke-width="5"/><rect x="23" y="42" width="9" height="17" rx="4" fill="#8eaaf8" stroke="#10263c" stroke-width="2"/><rect x="68" y="42" width="9" height="17" rx="4" fill="#8eaaf8" stroke="#10263c" stroke-width="2"/>',none:''};
- return {hat:hats[costume]||'',gadget:gadgets[gadget]||''};
+ const border='#10263c';
+ const simpleHat=(color,trim=color)=>`<path d="M27 22Q29 3 50 3Q71 3 73 22Z" fill="${color}" stroke="${border}" stroke-width="2.8"/><path d="M26 23Q50 19 74 23" fill="none" stroke="${trim}" stroke-width="7"/>`;
+ const brim=(color)=>`<path d="M19 22Q50 30 81 22" fill="none" stroke="${border}" stroke-width="8"/><path d="M19 22Q50 28 81 22" fill="none" stroke="${color}" stroke-width="5"/>`;
+ const topHat=(color,accent)=>`<path d="M34 22V-3Q50 -8 66 -3V22Z" fill="${color}" stroke="${border}" stroke-width="3"/><path d="M34 16H66" stroke="${accent}" stroke-width="5"/>${brim(color)}`;
+ const circle=(x,y,r,color)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" stroke="${border}" stroke-width="2"/>`;
+ const hat={
+ cap:'<path d="M28 22Q30 4 50 5Q69 6 72 22Z" fill="#f1bd40" stroke="#10263c" stroke-width="3"/><path d="M51 20Q75 14 83 20Q75 28 51 25" fill="#dca42c" stroke="#10263c" stroke-width="2.5"/>',
+ crown:'<path d="M30 23L27 3L39 12L50 0L61 12L73 3L70 23Z" fill="#f9cd55" stroke="#10263c" stroke-width="2.5"/><circle cx="50" cy="15" r="3" fill="#ff618c"/>',
+ cowboy:'<path d="M33 18L37 2Q50 10 63 2L67 18Z" fill="#9d673a" stroke="#10263c" stroke-width="2.8"/><path d="M16 19Q50 29 84 19" stroke="#10263c" stroke-width="8" fill="none"/><path d="M16 19Q50 27 84 19" stroke="#bc8955" stroke-width="5" fill="none"/>',
+ wizard:'<path d="M33 23L51 -8L70 23Z" fill="#7757c9" stroke="#10263c" stroke-width="3"/><path d="M27 22Q50 16 75 22" fill="none" stroke="#dcbcfb" stroke-width="6"/><path d="M51 5l2 4l4 1l-4 3l-2 4l-3 -4l-4 -3l5 -1z" fill="#ffdc66"/>',
+ scarf:'<path d="M31 75Q49 83 70 74" fill="none" stroke="#e66d83" stroke-width="9"/><path d="M58 78L66 103L77 100L71 77" fill="#e66d83" stroke="#10263c" stroke-width="2"/>',
+ beanie:simpleHat('#5aa9e8','#2a6baf')+circle(50,1,6,'#f9d77c'),
+ santa:'<path d="M27 23Q31 -8 66 -7Q73 -2 78 9" fill="#d9414e" stroke="#10263c" stroke-width="3"/><path d="M28 21H70" stroke="#fff9f1" stroke-width="9" stroke-linecap="round"/>'+circle(78,9,7,'#ffffff'),
+ pirate:topHat('#273349','#edbd54')+'<path d="M44 8h12m-6 -6v12" stroke="#fafafa" stroke-width="3"/>',
+ astronaut:simpleHat('#dce9f6','#acc9dd')+'<path d="M29 28Q50 11 71 28" stroke="#85bde8" stroke-width="6" fill="none"/>',
+ chef:'<path d="M29 22V8Q22 -3 34 -7Q42 -14 50 -6Q61 -15 69 -6Q80 1 70 12V22Z" fill="#f9ffff" stroke="#10263c" stroke-width="3"/><rect x="29" y="16" width="42" height="9" rx="3" fill="#d6e8fa" stroke="#10263c" stroke-width="2"/>',
+ graduate:'<path d="M17 10L50 -6L83 10L50 25Z" fill="#10263c" stroke="#f4d17d" stroke-width="2.5"/><path d="M30 18V24Q50 39 70 24V18" fill="none" stroke="#10263c" stroke-width="5"/><path d="M82 10V29" stroke="#f4d17d" stroke-width="2.5"/>',
+ detective:topHat('#576777','#a7c7db'),
+ viking:simpleHat('#bcbfc9','#9c7d51')+'<path d="M29 18Q10 9 18 -8Q22 5 35 7M71 18Q91 9 82 -8Q78 5 65 7" fill="#f1ebd5" stroke="#10263c" stroke-width="3"/>',
+ knight:simpleHat('#acbbc9','#708aa4')+'<path d="M31 24H69" stroke="#10263c" stroke-width="4"/><path d="M50 4V-7" stroke="#ee5c66" stroke-width="5"/>',
+ ninja:'<path d="M29 24Q29 -4 50 -4Q71 -4 71 24Z" fill="#273247" stroke="#10263c" stroke-width="3"/><path d="M30 21H70" stroke="#e94e69" stroke-width="6"/>',
+ sailor:simpleHat('#f4faff','#25499e')+'<path d="M39 9h22" stroke="#25499e" stroke-width="3"/>',
+ surfer:simpleHat('#f5bd5c','#ff6c78')+'<path d="M61 7q-7 7 -15 7" stroke="#2a7ba7" stroke-width="3" fill="none"/>',
+ cyclist:simpleHat('#f34e5d','#f8d13d')+'<path d="M31 9H69" stroke="#fff" stroke-width="2"/>',
+ football:simpleHat('#2bbb85','#f0f7fc')+'<path d="M47 3v13h6V3" fill="#fff"/>',
+ pilot:simpleHat('#243c73','#f7cf58')+'<path d="M38 13H62" stroke="#ffc74e" stroke-width="3"/>',
+ gardener:simpleHat('#3d9355','#cce592')+brim('#72a65c'),
+ party:'<path d="M36 23L55 -12L69 23Z" fill="#ff6395" stroke="#10263c" stroke-width="3"/><path d="M44 12l15 -4" stroke="#ffd65b" stroke-width="5"/><circle cx="55" cy="-12" r="5" fill="#ffd65b"/>',
+ pumpkin:simpleHat('#e88b34','#f0ba55')+'<path d="M47 -6V4" stroke="#419752" stroke-width="5"/>',
+ bunny:'<path d="M34 21L32 -10Q42 -16 47 21M53 21L58 -10Q69 -15 67 21" fill="#fff2f6" stroke="#10263c" stroke-width="3"/>'+simpleHat('#f9dbe8','#f9dbe8'),
+ flower:simpleHat('#ed89b5','#f6c7dc')+'<path d="M73 11q14 -15 17 2q-9 12 -17 -2" fill="#f5cb5a" stroke="#bb4e86" stroke-width="2"/>',
+ summer:simpleHat('#efdc92','#f2ab58')+brim('#e9ca75'),
+ winter:simpleHat('#e9f8ff','#8bd4ff')+circle(50,0,6,'#f8ffff'),
+ royal:topHat('#603e9b','#f2c75d')+'<circle cx="50" cy="17" r="4" fill="#8fe8f1"/>',
+ robot:simpleHat('#758da8','#44d6dc')+'<path d="M50 6V-8" stroke="#10263c" stroke-width="4"/>'+circle(50,-9,5,'#52f1d0'),
+ beret:'<path d="M26 20Q23 -1 48 -3Q74 -1 76 20Z" fill="#bf3d52" stroke="#10263c" stroke-width="3"/><path d="M30 22H72" stroke="#10263c" stroke-width="5"/>',
+ fedora:topHat('#315867','#e0ba71')
+ };
+ const props={
+ glasses:'<path d="M32 44h15m6 0h15" stroke="#10263c" stroke-width="2"/><rect x="34" y="39" width="14" height="12" rx="4" fill="#10263c" opacity=".86"/><rect x="52" y="39" width="14" height="12" rx="4" fill="#10263c" opacity=".86"/>',
+ bowtie:'<path d="M36 78L50 82L64 78L64 91L50 86L36 91Z" fill="#ef597e" stroke="#10263c" stroke-width="2"/><circle cx="50" cy="84" r="4" fill="#ffdd87"/>',
+ coffee:'<path d="M81 67v18h14V67Z" fill="#fff6e8" stroke="#10263c" stroke-width="2"/><path d="M94 71h5v9h-5" fill="none" stroke="#10263c" stroke-width="2"/><path d="M85 64q-3 -5 0 -9m6 9q-3 -5 0 -9" stroke="#e3b887" fill="none" stroke-width="2"/>',
+ star:'<path d="M87 13l4 9l10 1l-8 7l2 10l-8 -5l-9 5l3 -10l-7 -7l10 -1z" fill="#ffce4e" stroke="#10263c" stroke-width="2"/>',
+ headset:'<path d="M27 52Q23 20 50 20Q77 20 73 52" fill="none" stroke="#10263c" stroke-width="5"/><rect x="23" y="42" width="9" height="17" rx="4" fill="#8eaaf8" stroke="#10263c" stroke-width="2"/><rect x="68" y="42" width="9" height="17" rx="4" fill="#8eaaf8" stroke="#10263c" stroke-width="2"/>',
+ monocle:'<circle cx="58" cy="46" r="10" stroke="#b58538" stroke-width="3" fill="none"/><path d="M68 52Q80 65 69 77" fill="none" stroke="#b58538" stroke-width="2"/>',
+ reading:'<rect x="32" y="40" width="16" height="12" rx="4" fill="#b9e5fd66" stroke="#10263c" stroke-width="2.5"/><rect x="52" y="40" width="16" height="12" rx="4" fill="#b9e5fd66" stroke="#10263c" stroke-width="2.5"/><path d="M48 45H52" stroke="#10263c" stroke-width="3"/>',
+ tie:'<path d="M46 75L54 75L57 83L50 98L43 83Z" fill="#3a78cc" stroke="#10263c" stroke-width="2"/>',
+ medal:'<path d="M42 73L50 83L58 73" stroke="#5b95cf" stroke-width="7" fill="none"/>'+circle(50,87,9,'#f6c647'),
+ diamond:'<path d="M83 15L90 7L99 15L91 29Z" fill="#82e1f0" stroke="#10263c" stroke-width="2"/>',
+ heart:'<path d="M86 20Q78 8 72 21Q71 29 86 39Q101 29 100 21Q95 8 86 20Z" fill="#ed5e86" stroke="#10263c" stroke-width="2"/>',
+ sparkles:'<path d="M87 3l3 10l10 3l-10 3l-3 10l-3 -10l-10 -3l10 -3Z" fill="#f8d759"/>'+circle(76,33,3,'#8ae1eb'),
+ music:'<path d="M83 20V5l13 -4v19" stroke="#7860b6" stroke-width="3" fill="none"/>'+circle(80,21,5,'#7860b6')+circle(93,21,5,'#7860b6'),
+ book:'<path d="M78 64Q85 60 92 65V88Q86 83 78 87Z" fill="#fff6d3" stroke="#10263c" stroke-width="2"/><path d="M78 64Q70 60 64 65V88Q70 83 78 87" fill="#dbe9ff" stroke="#10263c" stroke-width="2"/>',
+ phone:'<rect x="80" y="62" width="15" height="26" rx="3" fill="#243c59" stroke="#10263c" stroke-width="2"/><path d="M83 67H92V82H83Z" fill="#86dadd"/>',
+ laptop:'<rect x="76" y="67" width="22" height="17" rx="2" fill="#91bcd3" stroke="#10263c" stroke-width="2"/><path d="M72 87h30" stroke="#10263c" stroke-width="5"/>',
+ controller:'<path d="M74 72Q86 65 97 72l5 13q-2 8 -12 2l-5 -5l-6 5q-9 6 -11 -2Z" fill="#d4a9e2" stroke="#10263c" stroke-width="2"/><path d="M76 78h10m-5 -5v10" stroke="#10263c" stroke-width="2"/>',
+ camera:'<rect x="77" y="67" width="24" height="18" rx="4" fill="#3c5974" stroke="#10263c" stroke-width="2"/>'+circle(89,76,6,'#91e0eb'),
+ umbrella:'<path d="M78 44Q90 26 102 44Z" fill="#df6f98" stroke="#10263c" stroke-width="2"/><path d="M90 44V78q0 10 8 5" stroke="#10263c" stroke-width="3" fill="none"/>',
+ icecream:'<path d="M81 68L97 68L89 94Z" fill="#d4a075" stroke="#10263c" stroke-width="2"/>'+circle(89,65,9,'#f6bdca'),
+ pizza:'<path d="M77 67L100 70L87 94Z" fill="#f1cf74" stroke="#10263c" stroke-width="2"/>'+circle(88,76,3,'#e55b57'),
+ flowerpot:'<path d="M82 78H97L94 94H85Z" fill="#c48a63" stroke="#10263c" stroke-width="2"/><path d="M90 80V61m0 9Q75 59 79 56Q89 55 90 70m0 -4Q101 51 103 58Q102 64 90 66" stroke="#4ea96a" stroke-width="4" fill="none"/>',
+ trophy:'<path d="M82 65H98V78Q90 90 82 78Z" fill="#ebbd45" stroke="#10263c" stroke-width="2"/><path d="M82 69H76Q74 82 84 81M98 69h6Q106 82 96 81M90 86v8" stroke="#e3b248" stroke-width="3" fill="none"/>',
+ shield:'<path d="M88 61L101 66L99 82Q93 93 88 95Q78 88 76 82L75 66Z" fill="#84b9e6" stroke="#10263c" stroke-width="2"/>',
+ compass:circle(89,75,13,'#e7d2a2')+'<path d="M88 68L96 69L89 83L82 83Z" fill="#d7585a"/>',
+ coin:circle(89,75,11,'#f3c35b')+'<path d="M89 67V83m-5 -13h9m-9 9h9" stroke="#a57922" stroke-width="2"/>',
+ butterfly:'<path d="M88 24Q72 5 76 30Q88 35 88 24Q104 5 103 30Q88 35 88 24Z" fill="#d593e8" stroke="#10263c" stroke-width="2"/><path d="M88 22v18" stroke="#10263c" stroke-width="2"/>',
+ balloon:circle(89,22,10,'#f37185')+'<path d="M89 32Q98 44 87 55" fill="none" stroke="#10263c" stroke-width="2"/>',
+ gift:'<rect x="77" y="70" width="24" height="22" rx="3" fill="#e86d8c" stroke="#10263c" stroke-width="2"/><path d="M89 70v22M77 78h24" stroke="#ffdf81" stroke-width="4"/>',
+ confetti:'<path d="M82 10l8 5m1 16l7 -5M75 30l-3 9M97 4l-3 6" stroke="#f8c65f" stroke-width="4" fill="none"/>',
+ candy:'<path d="M81 69L95 73L93 84L79 80Z" fill="#e990bf" stroke="#10263c" stroke-width="2"/><path d="M80 69l-8 -5l-3 10l10 6m15 -6l9 -4l4 11l-14 3" fill="#f9dc9c" stroke="#10263c" stroke-width="2"/>'
+ };
+ return {hat:hat[costume]||'',gadget:props[gadget]||''};
+}
+const FINN_STORE_GROUPS={costume:['Tutti','Base','Sport','Stagioni','Mestieri','Fantasy','Eventi'],gadget:['Tutti','Base','Accessori','Oggetti','Effetti','Tecnologia','Eventi']};
+let finnStoreCurrentGroup={costume:'Tutti',gadget:'Tutti'};
+function finnStoreUnlocked(kind,id){
+ return id==='none'||(kind==='costume'&&id===prefs.finnStoreCostume)||(kind==='gadget'&&id===prefs.finnStoreGadget)||!!(prefs.finnStoreUnlocked?.[kind]?.includes(id));
 }
 function renderFinnStore(){
- const make=(kind,items,selected)=>items.map(item=>`<button type="button" class="finn-store-item" data-finn-store-kind="${kind}" data-finn-store-id="${item.id}" aria-pressed="${item.id===selected}"><span class="finn-store-emoji">${item.emoji}</span><strong>${item.name}</strong><span class="finn-store-price">Gratis · 0 crediti</span><span class="finn-store-equip">${item.id===selected?'✓ Equipaggiato':'Equipaggia'}</span></button>`).join('');
+ const categories=(kind)=>FINN_STORE_GROUPS[kind].map(g=>`<button type="button" class="finn-store-filter${finnStoreCurrentGroup[kind]===g?' active':''}" data-finn-store-filter="${kind}" data-finn-store-group="${g}" aria-pressed="${finnStoreCurrentGroup[kind]===g}">${g}</button>`).join('');
+ const make=(kind,items,selected)=>{
+  const group=finnStoreCurrentGroup[kind];
+  return items.filter(item=>group==='Tutti'||item.group===group).map(item=>{
+   const unlocked=finnStoreUnlocked(kind,item.id),equipped=item.id===selected;
+   return `<button type="button" class="finn-store-item" data-finn-store-kind="${kind}" data-finn-store-id="${item.id}" aria-pressed="${equipped}"><span class="finn-store-emoji">${item.emoji}</span><strong>${item.name}</strong><span class="finn-store-price">${item.group} · Gratis</span><span class="finn-store-equip">${equipped?'✓ Equipaggiato':unlocked?'Equipaggia':'🔓 Sblocca gratis'}</span></button>`;
+  }).join('');
+ };
  const costumes=document.getElementById('finnStoreCostumes'),gadgets=document.getElementById('finnStoreGadgets');
  if(!costumes||!gadgets)return;
+ const cFilter=document.getElementById('finnStoreCostumeFilters'),gFilter=document.getElementById('finnStoreGadgetFilters');
+ if(cFilter)cFilter.innerHTML=categories('costume');if(gFilter)gFilter.innerHTML=categories('gadget');
  costumes.innerHTML=make('costume',FINN_STORE_COSTUMES,prefs.finnStoreCostume||'none');
  gadgets.innerHTML=make('gadget',FINN_STORE_GADGETS,prefs.finnStoreGadget||'none');
  const preview=document.getElementById('finnStorePreview');if(preview)preview.innerHTML=mascotSVG('positive',prefs.colors?.positive||'#5cdda4',false,'positive');
- const label=document.getElementById('finnStoreEquipped');if(label)label.textContent=[FINN_STORE_COSTUMES.find(i=>i.id===(prefs.finnStoreCostume||'none'))?.name,FINN_STORE_GADGETS.find(i=>i.id===(prefs.finnStoreGadget||'none'))?.name].filter(x=>x&&x!=='Nessuno').join(' · ');
+ const label=document.getElementById('finnStoreEquipped');if(label)label.textContent=[FINN_STORE_COSTUMES.find(i=>i.id===(prefs.finnStoreCostume||'none'))?.name,FINN_STORE_GADGETS.find(i=>i.id===(prefs.finnStoreGadget||'none'))?.name].filter(x=>x&&x!=='Nessuno').join(' · ')||'Nessun oggetto equipaggiato';
 }
 document.getElementById('finnStoreSettings')?.addEventListener('click',e=>{
+ const filter=e.target.closest('button[data-finn-store-filter]');
+ if(filter){finnStoreCurrentGroup[filter.dataset.finnStoreFilter]=filter.dataset.finnStoreGroup;renderFinnStore();return;}
  const btn=e.target.closest('button[data-finn-store-kind]');if(!btn)return;
  const kind=btn.dataset.finnStoreKind,id=btn.dataset.finnStoreId;
  if(kind==='costume'&&!FINN_STORE_COSTUMES.some(x=>x.id===id))return;
  if(kind==='gadget'&&!FINN_STORE_GADGETS.some(x=>x.id===id))return;
+ if(!finnStoreUnlocked(kind,id)){
+  if(!prefs.finnStoreUnlocked||typeof prefs.finnStoreUnlocked!=='object')prefs.finnStoreUnlocked={costume:[],gadget:[]};
+  if(!Array.isArray(prefs.finnStoreUnlocked[kind]))prefs.finnStoreUnlocked[kind]=[];
+  prefs.finnStoreUnlocked[kind].push(id);
+  savePreferences();renderFinnStore();return;
+ }
  prefs[kind==='costume'?'finnStoreCostume':'finnStoreGadget']=id;
  savePreferences();renderFinnStore();mascotPlayRender();finnUpdateFigure();
 });
@@ -3910,7 +4068,7 @@ const VISIT_COUNTER_KEY='my_patrimonio_daily_opens_v1';
 const VISIT_SUPPRESS_KEY='my_patrimonio_visit_alert_disabled_v1';
 
 const PREF_KEY='invesquo_preferences_v50';
-const PREF_DEFAULTS={weekendYellow:true,closedMarketColor:'gold',closedMarketCustom:'#245a49',marketColorScope:'home',marketColorBasis:'favorite',moodNeutral:1,moodPositive:2,moodExtreme:5,mainMarket:'MIL',newsSource:'yahoo',palette:'classic',mascotStyle:'rounded',showHeaderFinn:true,finnStoreCostume:'none',finnStoreGadget:'none',glow:true,theme:'dark',appearanceMode:'flat',categoryColors:{},motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',educationDetails:true,showQuoteTime:true,showLogos:true,showBackfill:true,favoriteEnabled:false,favoriteAssets:[],compact:false,autoOpenSettings:true,colors:{positive:'#09d66b',neutral:'#72e59d',negative:'#ef4444'}};
+const PREF_DEFAULTS={weekendYellow:true,closedMarketColor:'gold',closedMarketCustom:'#245a49',marketColorScope:'home',marketColorBasis:'favorite',moodNeutral:1,moodPositive:2,moodExtreme:5,mainMarket:'MIL',newsSource:'yahoo',palette:'classic',mascotStyle:'rounded',showHeaderFinn:true,finnStoreCostume:'none',finnStoreGadget:'none',finnStoreUnlocked:{costume:[],gadget:[]},glow:true,theme:'dark',appearanceMode:'flat',categoryColors:{},motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',educationDetails:true,showQuoteTime:true,showLogos:true,showBackfill:true,favoriteEnabled:false,favoriteAssets:[],compact:false,autoOpenSettings:true,colors:{positive:'#09d66b',neutral:'#72e59d',negative:'#ef4444'}};
 let prefs={...PREF_DEFAULTS,colors:{...PREF_DEFAULTS.colors}};
 try{const x=JSON.parse(store.getItem(PREF_KEY));if(x&&typeof x==='object'){prefs={...prefs,...x,colors:{...PREF_DEFAULTS.colors,...(x.colors||{})}}}}catch(e){}
 // Preserve legacy opt-out, but offer an accessible toggle to re-enable alerts.
@@ -6396,7 +6554,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.54';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.57';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -7098,13 +7256,13 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
  <div class="actions"><button id="fh101CloudUpload" class="btn" type="button" disabled>Salva nel cloud</button><button id="fh101CloudDownload" class="btn" type="button" disabled>Carica dal cloud</button></div>
  <div id="fh101CloudStatus" class="foot" role="status" aria-live="polite">Configura il progetto Supabase una sola volta per attivare l'accesso.</div>
  <p class="foot">Backup privato per account. Prima di sostituire i dati di questo dispositivo, esporta un JSON.</p>`;
- // Beta 10.9.54: one Google Drive panel, exclusively inside Backup e sicurezza.
+ // Beta 10.9.57: one Google Drive panel, exclusively inside Backup e sicurezza.
  // Preserve its id and all listeners wired by cloud-drive.js.
  syncCard.classList.remove('fh10946-drive-top');
  backup.appendChild(syncCard);
  const json=document.getElementById('jsonBackupSettings');if(json){json.classList.remove('fh10946-json-top');backup.appendChild(json);}
- // Finn Store remains a separate section near the top of settings.
- const storeTop=document.getElementById('finnStoreSettings');if(storeTop){storeTop.classList.add('fh10952-store-top');marker.insertAdjacentElement('afterend',storeTop);storeTop.hidden=false;storeTop.classList.remove('hidden');}
+ // Beta 10.9.57: Store stays only inside Giochi di Finn, with its state and event listeners preserved.
+ const storeTop=document.getElementById('finnStoreSettings');if(storeTop){storeTop.classList.remove('fh10952-store-top');game.prepend(storeTop);storeTop.hidden=false;storeTop.classList.remove('hidden');}
 
  const local=document.getElementById('switchLocalAccount')?.closest('section.card');if(local)backup.appendChild(local);
  moveGroups(['Backup programmato e cartella','Azzeramento dati e sicurezza'],backup);
