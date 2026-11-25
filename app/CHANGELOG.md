@@ -1,3 +1,22 @@
+## Beta 10.9.54
+
+- Buoni fruttiferi postali: corretta la registrazione per euro investiti o quote nominali, senza obbligare al prezzo di mercato.
+- Capitale nominale e valore lordo a scadenza; commissioni annue percentuali facoltative.
+- Anteprima e conferma del prospetto con interessi lordi e costi stimati; non vengono inventati tassi, imposte o bollo.
+- Data di sottoscrizione conservata nell’Archivio e salvataggio verificato.
+
+## Beta 10.9.53
+- Impostazioni: Google Drive torna esclusivamente nella scheda richiudibile "Backup e sicurezza", con gli stessi pulsanti Salva, Ripristina e backup automatico della funzione originale.
+- Barra principale: il pulsante di salvataggio apre una scelta tra "Salva in locale · JSON" e "Salva su Google Drive"; nessun salvataggio parte senza scegliere una destinazione.
+- Conservati i motori esistenti di esportazione e di backup Drive, senza alterare portafoglio, date, acquisti o archivio.
+
+## Beta 10.9.52
+- Scheda grafico titoli: eliminato il pulsante esterno TradingView, mantenendo la ricerca simboli e la gestione dei dati Yahoo.
+- Grafico Patrimonio e valore: dimensioni compatte su PC (max 650 px; tracciato più basso), stessa proporzione della scheda Investimenti. Layout mobile, dati e schermo intero invariati.
+- Impostazioni: Finn Store come scheda autonoma in alto, subito dopo le opzioni Backup Google Drive/JSON, mantenendo controlli e dati originali.
+- Radar: Nexus visualizzato interamente nel riquadro come Mira, senza ritaglio della figura.
+- Ricerca: per mercati con ticker .MI/.DE/.F/.PA recupero della valuta in modo trasparente; gli altri strumenti non certificati rimangono da verificare, senza inventare codici GEM.
+
 ## Beta 10.9.51
 - Impostazioni: opzione per nascondere Finn nell’header lasciandolo attivo nei giochi e nelle altre sezioni.
 - Finn Store: nuovo negozio gratuito in Impostazioni con costumi, gadget, anteprima ed equipaggiamento persistente. Crediti virtuali illimitati e nessun acquisto reale.

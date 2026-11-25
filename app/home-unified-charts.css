@@ -203,3 +203,13 @@
  #fhHomeCapitalCard .fh115-readout .fh149-date{width:100%}
  #fhHomeCapitalCard .fh115-readout .fh149-metric{font-size:12px}
 }
+
+/* 10.9.52 · Desktop: Home chart has the compact proportions of Investment charts. */
+@media (min-width: 801px) {
+ #fhHomeCapitalCard .fh115-host .fh115-actions,
+ #fhHomeCapitalCard .fh115-host .fh115-plot,
+ #fhHomeCapitalCard .fh115-host .fh115-readout,
+ #fhHomeCapitalCard .fh115-host .fh115-tools {width:100%;max-width:650px;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box;}
+ #fhHomeCapitalCard .fh115-host .fh115-plot{padding:11px 12px 6px!important;max-height:340px!important;}
+ #fhHomeCapitalCard .fh115-host .fh115-plot svg.fh115-svg{width:100%!important;height:auto!important;max-height:315px!important;}
+}
