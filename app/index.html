@@ -912,6 +912,25 @@ body[data-theme="modern"] .asset-logo{box-shadow:none!important}
 #assetDetailRanges button[data-asset-range="custom"]{white-space:nowrap}
 body[data-theme="light"] .fh1017-wealth-date input,body[data-theme="light"] .fh1017-custom-dates input{color-scheme:light}
 @media(max-width:520px){.fh1017-custom-dates label{flex:1 1 125px}.fh1017-custom-dates input{max-width:100%;width:100%}.fh1017-wealth-date{align-items:stretch}.fh1017-wealth-date label{width:100%}}
+
+/* Beta 10.9.51 · Finn Store and optional header mascot */
+body.finn-header-hidden .top .new-header-main #faceButton{display:none!important;pointer-events:none!important}
+body.finn-header-hidden .top .new-header-main{grid-template-columns:minmax(0,1fr) minmax(95px,.65fr)!important}
+body.finn-header-hidden .top .new-header-status{grid-column:2!important}
+@media(max-width:420px){body.finn-header-hidden .top .new-header-main{grid-template-columns:minmax(0,1fr) minmax(90px,.72fr)!important}}
+.finn-store-card{margin-top:14px}
+.finn-store-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px;border-radius:14px;background:var(--panel2);border:1px solid var(--border);margin-bottom:12px}
+.finn-store-preview{display:flex;align-items:center;gap:12px}
+.finn-store-preview-art{width:72px;height:81px;display:block;flex-shrink:0}
+.finn-store-preview-art svg{width:100%;height:100%;display:block;overflow:visible}
+.finn-store-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px;margin:10px 0 18px}
+.finn-store-item{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:6px;min-height:124px;border:1px solid var(--border);background:var(--panel2);border-radius:15px;padding:13px;color:var(--text);cursor:pointer;font:inherit;transition:border-color .15s,transform .15s}
+.finn-store-item:hover,.finn-store-item:focus-visible{border-color:var(--accent,#73a4ed);transform:translateY(-1px)}
+.finn-store-item[aria-pressed=true]{border-color:#5edcab;box-shadow:inset 0 0 0 1px #5edcab}
+.finn-store-emoji{font-size:25px;line-height:1.2}
+.finn-store-price{font-size:11px;color:var(--muted);margin-top:auto}
+.finn-store-equip{font-size:11px;font-weight:800;color:#65dfaf}
+@media(max-width:420px){.finn-store-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.finn-store-item{padding:10px;min-height:112px}}
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
 .pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
@@ -1867,9 +1886,23 @@ body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-
 body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="closed-custom"]{--bg:var(--fh117-bg)!important;--panel:var(--fh117-panel)!important;--panel2:var(--fh117-panel2)!important;--border:var(--fh117-border)!important;--muted:var(--fh117-muted)!important;--blue:var(--fh117-blue)!important;--fh-header-surface:var(--fh117-bg)!important;--fh-header-scrolled:var(--fh117-panel)!important;background:var(--bg)!important}
 body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--panel)!important;box-shadow:0 0 0 6px var(--panel)!important}
 </style>
+<style id="fh10948-lens-comparisons">
+/* Quattro confronti esposti nello stesso stile testuale. */
+#fh70LensGrid :is(#fh70LensBuy,#fh10612LensPmcMin,#fh10937LensBuyNow,#fh10937LensPmcNow) .fh70-card-value{font-size:clamp(17px,2.4vw,27px);line-height:1.22;overflow-wrap:break-word}
+#fh70LensGrid :is(#fh70LensBuy,#fh10612LensPmcMin,#fh10937LensBuyNow,#fh10937LensPmcNow) .fh70-card-sub{margin-top:7px;line-height:1.5}
+</style>
 <style id="fh10937-mobile-sheet">@media(max-width:550px){#assetDetailOverlay{padding-left:0!important;padding-right:0!important}#assetDetailSheet{width:100vw!important;max-width:100vw!important;border-radius:0!important;border-left:0!important;border-right:0!important;padding-left:max(17px,env(safe-area-inset-left))!important;padding-right:max(17px,env(safe-area-inset-right))!important}}</style>
 
-<link rel="stylesheet" href="./finholdra-hd.css?v=10.9.44">
+<link rel="stylesheet" href="./finholdra-hd.css?v=10.9.45">
+
+<style id="fh10946-top-backup-css">
+#settingsView .fh10946-drive-top{margin:12px 0 14px;padding:17px;border-radius:18px}
+#settingsView .fh10946-drive-top .actions{display:flex;gap:10px;flex-wrap:wrap}
+#settingsView .fh10946-drive-top .actions .btn{flex:1 1 160px}
+#settingsView .fh10946-drive-top #fhDriveSave,#settingsView .fh10946-drive-top #fhDriveRestore{min-height:44px}
+#settingsView .fh10946-json-top{margin:0 0 14px}
+@media(max-width:540px){#settingsView .fh10946-drive-top{padding:14px}#settingsView .fh10946-drive-top .actions .btn{min-width:0;flex-basis:135px}}
+</style>
 </head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco-neutral.svg?v=10.9.1" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
@@ -2101,19 +2134,43 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <p class="hint">Contenuti didattici, non consulenza finanziaria.</p></section>
 <section class="card"><h2>Piccolo glossario</h2><div class="learning-glossary"><p><strong>PMC</strong> — prezzo medio di carico delle quote acquistate.</p><p><strong>TWRR</strong> — rendimento concatenato dei sotto-periodi, che riduce l'effetto dei versamenti.</p><p><strong>MWRR / XIRR</strong> — rendimento che considera importo e momento dei flussi di cassa.</p><p><strong>Drawdown</strong> — calo dal precedente massimo del valore.</p><p><strong>TER</strong> — costi correnti annui di un fondo o ETF, non necessariamente tutti i costi sostenuti.</p><p><strong>Rischio di cambio</strong> — variazione del valore in euro quando la valuta del titolo è diversa.</p><p><strong>Tracking difference</strong> — differenza effettiva di rendimento tra ETF e indice.</p><p><strong>Spread denaro-lettera</strong> — costo implicito della differenza tra il miglior prezzo in acquisto e in vendita.</p><p><strong>Duration</strong> — sensibilità indicativa del prezzo obbligazionario ai tassi.</p><p><strong>Rendimento reale</strong> — rendimento al netto della perdita di potere d’acquisto.</p><p><strong>Margine futures</strong> — garanzia richiesta, non costo totale del contratto.</p></div></section>
 <section class="card" id="fhQuizPanel"><div class="section-head"><h2>Finholdra Quiz · 100 domande, livello avanzato</h2><span class="sub">Finanza, mercati e investimenti</span></div><div class="fh-quiz-meta"><span id="fhQuizProgress">Domanda 1 di 100</span><span id="fhQuizRecord">Record: 0/100</span></div><div class="fh-quiz-question" id="fhQuizQuestion"></div><div class="fh-quiz-options" id="fhQuizOptions"></div><p class="fh-quiz-feedback" id="fhQuizFeedback" aria-live="polite"></p><button type="button" class="btn primary fh-quiz-next" id="fhQuizNext" disabled>Prossima domanda</button><button type="button" class="btn" id="fhQuizRestart" style="margin-left:8px">Ricomincia</button><p class="hint">Il miglior punteggio è conservato nel profilo locale ; esporta il backup per conservarlo.</p></section>
+<section class="card" id="fhBehavioralAcademy" aria-labelledby="fhBehavioralTitle">
+<div class="fh-beh-head"><img src="./mira-academy.webp?v=10.9.1" alt="Mira, tutor Academy" loading="lazy"><div><div class="eyebrow">ACADEMY · MENTE E MERCATI</div><h2 id="fhBehavioralTitle">Finanza comportamentale</h2><p>Psicologia dell'investimento · dialoghi con Mira</p></div></div>
+<p class="hint">Capire le reazioni ai mercati e distinguere emozioni, rischi e decisioni.</p>
+<div id="fhBehavioralContext" class="fh-beh-context" aria-live="polite"></div>
+<div class="section-head"><strong>Come ti senti rispetto al portafoglio?</strong><button type="button" class="btn fh-beh-refresh" id="fhBehavioralRefresh" title="Rileggi i dati del portafoglio">↻ Aggiorna</button></div>
+<div id="fhBehavioralQuestions" class="fh-beh-questions" role="group" aria-label="Situazioni e domande per Mira"></div>
+<div id="fhBehavioralReply" class="fh-beh-replies" aria-live="polite" aria-atomic="true"></div>
+<div id="fhBehavioralSources" class="fh-beh-sources" aria-label="Studi di riferimento"></div>
+</section>
+<section class="card" id="fhMarketVenuesAcademy" aria-labelledby="fhMarketVenuesTitle">
+ <div class="section-head"><h2 id="fhMarketVenuesTitle">🇮🇹 Le Borse italiane e le fonti dei grafici</h2><span class="sub">Academy · Mercati e quotazioni</span></div>
+ <p class="hint">Lo stesso strumento può avere più ticker su piazze diverse. Nella ricerca Finholdra privilegia le quotazioni italiane quando disponibili: verifica sempre ISIN, valuta, liquidità e orario di negoziazione.</p>
+ <div class="academy-tree">
+ <details class="academy-node"><summary>EXM — Euronext Milan</summary><p>Mercato azionario italiano principale. Include società di varie dimensioni e il segmento STAR. Confronta valuta, spread e volume prima di selezionare una quotazione.</p></details>
+ <details class="academy-node"><summary>EGM — Euronext Growth Milan</summary><p>Mercato multilaterale rivolto soprattutto alle PMI in crescita. Il numero di scambi può essere più limitato: guarda il differenziale denaro/lettera oltre al grafico.</p></details>
+ <details class="academy-node"><summary>GEM — Global Equity Market</summary><p>Azioni estere negoziate a Milano. Per alcune aziende puoi trovare una quotazione in euro e una nella borsa d'origine in valuta diversa. Il grafico di una quotazione non deve essere scambiato per quello di un altro mercato.</p></details>
+ <details class="academy-node"><summary>ETFplus — ETF, ETC ed ETN</summary><p>Mercato dedicato agli strumenti negoziati come ETF, ETC ed ETN. Cerca il ticker della specifica piazza; lo stesso ISIN può avere prezzi e orari di riferimento diversi fra mercati.</p></details>
+ <details class="academy-node"><summary>MOT — Obbligazioni e titoli di Stato</summary><p>Mercato delle obbligazioni e dei titoli di Stato. I prezzi spesso sono espressi come percentuale del nominale; non sono il rendimento effettivo né comprendono automaticamente cedole e ratei.</p></details>
+ <details class="academy-node"><summary>IDEM — Derivati</summary><p>Mercato dei derivati, oggi nel perimetro Euronext Derivatives Milan. Futures e opzioni richiedono attenzione a scadenza, moltiplicatore, margini e mercato: il grafico di una serie continua non sostituisce i dati di un contratto specifico.</p></details>
+ <details class="academy-node"><summary>Yahoo Finance, TradingView e grafici Finholdra</summary><p>Yahoo Finance fornisce, quando disponibili, prezzi e serie temporali. TradingView è utile come piattaforma di visualizzazione e ricerca dei simboli: la Datafeed API della libreria richiede una fonte di dati propria o autorizzata, non è un servizio pubblico gratuito di quotazioni storiche. Finholdra mantiene i propri grafici e cerca prezzi verificabili senza inventare valori.</p></details>
+ <details class="academy-node"><summary>Perché 3M può non caricare subito?</summary><p>Una serie a tre mesi richiede storico giornaliero riferito al ticker e alla valuta esatti. Se la fonte non risponde o la serie è incompleta, non conviene inserire dati stimati. Cache, recuperi concorrenti e archivi verificati riducono l'attesa, ma non garantiscono la disponibilità di ogni titolo.</p></details>
+ </div>
+ <p class="sub">Approfondisci: <a href="https://www.borsaitaliana.it/borsaitaliana/mercati/mercati.htm" target="_blank" rel="noopener">Borsa Italiana</a> · <a href="https://www.tradingview.com/charting-library-docs/latest/connecting_data/Datafeed-API/" target="_blank" rel="noopener">TradingView Datafeed API</a>.</p>
+</section>
 <section class="card mira-academy-card" aria-labelledby="miraAcademyTitle">
  <div class="mira-academy-top"><button type="button" id="miraAcademyOpen" class="mira-academy-portrait" aria-expanded="false" aria-controls="miraAcademyChat" aria-label="Parla con Mira, tutor del quiz"><img src="./mira-academy.webp?v=10.9.1" alt="Mira, tutor di Finholdra Academy dai capelli castani" loading="lazy"></button><div><h2 id="miraAcademyTitle">Mira · Tutor Academy</h2><p class="sub">La tua alleata nei quiz: spiegazioni, progresso e suggerimenti per studiare meglio.</p><span class="mira-academy-hint">Tocca Mira per parlarle</span></div></div>
  <div class="mira-academy-chat" id="miraAcademyChat" hidden><p id="miraAcademyReply" class="mira-academy-reply" role="status">MIRA: «Ciao! Sono qui per aiutarti ad allenarti con la finanza, una domanda alla volta.»</p><div class="mira-academy-actions"><button type="button" data-mira-help="score">Il mio punteggio</button><button type="button" data-mira-help="help">Come funziona il quiz</button><button type="button" data-mira-help="study">Consiglio di studio</button></div></div>
 </section>
+<p id="fhAcademyDisclaimer" class="hint">Contenuti di educazione finanziaria e psicologia comportamentale: non sostituiscono una valutazione individuale di obiettivi, rischi e necessità di liquidità. Le performance future sono incerte.</p>
 </section>
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.44</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.51</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
- <div class="settings-drive-shortcut" style="margin:0 0 13px"><button type="button" class="btn primary full-btn" id="fhDriveQuickBackup" style="width:100%;min-height:46px">☁ Backup Google Drive</button></div>
  <p class="settings-intro">Preferenze, dati locali e stato dei servizi.</p><section class="card"><h2>Mercato di riferimento</h2><p class="hint">Orari di borsa indicativi, non dati di negoziazione in tempo reale.</p><div class="field"><label for="settingMainMarket">Borsa principale</label><select id="settingMainMarket"><option value="MIL">🇮🇹 Milano · Euronext Milan</option><option value="XETRA">🇩🇪 Francoforte · Xetra</option><option value="NYSE">🇺🇸 New York · NYSE / Nasdaq</option><option value="LSE">🇬🇧 Londra · LSE</option><option value="PAR">🇫🇷 Parigi · Euronext</option></select></div></section><section class="card"><h2>Modalità simulazione</h2><p class="hint">Portafoglio di prova separato.</p><button class="btn primary full-btn" id="simulationToggle">Avvia simulazione</button></section>
 <section class="card settings-card" id="jsonBackupSettings"><div class="section-head"><h2>Esporta e importa dati JSON</h2></div>
 <p class="hint">Scarica una copia completa del portafoglio, delle operazioni e dello storico, oppure ripristina un backup precedente.</p>
@@ -2138,12 +2195,17 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <label class="toggle"><input id="settingShowReconstructed" type="checkbox" checked> Includi i prezzi storici ricostruiti nei grafici</label><label class="toggle"><input id="settingShowBackfill" type="checkbox" checked> Mostra «Recupera prezzi» nei grafici</label>
 <p class="hint">Mostra solo rilevazioni osservate nei grafici.</p>
 <div class="setting-field"><label for="settingSearchRegion">Borse da cercare per prime</label><select id="settingSearchRegion"><option value="world">Tutto il mondo</option><option value="it">Solo Italia</option><option value="eu">Europa</option><option value="us">Solo USA</option></select><p class="hint">Filtra per mercato di quotazione. Cerca obbligazioni anche per ISIN.</p></div></section><section class="card settings-card" id="favoriteSettings"><h2>Titoli preferiti</h2><label class="toggle"><input type="checkbox" id="favoriteEnabled"> Mostra preferiti nella Home</label><div id="favoriteSettingsBody"><div class="field"><label for="favoriteQuery">Cerca per nome, ticker, ISIN o futures</label><div class="flex"><input id="favoriteQuery" class="order-select" placeholder="Es. VWCE, ES=F, oro, Nasdaq futures"><button type="button" class="btn" id="favoriteSearch">Cerca</button></div></div><section class="browse-categories" id="favoriteBrowse" aria-label="Esplora preferiti per categoria"><div class="browse-head"><strong>Esplora per categoria</strong><span class="sub">Seleziona un titolo e verifica mercato e valuta</span></div><div class="browse-tabs" id="favoriteBrowseTabs" role="group" aria-label="Categorie titoli preferiti"></div><div class="browse-list" id="favoriteBrowseList" aria-live="polite"></div></section><div class="search-results" id="favoriteSearchResults"></div><div id="favoriteSelected" class="favorites-selected"></div><p class="sub">Massimo 3 titoli, anche non posseduti. Futures: la quotazione è indicativa della serie continua e non rappresenta un contratto specifico.</p></div></section>
+<section class="card settings-card finn-store-card" id="finnStoreSettings"><div class="section-head"><h2>🛍️ Finn Store</h2><span class="sub">Costumi e gadget</span></div>
+<p class="hint">Personalizza Finn. Per ora tutto è gratuito: nessun acquisto reale e nessun credito scalato.</p>
+<div class="finn-store-banner"><div class="finn-store-preview"><div class="finn-store-preview-art" id="finnStorePreview" aria-label="Anteprima Finn"></div><div><strong>Il tuo Finn</strong><div class="sub" id="finnStoreEquipped">Look classico</div></div></div><strong>🪙 Crediti: ∞</strong></div>
+<h3>Costumi</h3><div class="finn-store-grid" id="finnStoreCostumes"></div><h3>Gadget</h3><div class="finn-store-grid" id="finnStoreGadgets"></div>
+<p class="hint">Un costume e un gadget alla volta. Le scelte vengono salvate nel profilo ed esportate nel backup JSON.</p></section>
 <section class="card settings-card" id="settingsSection">
 <div class="section-head"><h2>Preferenze</h2><span class="sub">Le modifiche si salvano automaticamente</span></div>
 <details class="setting-group" open=""><summary>Aspetto e colori</summary><div class="setting-field"><label for="finholdraLanguageSetting">Lingua / Language</label><select id="finholdraLanguageSetting"><option value="it">Italiano</option><option value="en">English</option></select></div>
 <div class="setting-field"><label for="settingTheme">Tema dell'app</label><select id="settingTheme"><option value="dark">Blu notte (attuale)</option><option value="ocean">Blu oceano</option><option value="light">Chiaro</option><option value="amethyst">Ametista</option><option value="graphite">Grafite</option><option value="modern">Modern · fintech contemporaneo</option><option value="nero">Nero · luxury</option><option value="pine">Verde petrolio</option><option value="sunset">Sunset · rosé sera</option><option value="copper">Rame · warm premium</option><option value="arctic">Artico · ghiaccio</option><option value="neon">Neon · cyber</option><option value="aurora">Aurora</option><option value="iconblue">Blu Finholdra</option><option value="honey">Miele e grafite</option><option value="burgundy">Borgogna</option><option value="system">Automatico (iPhone)</option></select></div>
 <div class="setting-field"><label for="settingMarketColorScope">Colore dinamico del mercato</label><select id="settingMarketColorScope"><option value="all">In tutta l’app</option><option value="home">Solo Dashboard</option><option value="off">Disattivato</option></select><p class="hint">Segui il primo preferito oppure il rendimento complessivo, usando le soglie emotive di Finn.</p><label for="settingMarketColorBasis">Colore dinamico basato su</label><select id="settingMarketColorBasis"><option value="favorite">Primo titolo preferito · variazione giornaliera</option><option value="portfolio">Performance generale · soglie Finn</option></select><details class="fh115-closed-submenu" style="margin-top:12px"><summary>Colore neutro · mercati chiusi</summary><div class="setting-field"><label for="settingClosedMarketColor">Colorazione nei giorni senza contrattazioni</label><select id="settingClosedMarketColor"><option value="theme">Predefinito del tema</option><option value="gold">Giallo Finholdra</option><option value="blue">Blu ghiaccio</option><option value="plum">Prugna</option><option value="forest">Verde bosco</option><option value="custom">Personalizzato · tavolozza</option></select><label class="fh117-colorpicker" for="settingClosedMarketCustom">Scegli una tonalità <input id="settingClosedMarketCustom" type="color" value="#245a49" aria-label="Tavolozza colore mercati chiusi"></label><p class="hint">Predefinito del tema mantiene i colori del tema attivo. Le altre opzioni colorano la Home quando i mercati sono chiusi.</p></div></details></div><div class="setting-field"><label for="settingAppearanceMode">Stile dell'interfaccia e dei menu</label><select id="settingAppearanceMode" aria-label="Stile dell'interfaccia"><option value="flat">Flat · essenziale</option><option value="glass">Liquid Glass · vetro e trasparenze</option><option value="studio">Studio</option><option value="moderno">Moderno</option><option value="fiducia">Fiducia</option><option value="tradizionale">Tradizione</option><option value="natale">Natale · cappello e decori</option><option value="arcade">Arcade · pixel-fintech</option><option value="editorial">Editoriale · impaginazione premium</option></select><p class="hint">Tema e stile sono indipendenti.</p></div>
-<div class="setting-field"><label for="settingPalette">Palette mascotte</label><select id="settingPalette"><option value="classic">Classica · verde / menta / rosso</option><option value="ocean">Oceano · turchese / azzurro / blu</option><option value="royal">Royal · blu / celeste / indaco</option><option value="forest">Bosco · smeraldo / lime / corallo</option></select></div><div class="setting-field" id="settingCategoryColorsSection"><label>Colori delle categorie del grafico</label><p class="hint">Personalizza le fette del donut e la legenda. Le intestazioni e i titoli dell'app mantengono il colore del tema.</p><div class="category-color-grid" id="settingCategoryColors"></div><button type="button" class="btn" id="settingCategoryColorsReset">Ripristina tutti i colori</button></div></details><details class="setting-group"><summary>Finn · Mascotte e giochi</summary><div class="mood-settings"><strong>Soglie emotive sul rendimento lordo (%)</strong><p class="hint">Soglie di reazione della mascotte.</p><div class="mood-setting-grid"><label>Zona neutra ± %<input id="settingMoodNeutral" type="number" min="0" max="50" step="0.1" value="1"/></label><label>Felice/arrabbiata ± %<input id="settingMoodPositive" type="number" min="0.1" max="100" step="0.1" value="2"/></label><label>Super felice/triste ± %<input id="settingMoodExtreme" type="number" min="0.2" max="200" step="0.1" value="5"/></label></div></div><div class="setting-field"><label for="settingMascotStyle">Modello mascotte</label><select id="settingMascotStyle"><option value="rounded">Candela classica</option><option value="slim">Candela sottile</option><option value="square">Candela geometrica</option></select></div><label class="toggle setting-toggle"><input id="settingGlow" type="checkbox" checked> Alone luminoso intorno alla mascotte</label><div class="setting-field"><label for="settingMotion">Movimento mascotte</label><select id="settingMotion"><option value="lively">Vivace</option><option value="normal">Normale</option><option value="off">Disattivato</option></select></div>
+<div class="setting-field"><label for="settingPalette">Palette mascotte</label><select id="settingPalette"><option value="classic">Classica · verde / menta / rosso</option><option value="ocean">Oceano · turchese / azzurro / blu</option><option value="royal">Royal · blu / celeste / indaco</option><option value="forest">Bosco · smeraldo / lime / corallo</option></select></div><div class="setting-field" id="settingCategoryColorsSection"><label>Colori delle categorie del grafico</label><p class="hint">Personalizza le fette del donut e la legenda. Le intestazioni e i titoli dell'app mantengono il colore del tema.</p><div class="category-color-grid" id="settingCategoryColors"></div><button type="button" class="btn" id="settingCategoryColorsReset">Ripristina tutti i colori</button></div></details><details class="setting-group"><summary>Finn · Mascotte e giochi</summary><label class="toggle setting-toggle"><input id="settingShowHeaderFinn" type="checkbox" checked> Mostra Finn nell’header dell’app</label><p class="hint">Nasconde Finn soltanto in alto. La mascotte e i giochi restano disponibili.</p><div class="mood-settings"><strong>Soglie emotive sul rendimento lordo (%)</strong><p class="hint">Soglie di reazione della mascotte.</p><div class="mood-setting-grid"><label>Zona neutra ± %<input id="settingMoodNeutral" type="number" min="0" max="50" step="0.1" value="1"/></label><label>Felice/arrabbiata ± %<input id="settingMoodPositive" type="number" min="0.1" max="100" step="0.1" value="2"/></label><label>Super felice/triste ± %<input id="settingMoodExtreme" type="number" min="0.2" max="200" step="0.1" value="5"/></label></div></div><div class="setting-field"><label for="settingMascotStyle">Modello mascotte</label><select id="settingMascotStyle"><option value="rounded">Candela classica</option><option value="slim">Candela sottile</option><option value="square">Candela geometrica</option></select></div><label class="toggle setting-toggle"><input id="settingGlow" type="checkbox" checked> Alone luminoso intorno alla mascotte</label><div class="setting-field"><label for="settingMotion">Movimento mascotte</label><select id="settingMotion"><option value="lively">Vivace</option><option value="normal">Normale</option><option value="off">Disattivato</option></select></div>
 </details>
 <details class="setting-group"><summary>Privacy e visualizzazione</summary>
 <label class="toggle setting-toggle"><input id="settingPrivacy" type="checkbox"/> Nascondi importi e dettagli sensibili</label>
@@ -2216,7 +2278,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <div class="fh66-broker-row" id="fh66BrokerRow"><label for="fh66BrokerInput">Broker / intermediario</label><div class="fh66-broker-flex"><img id="fh66BrokerIcon" alt="" width="30" height="30"><input id="fh66BrokerInput" type="text" list="fh66BrokerOptions" maxlength="70" placeholder="Es. Directa, Fineco, Trade Republic"><button id="fh66BrokerSave" type="button" class="btn">Salva</button></div><datalist id="fh66BrokerOptions"><option>Directa</option><option>Fineco</option><option>Trade Republic</option><option>Intesa Sanpaolo</option><option>ING</option><option>Fideuram</option><option>Degiro</option><option>Interactive Brokers</option></datalist><small>Il broker è associato a questo titolo e resta nel backup JSON. Per nomi noti viene caricata la favicon del sito ufficiale.</small></div><div class="asset-detail-metrics"><div class="asset-detail-metric"><span id="assetDetailPriceLabel">Ultimo prezzo salvato</span><strong id="assetDetailPrice">—</strong></div><div class="asset-detail-metric"><span>Variazione nel periodo</span><strong id="assetDetailDelta">—</strong></div></div>
 <div aria-label="Periodo grafico" class="asset-detail-ranges" id="assetDetailRanges" role="group"><button class="selected" data-asset-range="1d" type="button">1G</button><button data-asset-range="5d" type="button">1S</button><button data-asset-range="1mo" type="button">1M</button><button data-asset-range="3mo" type="button">3M</button><button data-asset-range="6mo" type="button">6M</button><button data-asset-range="1y" type="button">1A</button><button data-asset-range="max" type="button">MAX</button><button data-asset-range="custom" type="button" aria-label="Intervallo personalizzato" title="Scegli la data iniziale"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg></button></div><div class="fh1017-custom-dates hidden" id="assetCustomDates"><label>Dal <input type="date" id="assetCustomFrom" aria-label="Data inizio personalizzata"></label><label>Al <input type="date" id="assetCustomTo" aria-label="Data finale predefinita: oggi"></label><button type="button" class="btn" id="assetCustomApply">Mostra</button></div>
 <div aria-live="polite" class="asset-chart-wrap" id="assetDetailChart"><div class="asset-chart-empty">Caricamento dati…</div></div>
-<div class="asset-source-picker"><label for="assetDetailProvider">Fonte grafico</label><select id="assetDetailProvider" class="order-select"><option value="yahoo">Yahoo Finance · dati verificati</option></select></div><div class="asset-chart-foot"><span id="assetDetailSource">Dati: —</span><span id="assetDetailSelected">—</span></div>
+<div class="asset-source-picker"><label for="assetDetailProvider">Fonte grafico</label><select id="assetDetailProvider" class="order-select"><option value="yahoo">Yahoo Finance · dati verificati</option></select><a id="assetTradingViewExternal" class="btn" href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer" style="display:none;font-size:12px;margin-top:8px">📈 Apri su TradingView ↗</a></div><div class="asset-chart-foot"><span id="assetDetailSource">Dati: —</span><span id="assetDetailSelected">—</span></div>
 <div class="asset-detail-info"><div><span>Il tuo PMC</span><strong id="assetDetailPmc">—</strong></div><div><span>Quantità / nominale</span><strong id="assetDetailQty">—</strong></div><div><span>Capitale investito</span><strong id="assetDetailInvested">—</strong></div><div><span>Valore attuale stimato</span><strong id="assetDetailValue">—</strong></div></div><section class="asset-detail-insight" id="assetDetailInsight" aria-label="Insight rapido posizione"><div class="asset-detail-insight-top"><span class="asset-detail-insight-badge" id="assetInsightBadge">Insight rapido</span><strong id="assetInsightHeadline">—</strong></div><p class="asset-detail-insight-text" id="assetInsightText">—</p><div class="asset-detail-insight-progress" aria-hidden="true"><span id="assetInsightProgress"></span></div><div class="asset-detail-insight-grid"><div><span>Posizione</span><strong id="assetInsightPosition" data-pct-basis="Rispetto al capitale investito (PMC) · rendimento lordo della posizione">—</strong></div><div><span>Peso</span><strong id="assetInsightWeight" data-pct-basis="Peso sul patrimonio delle categorie selezionate">—</strong></div><div><span>Ultimo acquisto</span><strong id="assetInsightLastBuy">—</strong></div></div></section>
 <section class="fin-insight-panel" id="finInvestIntelligence" aria-label="Acquisti e confronto con il mercato"><div class="fin-insight-head"><span class="fin-tag">✦ ANALISI INVESTIMENTI</span><h3>Il momento del tuo acquisto</h3><p>Minimi, massimi e confronto.</p></div><div class="fin-analytics-grid"><div class="fin-analytics-metric"><span>Acquisto rispetto al minimo</span><strong id="finMinSignal" data-pct-basis="Rispetto al minimo dei sei mesi precedenti l’acquisto">Caricamento…</strong><small id="finMinExplain">—</small></div><div class="fin-analytics-metric"><span>Massimo e minimo del periodo</span><strong id="finPriceRange">—</strong><small id="finPricePeriod">—</small></div></div><div class="fin-bench-head"><h4>Il titolo sta battendo il mercato?</h4><div class="fin-periods" id="finBenchPeriods" role="group" aria-label="Periodo confronto"><button type="button" data-fin-period="1mo">1M</button><button type="button" data-fin-period="6mo" class="selected">6M</button><button type="button" data-fin-period="1y">1A</button></div></div><div class="fin-compare-select"><label for="finCompareAsset">Confronta con</label><select id="finCompareAsset" class="order-select" aria-label="Scegli il titolo da confrontare"><option value="VWCE.MI">VWCE.MI</option></select><input id="finCompareCustom" class="order-select" style="display:none;margin-top:6px" aria-label="Ticker da confrontare" placeholder="Ticker, es. XDEV.MI" maxlength="30" /></div><div id="finBenchSummary" class="fin-bench-summary">Confronto in preparazione…</div><div id="finBenchGraph" class="fin-bench-chart" role="group" aria-label="Grafico confronto titolo e benchmark"></div><div class="fin-bench-foot"><span><i class="fin-dot fin-stock-dot"></i> Titolo</span><span><i class="fin-dot fin-market-dot"></i> <span id="finCompareLegend">VWCE.MI</span></span><small>Prezzi normalizzati sulla stessa data. Non è il TWRR del tuo portafoglio.</small></div></section><section class="box fh75-simulator" id="fh75Simulator" aria-label="Simula acquisto"><div class="pmc-history-top"><h3>Simula acquisto</h3><span class="fh75-sim-chip">Simulazione · nessun ordine</span></div><p class="pmc-history-info">Scopri come cambierebbe il PMC aggiungendo un acquisto ipotetico.</p><div class="fh75-sim-grid"><label>Quote / nominale<input id="fh75SimQty" inputmode="decimal" type="text" placeholder="Es. 2" autocomplete="off"></label><label>Prezzo per quota<input id="fh75SimPrice" inputmode="decimal" type="text" placeholder="Es. 150,00" autocomplete="off"></label></div><div id="fh75SimResult" class="fh75-sim-result" aria-live="polite">Inserisci quantità e prezzo per simulare il nuovo PMC.</div></section>
 <section class="box" id="assetDetailPmcHistory" aria-label="Storico del prezzo medio di carico">
@@ -2480,12 +2542,12 @@ function save(){try{store.setItem(STORAGE,JSON.stringify(state));window.dispatch
 function saveFilters(){try{store.setItem(FILTER_KEY,JSON.stringify(filter));window.dispatchEvent(new Event('finholdra:changed'))}catch(e){}}
 
 let snapshots=[],trades=[],historyRange='30',buyPriceEdited=false,historySelectedDay=null,historyPointData=[];
-const RETURN_METHOD_KEY='invesquo_return_method_v57';let returnMethod='daily';
+const RETURN_METHOD_KEY='invesquo_return_method_v57';let returnMethod='daily';try{const savedMethod=store.getItem(RETURN_METHOD_KEY);if(['daily','twrr','mwrr','roi','archive','stats'].includes(savedMethod))returnMethod=savedMethod;}catch(_){}
 function updateMethodButtons(){
  document.querySelectorAll('[data-history-method]').forEach(b=>{const active=b.dataset.historyMethod===(['daily','archive','stats'].includes(returnMethod)?returnMethod:'roi');b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active));b.setAttribute('aria-selected',String(active))});
  document.querySelectorAll('.method-picker .method-label').forEach(el=>{el.textContent='ROI · TWRR · MWRR · confronto su scala percentuale comune'});
 }
-document.querySelectorAll('[data-history-method]').forEach(b=>b.addEventListener('click',()=>{returnMethod=b.dataset.historyMethod;historySelectedDay=null;renderHistory()}));
+document.querySelectorAll('[data-history-method]').forEach(b=>b.addEventListener('click',()=>{returnMethod=b.dataset.historyMethod;try{store.setItem(RETURN_METHOD_KEY,returnMethod)}catch(_){}historySelectedDay=null;renderHistory()}));
 const fh73VisibleSeries=new Set(['roi','twrr','mwrr']);
 document.querySelectorAll('[data-fh73-series]').forEach(b=>b.addEventListener('change',()=>{
  if(b.checked)fh73VisibleSeries.add(b.dataset.fh73Series);else fh73VisibleSeries.delete(b.dataset.fh73Series);
@@ -2583,8 +2645,14 @@ function persistVerifiedPurchase(nextAssets,nextTrades,expectedTrade){
   store.setItem(STORAGE,proposedState);
   const diskTrades=JSON.parse(store.getItem(TRADES_KEY)||'null');
   const diskState=JSON.parse(store.getItem(STORAGE)||'null');
-  if(!Array.isArray(diskTrades)||!diskTrades.some(t=>t.id===expectedTrade.id&&t.asset===expectedTrade.asset&&t.kind==='buy')||
-    !diskState||!Array.isArray(diskState.assets))throw new Error('I dati riletti non corrispondono all’acquisto.');
+  const persistedTrade=Array.isArray(diskTrades)?diskTrades.find(t=>t.id===expectedTrade.id):null;
+  if(!persistedTrade||persistedTrade.asset!==expectedTrade.asset||persistedTrade.kind!=='buy'||
+     persistedTrade.date!==expectedTrade.date||
+     !/^\d{4}-\d{2}-\d{2}$/.test(persistedTrade.date)||
+     !['quantity','price','spent'].every(k=>Number.isFinite(Number(persistedTrade[k]))&&
+       Math.abs(Number(persistedTrade[k])-Number(expectedTrade[k]))<=Math.max(1e-8,Math.abs(Number(expectedTrade[k]))*1e-10))||
+     !diskState||!Array.isArray(diskState.assets))
+    throw new Error('Acquisto non confermato: data, quantità, prezzo o importo non coincidono con i valori salvati.');
   const savedAsset=diskState.assets.find(a=>a.id===expectedTrade.asset);
   const expectedAsset=nextAssets.find(a=>a.id===expectedTrade.asset);
   if(!savedAsset||!expectedAsset||!Number.isFinite(Number(savedAsset.q))||Math.abs(Number(savedAsset.q)-Number(expectedAsset.q))>1e-8)
@@ -2691,6 +2759,7 @@ const svgEscape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':
 // 3/11 and 4/11 total. Compare the same scope across ALL plotted dates.
 // Other portfolio categories stay untouched in the dashboard.
 let historyComparableScope=null,historyCategory='ETF',dailyHistorySelectedDate='';
+try{const savedCategory=store.getItem('finholdra_history_category_v10946');if(savedCategory&&CAT.some(([cat])=>cat===savedCategory))historyCategory=savedCategory;}catch(_){}
 function historySelectedCats(){return CAT.filter(([cat])=>cat!=='Crypto'&&filter[cat]&&historyCategory===cat).map(([cat])=>cat)}
 function historyCatIncluded(cat){return historySelectedCats().includes(cat)}
 function refreshHistoryCategoryOptions(){
@@ -2701,7 +2770,7 @@ function refreshHistoryCategoryOptions(){
  sel.innerHTML='';opts.forEach(([v,label])=>{const o=document.createElement('option');o.value=v;o.textContent=label;sel.appendChild(o)});
  sel.value=historyCategory;
 }
-$('historyCategory').onchange=e=>{historyCategory=e.target.value;historySelectedDay=null;renderHistory()};
+$('historyCategory').onchange=e=>{historyCategory=e.target.value;try{store.setItem('finholdra_history_category_v10946',historyCategory)}catch(_){}historySelectedDay=null;renderHistory()};
 function trackedValue(s){
  // A valid portfolio-wide observation contains every category (even disabled
  // dashboard categories). Partial legacy totals lack an asset breakdown; they
@@ -2860,13 +2929,80 @@ function mergeDailySnapshots(observed,reconstructed){
  return {...observed,byAsset,byCat,source:'merged',coverage:full?'all-assets':'verified-selected',selectedCategories,
   recoveryVersion:reconstructed.recoveryVersion,hasRecoveredValues:true};
 }
+/* Beta 10.9.45 — Portable historical graph from backed-up DAILY closes.
+   A daily quote has no meaning without dated holdings. Never invent holdings, FX,
+   missing closes or trades. Observed snapshots take precedence below. */
+let fh10945ArchiveCache=null;
+function fh10945ArchivedSnapshots(){
+ const raw=store.getItem('finholdra_daily_closes_v1020')||'';
+ if(!raw)return [];
+ const signature=[raw.length,raw.slice(-96),trades.length,snapshots.length,state.assets.length,
+   state.assets.map(a=>[a.id,a.q,a.pmc]).join('|')].join('~');
+ if(fh10945ArchiveCache?.signature===signature)return fh10945ArchiveCache.records;
+ let archive;try{archive=JSON.parse(raw)}catch(_){return []}
+ if(!archive?.assets||typeof archive.assets!=='object')return [];
+ const byDay=new Set();
+ for(const rec of Object.values(archive.assets)){
+  for(const date of Object.keys(rec?.days||{}))if(/^\d{4}-\d\d-\d\d$/.test(date)&&date<=today())byDay.add(date);
+ }
+ const records=[];
+ for(const date of [...byDay].sort().slice(-730)){
+  const byAsset={},byCat={},incomplete=new Set(),known=new Set();
+  CAT.forEach(([cat])=>{byCat[cat]={value:0,capital:0};known.add(cat)});
+  for(const a of state.assets){
+   const pos=fh1096PositionAt(a,date);
+   if(!pos||pos.qty===null||!Number.isFinite(Number(pos.capital))){incomplete.add(a.cat);continue}
+   const q=Number(pos.qty);if(!(q>0))continue;
+   let p=null,fx=1,value=null,quality='close',source='';
+   if(a.cat==='Conto deposito'||a.cat==='Risparmio postale'){
+    const non=fh102NonMarketValue(a,date,q,pos);
+    if(!non||!Number.isFinite(Number(non.value))){incomplete.add(a.cat);continue}
+    value=Number(non.value);p=1;quality='estimated';source=non.source||'';
+   }else{
+    const rec=fh102Closest(archive,a,date);
+    p=Number(rec?.price);
+    if(!(p>0)){incomplete.add(a.cat);continue}
+    fx=currencyOf(a)==='EUR'?1:fh102HistoricFx(archive,currencyOf(a),date);
+    if(!(Number.isFinite(fx)&&fx>0)){incomplete.add(a.cat);continue}
+    value=q*p*fx/(a.cat==='Obbligazioni'?100:1);
+    quality=rec.quality||'observed';source=rec.source||'';
+   }
+   if(!Number.isFinite(value)){incomplete.add(a.cat);continue}
+   byAsset[a.id]={cat:a.cat,quantity:q,value,capital:Number(pos.capital),price:p,currency:currencyOf(a),fxRate:fx,
+     recovery:'daily-close-archive',quality,source};
+   byCat[a.cat].value+=value;byCat[a.cat].capital+=Number(pos.capital);
+  }
+  if(!Object.keys(byAsset).length)continue;
+  for(const cat of incomplete){delete byCat[cat];known.delete(cat)}
+  // Incomplete categories must not masquerade as fully reconstructed returns.
+  for(const [id,v] of Object.entries(byAsset))if(incomplete.has(v.cat))delete byAsset[id];
+  if(!Object.keys(byAsset).length)continue;
+  records.push({date,stamp:Date.parse(date+'T12:00:00Z'),source:'reconstructed',
+   coverage:incomplete.size?'verified-selected':'all-assets',selectedCategories:[...known],
+   byAsset,byCat,recoveryVersion:3,hasRecoveredValues:true,
+   recoveryNote:'Ricostruito da quotazioni giornaliere archiviate e movimenti datati; nessuna quotazione inventata.'});
+ }
+ fh10945ArchiveCache={signature,records};return records;
+}
+window.addEventListener('finholdra:changed',()=>{fh10945ArchiveCache=null});
 function dailySnapshotsByDate(){
  const daysMap=new Map();
- for(const snap of snapshots){
+ for(const snap of [...snapshots,...(prefs.showReconstructed===false?[]:fh10945ArchivedSnapshots())]){
   if(!snap||!snap.date)continue;
   if(prefs.showReconstructed===false&&snap.source==='reconstructed')continue;
   const pair=daysMap.get(snap.date)||{};
-  if(snap.source==='reconstructed')pair.reconstructed=snap;
+  if(snap.source==='reconstructed'){
+   if(!pair.reconstructed)pair.reconstructed=snap;
+   else{
+    // Supplement an existing reconstructed day only with missing verified assets.
+    const previous=pair.reconstructed;
+    const merged={...previous,byAsset:{...snap.byAsset,...previous.byAsset},byCat:{...snap.byCat,...previous.byCat}};
+    const categories=[...new Set([...(previous.selectedCategories||[]),...(snap.selectedCategories||[])])];
+    merged.selectedCategories=categories;
+    merged.coverage=previous.coverage==='all-assets'||snap.coverage==='all-assets'?'all-assets':'verified-selected';
+    pair.reconstructed=merged;
+   }
+  }
   else if(!pair.observed||Number(snap.stamp||0)>=Number(pair.observed.stamp||0))pair.observed=snap;
   daysMap.set(snap.date,pair);
  }
@@ -3610,6 +3746,32 @@ function finnSceneStart(type,emotion,ms,followUp){
  finnScene={type,emotion};finnUpdateFigure();
  finnSceneTimer=setTimeout(()=>{if(token!==finnSceneToken)return;finnScene=null;finnUpdateFigure();if(followUp)followUp()},ms);
 }
+const FINN_STORE_COSTUMES=[{id:'none',name:'Look classico',emoji:'✨'},{id:'cap',name:'Cappellino',emoji:'🧢'},{id:'crown',name:'Corona',emoji:'👑'},{id:'cowboy',name:'Cowboy',emoji:'🤠'},{id:'wizard',name:'Mago',emoji:'🧙'},{id:'scarf',name:'Sciarpa',emoji:'🧣'},{id:'beanie',name:'Berretto invernale',emoji:'❄️'}];
+const FINN_STORE_GADGETS=[{id:'none',name:'Nessuno',emoji:'✨'},{id:'glasses',name:'Occhiali',emoji:'🕶️'},{id:'bowtie',name:'Papillon',emoji:'🎀'},{id:'coffee',name:'Caffè',emoji:'☕'},{id:'star',name:'Stella',emoji:'⭐'},{id:'headset',name:'Cuffie',emoji:'🎧'}];
+function finnStoreDecorations(){
+ const costume=FINN_STORE_COSTUMES.some(i=>i.id===prefs.finnStoreCostume)?prefs.finnStoreCostume:'none';
+ const gadget=FINN_STORE_GADGETS.some(i=>i.id===prefs.finnStoreGadget)?prefs.finnStoreGadget:'none';
+ const hats={cap:'<path d="M28 22Q30 4 50 5Q69 6 72 22Z" fill="#f1bd40" stroke="#10263c" stroke-width="3"/><path d="M51 20Q75 14 83 20Q75 28 51 25" fill="#dca42c" stroke="#10263c" stroke-width="2.5"/>',crown:'<path d="M30 23L27 3L39 12L50 0L61 12L73 3L70 23Z" fill="#f9cd55" stroke="#10263c" stroke-width="2.5"/><circle cx="50" cy="15" r="3" fill="#ff618c"/>',cowboy:'<path d="M33 18L37 2Q50 10 63 2L67 18Z" fill="#9d673a" stroke="#10263c" stroke-width="2.8"/><path d="M16 19Q50 29 84 19" stroke="#10263c" stroke-width="8" fill="none"/><path d="M16 19Q50 27 84 19" stroke="#bc8955" stroke-width="5" fill="none"/>',wizard:'<path d="M33 23L51 -8L70 23Z" fill="#7757c9" stroke="#10263c" stroke-width="3"/><path d="M27 22Q50 16 75 22" fill="none" stroke="#dcbcfb" stroke-width="6"/><path d="M51 5l2 4l4 1l-4 3l-2 4l-3 -4l-4 -3l5 -1z" fill="#ffdc66"/>',scarf:'<path d="M31 75Q49 83 70 74" fill="none" stroke="#e66d83" stroke-width="9"/><path d="M58 78L66 103L77 100L71 77" fill="#e66d83" stroke="#10263c" stroke-width="2"/>',beanie:'<path d="M28 22Q28 2 49 2Q71 2 72 22Z" fill="#5aa9e8" stroke="#10263c" stroke-width="3"/><rect x="27" y="18" width="46" height="8" rx="3" fill="#2a6baf" stroke="#10263c" stroke-width="2"/><circle cx="50" cy="1" r="6" fill="#f9d77c"/>',none:''};
+ const gadgets={glasses:'<path d="M32 44h15m6 0h15" stroke="#10263c" stroke-width="2"/><rect x="34" y="39" width="14" height="12" rx="4" fill="#10263c" opacity=".86"/><rect x="52" y="39" width="14" height="12" rx="4" fill="#10263c" opacity=".86"/>',bowtie:'<path d="M36 78L50 82L64 78L64 91L50 86L36 91Z" fill="#ef597e" stroke="#10263c" stroke-width="2"/><circle cx="50" cy="84" r="4" fill="#ffdd87"/>',coffee:'<path d="M81 67v18h14V67Z" fill="#fff6e8" stroke="#10263c" stroke-width="2"/><path d="M94 71h5v9h-5" fill="none" stroke="#10263c" stroke-width="2"/><path d="M85 64q-3 -5 0 -9m6 9q-3 -5 0 -9" stroke="#e3b887" fill="none" stroke-width="2"/>',star:'<path d="M87 13l4 9l10 1l-8 7l2 10l-8 -5l-9 5l3 -10l-7 -7l10 -1z" fill="#ffce4e" stroke="#10263c" stroke-width="2"/>',headset:'<path d="M27 52Q23 20 50 20Q77 20 73 52" fill="none" stroke="#10263c" stroke-width="5"/><rect x="23" y="42" width="9" height="17" rx="4" fill="#8eaaf8" stroke="#10263c" stroke-width="2"/><rect x="68" y="42" width="9" height="17" rx="4" fill="#8eaaf8" stroke="#10263c" stroke-width="2"/>',none:''};
+ return {hat:hats[costume]||'',gadget:gadgets[gadget]||''};
+}
+function renderFinnStore(){
+ const make=(kind,items,selected)=>items.map(item=>`<button type="button" class="finn-store-item" data-finn-store-kind="${kind}" data-finn-store-id="${item.id}" aria-pressed="${item.id===selected}"><span class="finn-store-emoji">${item.emoji}</span><strong>${item.name}</strong><span class="finn-store-price">Gratis · 0 crediti</span><span class="finn-store-equip">${item.id===selected?'✓ Equipaggiato':'Equipaggia'}</span></button>`).join('');
+ const costumes=document.getElementById('finnStoreCostumes'),gadgets=document.getElementById('finnStoreGadgets');
+ if(!costumes||!gadgets)return;
+ costumes.innerHTML=make('costume',FINN_STORE_COSTUMES,prefs.finnStoreCostume||'none');
+ gadgets.innerHTML=make('gadget',FINN_STORE_GADGETS,prefs.finnStoreGadget||'none');
+ const preview=document.getElementById('finnStorePreview');if(preview)preview.innerHTML=mascotSVG('positive',prefs.colors?.positive||'#5cdda4',false,'positive');
+ const label=document.getElementById('finnStoreEquipped');if(label)label.textContent=[FINN_STORE_COSTUMES.find(i=>i.id===(prefs.finnStoreCostume||'none'))?.name,FINN_STORE_GADGETS.find(i=>i.id===(prefs.finnStoreGadget||'none'))?.name].filter(x=>x&&x!=='Nessuno').join(' · ');
+}
+document.getElementById('finnStoreSettings')?.addEventListener('click',e=>{
+ const btn=e.target.closest('button[data-finn-store-kind]');if(!btn)return;
+ const kind=btn.dataset.finnStoreKind,id=btn.dataset.finnStoreId;
+ if(kind==='costume'&&!FINN_STORE_COSTUMES.some(x=>x.id===id))return;
+ if(kind==='gadget'&&!FINN_STORE_GADGETS.some(x=>x.id===id))return;
+ prefs[kind==='costume'?'finnStoreCostume':'finnStoreGadget']=id;
+ savePreferences();renderFinnStore();mascotPlayRender();finnUpdateFigure();
+});
 function mascotSVG(mood,color,alertMode=false,emotionOverride){
  const emotion=emotionOverride||(alertMode?'concerned':currentMascotEmotion(mood));
  const safe=/^#[0-9a-fA-F]{6}$/.test(color||'')?color:(mood==='negative'?'#ef4444':mood==='neutral'?'#a7f3d0':'#22c55e');
@@ -3709,15 +3871,16 @@ function mascotSVG(mood,color,alertMode=false,emotionOverride){
  if(emotion==='scared'){leftArm='<path d="M30 60Q16 48 15 43"/><circle cx="15" cy="43" r="5.2" fill="'+white+'"/>';rightArm='<path d="M70 60Q84 48 85 43"/><circle cx="85" cy="43" r="5.2" fill="'+white+'"/>';}
  if(emotion==='watching'){rightArm='<path d="M70 60Q80 58 85 42"/><circle cx="85" cy="42" r="6" fill="'+white+'"/>'; }
  if(emotion==='praying'){leftArm='<path d="M30 62Q37 66 47 67"/><circle cx="47" cy="67" r="5" fill="'+white+'"/>';rightArm='<path d="M70 62Q63 66 53 67"/><circle cx="53" cy="67" r="5" fill="'+white+'"/>'; }
+ const finnStoreWear=finnStoreDecorations();
  const santaHat=prefs.appearanceMode==='natale'?'<g class="finn-santa-hat"><path d="M29 18Q39 -3 56 2Q69 5 73 14L82 18Q76 21 70 20Q49 12 30 23Z" fill="#c9223c" stroke="'+dark+'" stroke-width="2.8" stroke-linejoin="round"/><rect x="27" y="15" width="47" height="9" rx="4.5" fill="#fff9f0" stroke="'+dark+'" stroke-width="2"/><circle cx="82" cy="18" r="6.5" fill="#fff9f0" stroke="'+dark+'" stroke-width="2"/><path d="M37 12Q45 4 55 6" stroke="#ff8291" stroke-width="2.7" fill="none" stroke-linecap="round"/></g>':'',holidayTrim=prefs.appearanceMode==='natale'?'<g class="finn-holly"><circle cx="23" cy="24" r="3" fill="#be1f33"/><path d="M16 24q6 -8 11 0q-6 2 -11 0zm7 -8q8 3 4 10q-5 -2 -4 -10z" fill="#1f6b47" opacity=".9"/></g>':'';
- return `<svg viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g class="candle-character"><ellipse cx="50" cy="103" rx="29" ry="4" fill="#041428" opacity=".16"/>${holidayTrim}<g fill="none" stroke="${dark}" stroke-width="4.2" stroke-linecap="round"><g class="finn-left-arm">${leftArm}</g><g class="finn-right-arm">${rightArm}</g></g><path d="M50 12V5M50 91v10" stroke="${dark}" stroke-width="8" stroke-linecap="round"/><path d="M50 12V5M50 91v10" stroke="${safe}" stroke-width="4.6" stroke-linecap="round"/><rect x="29" y="13" width="42" height="78" rx="14" fill="${safe}" stroke="${dark}" stroke-width="4"/>${santaHat}<path d="M35 27q3 -8 10 -8" stroke="#fff" stroke-opacity=".38" stroke-width="5" stroke-linecap="round" fill="none"/><g class="mascot-brows" stroke="${dark}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">${eyebrows}</g><g class="mascot-mouth" stroke="${dark}" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none">${mouth}</g>${eyeA}${extras}</g></svg>`;
+ return `<svg viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g class="candle-character"><ellipse cx="50" cy="103" rx="29" ry="4" fill="#041428" opacity=".16"/>${holidayTrim}<g fill="none" stroke="${dark}" stroke-width="4.2" stroke-linecap="round"><g class="finn-left-arm">${leftArm}</g><g class="finn-right-arm">${rightArm}</g></g><path d="M50 12V5M50 91v10" stroke="${dark}" stroke-width="8" stroke-linecap="round"/><path d="M50 12V5M50 91v10" stroke="${safe}" stroke-width="4.6" stroke-linecap="round"/><rect x="29" y="13" width="42" height="78" rx="14" fill="${safe}" stroke="${dark}" stroke-width="4"/>${santaHat}${finnStoreWear.hat}<path d="M35 27q3 -8 10 -8" stroke="#fff" stroke-opacity=".38" stroke-width="5" stroke-linecap="round" fill="none"/><g class="mascot-brows" stroke="${dark}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">${eyebrows}</g><g class="mascot-mouth" stroke="${dark}" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none">${mouth}</g>${eyeA}${extras}${finnStoreWear.gadget}</g></svg>`;
 }
 
 const VISIT_COUNTER_KEY='my_patrimonio_daily_opens_v1';
 const VISIT_SUPPRESS_KEY='my_patrimonio_visit_alert_disabled_v1';
 
 const PREF_KEY='invesquo_preferences_v50';
-const PREF_DEFAULTS={weekendYellow:true,closedMarketColor:'gold',closedMarketCustom:'#245a49',marketColorScope:'home',marketColorBasis:'favorite',moodNeutral:1,moodPositive:2,moodExtreme:5,mainMarket:'MIL',newsSource:'yahoo',palette:'classic',mascotStyle:'rounded',glow:true,theme:'dark',appearanceMode:'flat',categoryColors:{},motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',educationDetails:true,showQuoteTime:true,showLogos:true,showBackfill:true,favoriteEnabled:false,favoriteAssets:[],compact:false,autoOpenSettings:true,colors:{positive:'#09d66b',neutral:'#72e59d',negative:'#ef4444'}};
+const PREF_DEFAULTS={weekendYellow:true,closedMarketColor:'gold',closedMarketCustom:'#245a49',marketColorScope:'home',marketColorBasis:'favorite',moodNeutral:1,moodPositive:2,moodExtreme:5,mainMarket:'MIL',newsSource:'yahoo',palette:'classic',mascotStyle:'rounded',showHeaderFinn:true,finnStoreCostume:'none',finnStoreGadget:'none',glow:true,theme:'dark',appearanceMode:'flat',categoryColors:{},motion:'lively',warnings:true,limit:4,privacy:false,refreshMinutes:1,historyDefault:'30',educationDetails:true,showQuoteTime:true,showLogos:true,showBackfill:true,favoriteEnabled:false,favoriteAssets:[],compact:false,autoOpenSettings:true,colors:{positive:'#09d66b',neutral:'#72e59d',negative:'#ef4444'}};
 let prefs={...PREF_DEFAULTS,colors:{...PREF_DEFAULTS.colors}};
 try{const x=JSON.parse(store.getItem(PREF_KEY));if(x&&typeof x==='object'){prefs={...prefs,...x,colors:{...PREF_DEFAULTS.colors,...(x.colors||{})}}}}catch(e){}
 // Preserve legacy opt-out, but offer an accessible toggle to re-enable alerts.
@@ -3745,12 +3908,12 @@ function renderCategoryColorSettings(){
 function effectiveTheme(){return prefs.theme==='system'?(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):prefs.theme}
 function applyPreferences(){
  const scope=['all','home','off'].includes(prefs.marketColorScope)?prefs.marketColorScope:'home';document.body.dataset.marketColorScope=scope;$('settingMarketColorScope').value=scope;const basisSetting=$('settingMarketColorBasis');if(basisSetting)basisSetting.value=prefs.marketColorBasis==='portfolio'?'portfolio':'favorite';const colorPicker=$('settingClosedMarketCustom');if(colorPicker)colorPicker.value=validColor(prefs.closedMarketCustom)?prefs.closedMarketCustom:'#245a49';const cmc=$('settingClosedMarketColor');if(cmc)cmc.value=['theme','gold','blue','plum','forest','custom'].includes(prefs.closedMarketColor)?prefs.closedMarketColor:(prefs.weekendYellow===false?'blue':'gold');
- renderCategoryColorSettings();document.body.dataset.theme=effectiveTheme();document.body.dataset.appearance=['glass','studio','moderno','fiducia','tradizionale','natale','arcade','editorial'].includes(prefs.appearanceMode)?prefs.appearanceMode:'flat';const appearanceControl=$('settingAppearanceMode');if(appearanceControl)appearanceControl.value=document.body.dataset.appearance;document.body.classList.toggle('mascot-glow',prefs.glow!==false);document.body.dataset.mascotStyle=prefs.mascotStyle||'rounded';document.body.classList.toggle('motion-normal',prefs.motion==='normal');document.body.classList.toggle('motion-off',prefs.motion==='off');document.body.classList.toggle('privacy-on',!!prefs.privacy);document.body.classList.toggle('compact-cards',!!prefs.compact);/* Backup shortcut icon remains static; privacy setting is available in Impostazioni. */
+ renderCategoryColorSettings();document.body.dataset.theme=effectiveTheme();document.body.dataset.appearance=['glass','studio','moderno','fiducia','tradizionale','natale','arcade','editorial'].includes(prefs.appearanceMode)?prefs.appearanceMode:'flat';const appearanceControl=$('settingAppearanceMode');if(appearanceControl)appearanceControl.value=document.body.dataset.appearance;document.body.classList.toggle('mascot-glow',prefs.glow!==false);document.body.dataset.mascotStyle=prefs.mascotStyle||'rounded';document.body.classList.toggle('finn-header-hidden',prefs.showHeaderFinn===false);const headerFinnCheck=$('settingShowHeaderFinn');if(headerFinnCheck)headerFinnCheck.checked=prefs.showHeaderFinn!==false;document.body.classList.toggle('motion-normal',prefs.motion==='normal');document.body.classList.toggle('motion-off',prefs.motion==='off');document.body.classList.toggle('privacy-on',!!prefs.privacy);document.body.classList.toggle('compact-cards',!!prefs.compact);/* Backup shortcut icon remains static; privacy setting is available in Impostazioni. */
  document.querySelector('meta[name="theme-color"]').content=effectiveTheme()==='light'?'#edf2f8':effectiveTheme()==='ocean'?'#091b2a':effectiveTheme()==='nero'?'#080b11':effectiveTheme()==='modern'?'#f3f5f7':effectiveTheme()==='aurora'?'#112531':effectiveTheme()==='sunset'?'#24151d':'#0b1426';
  $(`settingTheme`).value=prefs.theme;$(`settingMotion`).value=prefs.motion;$(`settingWarnings`).checked=prefs.warnings;$(`settingLimit`).value=String([4,6,10].includes(Number(prefs.limit))?prefs.limit:4);$(`settingPrivacy`).checked=!!prefs.privacy;$(`settingRefreshMinutes`).value=String([1,5,15,30].includes(Number(prefs.refreshMinutes))?prefs.refreshMinutes:1);$(`settingHistoryDefault`).value=prefs.historyDefault||'30';$(`settingShowQuoteTime`).checked=!!prefs.showQuoteTime;$(`settingWealthGraph`).checked=prefs.wealthGraph!==false;$(`settingShowLogos`).checked=prefs.showLogos!==false;$(`settingCompact`).checked=!!prefs.compact;$(`settingAutoOpenSettings`).checked=prefs.autoOpenSettings!==false;
  for(const [id,key] of [['settingMoodNeutral','moodNeutral'],['settingMoodPositive','moodPositive'],['settingMoodExtreme','moodExtreme']]){const field=$(id);if(field)field.value=String(prefs[key]??PREF_DEFAULTS[key]);} $('settingMarketNewsSource').value=prefs.newsSource==='investing'?'investing':'yahoo';$('settingPalette').value=prefs.palette||'classic';$('settingMascotStyle').value=prefs.mascotStyle||'rounded';$('settingGlow').checked=prefs.glow!==false;
  const visitMascot=$('visitMascot');if(visitMascot)visitMascot.innerHTML=mascotSVG('negative',prefs.colors.negative,true);
- updateVisitStatus();
+ updateVisitStatus();renderFinnStore();
 }
 // b.7.22: graph backfill visibility and favorite configuration
 function syncBackfillVisibility(){const enabled=prefs.showBackfill!==false;document.querySelectorAll('.wealth-backfill-row,.history-rebuild-controls').forEach(x=>x.classList.toggle('hidden',!enabled));const check=$('settingShowBackfill');if(check)check.checked=enabled}
@@ -3789,6 +3952,7 @@ for(const [id,key] of [['settingMoodNeutral','moodNeutral'],['settingMoodPositiv
 $('settingPalette').onchange=e=>{prefs.palette=e.target.value;const c=MASCOT_PALETTES[prefs.palette]||MASCOT_PALETTES.classic;prefs.colors={positive:c[0],neutral:c[1],negative:c[2]};savePreferences();mascotPlayRender()};
 $('settingMascotStyle').onchange=e=>{prefs.mascotStyle=e.target.value;savePreferences();mascotPlayRender()};
 $('settingGlow').onchange=e=>{prefs.glow=e.target.checked;savePreferences()};
+$('settingShowHeaderFinn').onchange=e=>{prefs.showHeaderFinn=e.target.checked;savePreferences();};
 $('resetVisitCounter').onclick=()=>{if(!confirm('Azzerare il conteggio degli ingressi di oggi?'))return;store.removeItem(VISIT_COUNTER_KEY);visitAlertShown=false;lastVisitAttempt=Date.now();updateVisitStatus();$('settingsSaved').textContent='Conteggio giornaliero azzerato.'};
 let dashboardScrollY=0;
 function openSettings(){
@@ -4266,12 +4430,22 @@ function accountDataForBundle(){
 function makePortableBundle(){
  let observedPrices={};try{observedPrices=JSON.parse(store.getItem(PRICE_HISTORY_KEY)||'{}')}catch(_){}
  const profileStorage=accountDataForBundle();
+ // Store a portable graph-ready series, not only isolated saved snapshots.
+ const portableSnapshots=(()=>{
+  const byDay=new Map();
+  for(const item of [...fh10945ArchivedSnapshots(),...snapshots]){
+   if(!item?.date)continue;
+   const key=item.date+'|'+(item.source==='reconstructed'?'reconstructed':'observed');
+   if(!byDay.has(key)||Number(item.stamp||0)>=Number(byDay.get(key).stamp||0))byDay.set(key,item);
+  }
+  return [...byDay.values()].sort((a,b)=>a.date.localeCompare(b.date)).slice(-20000);
+ })();
  const historicalKeys=Object.keys(profileStorage).filter(k=>k==='patrimonio_history_v36'||k==='patrimonio_trades_v36'||k==='finholdra_observations_v9930'||k==='finholdra_daily_closes_v1020'||k==='finholdra_first_verified_day_v1020'||k==='invesquo_asset_prices_v58'||k.startsWith('finholdra_verified_closes_'));
- const historyInventory={keys:Object.fromEntries(historicalKeys.map(k=>[k,profileStorage[k].length])),snapshots:snapshots.length,trades:trades.length,observationDays:(()=>{try{return (JSON.parse(profileStorage.finholdra_observations_v9930||'[]')||[]).length}catch(_){return 0}})(),hasDailyArchive:!!profileStorage.finholdra_daily_closes_v1020,generatedAt:new Date().toISOString()};
+ const historyInventory={keys:Object.fromEntries(historicalKeys.map(k=>[k,profileStorage[k].length])),snapshots:portableSnapshots.length,trades:trades.length,observationDays:(()=>{try{return (JSON.parse(profileStorage.finholdra_observations_v9930||'[]')||[]).length}catch(_){return 0}})(),hasDailyArchive:!!profileStorage.finholdra_daily_closes_v1020,generatedAt:new Date().toISOString()};
  return {format:BUNDLE_FORMAT,version:6,createdAt:new Date().toISOString(),historyInventory,
   profile:{name:window.invesquoLocalAccount?.name||'Profilo',sourceId:ACCOUNT_ID},profileStorage,
   assets:JSON.parse(JSON.stringify(state.assets)),lastUpdate:state.lastUpdate,
-  filters:{...filter},snapshots:JSON.parse(JSON.stringify(snapshots)),
+  filters:{...filter},snapshots:JSON.parse(JSON.stringify(portableSnapshots)),
   trades:JSON.parse(JSON.stringify(trades)),preferences:JSON.parse(JSON.stringify(prefs)),
   pacSchedules:readPacSchedules(),etfHoldingsLookthrough:(()=>{try{return JSON.parse(store.getItem('finholdra_etf_holdings_9955')||'[]')}catch(_){return []}})(),dailyObservations:(()=>{try{return JSON.parse(store.getItem('finholdra_observations_v9930')||'[]')}catch(_){return []}})(),quoteHistory:observedPrices,detailQuoteHistory:(()=>{try{return JSON.parse(store.getItem('invesquo_asset_prices_v58')||'{}')}catch(_){return {}}})(),returnMethod,historyRange,
   note:'Solo rilevazioni effettivamente salvate. Le transazioni retrodatate non generano prezzi storici mancanti.'};
@@ -4639,7 +4813,9 @@ function populateAssetInsight(a){
  last.textContent=lastBuy?shortDate(lastBuy.date):'—';
  const fill=invested>0?Math.max(0,Math.min(100,(current/invested)*100)):0;progress.style.width=fill.toFixed(1)+'%';
 }
-function getDetailAssetById(id){return state.assets.find(x=>x.id===id)||(window.finholdraPreviewAsset&&window.finholdraPreviewAsset.id===id?window.finholdraPreviewAsset:null)} function openAssetDetail(id){const a=getDetailAssetById(id);if(!a)return;const external=$('assetDetailExternal');external.classList.toggle('hidden',!(detailIsMarketAsset(a)||a.id==='btp'));if(a.cat!=='Obbligazioni'&&detailIsMarketAsset(a)&&a.symbol&&/^[A-Za-z0-9.^=\-]{1,22}$/.test(a.symbol)){external.href='https://it.finance.yahoo.com/quote/'+encodeURIComponent(a.symbol)+'/chart/';external.textContent='Apri grafico Yahoo Finance ↗'}else if(a.cat==='Obbligazioni'&&a.isin){external.href='https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/scheda/'+encodeURIComponent(a.isin)+'-MOTX.html';external.textContent='Consulta strumento su Borsa Italiana ↗'}else{external.classList.add('hidden')}if(detailLiveInterval){clearInterval(detailLiveInterval);detailLiveInterval=null}detailBaseSeries=null;assetCustomFrom='';assetCustomTo='';$('assetCustomFrom').value='';$('assetCustomTo').value='';assetDetailPreviousFocus=document.activeElement;assetDetailScrollY=window.scrollY||0;assetDetailId=id;assetDetailRange=(a.cat==='Azioni'||a.cat==='Obbligazioni'?'1mo':'1d');pmcHistoryRange='week';pmcHistoryYear='';$('assetDetailProvider').innerHTML=a.id==='btp'?'<option value="mot">Euronext · MOT</option>':a.cat==='Obbligazioni'?'<option value="yahoo">Yahoo Finance</option>': '<option value="yahoo">Yahoo Finance · dati verificati</option>'+(a.cat==='Crypto'?'<option value="kraken">Kraken · API pubblica</option>':'');$('assetDetailOverlay').classList.remove('hidden');document.body.classList.add('asset-detail-open');$('assetDetailSheet').scrollTop=0;const matPanel=$('assetDetailMaturityEditor');const matAvailable=a.cat==='Obbligazioni'||a.cat==='Risparmio postale'||a.cat==='Conto deposito';matPanel.classList.toggle('hidden',!matAvailable);if(matAvailable){$('assetDetailMaturityDate').value=a.maturityDate||'';$('assetDetailMaturityValue').value=a.maturity??'';$('assetDetailMaturityFeedback').textContent='';} $('assetDetailTitle').textContent=a.name;const detailIcon=$('assetDetailIcon');if(detailIcon)detailIcon.innerHTML=issuerIcon(a.id,a);$('assetDetailSub').textContent=[a.symbol||a.cat,a.isin||'',detailMarketLabel(a),a.cat==='Obbligazioni'?currencyOf(a)+' / 100 nominali':currencyOf(a)].filter(Boolean).join(' · ');$('assetDetailPmc').textContent=a.finholdraWatchOnly?'—':a.cat==='Obbligazioni'?number(a.pmc)+' / 100 '+currencyOf(a):localMoney(a.pmc,currencyOf(a));populateAssetInsight(a);renderAssetPmcHistory(a);$('assetDetailQty').textContent=a.finholdraWatchOnly?'Non posseduto':a.id==='btp'?eur(a.q)+' nominali':a.cat==='Conto deposito'||a.id==='bfp'?'1 posizione':a.cat==='Risparmio postale'&&a.postalKind?eur(a.q)+' nominali':number(a.q)+' quote';$('assetDetailInvested').textContent=a.finholdraWatchOnly?'—':eur(cap(a));$('assetDetailValue').textContent=a.finholdraWatchOnly?'—':eur(val(a));$('assetDetailPrice').textContent=a.cat==='Obbligazioni'?number(a.p)+' / 100 '+currencyOf(a):a.id==='bfp'||a.postalKind?'Non quotato':a.cat==='Conto deposito'?eur(val(a)):localMoney(a.p,currencyOf(a));$('assetDetailPriceLabel').textContent=a.finholdraWatchOnly?'Prezzo di mercato':a.cat==='Conto deposito'?'Valore stimato':a.id==='bfp'||a.postalKind?'Valore nominale':'Ultimo prezzo salvato';$('assetDetailSource').textContent=a.postalKind?'Buono postale non quotato · importo di rimborso da verificare':a.quoteAt?'Ultima quotazione: '+a.quoteAt:'Ultima quotazione: non verificata';detailRangeChange();$('assetDetailClose').focus();loadAssetDetail();detailLiveInterval=setInterval(()=>{if(assetDetailId&&document.visibilityState!=='hidden'&&navigator.onLine)void updateDetailLiveQuote(assetDetailRequest)},60000);}
+function getDetailAssetById(id){return state.assets.find(x=>x.id===id)||(window.finholdraPreviewAsset&&window.finholdraPreviewAsset.id===id?window.finholdraPreviewAsset:null)} function openAssetDetail(id){const a=getDetailAssetById(id);if(!a)return;const external=$('assetDetailExternal');external.classList.toggle('hidden',!(detailIsMarketAsset(a)||a.id==='btp'));
+ const tvLink=$('assetTradingViewExternal');if(tvLink){const symbol=String(a.symbol||'').toUpperCase();const tvTicker=symbol.endsWith('.MI')?'MIL:'+symbol.slice(0,-3):symbol;const allowed=/^[A-Z0-9.^=\-]{1,24}$/.test(symbol);tvLink.style.display=allowed&&detailIsMarketAsset(a)?'inline-flex':'none';if(allowed)tvLink.href='https://www.tradingview.com/chart/?symbol='+encodeURIComponent(tvTicker);}
+if(a.cat!=='Obbligazioni'&&detailIsMarketAsset(a)&&a.symbol&&/^[A-Za-z0-9.^=\-]{1,22}$/.test(a.symbol)){external.href='https://it.finance.yahoo.com/quote/'+encodeURIComponent(a.symbol)+'/chart/';external.textContent='Apri grafico Yahoo Finance ↗'}else if(a.cat==='Obbligazioni'&&a.isin){external.href='https://www.borsaitaliana.it/borsa/obbligazioni/mot/btp/scheda/'+encodeURIComponent(a.isin)+'-MOTX.html';external.textContent='Consulta strumento su Borsa Italiana ↗'}else{external.classList.add('hidden')}if(detailLiveInterval){clearInterval(detailLiveInterval);detailLiveInterval=null}detailBaseSeries=null;assetCustomFrom='';assetCustomTo='';$('assetCustomFrom').value='';$('assetCustomTo').value='';assetDetailPreviousFocus=document.activeElement;assetDetailScrollY=window.scrollY||0;assetDetailId=id;assetDetailRange=(a.cat==='Azioni'||a.cat==='Obbligazioni'?'1mo':'1d');pmcHistoryRange='week';pmcHistoryYear='';$('assetDetailProvider').innerHTML=a.id==='btp'?'<option value="mot">Euronext · MOT</option>':a.cat==='Obbligazioni'?'<option value="yahoo">Yahoo Finance</option>': '<option value="yahoo">Yahoo Finance · dati verificati</option>'+(a.cat==='Crypto'?'<option value="kraken">Kraken · API pubblica</option>':'');$('assetDetailOverlay').classList.remove('hidden');document.body.classList.add('asset-detail-open');$('assetDetailSheet').scrollTop=0;const matPanel=$('assetDetailMaturityEditor');const matAvailable=a.cat==='Obbligazioni'||a.cat==='Risparmio postale'||a.cat==='Conto deposito';matPanel.classList.toggle('hidden',!matAvailable);if(matAvailable){$('assetDetailMaturityDate').value=a.maturityDate||'';$('assetDetailMaturityValue').value=a.maturity??'';$('assetDetailMaturityFeedback').textContent='';} $('assetDetailTitle').textContent=a.name;const detailIcon=$('assetDetailIcon');if(detailIcon)detailIcon.innerHTML=issuerIcon(a.id,a);$('assetDetailSub').textContent=[a.symbol||a.cat,a.isin||'',detailMarketLabel(a),a.cat==='Obbligazioni'?currencyOf(a)+' / 100 nominali':currencyOf(a)].filter(Boolean).join(' · ');$('assetDetailPmc').textContent=a.finholdraWatchOnly?'—':a.cat==='Obbligazioni'?number(a.pmc)+' / 100 '+currencyOf(a):localMoney(a.pmc,currencyOf(a));populateAssetInsight(a);renderAssetPmcHistory(a);$('assetDetailQty').textContent=a.finholdraWatchOnly?'Non posseduto':a.id==='btp'?eur(a.q)+' nominali':a.cat==='Conto deposito'||a.id==='bfp'?'1 posizione':a.cat==='Risparmio postale'&&a.postalKind?eur(a.q)+' nominali':number(a.q)+' quote';$('assetDetailInvested').textContent=a.finholdraWatchOnly?'—':eur(cap(a));$('assetDetailValue').textContent=a.finholdraWatchOnly?'—':eur(val(a));$('assetDetailPrice').textContent=a.cat==='Obbligazioni'?number(a.p)+' / 100 '+currencyOf(a):a.id==='bfp'||a.postalKind?'Non quotato':a.cat==='Conto deposito'?eur(val(a)):localMoney(a.p,currencyOf(a));$('assetDetailPriceLabel').textContent=a.finholdraWatchOnly?'Prezzo di mercato':a.cat==='Conto deposito'?'Valore stimato':a.id==='bfp'||a.postalKind?'Valore nominale':'Ultimo prezzo salvato';$('assetDetailSource').textContent=a.postalKind?'Buono postale non quotato · importo di rimborso da verificare':a.quoteAt?'Ultima quotazione: '+a.quoteAt:'Ultima quotazione: non verificata';detailRangeChange();$('assetDetailClose').focus();loadAssetDetail();detailLiveInterval=setInterval(()=>{if(assetDetailId&&document.visibilityState!=='hidden'&&navigator.onLine)void updateDetailLiveQuote(assetDetailRequest)},60000);}
 function closeAssetDetail(){window.finholdraPreviewAsset=null;if(detailLiveInterval){clearInterval(detailLiveInterval);detailLiveInterval=null}detailBaseSeries=null;assetDetailRequest++;assetDetailId=null;$('assetDetailOverlay').classList.add('hidden');document.body.classList.remove('asset-detail-open');window.scrollTo(0,assetDetailScrollY);assetDetailPoints=[];if(assetDetailPreviousFocus&&assetDetailPreviousFocus.isConnected)assetDetailPreviousFocus.focus()}
 $('assetDetailMaturitySave').onclick=()=>{const a=getDetailAsset();if(!a||!['Obbligazioni','Risparmio postale','Conto deposito'].includes(a.cat))return;const d=$('assetDetailMaturityDate').value;const v=$('assetDetailMaturityValue').value.trim();if(d&&!/^\d{4}-\d{2}-\d{2}$/.test(d)){alert('Data di scadenza non valida.');return}if(v&&(!Number.isFinite(Number(v))||Number(v)<0)){alert('Valore previsto non valido.');return}a.maturityDate=d;a.maturity=v?Number(v):null;save();trackSnapshot();render();if(editing)renderEditor();$('assetDetailMaturityFeedback').textContent='Scadenza salvata nel portafoglio.';};
 $('assetDetailClose').onclick=closeAssetDetail;$('assetDetailProvider').onchange=()=>loadAssetDetail();
@@ -4666,20 +4842,37 @@ async function fetchDetailHistory(a,range){
  const duration=custom?(custom.to-custom.from)/86400000:0;
  const settings=custom?{interval:duration>750?'1wk':'1d'}:DETAIL_RANGES[range],key=a.symbol+'|'+range+'|'+(custom?assetCustomFrom+'|'+assetCustomTo:'')+'|'+currencyOf(a),previous=detailCache.get(key);
  if(previous&&Date.now()-previous.at<(range==='1d'?60000:240000))return previous.data;
+ // If a longer verified daily range was already loaded, reuse it instantly for 3M/1M.
+ if(!custom&&['1mo','3mo','6mo'].includes(range)){
+  const months={ '1mo':31,'3mo':93,'6mo':183 },start=Date.now()-months[range]*86400000;
+  const longer=range==='1mo'?['3mo','6mo','1y','max']:range==='3mo'?['6mo','1y','max']:['1y','max'];
+  for(const span of longer){const cached=detailCache.get(a.symbol+'|'+span+'||'+currencyOf(a));
+   if(cached&&Date.now()-cached.at<3600000&&cached.data?.points?.length>=5){
+    const pts=cached.data.points.filter(x=>x.t>=start);
+    if(pts.length>=5&&pts[0].t<=start+10*86400000)return {...cached.data,points:pts,source:cached.data.source+' · periodo filtrato'};
+   }
+  }
+ }
  const uri='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(a.symbol)+'?'+(custom?'period1='+Math.floor(custom.from/1000)+'&period2='+Math.floor((custom.to+1000)/1000):'range='+settings.range)+'&interval='+settings.interval+'&includePrePost=false';
  const sources=[['server','/.netlify/functions/history?symbol='+encodeURIComponent(a.symbol)+'&range='+encodeURIComponent(range)+'&currency='+encodeURIComponent(currencyOf(a))],['Yahoo',uri],...relayUrls(uri).map((url,i)=>['proxy'+i,url])];
  const failures=[];
- for(const [source,url] of sources){
-  try{
-   const parsed=JSON.parse(await readUrl(url,6000));const data=parseHistoryPayload(parsed,a.symbol);
-   // v6.8: never present monthly candles for 1G or 1S.
-   const cutoff=range==='1d'?Date.now()-25*3600000:range==='5d'?Date.now()-7*86400000:null;
-   if(custom)data.points=customDetailCut(data.points);
-   if(cutoff!==null)data.points=data.points.filter(p=>p.t>=cutoff);
-   if(!data.points.length)throw Error('Nessuna rilevazione nel periodo richiesto');
-   data.source+=' · '+(source==='server'?'server':'web');detailCache.set(key,{at:Date.now(),data});return data;
-  }catch(e){failures.push(source+': '+(e.message||'errore'))}
- }
+ // Fetch sources concurrently instead of waiting up to 6 seconds for each
+ // unsuccessful endpoint. Only the first *validated* history is accepted.
+ try{
+  const contenders=sources.map(async ([source,url])=>{
+   try{
+    const parsed=JSON.parse(await readUrl(url,source==='server'?5600:6100));
+    const data=parseHistoryPayload(parsed,a.symbol);
+    const cutoff=range==='1d'?Date.now()-25*3600000:range==='5d'?Date.now()-7*86400000:null;
+    if(custom)data.points=customDetailCut(data.points);
+    if(cutoff!==null)data.points=data.points.filter(p=>p.t>=cutoff);
+    if(!data.points.length)throw Error('Nessuna rilevazione nel periodo richiesto');
+    data.source+=' · '+(source==='server'?'server':'web');return data;
+   }catch(e){failures.push(source+': '+(e.message||'errore'));throw e}
+  });
+  const data=await Promise.any(contenders);
+  detailCache.set(key,{at:Date.now(),data});return data;
+ }catch(_){/* Fall through to real, locally observed quote history. */}
  // Use actual locally observed quotes in the selected period, not fictional intraday candles.
  const observed=localDetailSeries(a),lookback={'1d':1.04,'5d':7,'1mo':31,'3mo':93,'6mo':183,'1y':366,'max':3650}[range]||31;
  const points=custom?customDetailCut(observed):observed.filter(pt=>pt.t>=Date.now()-lookback*86400000);
@@ -5026,11 +5219,12 @@ document.getElementById('allocationDetail')?.addEventListener('keydown',e=>{cons
 
 $('assetList').addEventListener('click',e=>{const btn=e.target.closest('[data-buy-id]');if(!btn)return;$('buyAsset').value=btn.dataset.buyId;buyPriceEdited=false;$('buyVerify').checked=false;$('buyStatus').classList.add('hidden');syncBuyPrice();$('purchaseSection').scrollIntoView({behavior:'smooth',block:'start'});});
 $('buyCommit').onclick=()=>{
- const t=computeBuy(),purchaseDate=validEntryDate('buyDate');
- if(!t||!$('buyVerify').checked||!purchaseDate){alert('Verifica data, importo e prezzo effettivo. La data non può essere futura.');return}
+ const displayedDate=String($('buyDate')?.value||''),t=computeBuy(),purchaseDate=validEntryDate('buyDate');
+ if(!t||!$('buyVerify').checked||!purchaseDate||displayedDate!==purchaseDate){alert('Verifica data, importo e prezzo effettivo. La data non può essere futura.');return}
  const latest=state.assets.find(a=>a.id===t.a.id);if(!latest)return;
  const oldCapital=cap(latest),newQty=Number(latest.q)+t.count;
  if(!Number.isFinite(newQty)||newQty<=0){alert('Quantità non valida.');return}
+ if($('buyDate').value!==purchaseDate){alert('La data è cambiata durante la registrazione. Verificala e conferma nuovamente.');return;}
  const now=Date.now(),recorded={id:now+'-'+latest.id+'-'+Math.random().toString(36).slice(2,8),kind:'buy',date:purchaseDate,asset:latest.id,assetName:latest.name,cat:latest.cat,spent:t.spent,quantity:t.count,price:t.price,fxExecution:assetFx(latest),recordedAt:new Date(now).toISOString()};
  const nextAssets=state.assets.map(a=>a.id===latest.id?{...a,q:newQty,closed:false,pmc:t.newPmc,costEur:oldCapital+t.spent}:a);
  const status=$('buyStatus');status.classList.remove('hidden');
@@ -5044,7 +5238,7 @@ $('buyCommit').onclick=()=>{
  finally{if($('buyVerify').checked)renderBuy()}
 };
 function syncHistoryRangeButtons(){document.querySelectorAll('#historyRanges button[data-range]').forEach(b=>{const active=b.dataset.range===historyRange;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))})}
-$('historyRanges').onclick=e=>{const b=e.target.closest('button[data-range]');if(!b)return;historyRange=b.dataset.range;syncHistoryRangeButtons();renderHistory()};
+$('historyRanges').onclick=e=>{const b=e.target.closest('button[data-range]');if(!b)return;historyRange=b.dataset.range;try{prefs.historyDefault=historyRange;savePreferences();}catch(_){}syncHistoryRangeButtons();renderHistory()};
 refreshBuyOptions();
 
 
@@ -5267,7 +5461,7 @@ const isinFormat=s=>/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(s);
 function isinChecksum(isin){const digits=isin.toUpperCase().split('').map(c=>/[A-Z]/.test(c)?String(c.charCodeAt(0)-55):c).join('');let sum=0,twice=false;for(let i=digits.length-1;i>=0;i--){let n=Number(digits[i]);if(twice){n*=2;if(n>9)n-=9}sum+=n;twice=!twice}return sum%10===0}
 // Search multiple variants so "Amazon" also tries 1AMZN.MI; all candidates must be verified after selection.
 function venueRank(r){const sym=String(r.symbol||'').toUpperCase(),ex=String((r.exchDisp||'')+' '+(r.exchange||'')).toUpperCase();
- if(sym.endsWith('.MI')||sym.endsWith('.BIT')||/MILAN|MILANO|BORSA ITALIANA|MOT|ETFP|GEM/.test(ex))return 0;
+ if(sym.endsWith('.MI')||sym.endsWith('.BIT')||/MILAN|MILANO|BORSA ITALIANA|MOT|ETFP|GEM|EXM|EGM|IDEM|MTAA|MOTX|EXGM|ETFX|XDMI/.test(ex))return 0;
  if(sym.endsWith('.DE')||/XETRA|GERMAN|FRANKFURT|DEUTSCHE/.test(ex))return 1;
  if(/NASDAQ|NYSE|NMS|NYQ|USA|AMERICAN|CME|CBOT|COMEX|NYMEX/.test(ex)||/^[A-Z]{1,5}$/.test(sym))return 2;
  return 3;
@@ -5325,9 +5519,13 @@ async function yahooSearchTerm(q){
    return rows;
   }catch(e){errors.push(e.message);throw e}
  });
- const completed=await Promise.allSettled(searches);
+ // Prioritize the app's backend (already merges Yahoo and the symbol directory);
+ // on server failure the first working external directory wins.
  const unique=new Map();
- for(const r of completed){if(r.status!=='fulfilled')continue;for(const item of r.value){const id=String(item.symbol||'').toUpperCase();if(id&&!unique.has(id))unique.set(id,item);}}
+ try{
+  const first=await Promise.any(searches);
+  for(const item of first){const id=String(item.symbol||'').toUpperCase();if(id&&!unique.has(id))unique.set(id,item)}
+ }catch(_){/* All services rejected the query. */}
  const rows=[...unique.values()];
  if(rows.length){FIN_SEARCH_CACHE.set(key,{at:Date.now(),rows});window.__invesquoSearchIssue='';return rows;}
  window.__invesquoSearchIssue='Servizi online non disponibili oppure nessuna corrispondenza: '+errors.slice(-2).join('; ');
@@ -5483,7 +5681,7 @@ function exchangeFlag(r){
  const suffix=sym.includes('.')?sym.split('.').pop():'';
  const flags={MI:'🇮🇹',BIT:'🇮🇹',DE:'🇩🇪',F:'🇩🇪',PA:'🇫🇷',L:'🇬🇧',AS:'🇳🇱',SW:'🇨🇭',TO:'🇨🇦',V:'🇨🇦',AX:'🇦🇺',HK:'🇭🇰',T:'🇯🇵',SA:'🇧🇷',MC:'🇪🇸',BR:'🇧🇪',ST:'🇸🇪',CO:'🇩🇰',OL:'🇳🇴',HE:'🇫🇮',VI:'🇦🇹',IR:'🇮🇪',LS:'🇵🇹'};
  if(flags[suffix])return flags[suffix];
- if(/MILAN|MILANO|BORSA ITALIANA|MOT|ETFP|GEM/.test(ex))return '🇮🇹';
+ if(/MILAN|MILANO|BORSA ITALIANA|MOT|ETFP|GEM|EXM|EGM|IDEM|MTAA|MOTX|EXGM|ETFX|XDMI/.test(ex))return '🇮🇹';
  if(/XETRA|FRANKFURT|GERMAN/.test(ex))return '🇩🇪';
  if(/NASDAQ|NYSE|NMS|NYQ|USA|AMERICAN|NEW YORK|CME|CBOT|COMEX|NYMEX/.test(ex))return '🇺🇸';
  if(/LONDON|LSE/.test(ex))return '🇬🇧';
@@ -6813,8 +7011,12 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
  <div class="actions"><button id="fh101CloudUpload" class="btn" type="button" disabled>Salva nel cloud</button><button id="fh101CloudDownload" class="btn" type="button" disabled>Carica dal cloud</button></div>
  <div id="fh101CloudStatus" class="foot" role="status" aria-live="polite">Configura il progetto Supabase una sola volta per attivare l'accesso.</div>
  <p class="foot">Backup privato per account. Prima di sostituire i dati di questo dispositivo, esporta un JSON.</p>`;
- backup.appendChild(syncCard);
- const json=document.getElementById('jsonBackupSettings');if(json)backup.appendChild(json);
+ // The live Google Drive panel belongs at the very top, not in a collapsed macro.
+ // Keep its original id: cloud-drive.js attaches all handlers to this exact node.
+ syncCard.classList.add('fh10946-drive-top');
+ marker.insertAdjacentElement('beforebegin',syncCard);
+ const json=document.getElementById('jsonBackupSettings');if(json){json.classList.add('fh10946-json-top');syncCard.insertAdjacentElement('afterend',json);}
+
  const local=document.getElementById('switchLocalAccount')?.closest('section.card');if(local)backup.appendChild(local);
  moveGroups(['Backup programmato e cartella','Azzeramento dati e sicurezza'],backup);
  const notice=document.getElementById('settingsSaved');if(notice)backup.appendChild(notice);
@@ -7843,7 +8045,7 @@ function ensureLens(){
   if(grid.childElementCount===0){
     grid.innerHTML=`
       <div class="fh70-card" id="fh70LensTrend"><div class="fh70-card-title"><span class="fh70-chip">🔎</span><span>Andamento</span></div><div class="fh70-card-value">—</div><div class="fh70-card-sub">—</div></div>
-      <div class="fh70-card" id="fh70LensBuy"><div class="fh70-card-title"><span class="fh70-chip">📉</span><span>Ultimo acquisto vs minimo</span></div><div class="fh70-card-value">—</div><div class="fh70-card-sub">—</div></div>
+      <div class="fh70-card" id="fh70LensBuy"><div class="fh70-card-title"><span class="fh70-chip">📉</span><span>Ultimo acquisto vs minimo · 6 mesi</span></div><div class="fh70-card-value">—</div><div class="fh70-card-sub">—</div></div>
       <div class="fh70-card" id="fh10612LensPmcMin"><div class="fh70-card-title"><span class="fh70-chip">🎯</span><span>PMC vs minimo · 6 mesi</span></div><div class="fh70-card-value">—</div><div class="fh70-card-sub">PMC confrontato con il minimo documentato dei 6 mesi prima dell’ultimo acquisto.</div></div>
       <div class="fh70-card" id="fh10937LensBuyNow"><div class="fh70-card-title"><span class="fh70-chip">💹</span><span>Ultimo acquisto vs quotazione attuale</span></div><div class="fh70-card-value">—</div><div class="fh70-card-sub">Differenza tra prezzo eseguito e ultima quotazione verificata.</div></div>
       <div class="fh70-card" id="fh10937LensPmcNow"><div class="fh70-card-title"><span class="fh70-chip">🎯</span><span>PMC vs quotazione attuale</span></div><div class="fh70-card-value">—</div><div class="fh70-card-sub">Differenza tra prezzo medio e ultima quotazione verificata.</div></div>
@@ -7885,8 +8087,9 @@ function ensureLens(){
          const kind=dist<0?'good':dist<=3?'neutral':dist<=10?'orange':'bad';
          val.classList.add('fh70-'+kind);pmcMinCard.dataset.fh111Signal=kind;
          const face=dist<0?'☺':dist<=3?'◉':dist<=10?'◔':'☹';
-         val.textContent=face+' '+(dist>0?'+':'')+fmt(dist,2)+'%';
-         sub.textContent='Tuo PMC '+fmt(pmc,3)+' € · minimo verificato '+fmt(observedLow,3)+' €';
+         const position=dist<0?'Sotto il minimo':Math.abs(dist)<0.005?'Al minimo':'Sopra il minimo';
+         val.textContent=face+' '+position+' · '+(dist>0?'+':'')+fmt(dist,2)+'%';
+         sub.textContent='Tuo PMC '+fmt(pmc,3)+' € · minimo verificato dei 6 mesi precedenti '+fmt(observedLow,3)+' €';
        }else{val.textContent='n.d.';delete pmcMinCard.dataset.fh111Signal;sub.textContent='Servono PMC e minimo storico verificato.';}
      }
     // Latest quote versus documented execution/PMC; keep the security currency unchanged.
@@ -7905,8 +8108,12 @@ function ensureLens(){
       if(Number.isFinite(quote)&&quote>0&&Number.isFinite(basis)&&basis>0){
         const delta=quote-basis,percent=100*delta/basis,green=delta>=0;
         val.classList.add(green?'fh70-good':'fh70-bad');
-        val.textContent=(percent>0?'+':'')+fmt(percent,2)+'% · '+(delta>0?'+':'')+fmt(delta,3)+' '+ccy;
-        sub.textContent='Quotazione '+fmt(quote,3)+' '+ccy+' · '+label+' '+fmt(basis,3)+' '+ccy+(id==='fh10937LensBuyNow'?' · '+lastBuy.date:'');
+        // Esporre un confronto leggibile come le schede "vs minimo", mantenendo
+        // invariati verso e denominatore della variazione: (quotazione/base - 1).
+        const relativeTo=id==='fh10937LensBuyNow'?'acquisto':'PMC';
+        const position=Math.abs(percent)<0.005?'Alla pari':green?'Quotazione sopra '+(relativeTo==='PMC'?'il PMC':"l’acquisto"):'Quotazione sotto '+(relativeTo==='PMC'?'il PMC':"l’acquisto");
+        val.textContent=(green?'◉ ':'◔ ')+position+' · '+(percent>0?'+':'')+fmt(percent,2)+'%';
+        sub.textContent='Quotazione attuale '+fmt(quote,3)+' '+ccy+' · '+(relativeTo==='PMC'?'tuo PMC':'ultimo acquisto')+' '+fmt(basis,3)+' '+ccy+(id==='fh10937LensBuyNow'?' il '+lastBuy.date:'')+' · scarto '+(delta>0?'+':'')+fmt(delta,3)+' '+ccy;
       }else {val.textContent='n.d.';sub.textContent='Servono una quotazione e '+label+' documentati nella stessa valuta.';}
     }
     const paintTrack=(host,val)=>{ if(!host) return; const track=$('.fh70-track',host); if(!track) return; track.style.setProperty('--fill', (Number.isFinite(val)?Math.max(3,Math.min(97,val)):50)+'%'); };
@@ -8317,7 +8524,7 @@ header.top .new-header-brand #finholdraLogo{
   busy=true;btn.disabled=true;results.innerHTML='';feedback.textContent='Ricerca nei mercati…';
   try{
    matches=await searchYahooQuotes(term);
-   results.innerHTML=matches.map((a,i)=>'<button class="search-row" type="button" data-radar-quote="'+i+'"><span class="asset-search-main">'+searchIssuerLogo(a)+'<strong>'+formatSearchResult(a)+'</strong></span><small>'+svgEscape([a.exchDisp||a.exchange||'Mercato da verificare',a.currency||'Valuta non disponibile'].join(' · '))+'</small></button>').join('');
+   results.innerHTML=matches.map((a,i)=>'<button class="search-row" type="button" data-radar-quote="'+i+'"><span class="asset-search-main">'+searchIssuerLogo(a)+'<strong>'+formatSearchResult(a)+'</strong></span><small><span class="search-exchange-flag">'+exchangeFlag(a)+'</span> '+svgEscape([a.exchDisp||a.exchange||'Mercato da verificare',a.currency||'Valuta non disponibile'].join(' · '))+'</small></button>').join('');
    feedback.textContent=matches.length?'Seleziona il titolo per aprire il grafico. Nessun acquisto richiesto.':'Nessun risultato online. Prova ticker, ISIN o nome diverso; controlla la connessione.';
   }catch(e){matches=[];feedback.textContent='Ricerca non disponibile. Controlla la connessione o riprova.'}
   finally{busy=false;btn.disabled=false}
@@ -8340,12 +8547,4 @@ header.top .new-header-brand #finholdraLogo{
 #radarView #mrRows .mr-row[data-radar-chart]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media(max-width:600px){#radarView #mrModes{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}#radarView #mrModes>button{min-width:0;width:100%;min-height:42px}}
 </style>
-<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.40"><link rel="stylesheet" href="./finholdra-themes-extended.css?v=10.9.40"><link rel="stylesheet" href="./home-unified-charts.css?v=10.9.40"><script src="./home-unified-charts.js?v=10.9.40"></script><script>
-/* Beta 10.9.44: scorciatoia al backup Drive nelle impostazioni. */
-document.getElementById('fhDriveQuickBackup')?.addEventListener('click',function(){
- const save=document.getElementById('fhCloudSave');
- if(save&&!save.disabled){save.click();return;}
- const section=document.getElementById('finCloudSettings');
- if(section){section.scrollIntoView({behavior:'smooth',block:'start'});const connect=document.getElementById('fhCloudConnect');if(connect){setTimeout(()=>{try{connect.focus({preventScroll:true})}catch(e){connect.focus()}},330)}}
-});
-</script></body></html>
+<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.40"><link rel="stylesheet" href="./finholdra-themes-extended.css?v=10.9.40"><link rel="stylesheet" href="./home-unified-charts.css?v=10.9.51"><script src="./home-unified-charts.js?v=10.9.51"></script><link rel="stylesheet" href="./academy-behavioral.css?v=10.9.48"><script src="./academy-behavioral.js?v=10.9.48"></script></body></html>

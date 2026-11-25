@@ -1,3 +1,42 @@
+## Beta 10.9.51
+- Impostazioni: opzione per nascondere Finn nell’header lasciandolo attivo nei giochi e nelle altre sezioni.
+- Finn Store: nuovo negozio gratuito in Impostazioni con costumi, gadget, anteprima ed equipaggiamento persistente. Crediti virtuali illimitati e nessun acquisto reale.
+- Le personalizzazioni seguono le espressioni della mascotte e sono incluse nelle preferenze salvate e nei backup JSON.
+
+## Beta 10.9.50
+- Grafici dei singoli titoli: recupero storico concorrente anziché sequenziale, endpoint Netlify per serie Yahoo, collegamento esterno TradingView e cache dei periodi già recuperati (specialmente 3M).
+- Motore di ricerca: primo risultato valido disponibile senza attendere tutti i proxy, con priorità alle quotazioni italiane e mantenendo le borse estere.
+- Radar: bandierine dei mercati accanto ai risultati; EXM, EGM, GEM, MOT, ETFplus e IDEM riconosciuti nella preferenza Italia quando disponibili nell'identificativo di borsa.
+- Academy: nuovo capitolo dedicato alle Borse italiane, ISIN/ticker, rischio di scegliere il mercato errato, fonti dati e limiti delle API TradingView.
+
+## Beta 10.9.49
+- Home, grafico Patrimonio e valore: riepilogo ordinato Valore → Differenza → Capitale, con font e dimensioni coerenti anche in schermo intero; la differenza mantiene il colore verde/rosso.
+- Nessuna modifica ai calcoli, ai dati o ai movimenti.
+
+## Beta 10.9.48
+- Sotto la lente: le schede PMC vs minimo, ultimo acquisto vs quotazione e PMC vs quotazione adottano lo stesso linguaggio esplicito "sopra/sotto" e la percentuale visibile già utilizzata in Ultimo acquisto vs minimo.
+- Ultimo acquisto vs minimo: titolo precisato in "6 mesi".
+- Nessuna modifica ai dati o ai calcoli; le differenze in euro restano nelle spiegazioni.
+
+## Beta 10.9.47
+- Academy: nuova sezione Finanza comportamentale con 12 percorsi di dialogo con Mira su orizzonte, volatilità, paura, FOMO, avversione alle perdite e disciplina.
+- Mira: risposte contestualizzate sul rendimento corrente e sull’età documentata del portafoglio quando disponibili, senza automatismi di acquisto o vendita.
+- Academy: link agli studi di Kahneman e Tversky, Benartzi e Thaler, Barber e Odean, con disclaimer discreto a fondo pagina.
+- Radar: ritratto Nexus meno ingrandito, inquadratura più simile a Mira.
+
+## Beta 10.9.46
+
+- Impostazioni: rimosso il collegamento rapido Google Drive non funzionante. L’intero pannello Google Drive (salva, ripristina, backup automatici) e il backup JSON sono ora nella parte alta delle Impostazioni, con i pulsanti originali e relativi eventi.
+- Registrazione acquisti: la verifica della scrittura conferma non solo le quote, ma anche la data effettiva selezionata, il prezzo, la quantità e l’importo della transazione salvata; in caso di discrepanza l’operazione è annullata.
+- Storico: categoria, scheda selezionata e periodo di visualizzazione persistono nel profilo e sono inclusi nel successivo backup JSON/Drive.
+- Backup: invariata la procedura verificata per trasferire posizioni, movimenti, archivio quotazioni e rilevazioni tra dispositivi.
+
+## Beta 10.9.45
+
+- Storico Rendimento e Ultimo giorno: lettura automatica delle quotazioni di chiusura storiche già incluse nel backup e ricostruzione delle giornate in base a quantità e movimenti documentati, anche offline su un altro dispositivo.
+- Backup Google Drive/JSON: incluse nel file anche le rilevazioni ricostruibili dalle chiusure già presenti, senza dover prima lanciare un recupero online.
+- Le rilevazioni osservate mantengono priorità e i titoli senza chiusure o cambi verificabili non ricevono prezzi fittizi.
+
 ## Beta 10.9.44
 
 - Rendering HD: canvas dei giochi a risoluzione Retina fino a 3× (anziché 2×) sugli schermi compatibili.

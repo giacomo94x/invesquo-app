@@ -183,3 +183,23 @@
  #fhHomeCapitalCard .fh115-custom-dates .btn{min-width:70px;width:70px;min-height:36px;height:36px;padding:4px}
  #fhHomeCapitalCard .fh115-plot{padding:9px 5px 4px!important}
 }
+
+/* Beta 10.9.49: consistent type scale and ordering in portfolio chart readout. */
+#fhHomeCapitalCard .fh115-readout,
+#fh115Fullscreen .fh115-modal-readout{display:flex;align-items:center;justify-content:space-between;gap:8px 13px;flex-wrap:wrap}
+#fhHomeCapitalCard .fh115-readout .fh149-date,
+#fh115Fullscreen .fh115-modal-readout .fh149-date{font:500 12px/1.4 Montserrat,system-ui,sans-serif;color:var(--muted);white-space:nowrap}
+#fhHomeCapitalCard .fh115-readout .fh149-metric,
+#fh115Fullscreen .fh115-modal-readout .fh149-metric{font:600 12px/1.4 Montserrat,system-ui,sans-serif;white-space:normal;min-width:0;overflow-wrap:anywhere;display:inline-flex;flex-wrap:wrap;gap:3px 5px;align-items:baseline}
+#fhHomeCapitalCard .fh115-readout .fh149-metric b,
+#fh115Fullscreen .fh115-modal-readout .fh149-metric b{font:inherit;font-weight:700}
+#fhHomeCapitalCard .fh115-readout .fh149-metric span,
+#fh115Fullscreen .fh115-modal-readout .fh149-metric span{font:inherit;font-weight:700}
+#fhHomeCapitalCard .fh115-readout .fh149-positive,
+#fh115Fullscreen .fh115-modal-readout .fh149-positive{color:#54d5ad}
+#fhHomeCapitalCard .fh115-readout .fh149-negative,
+#fh115Fullscreen .fh115-modal-readout .fh149-negative{color:#f78299}
+@media(max-width:560px){
+ #fhHomeCapitalCard .fh115-readout .fh149-date{width:100%}
+ #fhHomeCapitalCard .fh115-readout .fh149-metric{font-size:12px}
+}
