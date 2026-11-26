@@ -932,6 +932,24 @@ body.finn-header-hidden .top .new-header-status{grid-column:2!important}
 .finn-store-equip{font-size:11px;font-weight:800;color:#65dfaf}
 .finn-store-filters{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0 12px}.finn-store-filter{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:30px;padding:7px 12px;font:700 12px Montserrat,system-ui;cursor:pointer}.finn-store-filter.active{border-color:#60dda9;background:color-mix(in srgb,var(--panel2),#21bd85 18%)}
 @media(max-width:420px){.finn-store-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.finn-store-item{padding:10px;min-height:112px}}
+/* Beta 10.9.58 — Finn Store compatto: schede, filtri e paginazione */
+#finnStoreSettings .finn-store-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+#finnStoreSettings .finn-store-tab{border:1px solid var(--border);border-radius:13px;background:var(--panel2);color:var(--text);font:800 13px Montserrat,system-ui;padding:11px 8px;cursor:pointer}
+#finnStoreSettings .finn-store-tab.active{border-color:#5edcab;box-shadow:inset 0 0 0 1px #5edcab;background:color-mix(in srgb,var(--panel2),#21bd85 17%)}
+#finnStoreSettings .finn-store-pane[hidden]{display:none!important}
+#finnStoreSettings .finn-store-filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:5px;margin:5px 0 9px}
+#finnStoreSettings .finn-store-filter{white-space:nowrap;flex-shrink:0}
+#finnStoreSettings .finn-store-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:8px 0 10px}
+#finnStoreSettings .finn-store-item{align-items:center;text-align:center;min-height:95px;padding:9px 5px;gap:4px;border-radius:12px;overflow-wrap:anywhere}
+#finnStoreSettings .finn-store-item strong{font-size:11px;line-height:1.25;max-width:100%}
+#finnStoreSettings .finn-store-emoji{font-size:23px}
+#finnStoreSettings .finn-store-equip{font-size:9px}
+#finnStoreSettings .finn-store-pages{display:flex;justify-content:center;align-items:center;gap:12px;margin:6px 0 12px;color:var(--muted);font-size:12px}
+#finnStoreSettings .finn-store-pages button{border:1px solid var(--border);border-radius:10px;background:var(--panel2);color:var(--text);font-size:22px;cursor:pointer;min-height:36px;min-width:44px}
+#finnStoreSettings .finn-store-pages button:disabled{opacity:.4;cursor:default}
+@media(max-width:600px){#finnStoreSettings .finn-store-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#finnStoreSettings .finn-store-item{min-height:91px}#finnStoreSettings .finn-store-item strong{font-size:10px}}
+@media(max-width:360px){#finnStoreSettings .finn-store-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style><style>
 .wealth-backfill-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 13px}.wealth-backfill-row .sub{font-size:.79rem;flex:1}
 .pac-modal{max-width:680px}.pac-event{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #32455e;padding:8px 0;align-items:center}.pac-event small{display:block;color:#a7b9d0}.pac-event .btn{flex-shrink:0}
@@ -2198,7 +2216,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.57</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.58</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -2229,8 +2247,10 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <section class="card settings-card finn-store-card" id="finnStoreSettings"><div class="section-head"><h2>🛍️ Finn</h2><span class="sub">Costumi e gadget</span></div>
 <p class="hint">Personalizza Finn. Tutti gli oggetti sono sbloccabili gratis. Nessun acquisto reale e nessun credito scalato.</p>
 <div class="finn-store-banner"><div class="finn-store-preview"><div class="finn-store-preview-art" id="finnStorePreview" aria-label="Anteprima Finn"></div><div><strong>Il tuo Finn</strong><div class="sub" id="finnStoreEquipped">Look classico</div></div></div><strong>🪙 Crediti: ∞</strong></div>
-<h3>Costumi</h3><div class="finn-store-filters" id="finnStoreCostumeFilters" role="group" aria-label="Filtra costumi"></div><div class="finn-store-grid" id="finnStoreCostumes"></div><h3>Gadget</h3><div class="finn-store-filters" id="finnStoreGadgetFilters" role="group" aria-label="Filtra gadget"></div><div class="finn-store-grid" id="finnStoreGadgets"></div>
-<p class="hint">Sblocca gratis con un tocco, poi equipaggia l’oggetto. Un costume e un gadget alla volta. Le scelte sono incluse nel backup JSON.</p></section>
+<div class="finn-store-tabs" role="group" aria-label="Scegli la categoria dello Store"><button class="finn-store-tab active" type="button" data-finn-store-tab="costume" aria-pressed="true">🎩 Costumi · 32</button><button class="finn-store-tab" type="button" data-finn-store-tab="gadget" aria-pressed="false">🎧 Gadget · 32</button></div>
+<div class="finn-store-pane" data-finn-store-pane="costume"><div class="finn-store-filters" id="finnStoreCostumeFilters" role="group" aria-label="Filtra costumi"></div><div class="finn-store-grid" id="finnStoreCostumes"></div><div class="finn-store-pages" id="finnStoreCostumePages"></div></div>
+<div class="finn-store-pane" data-finn-store-pane="gadget" hidden><div class="finn-store-filters" id="finnStoreGadgetFilters" role="group" aria-label="Filtra gadget"></div><div class="finn-store-grid" id="finnStoreGadgets"></div><div class="finn-store-pages" id="finnStoreGadgetPages"></div></div>
+<p class="hint">Tocca un oggetto una sola volta per sbloccarlo gratis ed equipaggiarlo. La scelta viene conservata nel backup JSON.</p></section>
 <section class="card settings-card" id="settingsSection">
 <div class="section-head"><h2>Preferenze</h2><span class="sub">Le modifiche si salvano automaticamente</span></div>
 <details class="setting-group" open=""><summary>Aspetto e colori</summary><div class="setting-field"><label for="finholdraLanguageSetting">Lingua / Language</label><select id="finholdraLanguageSetting"><option value="it">Italiano</option><option value="en">English</option></select></div>
@@ -3923,30 +3943,48 @@ function finnStoreDecorations(){
 }
 const FINN_STORE_GROUPS={costume:['Tutti','Base','Sport','Stagioni','Mestieri','Fantasy','Eventi'],gadget:['Tutti','Base','Accessori','Oggetti','Effetti','Tecnologia','Eventi']};
 let finnStoreCurrentGroup={costume:'Tutti',gadget:'Tutti'};
+let finnStoreTab='costume';
+const FINN_STORE_PAGE_SIZE=8;
+let finnStorePage={costume:0,gadget:0};
 function finnStoreUnlocked(kind,id){
  return id==='none'||(kind==='costume'&&id===prefs.finnStoreCostume)||(kind==='gadget'&&id===prefs.finnStoreGadget)||!!(prefs.finnStoreUnlocked?.[kind]?.includes(id));
 }
 function renderFinnStore(){
- const categories=(kind)=>FINN_STORE_GROUPS[kind].map(g=>`<button type="button" class="finn-store-filter${finnStoreCurrentGroup[kind]===g?' active':''}" data-finn-store-filter="${kind}" data-finn-store-group="${g}" aria-pressed="${finnStoreCurrentGroup[kind]===g}">${g}</button>`).join('');
- const make=(kind,items,selected)=>{
-  const group=finnStoreCurrentGroup[kind];
-  return items.filter(item=>group==='Tutti'||item.group===group).map(item=>{
-   const unlocked=finnStoreUnlocked(kind,item.id),equipped=item.id===selected;
-   return `<button type="button" class="finn-store-item" data-finn-store-kind="${kind}" data-finn-store-id="${item.id}" aria-pressed="${equipped}"><span class="finn-store-emoji">${item.emoji}</span><strong>${item.name}</strong><span class="finn-store-price">${item.group} · Gratis</span><span class="finn-store-equip">${equipped?'✓ Equipaggiato':unlocked?'Equipaggia':'🔓 Sblocca gratis'}</span></button>`;
-  }).join('');
- };
+ const categories=kind=>FINN_STORE_GROUPS[kind].map(g=>`<button type="button" class="finn-store-filter${finnStoreCurrentGroup[kind]===g?' active':''}" data-finn-store-filter="${kind}" data-finn-store-group="${g}" aria-pressed="${finnStoreCurrentGroup[kind]===g}">${g}</button>`).join('');
  const costumes=document.getElementById('finnStoreCostumes'),gadgets=document.getElementById('finnStoreGadgets');
  if(!costumes||!gadgets)return;
- const cFilter=document.getElementById('finnStoreCostumeFilters'),gFilter=document.getElementById('finnStoreGadgetFilters');
- if(cFilter)cFilter.innerHTML=categories('costume');if(gFilter)gFilter.innerHTML=categories('gadget');
- costumes.innerHTML=make('costume',FINN_STORE_COSTUMES,prefs.finnStoreCostume||'none');
- gadgets.innerHTML=make('gadget',FINN_STORE_GADGETS,prefs.finnStoreGadget||'none');
+ for(const tab of document.querySelectorAll('#finnStoreSettings [data-finn-store-tab]')){
+  const active=tab.dataset.finnStoreTab===finnStoreTab;
+  tab.classList.toggle('active',active);tab.setAttribute('aria-pressed',String(active));
+ }
+ for(const pane of document.querySelectorAll('#finnStoreSettings [data-finn-store-pane]'))pane.hidden=pane.dataset.finnStorePane!==finnStoreTab;
+ for(const [kind,items,selected,gridId,filterId,pagesId] of [
+  ['costume',FINN_STORE_COSTUMES,prefs.finnStoreCostume||'none','finnStoreCostumes','finnStoreCostumeFilters','finnStoreCostumePages'],
+  ['gadget',FINN_STORE_GADGETS,prefs.finnStoreGadget||'none','finnStoreGadgets','finnStoreGadgetFilters','finnStoreGadgetPages']]){
+  const group=finnStoreCurrentGroup[kind];
+  const matching=items.filter(item=>group==='Tutti'||item.group===group);
+  const pages=Math.max(1,Math.ceil(matching.length/FINN_STORE_PAGE_SIZE));
+  finnStorePage[kind]=Math.max(0,Math.min(finnStorePage[kind],pages-1));
+  const offset=finnStorePage[kind]*FINN_STORE_PAGE_SIZE;
+  const visible=matching.slice(offset,offset+FINN_STORE_PAGE_SIZE);
+  const grid=document.getElementById(gridId),filters=document.getElementById(filterId),pager=document.getElementById(pagesId);
+  if(filters)filters.innerHTML=categories(kind);
+  if(grid)grid.innerHTML=visible.map(item=>{
+   const unlocked=finnStoreUnlocked(kind,item.id),equipped=item.id===selected;
+   return `<button type="button" class="finn-store-item" data-finn-store-kind="${kind}" data-finn-store-id="${item.id}" aria-pressed="${equipped}" aria-label="${item.name}: ${equipped?'equipaggiato':unlocked?'equipaggia':'sblocca ed equipaggia gratis'}"><span class="finn-store-emoji">${item.emoji}</span><strong>${item.name}</strong><span class="finn-store-equip">${equipped?'✓ Indossato':unlocked?'Equipaggia':'🔓 Gratis'}</span></button>`;
+  }).join('');
+  if(pager)pager.innerHTML=pages>1?`<button type="button" data-finn-store-page="${kind}" data-finn-store-step="-1" ${finnStorePage[kind]===0?'disabled':''} aria-label="Pagina precedente">‹</button><span>${finnStorePage[kind]+1} / ${pages} · ${matching.length} oggetti</span><button type="button" data-finn-store-page="${kind}" data-finn-store-step="1" ${finnStorePage[kind]>=pages-1?'disabled':''} aria-label="Pagina successiva">›</button>`:`<span>${matching.length} oggetti</span>`;
+ }
  const preview=document.getElementById('finnStorePreview');if(preview)preview.innerHTML=mascotSVG('positive',prefs.colors?.positive||'#5cdda4',false,'positive');
  const label=document.getElementById('finnStoreEquipped');if(label)label.textContent=[FINN_STORE_COSTUMES.find(i=>i.id===(prefs.finnStoreCostume||'none'))?.name,FINN_STORE_GADGETS.find(i=>i.id===(prefs.finnStoreGadget||'none'))?.name].filter(x=>x&&x!=='Nessuno').join(' · ')||'Nessun oggetto equipaggiato';
 }
 document.getElementById('finnStoreSettings')?.addEventListener('click',e=>{
+ const tab=e.target.closest('button[data-finn-store-tab]');
+ if(tab){finnStoreTab=tab.dataset.finnStoreTab;renderFinnStore();return;}
  const filter=e.target.closest('button[data-finn-store-filter]');
- if(filter){finnStoreCurrentGroup[filter.dataset.finnStoreFilter]=filter.dataset.finnStoreGroup;renderFinnStore();return;}
+ if(filter){const kind=filter.dataset.finnStoreFilter;finnStoreCurrentGroup[kind]=filter.dataset.finnStoreGroup;finnStorePage[kind]=0;renderFinnStore();return;}
+ const page=e.target.closest('button[data-finn-store-page]');
+ if(page){const kind=page.dataset.finnStorePage;finnStorePage[kind]=Math.max(0,finnStorePage[kind]+Number(page.dataset.finnStoreStep));renderFinnStore();return;}
  const btn=e.target.closest('button[data-finn-store-kind]');if(!btn)return;
  const kind=btn.dataset.finnStoreKind,id=btn.dataset.finnStoreId;
  if(kind==='costume'&&!FINN_STORE_COSTUMES.some(x=>x.id===id))return;
@@ -3954,9 +3992,9 @@ document.getElementById('finnStoreSettings')?.addEventListener('click',e=>{
  if(!finnStoreUnlocked(kind,id)){
   if(!prefs.finnStoreUnlocked||typeof prefs.finnStoreUnlocked!=='object')prefs.finnStoreUnlocked={costume:[],gadget:[]};
   if(!Array.isArray(prefs.finnStoreUnlocked[kind]))prefs.finnStoreUnlocked[kind]=[];
-  prefs.finnStoreUnlocked[kind].push(id);
-  savePreferences();renderFinnStore();return;
+  if(!prefs.finnStoreUnlocked[kind].includes(id))prefs.finnStoreUnlocked[kind].push(id);
  }
+ // Sblocco ed equipaggiamento insieme: un solo tocco per entrambi.
  prefs[kind==='costume'?'finnStoreCostume':'finnStoreGadget']=id;
  savePreferences();renderFinnStore();mascotPlayRender();finnUpdateFigure();
 });
@@ -6554,7 +6592,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.57';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.58';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -7256,12 +7294,12 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
  <div class="actions"><button id="fh101CloudUpload" class="btn" type="button" disabled>Salva nel cloud</button><button id="fh101CloudDownload" class="btn" type="button" disabled>Carica dal cloud</button></div>
  <div id="fh101CloudStatus" class="foot" role="status" aria-live="polite">Configura il progetto Supabase una sola volta per attivare l'accesso.</div>
  <p class="foot">Backup privato per account. Prima di sostituire i dati di questo dispositivo, esporta un JSON.</p>`;
- // Beta 10.9.57: one Google Drive panel, exclusively inside Backup e sicurezza.
+ // Beta 10.9.58: one Google Drive panel, exclusively inside Backup e sicurezza.
  // Preserve its id and all listeners wired by cloud-drive.js.
  syncCard.classList.remove('fh10946-drive-top');
  backup.appendChild(syncCard);
  const json=document.getElementById('jsonBackupSettings');if(json){json.classList.remove('fh10946-json-top');backup.appendChild(json);}
- // Beta 10.9.57: Store stays only inside Giochi di Finn, with its state and event listeners preserved.
+ // Beta 10.9.58: Store stays only inside Giochi di Finn, with its state and event listeners preserved.
  const storeTop=document.getElementById('finnStoreSettings');if(storeTop){storeTop.classList.remove('fh10952-store-top');game.prepend(storeTop);storeTop.hidden=false;storeTop.classList.remove('hidden');}
 
  const local=document.getElementById('switchLocalAccount')?.closest('section.card');if(local)backup.appendChild(local);

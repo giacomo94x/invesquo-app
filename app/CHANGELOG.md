@@ -1,3 +1,7 @@
+## Beta 10.9.58
+- Finn Store: costumi e gadget in due schede compatte, filtri scorrevoli e pagine di 8 oggetti, senza lunghi elenchi verticali.
+- Un solo tocco sblocca gratuitamente ed equipaggia subito l’oggetto; sblocchi precedenti, anteprima e salvataggio profilo restano invariati.
+
 ## Beta 10.9.57
 - Grafico Patrimonio e valore in modalità Ingrandisci: ridotti i marcatori delle rilevazioni, le icone € degli acquisti e i contrassegni A/B, senza modificare la visualizzazione normale o i calcoli.
 
