@@ -1,3 +1,7 @@
+## Beta 10.9.83
+- Grafici intraday/futures: ripristinato il tratteggio iniziale tra chiusura precedente e prima quotazione disponibile della seduta. Resta un raccordo visivo separato, non una candela artificiale.
+- Nessuna modifica ai dati Yahoo, al tratteggio finale verso l’ultima quotazione o al tema del pannello dettagli.
+
 ## Beta 10.9.82
 - Dettaglio strumenti: finestra, pulsanti e pannelli seguono la palette del tema scelto (chiaro, moderno, nero e altri), senza essere scuriti dal colore dinamico dei mercati. Sfondo esterno meno opaco, soprattutto nei temi chiari.
 - Futures ES=F: recupero parallelo di candele Yahoo 1d/1m, 5d/1m, 5d/2m e 5d/5m; integrazione dei soli timestamp reali verificati, con precedenza alle serie più granulari.
