@@ -35,11 +35,19 @@ function chartSvg(s,all,large){if(!all.length)return '<p class="hint">Nessuna qu
 function readout(s,all){const p=all.find(p=>p.date===s.selected)||all.at(-1);if(!p)return 'Nessun dato storico';if(s.ab&&s.A&&s.B){const delta=s.B.value-s.A.value,base=s.A.value,pct=base?delta/Math.abs(base)*100:0;return `<span class="fh119-ab-read"><b style="color:#47d8bd">A · ${fmt(s.A.date)}</b> ${euros(s.A.value)} <b style="color:#f9b85b">B · ${fmt(s.B.date)}</b> ${euros(s.B.value)}</span><strong style="color:${delta>=0?'#54d5ad':'#f78299'}">Δ ${delta>0?'+':''}${euros(delta)} (${pct>0?'+':''}${pct.toFixed(2).replace('.',',')}%)</strong>`;}
  if(s.ab&&s.A)return `<span>A: ${fmt(s.A.date)} · ${euros(s.A.value)}</span><strong>Seleziona B</strong>`;
  const delta=p.value-p.capital,pctBase=p.capital?delta/Math.abs(p.capital)*100:null;return `<span class="fh149-date">${fmt(p.date)}${p.provisional?' · indicativo':''}</span><span class="fh149-metric"><b>Valore</b> <span>${euros(p.value)}</span></span><span class="fh149-metric fh149-difference ${delta>=0?'fh149-positive':'fh149-negative'}"><b>Differenza</b> <span>${signedEuros(delta)} · ${signedPct(pctBase)}</span></span><span class="fh149-metric"><b>Capitale</b> <span>${euros(p.capital)}</span></span>`;}
-function dailyExtremes(all){
+function dailyExtremes(all,s){
  // The day gain is calculated by the ledger-aware valuation engine and
  // explicitly excludes subscriptions and withdrawals; never substitute
  // the unadjusted change in portfolio value for market performance.
- const observed=all.filter(p=>Number.isFinite(p.gain));
+ // Respect the selected date range independently of the visible zoom window.
+ // 1G represents exactly the most recent day's verified P&L, even if a
+ // prior-day valuation is displayed only as a visual baseline.
+ const source=s?.data?.()||all;
+ const sorted=source.filter(p=>p&&/^\d{4}-\d{2}-\d{2}$/.test(p.date)).sort((a,b)=>a.date.localeCompare(b.date));
+ const end=sorted.at(-1)?.date||all.at(-1)?.date;
+ const cutoff=s?.from?s.from:(s?.range==='all'?'':end?new Date(dt(end)-Math.max(0,Number(s?.range||0)-1)*86400000).toISOString().slice(0,10):'');
+ const upto=s?.to||end;
+ const observed=sorted.filter(p=>(!cutoff||p.date>=cutoff)&&(!upto||p.date<=upto)&&Number.isFinite(p.gain));
  const positive=observed.filter(p=>p.gain>0).sort((a,b)=>b.gain-a.gain)[0];
  const negative=observed.filter(p=>p.gain<0).sort((a,b)=>a.gain-b.gain)[0];
  const card=(kind,label,entry,empty)=>`<div class="fh10969-day-${kind}"><span>${label}</span><strong>${entry?signedEuros(entry.gain):'n.d.'}</strong><small>${entry?fmt(entry.date):empty}</small></div>`;
@@ -54,7 +62,7 @@ function controls(s){
 function mount(){const report=$('dashboardReports'),home=$('dashboardView');if(report&&home){let reportCard=$('fh117ReportCard');if(!reportCard){reportCard=document.createElement('section');reportCard.id='fh117ReportCard';reportCard.className='card fh117-report';home.append(reportCard);}reportCard.append(report);}const cap=$('fhHomeCapitalCard');if(cap){cap.querySelector('.section-head h2').textContent='Patrimonio e valore';const sub=cap.querySelector('.section-head .sub');if(sub)sub.textContent='Capitale investito e valore nel tempo';}for(const s of Object.values(states)){if(!s.card)continue;const original=s.card.querySelector('.section-head');let host=s.card.querySelector('.fh115-host');if(!host){host=document.createElement('div');host.className='fh115-host';original?.after(host);}s.host=host;} full=document.createElement('div');full.id='fh115Fullscreen';full.innerHTML='<div class="fh115-modal fh117-investment-style" role="dialog" aria-modal="true" aria-label="Patrimonio e valore a schermo intero"><div class="fh115-modal-head"><strong id="fh115Title">Patrimonio e valore</strong><button class="btn" type="button" data-fh115-close="1">✕ Chiudi</button></div><div class="fh115-modal-plot"></div><div class="fh115-modal-readout"></div><div class="fh10969-full-extremes"></div><div class="fh115-zoom"><button type="button" data-fh115-tool="prev" aria-label="Punto precedente">↑</button><button type="button" data-fh115-tool="minus">− Zoom</button><button type="button" data-fh115-tool="reset">Ripristina</button><button type="button" data-fh115-tool="plus">+ Zoom</button><button type="button" data-fh115-tool="next" aria-label="Punto successivo">↓</button><button type="button" data-fh115-tool="ab">A↔B</button></div></div>';document.body.append(full);}
 function paint(s){if(!s.host)return;let all=filtered(s);if(!all.find(p=>p.date===s.selected))s.selected=all.at(-1)?.date||null;
  if(s.ab&&all.length>1){if(!s.A||!all.some(p=>p.date===s.A.date))s.A=all[Math.floor((all.length-1)*.25)];if(!s.B||!all.some(p=>p.date===s.B.date))s.B=all[Math.ceil((all.length-1)*.75)];}
- const inner=`${controls(s)}<div class="fh115-actions"><button type="button" data-fh115-open="1" aria-label="Ingrandisci grafico patrimonio e valore"><span>⛶ Ingrandisci</span></button></div><div class="fh115-plot">${chartSvg(s,all,false)}</div><div class="fh115-readout">${readout(s,all)}</div>${dailyExtremes(all)}<div class="fh115-tools"><button type="button" data-fh115-tool="ab" class="${s.ab?'selected':''}">A↔B</button><span><i class="fh115-dot green"></i> Positivo <i class="fh115-dot red"></i> Negativo <i class="fh115-dot gold"></i> Capitale · 💰 Acquisti</span></div>`;
+ const inner=`${controls(s)}<div class="fh115-actions"><button type="button" data-fh115-open="1" aria-label="Ingrandisci grafico patrimonio e valore"><span>⛶ Ingrandisci</span></button></div><div class="fh115-plot">${chartSvg(s,all,false)}</div><div class="fh115-readout">${readout(s,all)}</div>${dailyExtremes(all,s)}<div class="fh115-tools"><button type="button" data-fh115-tool="ab" class="${s.ab?'selected':''}">A↔B</button><span><i class="fh115-dot green"></i> Positivo <i class="fh115-dot red"></i> Negativo <i class="fh115-dot gold"></i> Capitale · 💰 Acquisti</span></div>`;
  // Preserve SVG roots and the active pointer target while dragging. Replacing the
  // whole plot on every pointermove breaks touch tracking on WebKit/iOS.
  function updatePlot(container, svgMarkup){
@@ -68,7 +76,7 @@ function paint(s){if(!s.host)return;let all=filtered(s);if(!all.find(p=>p.date==
  }
  s.host.innerHTML=inner;
  s.card?.classList.toggle('fh116-active', all.length>0 && !!s.host.querySelector('svg.fh115-svg'));
- if(expanded===s&&full){full.querySelector('#fh115Title').textContent='Patrimonio e valore';updatePlot(full.querySelector('.fh115-modal-plot'),chartSvg(s,all,true));full.querySelector('.fh115-modal-readout').innerHTML=readout(s,all);full.querySelector('.fh10969-full-extremes').innerHTML=dailyExtremes(all);full.querySelector('[data-fh115-tool="ab"]').classList.toggle('selected',s.ab);}
+ if(expanded===s&&full){full.querySelector('#fh115Title').textContent='Patrimonio e valore';updatePlot(full.querySelector('.fh115-modal-plot'),chartSvg(s,all,true));full.querySelector('.fh115-modal-readout').innerHTML=readout(s,all);full.querySelector('.fh10969-full-extremes').innerHTML=dailyExtremes(all,s);full.querySelector('[data-fh115-tool="ab"]').classList.toggle('selected',s.ab);}
 }
 function schedule(){if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;for(const s of Object.values(states)){try{paint(s)}catch(err){s.card?.classList.remove('fh116-active');console.warn('[Finholdra Home chart]',s.id,err)}}})}
 function show(s){expanded=s;lastFocus=document.activeElement;full.classList.add('open');document.body.classList.add('fh115-modal-open');paint(s);full.querySelector('[data-fh115-close]')?.focus()}

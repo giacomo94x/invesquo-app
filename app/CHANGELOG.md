@@ -1,3 +1,24 @@
+## Beta 10.9.72 — Chiedi a Finn: andamento di oggi e confronto USA
+- Pulsante intuitivo «Come andrà oggi?» basato su Opening Range Breakout (primi 15 minuti e volumi Yahoo disponibili), senza livelli inventati né previsioni garantite.
+- Per le azioni di Milano, pulsante «Com’è andato negli USA?»; consulta un ticker USA corrispondente o candidato, segnala i match trovati solo per nome e confronta variazioni percentuali e date; dove disponibili isola anche i movimenti USA dopo le 17:30 italiane usando candele intraday da 15 minuti.
+- Nuova Netlify Function finn-market-context.js; nessuna chiave richiesta.
+- AI generativa opzionale riceve anche il contesto di mercato effettivamente recuperato e risponde senza terminologia tecnica superflua.
+- Dati del portafoglio invariati.
+
+## Beta 10.9.71 — Market Auction Theory e Volume Profile
+- Chiedi a Finn: domanda dedicata a Market Auction Theory (MAT) e Volume Profile al posto della generica teoria dell’asta di apertura.
+- Risposte locale e AI aggiornate per spiegare accettazione/rifiuto del prezzo, POC, VAH/VAL, HVN e LVN, e scenari condizionali.
+- Se sono disponibili solo i prezzi, Finn esplicita che non può calcolare un autentico Volume Profile né livelli/target non verificati.
+- Invariati portafoglio, prezzi, storico e impostazioni.
+
+## Beta 10.9.70 — Finn AI e massimi/minimi giornalieri per intervallo
+- Miglior guadagno e perdita giornaliera calcolati esclusivamente fra le date effettivamente selezionate (1G = solo ultimo giorno, 1S = 7 giorni, 1M = 30 giorni, eccetera), senza includere giorni fuori intervallo usati come baseline del grafico; personalizzati inclusi.
+- Indicatori indipendenti dallo zoom: ingrandire il grafico non cambia i record del periodo.
+- Nuovo riquadro Chiedi a Finn nella scheda del titolo, sotto i dati e prima di Sotto la lente: domande rapide su trend, rischi, PMC e scenari di apertura basati sull'interpretazione condizionale dei volumi d'asta.
+- Analisi locale esplicita, senza inventare dati di volume o prezzi; AI generativa reale opzionale lato server tramite variabile OPENAI_API_KEY su Netlify (non inclusa nel client, richiede account/consumo API).
+- Nessuna trasmissione di dati di portafoglio completi: solo nome, ticker, prezzo, PMC e punti della serie del titolo selezionato a seguito di una domanda esplicita.
+- Dati personali, operazioni, broker e backup non modificati.
+
 ## Beta 10.9.69 — 26 novembre 2026
 - Grafici strumenti, incluso E-mini S&P 500: eliminato il collegamento arancione tratteggiato fra storico e ultima quotazione isolata. Il punto live è mostrato senza implicare movimenti non osservati.
 - Patrimonio e valore: per ogni intervallo selezionato (1G, 1S, 1M, 3M, 6M, 1A, MAX e date custom) mostra maggior guadagno e maggiore perdita giornaliera in euro, con data.
