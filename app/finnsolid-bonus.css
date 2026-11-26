@@ -1,4 +1,14 @@
-/* Finholdra 10.9.88 — the bonus reuses the main playfield, no separate puzzle UI. */
-#finnSolid .fs-overlay-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-#finnSolid .fs-bonus-trigger{flex:1 1 190px;min-height:44px;background:#22546b;border:1px solid #65d8be;border-radius:12px;color:#e8fff5;font-weight:800;font-family:inherit;font-size:12px;padding:10px 12px;cursor:pointer}
-#finnSolid .fs-bonus-trigger:focus-visible{outline:2px solid #efffd3;outline-offset:3px}
+/* FinnSolid original optional memory-vault bonus */
+#fsBonusStart{background:linear-gradient(135deg,#385e86,#267f7b);border:1px solid #80d7c6;color:#f5fff9;border-radius:12px;padding:12px;font-weight:800;min-height:44px;width:100%;margin-top:8px}
+#finnSolid .fs-bonus-screen[hidden]{display:none!important}
+#finnSolid .fs-bonus-screen{position:absolute;inset:0;z-index:45;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;background:linear-gradient(155deg,#081b30,#132a45 58%,#103a45);color:#eafaff;padding:clamp(10px,2.8vw,22px);overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;box-sizing:border-box}
+#finnSolid .fs-bonus-top{display:flex;justify-content:space-between;align-items:center;gap:12px}#finnSolid .fs-bonus-top small{font-weight:750;letter-spacing:1px;font-size:10px;color:#87dfc6}#finnSolid .fs-bonus-top h2{margin:4px 0;font-size:clamp(16px,4.2vw,24px);color:#f3fff9}#finnSolid .fs-bonus-exit{min-width:78px;background:#233d58;color:#fff;border:1px solid #6c92aa;border-radius:10px;padding:10px;font-weight:800}
+#finnSolid .fs-bonus-status{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:13px;border:1px solid #3e6f84;border-radius:12px;padding:10px;background:#1a3b54}#finnSolid #fsBonusLives{color:#f4d36c;letter-spacing:4px}
+#finnSolid #fsBonusMessage{min-height:48px;font-size:13px;line-height:1.55;color:#cee8e8;margin:14px 0 7px}
+#finnSolid .fs-bonus-board{width:min(100%,360px);aspect-ratio:1;align-self:center;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:clamp(6px,1.8vw,12px);padding:10px;border:2px solid #46a5a9;border-radius:17px;background:#061d31;box-shadow:inset 0 0 24px #28d7b327}
+#finnSolid .fs-bonus-tile{min-width:0;min-height:0;border:1px solid #467e97;background:linear-gradient(145deg,#244869,#193c5b);color:#74bdd1;font-size:clamp(19px,5vw,32px);border-radius:11px;cursor:pointer;transition:background .12s,transform .12s,box-shadow .12s;touch-action:manipulation}
+#finnSolid .fs-bonus-tile.flash{background:#ffdf82;color:#213b45;box-shadow:0 0 24px #ffda7cbd;transform:scale(1.055)}#finnSolid .fs-bonus-tile.correct{background:#49d9a9;color:#072e37}#finnSolid .fs-bonus-tile.wrong{background:#f06b80;color:white}
+#finnSolid .fs-bonus-progress{text-align:center;color:#8ce4c9;font-size:19px;letter-spacing:6px;min-height:27px;margin:12px 0 7px}
+#finnSolid .fs-bonus-actions{display:flex;justify-content:center;gap:10px}#finnSolid .fs-bonus-actions button{background:#e8c66c;color:#122c42;border:0;border-radius:12px;padding:12px 18px;font-weight:900;min-height:46px}
+#finnSolid .fs-bonus-foot{font-size:11px;line-height:1.5;color:#99b8c5;margin:14px 0 4px}
+@media(prefers-reduced-motion:reduce){#finnSolid .fs-bonus-tile{transition:none!important}}
