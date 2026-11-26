@@ -1,0 +1,31 @@
+/* Finholdra Beta 10.9.10: Patrimonio uses exactly the Capital/Value fullscreen layout. */
+#dashboardWealthCard .fh10100-wealth-ranges{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:5px!important;margin:14px 0!important}
+#dashboardWealthCard .fh10100-wealth-ranges button{min-width:0!important;padding:9px 2px!important;font-size:12px!important;font-weight:750!important}
+#dashboardWealthCard .fh10100-wealth-ranges button.selected{background:#eac044!important;color:#13213a!important;border-color:#f6dd7b!important}
+#dashboardWealthCard .wealth-plot{width:100%;height:auto;max-height:none;display:block;cursor:crosshair;touch-action:pan-y}
+#dashboardWealthCard .wealth-day-focus{margin:8px 0;padding:8px 12px;min-height:48px;background:var(--panel2);display:flex;justify-content:space-between;flex-wrap:wrap}
+#dashboardWealthCard .wealth-day-focus strong{color:#4ddbb3;font-size:15px}
+#dashboardWealthCard .fh1084-capital-expand{width:100%;display:flex;justify-content:space-between;align-items:center;margin:8px 0 5px}
+body.fh10100-wealth-modal-open{overflow:hidden!important}
+#fhWealthFullscreen{display:none;position:fixed;inset:0;z-index:2147483102;background:#071629;color:#f0f7ff;overflow:hidden}
+#fhWealthFullscreen.open{display:block}
+#fhWealthFullscreen .fh10100-wealth-dialog{position:relative;width:100%;height:100%;max-height:none;max-width:none;box-sizing:border-box;border:0;border-radius:0;display:flex;flex-direction:column;gap:6px;overflow:hidden;padding:12px}
+#fhWealthFullscreen .fh10100-wealth-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none}
+#fhWealthFullscreen .fh10100-wealth-dialog-head strong{font-size:clamp(12px,2.3vw,18px)}
+#fhWealthFullscreen .fh10100-wealth-fullplot{flex:1 1 auto;min-height:0;min-width:0;display:flex;align-items:stretch;justify-content:center;overflow:hidden}
+#fhWealthFullscreen .fh10100-wealth-svg{width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;max-width:none!important;object-fit:fill!important;touch-action:none!important}
+#fhWealthFullscreen .fh10100-wealth-readout{flex:0 0 auto;min-height:38px;margin:0;font-size:12px;background:#12314a;color:#f0f7ff;border-color:#385773}
+#fhWealthFullscreen .fh10100-wealth-readout strong{color:#4ddbb3}
+#fhWealthFullscreen .fh10100-wealth-legend{flex:0 0 auto;margin:0;color:#b9cfe0}
+#fhWealthFullscreen .fh10100-wealth-legend span{display:inline-flex;align-items:center;gap:5px}
+#fhWealthFullscreen .fh10100-wealth-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+#fhWealthFullscreen .fh10100-green{background:#4ddbb3}#fhWealthFullscreen .fh10100-red{background:#f57f91}
+#fhWealthFullscreen .fh10100-wealth-tools{flex:0 0 auto;display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
+#fhWealthFullscreen .fh10100-wealth-tools .btn{padding:6px 10px;font-size:11px;background:#21476b;color:#fff;border:1px solid #7294b2}
+#fhWealthFullscreen .fh10100-wealth-tools .selected{background:#277e6f!important}
+@media(max-width:767px) and (orientation:portrait){
+ #fhWealthFullscreen .fh10100-wealth-dialog{position:absolute;left:100dvw;top:0;width:100dvh;height:100dvw;transform-origin:top left;transform:rotate(90deg);padding:6px 12px}
+ #fhWealthFullscreen .fh10100-wealth-dialog-head strong{font-size:12px}
+}
+@media(max-width:390px){#dashboardWealthCard .fh10100-wealth-ranges{gap:3px!important}#dashboardWealthCard .fh10100-wealth-ranges button{padding:8px 0!important;font-size:11px!important}}
+@media(prefers-reduced-motion:reduce){#fhWealthFullscreen{scroll-behavior:auto}}

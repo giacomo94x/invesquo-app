@@ -1,0 +1,42 @@
+/* Finholdra Beta 10.9.79: preserve the selected theme inside asset details.
+   Market-performance tint belongs to the dashboard and top-level accents;
+   a financial chart must never inherit an entire green/red UI palette. */
+#assetDetailOverlay {
+  --bg:#091221; --panel:#142239; --panel2:#1b2c47;
+  --border:#293b54; --text:#f4f7fc; --muted:#a9b9ce;
+  --blue:#78a8ff; --green:#47dba9; --red:#fa8090;
+}
+body[data-theme="ocean"] #assetDetailOverlay {
+  --bg:#091b2a;--panel:#123145;--panel2:#204156;--border:#365b6b;--muted:#b6d0d9;--blue:#8bdded;
+}
+body[data-theme="amethyst"] #assetDetailOverlay {
+  --bg:#171329;--panel:#292341;--panel2:#393253;--border:#51476b;--muted:#c7b8db;
+}
+body[data-theme="graphite"] #assetDetailOverlay {
+  --bg:#11141b;--panel:#202630;--panel2:#2d3541;--border:#465262;--muted:#bac4d2;
+}
+body[data-theme="pine"] #assetDetailOverlay {
+  --bg:#0b2122;--panel:#173538;--panel2:#24484a;--border:#376365;--muted:#add0c9;
+}
+body[data-theme="sunset"] #assetDetailOverlay {
+  --bg:#24151d;--panel:#3b2332;--panel2:#563247;--border:#8f5a73;
+  --muted:#ead0d8;--text:#fff8fb;--green:#63d89e;--red:#ff8ea1;--blue:#ffc06a;
+}
+body:is([data-theme="light"],[data-theme="modern"]) #assetDetailOverlay {
+  color-scheme:light;--bg:#edf2f8;--panel:#ffffff;--panel2:#e9eef6;
+  --border:#d6deea;--text:#18293f;--muted:#596b80;
+  --blue:#315ebd;--green:#07885b;--red:#c33f50;
+}
+#assetDetailSheet {
+  background:var(--panel)!important;
+  color:var(--text)!important;
+  border-color:var(--border)!important;
+}
+#assetDetailChart {
+  background:var(--bg)!important;
+  border-color:var(--border)!important;
+}
+#assetDetailOverlay :is(.asset-detail-metric,.asset-detail-ranges button:not(.selected),.asset-detail-x,.asset-detail-info,.asset-detail-card) {
+  border-color:var(--border)!important;
+}
+/* Keep the actual plotted line's up/down color; no tinting the chart background. */

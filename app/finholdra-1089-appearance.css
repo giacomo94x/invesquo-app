@@ -1,0 +1,19 @@
+/* Finholdra Beta 10.9.89 — theme and interface style together in Settings > Aspetto. */
+.fh1089-appearance-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:end;margin:13px 0 2px}
+.fh1089-appearance-pair>.setting-field{margin:0!important;min-width:0}
+.fh1089-appearance-pair>.setting-field>label{margin-bottom:7px;min-height:17px;font-size:12px;font-weight:750;color:var(--text)}
+.fh1089-appearance-pair select{box-sizing:border-box;width:100%;min-width:0;max-width:100%;min-height:45px;padding:10px 24px 10px 10px;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:11px;font-size:13px;font-weight:650;text-overflow:ellipsis}
+.fh1089-appearance-pair select:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.fh1089-appearance-help{margin:4px 0 13px!important;font-size:11px;line-height:1.55}
+/* The settings stay side by side on iPhone; stack only on very narrow screens. */
+@media(max-width:440px){.fh1089-appearance-pair{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.fh1089-appearance-pair>.setting-field>label{font-size:11px}.fh1089-appearance-pair select{font-size:12px;min-height:45px;padding:8px 18px 8px 6px}}
+@media(max-width:320px){.fh1089-appearance-pair{grid-template-columns:1fr}}
+/* The five dark themes retain their base color even in dropdowns and system UI. */
+body:is([data-theme="azureglass"],[data-theme="capriblue"],[data-theme="iceblue"],[data-theme="mintday"],[data-theme="lavenderlight"]){color-scheme:dark}
+body:is([data-theme="azureglass"],[data-theme="capriblue"],[data-theme="iceblue"],[data-theme="mintday"],[data-theme="lavenderlight"]) :is(select,option,.setting-field input:not([type="color"]),.order-select){color-scheme:dark;color:var(--text);background:var(--panel2);border-color:var(--border)}
+body:is([data-theme="azureglass"],[data-theme="capriblue"],[data-theme="iceblue"],[data-theme="mintday"],[data-theme="lavenderlight"]) :is(.settings-macro-content,.setting-group,.fh115-readout,.fh-mira-shared-response){border-color:var(--border);color:var(--text)}
+body:is([data-theme="azureglass"],[data-theme="capriblue"],[data-theme="iceblue"],[data-theme="mintday"],[data-theme="lavenderlight"]) :is(.fh115-range button.selected,.nav-tool.active){border-color:var(--blue);}
+
+/* Selected app theme must be the source of the settings surface, never the temporary market tint. */
+#settingsSection .fh1089-appearance-pair{isolation:isolate;position:relative;z-index:1}
+#settingsSection .fh1089-appearance-pair select{background:var(--panel2);color:var(--text);border-color:var(--border)}

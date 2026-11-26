@@ -1,0 +1,80 @@
+#radarView .mr-head{display:flex;align-items:center;gap:12px}#radarView .mr-head>div{flex:1;min-width:0}#radarView h2{margin:0 0 5px}#radarView .mr-medal{font-size:30px;background:var(--panel2);border-radius:15px;padding:12px}#radarView .mr-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}#radarView .mr-tabs button{flex:1 1 auto;font-size:12px;padding:9px 7px}#radarView .mr-tabs .selected{background:#e4ba52!important;color:#152943!important;font-weight:800}#radarView .mr-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}#radarView .mr-tile{background:var(--panel2);border:1px solid var(--border);border-radius:13px;padding:11px 9px;min-width:0}#radarView .mr-tile b{display:block;font-size:16px;margin-top:5px;overflow-wrap:anywhere}#radarView .mr-row{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:9px;padding:12px 0;border-bottom:1px solid var(--border)}#radarView .mr-row h3{margin:0 0 4px;font-size:14px}#radarView .mr-row p{margin:3px 0;font-size:11px;color:var(--muted)}#radarView .mr-rank{font-size:17px;text-align:center}#radarView .mr-right{text-align:right}#radarView .mr-right button{font-size:11px;margin-top:5px;padding:6px 8px}#radarView .mr-bar{height:4px;background:var(--border);border-radius:5px;margin-top:7px;overflow:hidden}#radarView .mr-bar i{display:block;height:100%;background:#d6b24f;border-radius:5px}#radarView .mr-news-item{padding:13px 0;border-bottom:1px solid var(--border);line-height:1.45}#radarView .mr-news-item a{font-weight:700;text-decoration:none}#radarView .mr-news-item p{margin:4px 0;color:var(--muted);font-size:11px}#radarView .mr-empty{padding:22px 8px;text-align:center;color:var(--muted)}#radarView .fh-radar-sources{margin-top:12px}#radarView input{font-size:16px!important}.fh-radar-active #faceButton::before,.fh-radar-active #faceButton::after{display:none!important}.fh-radar-active #performanceFace .mr-squint{transform-box:fill-box;transform-origin:center;animation:mrSquint 6s infinite!important}.fh-radar-active #performanceFace .mr-lens{transform-box:fill-box;transform-origin:center;animation:mrLens 6s infinite!important}.fh-radar-active #performanceFace{animation:mrLook 6s infinite!important}@keyframes mrSquint{0%,22%,72%,100%{transform:scaleY(1)}35%,58%{transform:scaleY(.15)}}@keyframes mrLens{0%,20%,78%,100%{transform:translate(3px,8px) rotate(12deg)}35%,60%{transform:translate(-16px,-6px) rotate(-8deg)}}@keyframes mrLook{0%,100%{transform:rotate(0)}22%{transform:rotate(-6deg)}40%,60%{transform:rotate(5deg)}80%{transform:rotate(-4deg)}}@media(prefers-reduced-motion:reduce){.fh-radar-active #performanceFace,.fh-radar-active #performanceFace *{animation:none!important}}
+
+/* Independent chromatic palettes: no blue blending. */
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="up"]{--bg:#092b17!important;--panel:#104524!important;--panel2:#185b30!important;--border:#37834c!important;--muted:#b5d0ba!important;--blue:#91d5a4!important;--fh-header-surface:#092b17!important;--fh-header-scrolled:#104524!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="down"]{--bg:#360d13!important;--panel:#571820!important;--panel2:#72232d!important;--border:#a34450!important;--muted:#d9baba!important;--blue:#e6b0a7!important;--fh-header-surface:#360d13!important;--fh-header-scrolled:#571820!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="up"]{--bg:#dcf5df!important;--panel:#effdf0!important;--panel2:#c8eacb!important;--border:#b9d1bd!important;--muted:#49674f!important;--blue:#27653d!important;--fh-header-surface:#dcf5df!important;--fh-header-scrolled:#c8eacb!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="down"]{--bg:#fbe0e3!important;--panel:#fff0f1!important;--panel2:#f3cbd0!important;--border:#dfbeb9!important;--muted:#805b56!important;--blue:#9a443c!important;--fh-header-surface:#fbe0e3!important;--fh-header-scrolled:#f3cbd0!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-favorite-tint="up"],[data-favorite-tint="down"]){background:var(--bg)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-favorite-tint="up"],[data-favorite-tint="down"]) header.top{background:transparent!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-favorite-tint="up"],[data-favorite-tint="down"]) #dashboardView :is(.card,.hero,.box,.metric,.favorite-row,.allocation-detail-item){background:var(--panel)!important;border-color:var(--border)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-favorite-tint="up"],[data-favorite-tint="down"]) :is(.new-header-nav button:not(.active),#dashboardView button:not(.active):not(.selected):not(.primary),#dashboardView select){background:var(--panel2)!important;border-color:var(--border)!important;color:var(--text)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-favorite-tint="up"],[data-favorite-tint="down"]) #dashboardView :is(.donut-hole,.donut-center){background:var(--panel)!important}
+#radarView .mr-external{width:100%;min-height:500px;border:0;background:var(--panel);border-radius:12px}
+#radarView .mr-source-table{width:100%;border-collapse:collapse}#radarView .mr-source-table td{padding:9px 4px;border-bottom:1px solid var(--border)}
+.fh-radar-active #performanceFace .mr-cap{display:none!important}.fh-radar-active .expression-radar .mr-lens{animation-duration:6s!important}
+body[data-motion="off"].fh-radar-active #performanceFace,body[data-motion="off"].fh-radar-active #performanceFace *{animation:none!important}
+
+/* 10.5.3: consistent allocation switch and independent Home reactions. */
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-favorite-tint="up"],[data-favorite-tint="down"]) #dashboardView .seg:has(#modeNow){background:var(--bg)!important;border-color:var(--border)!important;box-shadow:none!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-favorite-tint="up"],[data-favorite-tint="down"]) #dashboardView .seg :is(#modeNow,#modeCost){background:var(--panel)!important;border-color:var(--border)!important;color:var(--text)!important;box-shadow:none!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-favorite-tint="up"],[data-favorite-tint="down"]) #dashboardView .seg :is(#modeNow,#modeCost).selected{background:var(--panel2)!important;border-color:var(--blue)!important;color:var(--text)!important;box-shadow:inset 0 0 0 1px var(--border)!important}
+body.fh-home-active:is([data-favorite-tint="up"],[data-favorite-tint="down"]) #performanceFace{animation:none}
+body.fh-home-active[data-favorite-tint="down"] #performanceFace.expression-concerned .candle-character{animation:fhConcern 2.9s ease-in-out infinite}
+body.fh-home-active[data-favorite-tint="down"] #performanceFace.expression-scared .candle-character{animation:fhScared 1.25s ease-in-out infinite}
+body.fh-home-active[data-favorite-tint="down"] #performanceFace.expression-sweating .fh-sweat{animation:fhSweat 1.6s ease-in infinite}
+body.fh-home-active[data-favorite-tint="down"] #performanceFace.expression-sweating .fh-sweat-two{animation-delay:.65s}
+body.fh-home-active[data-favorite-tint="up"] #performanceFace.expression-positive .candle-character{animation:fhJoy 2.4s ease-in-out infinite}
+body.fh-home-active[data-favorite-tint="up"] #performanceFace.expression-celebrate .candle-character{animation:fhJoy .85s ease-in-out infinite}
+body.fh-home-active[data-favorite-tint="up"] #performanceFace.expression-satisfied .candle-character{animation:happyNod 2.5s ease-in-out infinite}
+@keyframes fhConcern{0%,100%{transform:rotate(0)}40%{transform:rotate(-4deg)}70%{transform:rotate(4deg)}}
+@keyframes fhScared{0%,100%{transform:translateX(0)}25%{transform:translateX(-1.8px) rotate(-2deg)}75%{transform:translateX(1.8px) rotate(2deg)}}
+@keyframes fhSweat{0%{opacity:0;transform:translateY(-2px)}25%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translateY(10px)}}
+@keyframes fhJoy{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+body.motion-off.fh-home-active #performanceFace,body.motion-off.fh-home-active #performanceFace *{animation:none!important}
+@media(prefers-reduced-motion:reduce){body.fh-home-active #performanceFace,body.fh-home-active #performanceFace *{animation:none!important}}
+
+/* Beta 10.6.12 — weekend resting mode and borderless category rows. */
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"]{
+ --bg:#403600!important;--panel:#60510b!important;--panel2:#796617!important;--border:#b69b31!important;
+ --muted:#f2de9c!important;--blue:#f4d13f!important;--fh-header-surface:#403600!important;--fh-header-scrolled:#60510b!important;
+ background:var(--bg)!important;
+}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"]):is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="weekend"]{
+ --bg:#fff3b7!important;--panel:#fff9d8!important;--panel2:#f7e68c!important;--border:#d1ad3b!important;
+ --muted:#766018!important;--blue:#a67b00!important;--fh-header-surface:#fff3b7!important;--fh-header-scrolled:#fff9d8!important;
+}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] header.top{background:transparent!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView :is(.card,.hero,.metric,.favorite-row,.allocation-detail-item){background:var(--panel)!important;border-color:var(--border)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] :is(.new-header-nav button:not(.active),#dashboardView button:not(.active):not(.selected):not(.primary),#dashboardView select){background:var(--panel2)!important;border-color:var(--border)!important;color:var(--text)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView :is(.donut-hole,.donut-center){background:var(--panel)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView .seg:has(#modeNow){background:var(--bg)!important;border-color:var(--border)!important;box-shadow:none!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView .seg :is(#modeNow,#modeCost){background:var(--panel)!important;border-color:var(--border)!important;color:var(--text)!important}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint="weekend"] #dashboardView .seg :is(#modeNow,#modeCost).selected{background:var(--panel2)!important;border-color:var(--blue)!important}
+/* Keep the category rows as uninterrupted separators, not inset colored tiles. */
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint] #dashboardView #legend .legend-row{
+ background:transparent!important;background-image:none!important;border-radius:0!important;
+ border-left:0!important;border-right:0!important;border-top:0!important;
+ border-bottom:1px solid var(--border)!important;box-shadow:none!important;outline-offset:0;
+}
+body:is(.fh-home-active:not([data-market-color-scope="off"]),[data-market-color-scope="all"])[data-favorite-tint] #dashboardView #legend .legend-row[aria-expanded="true"]{background:transparent!important;box-shadow:none!important}
+body.fh-home-active[data-favorite-tint="weekend"] #performanceFace .candle-character{animation:fhWeekendBreathe 4.8s ease-in-out infinite}
+body.fh-home-active[data-favorite-tint="weekend"] #performanceFace.expression-thinking .candle-character{animation:fhWeekendThink 3s ease-in-out infinite}
+@keyframes fhWeekendBreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(1.5px)}}
+@keyframes fhWeekendThink{0%,100%{transform:rotate(0)}45%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}}
+body.motion-off.fh-home-active #performanceFace,body.motion-off.fh-home-active #performanceFace *{animation:none!important}
+@media(prefers-reduced-motion:reduce){body.fh-home-active[data-favorite-tint="weekend"] #performanceFace *{animation:none!important}}
+
+
+/* 10.9.31 — Home "Patrimonio e valore" graph surface follows the dynamic Home tint like favorite titles. */
+body.fh-home-active{--fh-home-chart-surface:#091b30;--fh-home-chart-border:var(--border)}
+body.fh-home-active[data-favorite-tint="up"]{--fh-home-chart-surface:#022f1d;--fh-home-chart-border:#2f7f4b}
+body.fh-home-active[data-favorite-tint="down"]{--fh-home-chart-surface:#330f16;--fh-home-chart-border:#8f4650}
+body.fh-home-active[data-favorite-tint="weekend"]{--fh-home-chart-surface:#11314b;--fh-home-chart-border:#3d6589}
+body.fh-home-active:is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="up"]{--fh-home-chart-surface:#e0f5e4;--fh-home-chart-border:#b7d0bd}
+body.fh-home-active:is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="down"]{--fh-home-chart-surface:#fae3e5;--fh-home-chart-border:#debec0}
+body.fh-home-active:is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="weekend"]{--fh-home-chart-surface:#e7eff8;--fh-home-chart-border:#c1cedc}
+
+
+/* Beta 10.9.85 — keep the Home chart on theme colors even when the page tint changes with markets. */
+body.fh-home-active{--fh-home-chart-surface:var(--fh-theme-chart-surface,var(--panel))!important;--fh-home-chart-border:var(--fh-theme-chart-border,var(--border))!important}
