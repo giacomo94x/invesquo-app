@@ -1940,7 +1940,20 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 #settingsView .settings-macro-content #finholdraCloudSync .actions{display:flex;flex-wrap:wrap;gap:9px}
 #settingsView .settings-macro-content #finholdraCloudSync .actions .btn{flex:1 1 150px}
 </style>
-<link rel="stylesheet" href="./finholdra-10969.css?v=10.9.74"></head><body><section id="accountGate" aria-labelledby="accountTitle">
+<link rel="stylesheet" href="./finholdra-10969.css?v=10.9.74">
+<style id="fh10978-mira-quiz-style">
+/* Academy: Mira pone le domande nel suo unico riquadro di interazione. */
+#miraAcademyChat .fh-mira-quiz{margin-top:16px;padding:14px 0 0;border-top:1px solid var(--border);background:transparent;box-shadow:none}
+#miraAcademyChat .fh-mira-quiz .section-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+#miraAcademyChat .fh-mira-quiz h3{margin:0;font-size:15px;line-height:1.35;color:var(--text)}
+#miraAcademyChat .fh-quiz-mira-question{font-size:14px;font-weight:650;line-height:1.5;margin:12px 0 10px;color:var(--muted)}
+#miraAcademyChat .fh-quiz-options button{background:var(--panel2);border:1px solid var(--border);border-radius:11px;text-align:left;white-space:normal;line-height:1.45;min-height:44px}
+#miraAcademyChat .fh-quiz-options button:not(:disabled):hover{border-color:var(--blue)}
+#miraAcademyChat .fh-quiz-feedback-sr{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+#miraAcademyChat .fh-quiz-next{margin:12px 4px 8px 0}
+#miraAcademyChat .fh-mira-quiz>.hint{margin-top:6px}
+</style>
+</head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco-neutral.svg?v=10.9.1" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
 <div class="finholdra-language-gate"><label for="finholdraLanguageWelcome">Lingua / Language</label><select id="finholdraLanguageWelcome"><option value="it">Italiano</option><option value="en">English</option></select></div><div class="account-tabs"><button type="button" id="accountTabCreate" class="selected">Nuovo profilo</button><button type="button" id="accountTabLogin">Accedi</button></div>
@@ -2217,27 +2230,13 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <div class="learning-grid" id="learningGrid"></div>
 <p class="hint">Contenuti didattici, non consulenza finanziaria.</p></section>
 <section class="card"><h2>Piccolo glossario</h2><div class="learning-glossary"><p><strong>PMC</strong> — prezzo medio di carico delle quote acquistate.</p><p><strong>TWRR</strong> — rendimento concatenato dei sotto-periodi, che riduce l'effetto dei versamenti.</p><p><strong>MWRR / XIRR</strong> — rendimento che considera importo e momento dei flussi di cassa.</p><p><strong>Drawdown</strong> — calo dal precedente massimo del valore.</p><p><strong>TER</strong> — costi correnti annui di un fondo o ETF, non necessariamente tutti i costi sostenuti.</p><p><strong>Rischio di cambio</strong> — variazione del valore in euro quando la valuta del titolo è diversa.</p><p><strong>Tracking difference</strong> — differenza effettiva di rendimento tra ETF e indice.</p><p><strong>Spread denaro-lettera</strong> — costo implicito della differenza tra il miglior prezzo in acquisto e in vendita.</p><p><strong>Duration</strong> — sensibilità indicativa del prezzo obbligazionario ai tassi.</p><p><strong>Rendimento reale</strong> — rendimento al netto della perdita di potere d’acquisto.</p><p><strong>Margine futures</strong> — garanzia richiesta, non costo totale del contratto.</p></div></section>
-<section class="card" id="fhQuizPanel"><div class="section-head"><h2>Finholdra Quiz · 100 domande, livello avanzato</h2><span class="sub">Finanza, mercati e investimenti</span></div><div class="fh-quiz-meta"><span id="fhQuizProgress">Domanda 1 di 100</span><span id="fhQuizRecord">Record: 0/100</span></div><div class="fh-quiz-question" id="fhQuizQuestion"></div><div class="fh-quiz-options" id="fhQuizOptions"></div><p class="fh-quiz-feedback" id="fhQuizFeedback" aria-live="polite"></p><button type="button" class="btn primary fh-quiz-next" id="fhQuizNext" disabled>Prossima domanda</button><button type="button" class="btn" id="fhQuizRestart" style="margin-left:8px">Ricomincia</button><p class="hint">Il miglior punteggio è conservato nel profilo locale ; esporta il backup per conservarlo.</p></section>
 
-<section class="card" id="fhMarketVenuesAcademy" aria-labelledby="fhMarketVenuesTitle">
- <div class="section-head"><h2 id="fhMarketVenuesTitle">🇮🇹 Le Borse italiane e le fonti dei grafici</h2><span class="sub">Academy · Mercati e quotazioni</span></div>
- <p class="hint">Lo stesso strumento può avere più ticker su piazze diverse. Nella ricerca Finholdra privilegia le quotazioni italiane quando disponibili: verifica sempre ISIN, valuta, liquidità e orario di negoziazione.</p>
- <div class="academy-tree">
- <details class="academy-node"><summary>EXM — Euronext Milan</summary><p>Mercato azionario italiano principale. Include società di varie dimensioni e il segmento STAR. Confronta valuta, spread e volume prima di selezionare una quotazione.</p></details>
- <details class="academy-node"><summary>EGM — Euronext Growth Milan</summary><p>Mercato multilaterale rivolto soprattutto alle PMI in crescita. Il numero di scambi può essere più limitato: guarda il differenziale denaro/lettera oltre al grafico.</p></details>
- <details class="academy-node"><summary>GEM — Global Equity Market</summary><p>Azioni estere negoziate a Milano. Per alcune aziende puoi trovare una quotazione in euro e una nella borsa d'origine in valuta diversa. Il grafico di una quotazione non deve essere scambiato per quello di un altro mercato.</p></details>
- <details class="academy-node"><summary>ETFplus — ETF, ETC ed ETN</summary><p>Mercato dedicato agli strumenti negoziati come ETF, ETC ed ETN. Cerca il ticker della specifica piazza; lo stesso ISIN può avere prezzi e orari di riferimento diversi fra mercati.</p></details>
- <details class="academy-node"><summary>MOT — Obbligazioni e titoli di Stato</summary><p>Mercato delle obbligazioni e dei titoli di Stato. I prezzi spesso sono espressi come percentuale del nominale; non sono il rendimento effettivo né comprendono automaticamente cedole e ratei.</p></details>
- <details class="academy-node"><summary>IDEM — Derivati</summary><p>Mercato dei derivati, oggi nel perimetro Euronext Derivatives Milan. Futures e opzioni richiedono attenzione a scadenza, moltiplicatore, margini e mercato: il grafico di una serie continua non sostituisce i dati di un contratto specifico.</p></details>
- <details class="academy-node"><summary>Yahoo Finance, TradingView e grafici Finholdra</summary><p>Yahoo Finance fornisce, quando disponibili, prezzi e serie temporali. TradingView è utile come piattaforma di visualizzazione e ricerca dei simboli: la Datafeed API della libreria richiede una fonte di dati propria o autorizzata, non è un servizio pubblico gratuito di quotazioni storiche. Finholdra mantiene i propri grafici e cerca prezzi verificabili senza inventare valori.</p></details>
- <details class="academy-node"><summary>Perché 3M può non caricare subito?</summary><p>Una serie a tre mesi richiede storico giornaliero riferito al ticker e alla valuta esatti. Se la fonte non risponde o la serie è incompleta, non conviene inserire dati stimati. Cache, recuperi concorrenti e archivi verificati riducono l'attesa, ma non garantiscono la disponibilità di ogni titolo.</p></details>
- </div>
- <p class="sub">Approfondisci: <a href="https://www.borsaitaliana.it/borsaitaliana/mercati/mercati.htm" target="_blank" rel="noopener">Borsa Italiana</a> · <a href="https://www.tradingview.com/charting-library-docs/latest/connecting_data/Datafeed-API/" target="_blank" rel="noopener">TradingView Datafeed API</a>.</p>
-</section>
+
+
 <section class="card mira-academy-card" aria-labelledby="miraAcademyTitle">
- <div class="mira-academy-top"><button type="button" id="miraAcademyOpen" class="mira-academy-portrait" aria-expanded="false" aria-controls="miraAcademyChat" aria-label="Parla con Mira, tutor del quiz"><img src="./mira-academy.webp?v=10.9.1" alt="Mira, tutor di Finholdra Academy dai capelli castani" loading="lazy"></button><div><h2 id="miraAcademyTitle">Mira · Tutor Academy</h2><p class="sub">La tua alleata nei quiz: spiegazioni, progresso e suggerimenti per studiare meglio.</p><span class="mira-academy-hint">Tocca Mira per parlarle</span></div></div>
+ <div class="mira-academy-top"><button type="button" id="miraAcademyOpen" class="mira-academy-portrait" aria-expanded="false" aria-controls="miraAcademyChat" aria-label="Parla con Mira, tutor del quiz"><img src="./mira-academy.webp?v=10.9.1" alt="Mira, tutor di Finholdra Academy dai capelli castani" loading="lazy"></button><div><h2 id="miraAcademyTitle">Mira · Tutor Academy</h2><p class="sub">Mira ti pone le domande del quiz, spiega le risposte e ti aiuta a studiare.</p><span class="mira-academy-hint">Le domande e le spiegazioni sono qui con Mira</span></div></div>
  <div class="fh-mira-modes" role="tablist" aria-label="Parla con Mira"><button type="button" class="fh-mira-mode active" id="fhMiraModeQuiz" aria-selected="true" role="tab" aria-controls="miraAcademyChat">Quiz e studio</button><button type="button" class="fh-mira-mode" id="fhMiraModeBehavior" aria-selected="false" role="tab" aria-controls="fhBehavioralAcademy">Finanza comportamentale</button></div>
- <div class="fh-mira-shared-response" id="fhMiraSharedResponse"> <div class="mira-academy-chat" id="miraAcademyChat"><p id="miraAcademyReply" class="mira-academy-reply" role="status">MIRA: «Ciao! Sono qui per aiutarti ad allenarti con la finanza, una domanda alla volta.»</p><div class="mira-academy-actions"><button type="button" data-mira-help="score">Il mio punteggio</button><button type="button" data-mira-help="help">Come funziona il quiz</button><button type="button" data-mira-help="study">Consiglio di studio</button></div></div>
+ <div class="fh-mira-shared-response" id="fhMiraSharedResponse"> <div class="mira-academy-chat" id="miraAcademyChat"><p id="miraAcademyReply" class="mira-academy-reply" role="status">MIRA: «Ciao! Sono qui per aiutarti ad allenarti con la finanza, una domanda alla volta.»</p><div class="mira-academy-actions"><button type="button" data-mira-help="score">Il mio punteggio</button><button type="button" data-mira-help="help">Come funziona il quiz</button><button type="button" data-mira-help="study">Consiglio di studio</button></div><section class="fh-mira-quiz" id="fhQuizPanel" aria-label="Le domande di Mira"><div class="section-head"><h3>Le domande di Mira · 100 quiz</h3><span class="sub">Rispondi a Mira, una domanda alla volta</span></div><div class="fh-quiz-meta"><span id="fhQuizProgress">Domanda 1 di 100</span><span id="fhQuizRecord">Record: 0/100</span></div><div class="fh-quiz-question fh-quiz-mira-question" id="fhQuizQuestion"></div><div class="fh-quiz-options" id="fhQuizOptions"></div><p class="fh-quiz-feedback fh-quiz-feedback-sr" id="fhQuizFeedback" aria-live="off"></p><button type="button" class="btn primary fh-quiz-next" id="fhQuizNext" disabled>Mira, prossima domanda</button><button type="button" class="btn" id="fhQuizRestart" style="margin-left:8px">Ricomincia</button><p class="hint">Il miglior punteggio è conservato nel profilo locale ; esporta il backup per conservarlo.</p></section></div>
 <section class="fh-mira-mode-panel" id="fhBehavioralAcademy">
 
 <p class="hint">Capire le reazioni ai mercati e distinguere emozioni, rischi e decisioni.</p>
@@ -2253,7 +2252,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.74</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.78</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -5139,7 +5138,7 @@ async function fetchDetailHistory(a,range){
  if(range==='custom'&&!custom)throw Error('Seleziona la data di inizio e fine');
  const duration=custom?(custom.to-custom.from)/86400000:0;
  const settings=custom?{interval:duration>750?'1wk':'1d'}:DETAIL_RANGES[range],key=a.symbol+'|'+range+'|'+(custom?assetCustomFrom+'|'+assetCustomTo:'')+'|'+currencyOf(a),previous=detailCache.get(key);
- if(previous&&Date.now()-previous.at<(range==='1d'?60000:240000))return previous.data;
+ if(previous&&Date.now()-previous.at<(range==='1d'&&/=F$/i.test(String(a.symbol||''))?20000:range==='1d'?60000:240000))return previous.data;
  // If a longer verified daily range was already loaded, reuse it instantly for 3M/1M.
  if(!custom&&['1mo','3mo','6mo'].includes(range)){
   const months={ '1mo':31,'3mo':93,'6mo':183 },start=Date.now()-months[range]*86400000;
@@ -5151,15 +5150,22 @@ async function fetchDetailHistory(a,range){
    }
   }
  }
- const uri='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(a.symbol)+'?'+(custom?'period1='+Math.floor(custom.from/1000)+'&period2='+Math.floor((custom.to+1000)/1000):'range='+settings.range)+'&interval='+settings.interval+'&includePrePost=false';
- const sources=[['server','/.netlify/functions/history?symbol='+encodeURIComponent(a.symbol)+'&range='+encodeURIComponent(range)+'&currency='+encodeURIComponent(currencyOf(a))],['Yahoo',uri],...relayUrls(uri).map((url,i)=>['proxy'+i,url])];
+ const isFuture=/=F$/i.test(String(a.symbol||''))||a.cat==='Futures';
+ const isFutureDay=isFuture&&range==='1d'&&!custom;
+ const base='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(a.symbol);
+ const uri=base+'?'+(custom?'period1='+Math.floor(custom.from/1000)+'&period2='+Math.floor((custom.to+1000)/1000):isFutureDay?'range=5d':'range='+settings.range)+'&interval='+(isFutureDay?'1m':settings.interval)+'&includePrePost='+(isFuture?'true':'false');
+ const server='/.netlify/functions/history?symbol='+encodeURIComponent(a.symbol)+'&range='+encodeURIComponent(range)+'&currency='+encodeURIComponent(currencyOf(a));
+ const sources=[['server',server],['Yahoo',uri],...relayUrls(uri).map((url,i)=>['proxy'+i,url])];
+ // The CME session can include hours outside the ordinary US cash session.
+ // If the 1-minute endpoint is unavailable, retain a genuine 5-minute fallback.
+ if(isFutureDay){const backup=base+'?range=5d&interval=5m&includePrePost=true';
+  sources.push(['Yahoo 5m',backup]);
+ }
  const failures=[];
- // Fetch sources concurrently instead of waiting up to 6 seconds for each
- // unsuccessful endpoint. Only the first *validated* history is accepted.
  try{
   const contenders=sources.map(async ([source,url])=>{
    try{
-    const parsed=JSON.parse(await readUrl(url,source==='server'?5600:6100));
+    const parsed=JSON.parse(await readUrl(url,source==='server'?7500:6500));
     const data=parseHistoryPayload(parsed,a.symbol);
     const cutoff=range==='1d'?Date.now()-25*3600000:range==='5d'?Date.now()-7*86400000:null;
     if(custom)data.points=customDetailCut(data.points);
@@ -5168,7 +5174,25 @@ async function fetchDetailHistory(a,range){
     data.source+=' · '+(source==='server'?'server':'web');return data;
    }catch(e){failures.push(source+': '+(e.message||'errore'));throw e}
   });
-  const data=await Promise.any(contenders);
+  // For futures, a quick but truncated response is NOT preferable to a slightly
+  // slower, complete Yahoo series. Compare the last verified timestamp and
+  // candle coverage; all responses must pass identity/currency checks above.
+  let data;
+  if(isFutureDay){
+   const settled=await Promise.allSettled(contenders);
+   const good=settled.filter(s=>s.status==='fulfilled').map(s=>s.value);
+   if(!good.length)throw Error('Storico futures non disponibile');
+   const freshness=d=>d.points.at(-1)?.t||0;
+   const score=d=>{const last=freshness(d),now=Date.now();return -Math.max(0,now-last)/60000*1000+d.points.length;};
+   good.sort((a,b)=>score(b)-score(a));data=good[0];
+   // Merge only actual matching-timestamp Yahoo observations, not synthetic
+   // interpolation, avoiding sparse gaps when one feed has extra bars.
+   const bestEnd=freshness(data),merged=new Map();
+   for(const feed of good)if(Math.abs(freshness(feed)-bestEnd)<3*3600000)
+    for(const point of feed.points){if(Number.isFinite(point.t)&&Number.isFinite(point.p)&&point.p>0)merged.set(point.t,point)}
+   const full=[...merged.values()].sort((a,b)=>a.t-b.t);
+   if(full.length>data.points.length)data={...data,points:full,source:data.source+' · sessione elettronica integrata'};
+  }else data=await Promise.any(contenders);
   detailCache.set(key,{at:Date.now(),data});return data;
  }catch(_){/* Fall through to real, locally observed quote history. */}
  // Use actual locally observed quotes in the selected period, not fictional intraday candles.
@@ -5257,13 +5281,14 @@ function plotAssetDetail(points,a,opts={}){
  // A single BTP quote is a horizontal reference LEVEL, not a fabricated
  // historical line. We do not imply that this price held throughout the range.
  const d=singleBond?'M'+L+' '+y(points[0].p).toFixed(2)+' L'+(W-R)+' '+y(points[0].p).toFixed(2):
-  drawHistorical.map((p,i)=>(i?'L':'M')+x(p.t).toFixed(2)+' '+y(p.p).toFixed(2)).join(' ');
+  drawHistorical.map((p,i)=>(i&&!(assetDetailRange==='1d'&&/=(?:F|f)$/.test(String(a.symbol||''))&&p.t-drawHistorical[i-1].t>25*60000)?'L':'M')+x(p.t).toFixed(2)+' '+y(p.p).toFixed(2)).join(' ');
  const liveLast=points[points.length-1].live?points[points.length-1]:null;
  const isFutures=a.cat==='Futures'||/=(?:F|f)$/.test(String(a.symbol||a.ticker||''));
  // Futures: restore the dashed orange link between the last intraday candle
  // and the latest quote, matching the display used through beta 10.9.68.
  // For other asset classes the live quote remains an isolated observation.
- const tail=liveLast&&historical.length?(isFutures?'<line x1="'+x(historical[historical.length-1].t).toFixed(2)+'" y1="'+y(historical[historical.length-1].p).toFixed(2)+'" x2="'+x(liveLast.t).toFixed(2)+'" y2="'+y(liveLast.p).toFixed(2)+'" stroke="#f3c15a" stroke-width="2.4" stroke-dasharray="5 5"><title>Collegamento tra ultimo punto storico e quotazione recente; dati intermedi non disponibili</title></line>':'<circle cx="'+x(liveLast.t).toFixed(2)+'" cy="'+y(liveLast.p).toFixed(2)+'" r="5.8" fill="#f3c15a" stroke="#fff" stroke-width="1.5"><title>Ultima quotazione isolata; dati intermedi non disponibili</title></circle>'):'';
+ const futureGap=liveLast&&historical.length?liveLast.t-historical[historical.length-1].t:Infinity;
+ const tail=liveLast&&historical.length?(isFutures&&futureGap>=0&&futureGap<=6*60000?'<line x1="'+x(historical[historical.length-1].t).toFixed(2)+'" y1="'+y(historical[historical.length-1].p).toFixed(2)+'" x2="'+x(liveLast.t).toFixed(2)+'" y2="'+y(liveLast.p).toFixed(2)+'" stroke="'+color+'" stroke-width="2.8"><title>Ultima quotazione collegata alla candela recente</title></line>':isFutures?'<line x1="'+x(historical[historical.length-1].t).toFixed(2)+'" y1="'+y(historical[historical.length-1].p).toFixed(2)+'" x2="'+x(liveLast.t).toFixed(2)+'" y2="'+y(liveLast.p).toFixed(2)+'" stroke="#f3c15a" stroke-width="2.4" stroke-dasharray="5 5"><title>Tra le due rilevazioni mancano candele Yahoo: nessuna interpolazione</title></line>':'<circle cx="'+x(liveLast.t).toFixed(2)+'" cy="'+y(liveLast.p).toFixed(2)+'" r="5.8" fill="#f3c15a" stroke="#fff" stroke-width="1.5"><title>Ultima quotazione isolata; dati intermedi non disponibili</title></circle>'):'';
  const borderTop='<line x1="'+L+'" y1="'+T+'" x2="'+(W-R)+'" y2="'+T+'" stroke="#52647a" stroke-opacity=".5" stroke-dasharray="3 6"/>',borderBottom='<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#52647a" stroke-opacity=".5" stroke-dasharray="3 6"/>';
  const mc=pmc&&Number.isFinite(pmc)&&pmc>0?'<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(pmc).toFixed(2)+'" y2="'+y(pmc).toFixed(2)+'" stroke="#f3c15a" stroke-width="1.6" stroke-dasharray="5 5"/><text x="'+(W-R)+'" y="'+Math.max(11,y(pmc)-6).toFixed(2)+'" fill="#f3c15a" font-size="10" text-anchor="end">PMC '+(a.cat==='Obbligazioni'?number(pmc):localMoney(pmc,currencyOf(a)))+'</text>':'';
  const upward=sessionPoints.at(-1).p>=sessionPoints[0].p,color=upward?'#45dbae':'#fa8090';
@@ -5394,7 +5419,7 @@ async function updateDetailLiveQuote(req){
   if(!last||obs.t>last.t+60000){
    pts.push(obs);plotAssetDetail(pts,a,{previousClose:base.previousClose});
    $('assetDetailSource').textContent=base.source+' + '+obs.source+' · '+detailDate(obs.t,true)+(obs.delayed?' (differita)':'');
-   $('assetDetailNote').textContent='Ultimo punto giallo: quotazione'+(obs.delayed?' differita':'')+' con data e ora effettive, aggiornata ogni 60 secondi mentre il grafico è aperto. Tratteggio giallo: collegamento con l’ultima chiusura storica disponibile; non sono prezzi intraday ricostruiti. PMC: linea gialla orizzontale.';
+   $('assetDetailNote').textContent='Ultima quotazione'+(obs.delayed?' differita':'')+' con orario effettivo. Il futures usa le candele intraday Yahoo (anche sessione elettronica); un eventuale tratteggio segnala soltanto rilevazioni mancanti. PMC: linea gialla orizzontale.';
   }else{
    $('assetDetailNote').textContent='Lo storico è più recente o coincide con la quotazione disponibile: nessun punto aggiunto per evitare prezzi cronologicamente errati. Fonte quotazione: '+obs.source+'.';
   }
@@ -6700,7 +6725,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.74';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.78';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -7690,14 +7715,17 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
   $('fhQuizProgress').textContent=state.index>=100?'Quiz completato':'Domanda '+(state.index+1)+' di 100 · '+state.score+' corrette';
   const q=BANK[state.index];const options=$('fhQuizOptions'),next=$('fhQuizNext'),feedback=$('fhQuizFeedback');
   options.replaceChildren();next.disabled=!state.answered;
-  if(!q){$('fhQuizQuestion').textContent='Hai completato tutte le 100 domande! Punteggio: '+state.score+'/100';feedback.textContent='Miglior punteggio: '+state.best+'/100';next.disabled=true;return}
+  const miraReply=$('miraAcademyReply');
+  if(!q){$('fhQuizQuestion').textContent='Hai completato tutte le 100 domande! Punteggio: '+state.score+'/100';feedback.textContent='Miglior punteggio: '+state.best+'/100';if(miraReply)miraReply.textContent='MIRA: «Hai completato il quiz! Hai totalizzato '+state.score+' risposte corrette su 100. Il tuo record è '+state.best+'/100. Vuoi riprovare?»';next.disabled=true;return}
   $('fhQuizQuestion').textContent=q.q;
+  if(miraReply){if(state.answered){const chosen=state.history[state.index];miraReply.textContent='MIRA: «'+(chosen===q.answer?'Esatto! ':'Non proprio. La risposta corretta è '+q.options[q.answer]+'. ')+q.why+'»'}else{miraReply.textContent='MIRA: «Domanda '+(state.index+1)+': '+q.q+'»'}}
   q.options.forEach((answer,i)=>{const b=document.createElement('button');b.className='btn';b.type='button';b.textContent=String.fromCharCode(65+i)+'. '+answer;b.disabled=state.answered;
    b.addEventListener('click',()=>{
     if(state.answered)return;
     const ok=i===q.answer;state.answered=true;state.history[state.index]=i;if(ok)state.score++;
     feedback.className='fh-quiz-feedback '+(ok?'ok':'no');
     feedback.textContent=(ok?'✓ Corretto! ':'✕ Risposta corretta: '+q.options[q.answer]+'. ')+q.why;
+    const miraReply=$('miraAcademyReply');if(miraReply)miraReply.textContent='MIRA: «'+(ok?'Esatto! ':'Non proprio. La risposta corretta è '+q.options[q.answer]+'. ')+q.why+'»';
     state.best=Math.max(state.best,state.index===99?state.score:state.best);persist();mascotReact(ok);renderButtons();
    });options.append(b)});
   function renderButtons(){options.querySelectorAll('button').forEach((b,i)=>{b.disabled=true;if(i===q.answer)b.style.borderColor='#19C76D'});next.disabled=false;$('fhQuizRecord').textContent='Record: '+state.best+'/100'}

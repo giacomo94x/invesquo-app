@@ -1,3 +1,15 @@
+## Beta 10.9.78
+- Rimossa integralmente la sezione Academy «Le Borse italiane e le fonti dei grafici».
+- Spostate tutte le 100 domande del quiz all'interno dell'unico pannello Quiz e studio di Mira.
+- Ora Mira pone personalmente ciascuna domanda nel suo riquadro e spiega direttamente ogni risposta corretta o errata, senza creare un secondo riquadro di spiegazione.
+- Mantenuti progresso, record, riavvio e salvataggio dei punteggi esistenti.
+
+## Beta 10.9.77
+- Futures ES=F e altri =F: storico intraday Yahoo a 1 minuto nelle ultime 5 giornate, includendo sessione elettronica, con fallback a 5 minuti.
+- Corretto il selettore dei dati: per i futures confronta le diverse risposte e privilegia l’ultima serie verificata e più completa, anziché accettare la prima risposta.
+- Le rilevazioni realmente presenti vengono unite in ordine cronologico senza inventare candele. Nessuna linea continua sulle pause di dati superiori a 25 minuti; un collegamento alla quotazione live è continuo solo se vicino alla candela reale.
+- Cache 1G futures più breve, circa 20 secondi. Nessuna modifica a portafoglio o transazioni.
+
 ## Beta 10.9.76
 - Colore dinamico · Performance generale: rimossa la logica a soglie Finn.
 - Ora il colore usa una regola diretta: **verde se il rendimento lordo del portafoglio è positivo**, **rosso se è negativo**, neutro solo a zero.

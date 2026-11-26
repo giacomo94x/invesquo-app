@@ -10,7 +10,14 @@ exports.handler = async event => {
   const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'public, max-age=180, stale-while-revalidate=300','Access-Control-Allow-Origin':'*'};
   if(event.httpMethod!=='GET')return {statusCode:405,headers,body:JSON.stringify({error:'Method not allowed'})};
   if(!/^[A-Za-z0-9.^=\-]{1,24}$/.test(symbol)||!RANGES[range]||!/^(EUR|USD|GBP|CHF|CAD|JPY|AUD|SEK|NOK|DKK|HKD|CNY|BRL|INR)?$/.test(currency))return {statusCode:400,headers,body:JSON.stringify({error:'Richiesta non valida'})};
-  const [r,interval]=RANGES[range],url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol)+'?range='+r+'&interval='+interval+'&includePrePost=false';
+  const isFuture=/=F$/i.test(symbol);
+  const [baseRange,baseInterval]=RANGES[range];
+  // CME futures have an extended electronic session. Read the Yahoo 1-minute
+  // candles over 5 days, then let the client select its desired time window.
+  // A 1-day regular-session request may omit the most recent overnight candles.
+  const r=isFuture&&range==='1d'?'5d':baseRange;
+  const interval=isFuture&&range==='1d'?'1m':baseInterval;
+  const url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol)+'?range='+r+'&interval='+interval+'&includePrePost='+(isFuture?'true':'false');
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),5000);
   try{
     const resp=await fetch(url,{signal:controller.signal,headers:{'Accept':'application/json','User-Agent':'Mozilla/5.0 (compatible; Finholdra/1.0)'}});
