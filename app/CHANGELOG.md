@@ -1,3 +1,10 @@
+## Beta 10.9.65
+- Rimossi OpenFIGI, catalogo Netlify Blobs, funzioni di aggiornamento programmato e relativa dipendenza; nessun job automatico a consumo per la ricerca.
+- Corretto un errore JavaScript nella funzione di ricerca: la dichiarazione delle varianti futures era stata inglobata in un commento, provocando un errore su ricerche anche comuni come Tesla.
+- Ripristinato il motore Yahoo Finance + directory TradingView + ricerca italiana GEM. I risultati delle fonti sono combinati, deduplicati e ordinati per pertinenza; la ricerca non dipende più dalla prima fonte che risponde.
+- Fallback di identificativi locali per aziende conosciute anche in caso di indisponibilità delle fonti esterne; nessun prezzo sintetico. Conservati mercati, ticker e categorie, senza alterare investimenti e transazioni.
+- Mantenute le migliorie di interfaccia e tutte le altre funzioni della Beta 10.9.64.
+
 ## Beta 10.9.64
 - Catalogo titoli condiviso e persistente con Netlify Blobs: le ricerche utente leggono la cache, senza consumare chiamate OpenFIGI.
 - Le ricerche nuove o scadute vengono messe in coda e arricchite da un processo programmato ogni 15 minuti (massimo 3 ricerche OpenFIGI a ciclo).

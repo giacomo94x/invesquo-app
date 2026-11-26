@@ -3,6 +3,3 @@
 
 [functions]
   directory = "netlify/functions"
-
-[functions.catalog-refresh]
-  schedule = "*/15 * * * *"

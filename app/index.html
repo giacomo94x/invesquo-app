@@ -2216,7 +2216,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.64</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.65</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -5751,36 +5751,25 @@ async function tradingviewSearchTerm(q){
 async function yahooSearchTerm(q){
  const key=q.trim().toLocaleLowerCase('it-IT'),cached=FIN_SEARCH_CACHE.get(key);
  if(cached&&Date.now()-cached.at<120000)return cached.rows;
- const urlBase='https://query1.finance.yahoo.com/v1/finance/search?q='+encodeURIComponent(q)+'&quotesCount=45&newsCount=0';
- const tvUrl='https://symbol-search.tradingview.com/symbol_search/v3/?text='+encodeURIComponent(q)+'&hl=1&exchange=&lang=en&search_type=undefined&domain=production';
- const checks=[
+ const y='https://query1.finance.yahoo.com/v1/finance/search?q='+encodeURIComponent(q)+'&quotesCount=50&newsCount=0';
+ const tv='https://symbol-search.tradingview.com/symbol_search/v3/?text='+encodeURIComponent(q)+'&hl=1&exchange=&lang=en&search_type=undefined&domain=production';
+ const requests=[
   {url:'/.netlify/functions/search?q='+encodeURIComponent(q),type:'mixed'},
-  {url:'https://proxy.cors.dev/'+urlBase,type:'yahoo'},
-  {url:'https://api.allorigins.win/raw?url='+encodeURIComponent(urlBase),type:'yahoo'},
-  {url:tvUrl,type:'tv'},
-  {url:'https://proxy.cors.dev/'+tvUrl,type:'tv'},
-  {url:'https://api.allorigins.win/raw?url='+encodeURIComponent(tvUrl),type:'tv'}
+  {url:'https://api.allorigins.win/raw?url='+encodeURIComponent(y),type:'yahoo'},
+  {url:'https://api.allorigins.win/raw?url='+encodeURIComponent(tv),type:'tv'}
  ];
- const errors=[];
- const searches=checks.map(async ({url,type})=>{
-  try{
-   const data=JSON.parse(await readUrl(url,6200));
-   const rows=(type==='tv'?(Array.isArray(data.symbols)?data.symbols.map(tradingviewToYahoo).filter(Boolean):[]):searchResultObjects(data)).filter(x=>x&&x.symbol);
-   if(!Array.isArray(data.quotes)&&!Array.isArray(data.results)&&!Array.isArray(data.symbols))throw Error('Formato inatteso');
-   if(!rows.length)throw Error('Nessun risultato da questa fonte');
-   return rows;
-  }catch(e){errors.push(e.message);throw e}
- });
- // Prioritize the app's backend (already merges Yahoo and the symbol directory);
- // on server failure the first working external directory wins.
- const unique=new Map();
- try{
-  const first=await Promise.any(searches);
-  for(const item of first){const id=String(item.symbol||'').toUpperCase();if(id&&!unique.has(id))unique.set(id,item)}
- }catch(_){/* All services rejected the query. */}
+ // Combine sources rather than returning the first successful but possibly incomplete source.
+ const answers=await Promise.allSettled(requests.map(async ({url,type})=>{
+  const data=JSON.parse(await readUrl(url,4200));
+  if(type==='tv')return Array.isArray(data.symbols)?data.symbols.map(tradingviewToYahoo).filter(Boolean):[];
+  return searchResultObjects(data).filter(x=>x&&x.symbol);
+ }));
+ const unique=new Map();for(const answer of answers){if(answer.status!=='fulfilled')continue;
+  for(const item of answer.value){const id=String(item.symbol||'').toUpperCase();if(id&&!unique.has(id))unique.set(id,item)}
+ }
  const rows=[...unique.values()];
  if(rows.length){FIN_SEARCH_CACHE.set(key,{at:Date.now(),rows});window.__invesquoSearchIssue='';return rows;}
- window.__invesquoSearchIssue='Servizi online non disponibili oppure nessuna corrispondenza: '+errors.slice(-2).join('; ');
+ window.__invesquoSearchIssue='Fonti Yahoo/TradingView temporaneamente indisponibili; mostro gli strumenti noti quando presenti.';
  return [];
 }
 
@@ -5801,6 +5790,7 @@ const ISSUER_SEARCH_FALLBACK=[
  {words:['nvidia','nvda','1nvda','us67066g1040'],name:'NVIDIA Corporation',isin:'US67066G1040',listings:[['1NVDA.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['NVDA','NMS','Nasdaq','USD']]},
  {words:['tesla','tsla','1tsla','us88160r1014'],name:'Tesla Inc.',isin:'US88160R1014',listings:[['1TSLA.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['TSLA','NMS','Nasdaq','USD']]},
  {words:['intel','intc','us4581401001'],name:'Intel Corporation',isin:'US4581401001',listings:[['INTC','NMS','Nasdaq','USD']]},
+ {words:['sandisk','sndk','bw9'],name:'SanDisk Corporation',isin:'',listings:[['SNDK','NMS','Nasdaq','USD'],['BW9.DE','XETR','Xetra','EUR']]},
  {words:['meta','facebook','1fb','us30303m1027'],name:'Meta Platforms Inc.',isin:'US30303M1027',listings:[['1FB.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['META','NMS','Nasdaq','USD']]},
  {words:['netflix','nflx','1nflx','us64110l1061'],name:'Netflix Inc.',isin:'US64110L1061',listings:[['1NFLX.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['NFLX','NMS','Nasdaq','USD']]},
  {words:['broadcom','avgo','1avgo','us11135f1012'],name:'Broadcom Inc.',isin:'US11135F1012',listings:[['1AVGO.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['AVGO','NMS','Nasdaq','USD']]},
@@ -5891,20 +5881,7 @@ function correctAccidentalCryptoCategory(){
 
 // Discovery for every equity: ask the exchange-scoped Italian directory, not just the static GEM aliases.
 // No guessed Italian ticker is created. Only actual scoped directory results are displayed.
-// Finholdra shared catalog serves OpenFIGI identities verified against Yahoo.
-// User searches never call OpenFIGI directly; timed server jobs enrich the persistent catalogue.
-const FIN_FIGI_SEARCH_CACHE=new Map();
-async function discoverOpenFIGI(term){
- const q=String(term||'').trim();if(q.length<2)return [];
- const key=q.toLocaleLowerCase('it-IT'),cached=FIN_FIGI_SEARCH_CACHE.get(key);
- if(cached&&Date.now()-cached.at<(cached.rows.length?900000:60000))return cached.rows;
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),5400);
- try{const res=await fetch('/.netlify/functions/catalog-search?q='+encodeURIComponent(q),{signal:controller.signal});
-  if(!res.ok)return [];const data=await res.json();
-  const rows=Array.isArray(data.quotes)?data.quotes.filter(r=>r&&r.symbol&&r.shortname).slice(0,30):[];
-  FIN_FIGI_SEARCH_CACHE.set(key,{at:Date.now(),rows});return rows;
- }catch(_){return []}finally{clearTimeout(timer)}
-}
+// Ricerca live Yahoo/TradingView con directory italiana e fallback identificativi locali.
 const FIN_GEM_SEARCH_CACHE=new Map();
 async function discoverItalianEquities(q){
  const query=String(q||'').trim();
@@ -5921,7 +5898,10 @@ async function discoverItalianEquities(q){
 }
 async function searchYahooQuotes(term){
  const word=term.trim(),t=word.toUpperCase(),isin=isinFormat(t)&&isinChecksum(t);
- const lookups=[word]; // Italian listing discovery runs independently; broad keyword expansion creates irrelevant results and slows searches.const futureAliases=futuresSearchCandidates(word);for(const f of futureAliases)if(f.symbol.toLowerCase()!==word.toLowerCase())lookups.push(f.symbol);if(/amazon|amzn/i.test(word))lookups.push('1AMZN.MI','AMZN','Amazon Milano');
+ const lookups=[word]; // Le ricerche per nome non devono generare varianti non pertinenti.
+ const futureAliases=futuresSearchCandidates(word);
+ for(const f of futureAliases)if(f.symbol.toLowerCase()!==word.toLowerCase())lookups.push(f.symbol);
+ if(/amazon|amzn/i.test(word))lookups.push('1AMZN.MI','AMZN');
  if(/google|alphabet|goog/i.test(word))lookups.push('1GOOG.MI');
  // Confirmed GEM/Milan listings are queried explicitly; an Italian listing must be DISCOVERED,
  // not merely ranked above the foreign exchanges returned by the generic issuer lookup.
@@ -5949,7 +5929,7 @@ async function searchYahooQuotes(term){
  if(isin||/\b(?:btp|bond|obbligazion|mot|titolo di stato|bund|treasury)\b/i.test(word)){
   try{const r=await fetch('/.netlify/functions/bond-search?q='+encodeURIComponent(word),{cache:'no-store'});if(r.ok){const d=await r.json();candidates.push(...(d.results||[]))}}catch(_){}
  }
- const found=await Promise.allSettled([...lookups.map(q=>yahooSearchTerm(q)),discoverItalianEquities(word),discoverOpenFIGI(word)]);
+ const found=await Promise.allSettled([...lookups.map(q=>yahooSearchTerm(q)),discoverItalianEquities(word)]);
  found.forEach(r=>{if(r.status==='fulfilled')candidates.push(...r.value)});
  if(guessYahooCode(t)&&!candidates.some(c=>String(c.symbol).toUpperCase()===t))candidates.unshift({symbol:t,shortname:t,longname:t,quoteType:/=F$/i.test(t)?'FUTURE':'EQUITY'});
  const map=new Map();for(const c of candidates){if(!c.symbol)continue;const key=String(c.symbol).toUpperCase();if(!map.has(key)||futuresType(c)&&!futuresType(map.get(key)))map.set(key,c)}
@@ -6667,7 +6647,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.64';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.65';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
