@@ -5182,24 +5182,37 @@ async function fetchDetailHistory(a,range){
  }
  const failures=[];
  try{
-  const contenders=sources.map(async ([source,url])=>{
+  const loadSource=async ([source,url])=>{
    try{
     const parsed=JSON.parse(await readUrl(url,source==='server'?7500:6500));
     const data=parseHistoryPayload(parsed,a.symbol);
-    const cutoff=range==='1d'?Date.now()-25*3600000:range==='5d'?Date.now()-7*86400000:null;
     if(custom)data.points=customDetailCut(data.points);
+    // Futures trade on extended and holiday schedules. For 1G use the last
+    // available *actual* candle as the reference if Yahoo has not published
+    // anything during the last 25 hours. Never fabricate or shift timestamps.
+    const latestCandle=isFutureDay&&data.points.length?data.points[data.points.length-1].t:null;
+    const staleFutures=isFutureDay&&latestCandle<Date.now()-25*3600000;
+    const cutoff=range==='1d'?(staleFutures?latestCandle-25*3600000:Date.now()-25*3600000):range==='5d'?Date.now()-7*86400000:null;
     if(cutoff!==null)data.points=data.points.filter(p=>p.t>=cutoff);
     if(!data.points.length)throw Error('Nessuna rilevazione nel periodo richiesto');
+    if(staleFutures){data.staleSession=true;data.source+=' · ultima sessione disponibile ('+new Date(latestCandle).toLocaleDateString('it-IT')+')';}
     data.source+=' · '+(source==='server'?'server':'web');return data;
    }catch(e){failures.push(source+': '+(e.message||'errore'));throw e}
-  });
+  };
+  // Avoid launching 7–9 concurrent Yahoo calls for each futures chart.
+  // Try the Netlify aggregator first, only probe browser/proxy alternatives if needed.
+  const contenders=(isFutureDay?[sources[0]]:sources).map(loadSource);
   // For futures, a quick but truncated response is NOT preferable to a slightly
   // slower, complete Yahoo series. Compare the last verified timestamp and
   // candle coverage; all responses must pass identity/currency checks above.
   let data;
   if(isFutureDay){
-   const settled=await Promise.allSettled(contenders);
-   const good=settled.filter(s=>s.status==='fulfilled').map(s=>s.value);
+   let settled=await Promise.allSettled(contenders);
+   let good=settled.filter(s=>s.status==='fulfilled').map(s=>s.value);
+   if(!good.length){
+    settled=await Promise.allSettled(sources.slice(1).map(loadSource));
+    good=settled.filter(s=>s.status==='fulfilled').map(s=>s.value);
+   }
    if(!good.length)throw Error('Storico futures non disponibile');
    const freshness=d=>d.points.at(-1)?.t||0;
    const score=d=>{const last=freshness(d),now=Date.now();return -Math.max(0,now-last)/60000*1000+d.points.length;};
@@ -7443,7 +7456,7 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
  const appearance=macro('Aspetto','◐',true),market=macro('Mercati e quotazioni','⌁'),quotesArchive=macro('Archivio quotazioni giornaliere','▦'),portfolio=macro('Portafoglio','▤'),backup=macro('Backup e sicurezza','♧'),game=macro('Finn','◇');
  const groups=Array.from(pref.querySelectorAll(':scope > .setting-group'));
  const moveGroups=(labels,dest)=>{for(const label of labels){const g=groups.find(x=>x.querySelector(':scope > summary')?.textContent.trim()===label);if(g)dest.appendChild(g)}};
- moveGroups(['Aspetto e colori','Aspetto avanzato','Finn · Mascotte e giochi'],appearance);
+ moveGroups(['Aspetto','Aspetto e colori','Aspetto avanzato','Finn · Mascotte e giochi'],appearance);
  moveGroups(['Quotazioni e frequenza','Educational e protezione dei dati'],market);
  moveGroups(['Privacy e visualizzazione','Benessere e accessi'],portfolio);
  const marketCard=Array.from(settings.querySelectorAll(':scope > section.card')).find(x=>x.querySelector(':scope > h2')?.textContent.trim()==='Mercato di riferimento');if(marketCard)market.prepend(marketCard);
@@ -9028,5 +9041,5 @@ header.top .new-header-brand #finholdraLogo{
 <link rel="stylesheet" href="./finholdra-fintech.css?v=10.9.74">
 <link rel="stylesheet" href="./asset-detail-neutral.css?v=10.9.79">
 <link rel="stylesheet" href="./finholdra-10982.css?v=10.9.84">
-<link rel="stylesheet" href="./finholdra-1089-appearance.css?v=10.9.90">
+<link rel="stylesheet" href="./finholdra-1089-appearance.css?v=10.9.91">
 </body></html>
