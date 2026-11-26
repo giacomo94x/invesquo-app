@@ -2216,7 +2216,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.59</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.61</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -5797,12 +5797,15 @@ const ISSUER_SEARCH_FALLBACK=[
  {words:['microsoft','msft','us5949181045'],name:'Microsoft Corporation',isin:'US5949181045',listings:[['1MSFT.MI','MIL','Borsa Italiana · GEM','EUR'],['MSFT','NMS','Nasdaq','USD']]},
  {words:['amazon','amzn','us0231351067'],name:'Amazon.com Inc.',isin:'US0231351067',listings:[['1AMZN.MI','MIL','Borsa Italiana · GEM','EUR'],['AMZN','NMS','Nasdaq','USD']]},
  {words:['alphabet','google','goog','us02079k1079'],name:'Alphabet Inc. Classe C',isin:'US02079K1079',listings:[['1GOOG.MI','MIL','Borsa Italiana · GEM','EUR'],['GOOG','NMS','Nasdaq','USD']]},
- {words:['apple','aapl','us0378331005'],name:'Apple Inc.',isin:'US0378331005',listings:[['AAPL','NMS','Nasdaq','USD']]},
- {words:['nvidia','nvda','us67066g1040'],name:'NVIDIA Corporation',isin:'US67066G1040',listings:[['NVDA','NMS','Nasdaq','USD']]},
- {words:['tesla','tsla','us88160r1014'],name:'Tesla Inc.',isin:'US88160R1014',listings:[['TSLA','NMS','Nasdaq','USD']]},
+ {words:['apple','aapl','1aapl','us0378331005'],name:'Apple Inc.',isin:'US0378331005',listings:[['1AAPL.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['AAPL','NMS','Nasdaq','USD']]},
+ {words:['nvidia','nvda','1nvda','us67066g1040'],name:'NVIDIA Corporation',isin:'US67066G1040',listings:[['1NVDA.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['NVDA','NMS','Nasdaq','USD']]},
+ {words:['tesla','tsla','1tsla','us88160r1014'],name:'Tesla Inc.',isin:'US88160R1014',listings:[['1TSLA.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['TSLA','NMS','Nasdaq','USD']]},
  {words:['intel','intc','us4581401001'],name:'Intel Corporation',isin:'US4581401001',listings:[['INTC','NMS','Nasdaq','USD']]},
- {words:['meta','facebook','us30303m1027'],name:'Meta Platforms Inc.',isin:'US30303M1027',listings:[['META','NMS','Nasdaq','USD']]},
- {words:['netflix','nflx','us64110l1061'],name:'Netflix Inc.',isin:'US64110L1061',listings:[['NFLX','NMS','Nasdaq','USD']]},
+ {words:['meta','facebook','1fb','us30303m1027'],name:'Meta Platforms Inc.',isin:'US30303M1027',listings:[['1FB.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['META','NMS','Nasdaq','USD']]},
+ {words:['netflix','nflx','1nflx','us64110l1061'],name:'Netflix Inc.',isin:'US64110L1061',listings:[['1NFLX.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['NFLX','NMS','Nasdaq','USD']]},
+ {words:['broadcom','avgo','1avgo','us11135f1012'],name:'Broadcom Inc.',isin:'US11135F1012',listings:[['1AVGO.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['AVGO','NMS','Nasdaq','USD']]},
+ {words:['strategy','microstrategy','mstr','1mstr','us5949724083'],name:'Strategy Inc.',isin:'US5949724083',listings:[['1MSTR.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['MSTR','NMS','Nasdaq','USD']]},
+ {words:['block inc','square inc','1sq','us8522341036'],name:'Block Inc.',isin:'US8522341036',listings:[['1SQ.MI','MIL','Borsa Italiana · GEM Milano','EUR'],['XYZ','NYQ','NYSE','USD']]},
  {words:['visa','us92826c8394'],name:'Visa Inc.',isin:'US92826C8394',listings:[['V','NYQ','NYSE','USD']]}
 ];
 function knownIssuerMatches(term){const q=String(term||'').toLowerCase().trim();if(q.length<2)return [];
@@ -5886,10 +5889,33 @@ function correctAccidentalCryptoCategory(){
  return select.value;
 }
 
+// Discovery for every equity: ask the exchange-scoped Italian directory, not just the static GEM aliases.
+// No guessed Italian ticker is created. Only actual scoped directory results are displayed.
+const FIN_GEM_SEARCH_CACHE=new Map();
+async function discoverItalianEquities(q){
+ const query=String(q||'').trim();
+ if(query.length<2||/\b(?:futures?|bitcoin|ethereum|forex|obbligazion|btp|crypto)\b/i.test(query))return [];
+ const key=query.toLowerCase(),cached=FIN_GEM_SEARCH_CACHE.get(key);
+ if(cached&&Date.now()-cached.at<300000)return cached.rows;
+ const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),4800);
+ try{
+  const res=await fetch('/.netlify/functions/gem-search?q='+encodeURIComponent(query),{signal:ctl.signal});
+  if(!res.ok)return [];
+  const data=await res.json();const rows=Array.isArray(data.quotes)?data.quotes.filter(r=>/\.MI$/i.test(String(r.symbol))&&['EQUITY','STOCK'].includes(String(r.quoteType).toUpperCase())):[];
+  FIN_GEM_SEARCH_CACHE.set(key,{at:Date.now(),rows});return rows;
+ }catch(_){return []}finally{clearTimeout(timer)}
+}
 async function searchYahooQuotes(term){
  const word=term.trim(),t=word.toUpperCase(),isin=isinFormat(t)&&isinChecksum(t);
  const lookups=[word];if(!isin&&word.length>=3&&!/\b(?:futures?|bitcoin|ethereum|forex|bond|obbligazion|btp)\b/i.test(word))lookups.push(word+' Borsa Italiana GEM');const futureAliases=futuresSearchCandidates(word);for(const f of futureAliases)if(f.symbol.toLowerCase()!==word.toLowerCase())lookups.push(f.symbol);if(/amazon|amzn/i.test(word))lookups.push('1AMZN.MI','AMZN','Amazon Milano');
  if(/google|alphabet|goog/i.test(word))lookups.push('1GOOG.MI');
+ // Confirmed GEM/Milan listings are queried explicitly; an Italian listing must be DISCOVERED,
+ // not merely ranked above the foreign exchanges returned by the generic issuer lookup.
+ for(const issuer of ISSUER_SEARCH_FALLBACK){
+  if(issuer.words.some(w=>w===word.toLowerCase()||(word.length>=3&&w.includes(word.toLowerCase())))){
+   for(const [symbol,exchange] of issuer.listings)if(exchange==='MIL'&&!lookups.includes(symbol))lookups.push(symbol);
+  }
+ }
  if(/bitcoin|btc/i.test(word))lookups.push('BTC-EUR','BTC-USD');
  if(/ethereum|ether|eth/i.test(word))lookups.push('ETH-EUR','ETH-USD');
  if(/^(xeon|lu0290358497)$/i.test(word)||/overnight|monetari|\bestr\b|\bstr\b/i.test(word))lookups.push('XEON.MI','XEON.DE','Xtrackers EUR Overnight');
@@ -5909,7 +5935,7 @@ async function searchYahooQuotes(term){
  if(isin||word.length>=3){
   try{const r=await fetch('/.netlify/functions/bond-search?q='+encodeURIComponent(word),{cache:'no-store'});if(r.ok){const d=await r.json();candidates.push(...(d.results||[]))}}catch(_){}
  }
- const found=await Promise.allSettled(lookups.map(q=>yahooSearchTerm(q)));
+ const found=await Promise.allSettled([...lookups.map(q=>yahooSearchTerm(q)),discoverItalianEquities(word)]);
  found.forEach(r=>{if(r.status==='fulfilled')candidates.push(...r.value)});
  if(guessYahooCode(t)&&!candidates.some(c=>String(c.symbol).toUpperCase()===t))candidates.unshift({symbol:t,shortname:t,longname:t,quoteType:/=F$/i.test(t)?'FUTURE':'EQUITY'});
  const map=new Map();for(const c of candidates){if(!c.symbol)continue;const key=String(c.symbol).toUpperCase();if(!map.has(key)||futuresType(c)&&!futuresType(map.get(key)))map.set(key,c)}
@@ -5957,7 +5983,7 @@ function searchIssuerLogo(r){
 function formatSearchResult(a){return svgEscape((a.longname||a.shortname||a.symbol)+' · '+a.symbol)}
 /* Beta 9.7 — curated instruments as discoverable search suggestions; no invented volume ranking. */
 const FINHOLDRA_BROWSE_CATALOG={
- 'Azioni':[['NVIDIA','NVDA','Nasdaq · USA'],['Apple','AAPL','Nasdaq · USA'],['Microsoft','MSFT','Nasdaq · USA'],['Amazon','AMZN','Nasdaq · USA'],['Alphabet C','GOOG','Nasdaq · USA'],['Tesla','TSLA','Nasdaq · USA'],['Meta Platforms','META','Nasdaq · USA'],['Intesa Sanpaolo','ISP.MI','Milano · Italia'],['Enel','ENEL.MI','Milano · Italia'],['Ferrari','RACE.MI','Milano · Italia']],
+ 'Azioni':[['NVIDIA · GEM Milano','1NVDA.MI','GEM Milano · Italia'],['Tesla · GEM Milano','1TSLA.MI','GEM Milano · Italia'],['NVIDIA','NVDA','Nasdaq · USA'],['Apple','AAPL','Nasdaq · USA'],['Microsoft','MSFT','Nasdaq · USA'],['Amazon','AMZN','Nasdaq · USA'],['Alphabet C','GOOG','Nasdaq · USA'],['Tesla','TSLA','Nasdaq · USA'],['Meta Platforms','META','Nasdaq · USA'],['Intesa Sanpaolo','ISP.MI','Milano · Italia'],['Enel','ENEL.MI','Milano · Italia'],['Ferrari','RACE.MI','Milano · Italia']],
  'ETF':[['Vanguard FTSE All-World','VWCE.MI','Borsa Italiana'],['iShares Core MSCI World','SWDA.MI','Borsa Italiana'],['iShares Core S&P 500','CSSPX.MI','Borsa Italiana'],['Vanguard S&P 500','VUAA.MI','Borsa Italiana'],['Xtrackers MSCI World','XDWD.DE','Xetra'],['Invesco Nasdaq 100','EQQQ.MI','Borsa Italiana']],
  'ETF monetari':[['Xtrackers EUR Overnight Rate','XEON.MI','Borsa Italiana'],['Amundi Smart Overnight Return','CSH2.PA','Euronext Parigi'],['iShares EUR Ultrashort Bond','ERNE.MI','Borsa Italiana']],
  'Obbligazioni':[['BTP Valore','BTP Valore ISIN','Titoli di Stato italiani · cerca ISIN'],['BTP Italia','BTP Italia','Titoli indicizzati · cerca ISIN'],['BTP ordinari','BTP','Titoli di Stato italiani'],['Bund tedeschi','Bund','Titoli di Stato Germania'],['Treasury USA','US Treasury Bond','Titoli di Stato USA'],['Obbligazioni societarie','corporate bond','Emittenti privati']],

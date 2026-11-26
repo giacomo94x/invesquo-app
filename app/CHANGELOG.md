@@ -1,3 +1,13 @@
+## Beta 10.9.61
+- Ricerca azioni su Radar, Preferiti e Aggiungi investimento: ricerca generalizzata delle quotazioni a Milano (GEM e altri mercati azionari) tramite directory filtrata per mercato italiano, invece di dipendere da una lista di società preimpostate.
+- Risultati italiani individuati dalla directory aggiunti al motore comune e ordinati per primi; nessun ticker italiano inventato, con le alternative estere sempre disponibili.
+- Cache breve e chiamate parallele per evitare di rallentare inutilmente le ricerche.
+
+## Beta 10.9.60
+- Radar/Preferiti/Aggiungi investimento: ricerca GEM corretta a monte dei risultati; inclusi i ticker italiani ufficiali verificati 1NVDA.MI (NVIDIA), 1TSLA.MI (Tesla), 1AVGO.MI (Broadcom), 1MSTR.MI (Strategy), 1SQ.MI (Block) e anche 1AAPL.MI (Apple), 1FB.MI (Meta), 1NFLX.MI (Netflix), oltre ad Alphabet e Microsoft già presenti.
+- La ricerca interroga esplicitamente i ticker GEM disponibili e presenta la quotazione italiana in EUR prima di Nasdaq/Xetra; conserva le alternative estere.
+- Le quotazioni effettive restano recuperate dalle fonti, senza inventare prezzi. La denominazione GEM viene distinta dal semplice mercato tedesco in EUR.
+
 ## Beta 10.9.59
 - Academy: Mira ha riquadri e proporzioni coerenti fra Quiz e Finanza comportamentale, e una sola risposta ampia per ogni tema.
 - Radar: Nexus a corpo intero, stessa cornice e proporzioni di Mira.
