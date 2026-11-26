@@ -77,3 +77,13 @@
 #searchResults .search-row{padding-top:14px;padding-bottom:14px}
 @media(max-width:560px){.nexus-head,.mira-academy-top{align-items:flex-start}.nexus-card h2,.mira-academy-card h2{line-height:1.14}#searchResults .search-row{padding-top:13px;padding-bottom:13px}}
 @media(prefers-reduced-motion:reduce){#miraAcademyOpen,#nexusOpen,#fhBehavioralMiraPortrait,#miraAcademyOpen img,#nexusOpen img,#fhBehavioralMiraPortrait img{animation:none!important}}
+
+/* Beta 10.9.88: only the character silhouette is opaque; themed surface shows behind image. */
+#miraAcademyOpen,#nexusOpen,#fhBehavioralMiraPortrait{background:var(--fh-theme-panel,var(--panel))!important;border:1.5px solid var(--fh-theme-border,var(--border))!important;isolation:isolate;overflow:hidden!important;box-shadow:none!important;border-radius:15px!important}
+#miraAcademyOpen::before,#nexusOpen::before,#fhBehavioralMiraPortrait::before{display:none!important}
+#miraAcademyOpen::after,#nexusOpen::after,#fhBehavioralMiraPortrait::after{display:none!important}
+#miraAcademyOpen img,#nexusOpen img,#fhBehavioralMiraPortrait img{background:transparent!important;object-fit:contain!important;object-position:center center!important;filter:none!important;max-width:100%!important;max-height:100%!important;padding:3px!important}
+#miraAcademyOpen img,#nexusOpen img{animation:fh985PortraitSway 5.9s ease-in-out infinite!important;transform-origin:50% 82%}
+#miraAcademyOpen img{animation-duration:4.8s!important;animation-delay:-1.1s!important}
+body.motion-off #miraAcademyOpen img,body.motion-off #nexusOpen img{animation:none!important}
+@media(prefers-reduced-motion:reduce){#miraAcademyOpen img,#nexusOpen img{animation:none!important}}
