@@ -1,3 +1,10 @@
+## Beta 10.9.92
+- Distribuzione completa: incluse tutte e 12 le funzioni Netlify effettivamente richieste dal frontend.
+- Quotazioni Yahoo per strumenti e Alphabet EUR Milano, e indici con verifiche di ticker, valuta e timestamp.
+- Endpoint obbligazioni sempre esistenti: rispondono con errore esplicito quando non possono verificare la fonte MOT, senza inventare prezzi.
+- Confermata sezione Impostazioni Aspetto dalla 10.9.91.
+- Pubblicare da repository GitHub (branch beta) tramite Netlify build o Netlify CLI: il solo drag-and-drop statico non distribuisce le funzioni.
+
 ## Beta 10.9.91 — Ripristino sezione Aspetto
 - Corretto il nome cercato dal raggruppamento impostazioni: "Aspetto" (non solo "Aspetto e colori").
 - Ripristinati Lingua, Tema, Stile, colore dinamico e le restanti impostazioni prima di Aspetto avanzato.
