@@ -1,0 +1,5 @@
+FINHOLDRA Beta 10.9.90 - distribuzione frontend + funzioni recuperate
+Questo archivio contiene tutto il frontend della 10.9.90 e le 4 funzioni Netlify presenti nella Beta 10.9.86, oltre al nuovo endpoint health richiesto dalla schermata Impostazioni.
+ATTENZIONE: altri endpoint richiesti dall'app (alphabet, live-quote, bond-search, bond-quote, bond-history, instruments, market-indices) non erano presenti negli archivi precedenti disponibili. Devono essere recuperati dal repository originale se esistenti, e non sono implementati o verificati da questo pacchetto.
+Il controllo health indica solo che l'endpoint di controllo risponde: non garantisce il corretto funzionamento di tutte le integrazioni o dei fornitori dati.
+Per preservare funzioni eventualmente gia presenti nel repository, integrare lo ZIP nel repository senza cancellare altri file della cartella netlify/functions. Netlify deve fare il deploy dal repository/build che include le funzioni.

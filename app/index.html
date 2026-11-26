@@ -7443,7 +7443,7 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
  const appearance=macro('Aspetto','◐',true),market=macro('Mercati e quotazioni','⌁'),quotesArchive=macro('Archivio quotazioni giornaliere','▦'),portfolio=macro('Portafoglio','▤'),backup=macro('Backup e sicurezza','♧'),game=macro('Finn','◇');
  const groups=Array.from(pref.querySelectorAll(':scope > .setting-group'));
  const moveGroups=(labels,dest)=>{for(const label of labels){const g=groups.find(x=>x.querySelector(':scope > summary')?.textContent.trim()===label);if(g)dest.appendChild(g)}};
- moveGroups(['Aspetto e colori','Aspetto avanzato','Finn · Mascotte e giochi'],appearance);
+ moveGroups(['Aspetto','Aspetto e colori','Aspetto avanzato','Finn · Mascotte e giochi'],appearance);
  moveGroups(['Quotazioni e frequenza','Educational e protezione dei dati'],market);
  moveGroups(['Privacy e visualizzazione','Benessere e accessi'],portfolio);
  const marketCard=Array.from(settings.querySelectorAll(':scope > section.card')).find(x=>x.querySelector(':scope > h2')?.textContent.trim()==='Mercato di riferimento');if(marketCard)market.prepend(marketCard);
@@ -9028,5 +9028,5 @@ header.top .new-header-brand #finholdraLogo{
 <link rel="stylesheet" href="./finholdra-fintech.css?v=10.9.74">
 <link rel="stylesheet" href="./asset-detail-neutral.css?v=10.9.79">
 <link rel="stylesheet" href="./finholdra-10982.css?v=10.9.84">
-<link rel="stylesheet" href="./finholdra-1089-appearance.css?v=10.9.90">
+<link rel="stylesheet" href="./finholdra-1089-appearance.css?v=10.9.91">
 </body></html>
