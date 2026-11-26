@@ -1,5 +1,0 @@
-Finholdra Beta 10.6.12
-- Statistiche: correzione della variabile di risultato non definita che impediva la visualizzazione.
-- Home weekend: palette più gialla e luminosa.
-- Sotto la lente: Ultimo acquisto vs minimo + PMC vs minimo, scala verde sotto 0, giallo 0-3, arancione 3-10, rosso oltre 10%.
-- Impostazioni: Giochi di Finn diventa categoria separata in fondo, impostazioni mascotte restano in Aspetto.

@@ -1,5 +1,0 @@
-Finholdra Beta 10.9.1
-- Storico Home: parti dalla data della prima posizione documentata e dalle quotazioni archiviate, non dalla prima rilevazione dell’app.
-- Capitale/valore: stessa serie completa dello storico selezionato.
-- FinnSolid: bug Riprova corretto, difficoltà Facile/Difficile, fase jeep con Mira dopo Liquid al 15, poi inseguimento finale al 16.
-- Dati anteriori all’acquisto non vengono presentati come patrimonio posseduto.

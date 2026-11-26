@@ -1,1 +1,0 @@
-Backup automatico Google Drive opzionale per profilo e dispositivo. Frequenza 15 min–7 giorni, default 1 ora. Copia separata da quella manuale. Token in memoria; riconnessione dopo scadenza o riapertura. Nessun servizio in background.
