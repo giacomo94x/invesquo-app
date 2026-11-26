@@ -1,7 +1,0 @@
-Finholdra Beta 10.6.9
-- Banner rendimento lordo in Home totale e per categoria.
-- Sotto il totale patrimonio soltanto differenza euro, non percentuale.
-- Legenda categorie senza riquadri colorati aggiuntivi.
-- Sabato e domenica con tema dinamico: ambra neutro, anche durante caricamento.
-- Finn nel weekend riposa e occasionalmente pensa; particelle € $ ¥.
-- Mantiene Statistiche 10.6.7 e grafici 1S/3M.

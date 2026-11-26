@@ -1,8 +1,0 @@
-Finholdra Beta 10.9.5
-- Bordo grafico allocazione: stessa tinta del fondo Home, leggermente più scura; reattivo al cambio tema.
-- Archivio chiusure 2026: recupero per tutti gli asset disponibili dal 01/01/2026, con distinzione per fonte e date.
-- Grafico Patrimonio: non riempie più le giornate mancanti copiando il totale del giorno precedente; usa solo valori completi e prezzi portati avanti per le sole giornate di mercato chiuso.
-- Resoconto recupero per strumento (giorni disponibili e mancanti).
-- Versione app, version.json e manifest: 10.9.5.
-
-Nota: le chiusure dipendono dalle fonti di mercato. Titoli senza dati, valute non recuperate e valori prima delle date documentate di possesso non vengono inventati.

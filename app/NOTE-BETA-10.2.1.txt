@@ -1,1 +1,0 @@
-Archivio e grafico locali indipendenti dalla rete; recupero progressivo con timeout; calendario sulla stessa riga; ripristino prezzi archiviati dal JSON.

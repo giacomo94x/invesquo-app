@@ -1,6 +1,0 @@
-Finholdra 10.2.0
-Grafico patrimonio ricostruito con quantità giornaliere ricavate a ritroso dal registro delle transazioni e chiusure da archivio per strumento.
-Archivio chiusure giornaliere in Impostazioni → Portafoglio; aggiornamento quando app aperta, senza background server e con indicazione della fonte.
-Calendario personalizzato grafici singoli titoli (predefinito fine oggi).
-Header orizzontale e desktop allineato larghezza contenuti.
-Dati incompleti non generano un totale parziale.

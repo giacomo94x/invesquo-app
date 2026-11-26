@@ -1,4 +1,0 @@
-Finholdra Beta 10.8.3
-- Nexus e Mira hanno animazioni leggere dei ritratti in Radar e Academy; supporto riduzione movimento.
-- Liquid Leverage, boss finale di FinnSolid, ora e un rivale rosso di Finn con bandana blu e movimenti animati.
-- Nessuna modifica alle hitbox, alle soglie o alla progressione.

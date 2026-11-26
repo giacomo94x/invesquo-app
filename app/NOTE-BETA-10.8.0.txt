@@ -1,6 +1,0 @@
-Finholdra Beta 10.8.0
-- Opzione colore weekend giallo on/off
-- FinnSolid: gadget EMP/fumo/esca con pulsanti distinti e meccaniche indipendenti
-- Dialoghi Codec visuali prima di ogni missione (Nexus e Finn, personaggi originali)
-- Nexus in coda a Radar, con risposte basate esclusivamente sui dati e notizie attualmente recuperati
-- Conserva l'importazione/esportazione dei backup e tutte le altre funzioni.

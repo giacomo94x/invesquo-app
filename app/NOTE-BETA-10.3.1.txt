@@ -1,1 +1,0 @@
-Larghezza condivisa per header, navigazione e sezioni su desktop e landscape. Vista verticale invariata.

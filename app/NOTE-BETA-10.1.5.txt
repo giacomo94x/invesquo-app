@@ -1,1 +1,0 @@
-Beta 10.1.5: Archivio Storico mostra un solo logo per operazione, identico a quello di Investimenti. Rimossa icona generica accanto al logo. Nessuna modifica ai dati finanziari.

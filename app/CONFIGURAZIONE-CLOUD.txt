@@ -1,7 +1,0 @@
-Finholdra Beta 10.1.1 - Supabase gia configurato.
-Project URL e chiave publishable pubblica sono in supabase-config.js.
-
-IMPORTANTE: Per il funzionamento effettivo devi aver eseguito SUPABASE-SETUP.sql e abilitato Authentication > Email.
-Configura Site URL e redirect per il dominio Netlify.
-Su siti pubblici abilita un provider SMTP idoneo e verifica RLS prima di usare dati reali.
-La sincronizzazione non e stata collaudata con un accesso reale in questa build.

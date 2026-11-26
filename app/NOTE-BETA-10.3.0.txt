@@ -1,1 +1,0 @@
-Grafico patrimonio con saldo al netto di acquisti/vendite, marker quantità, layout e trasferimento manuale JSON tramite cloud privato. Nessuna sincronizzazione automatica. I dati mancanti restano mancanti; le rilevazioni indicative non sono chiusure ufficiali.

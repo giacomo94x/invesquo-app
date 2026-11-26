@@ -1,1 +1,0 @@
-Palette Home autonome rosso/verde, header uniforme; Radar: fonte alternativa TradingView, collegamento ufficiale ETF Milano, controvalore ufficiale quando recuperabile, widget quotazioni in caso di indisponibilità. Le fonti esterne possono bloccare il browser: nessun dato simulato.

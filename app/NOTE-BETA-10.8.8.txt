@@ -1,5 +1,0 @@
-Finholdra Beta 10.9.1
-- Riparato il blocco JavaScript di Nexus: un apostrofo non escapato impediva ai comandi di funzionare.
-- Le 4 domande di Nexus ora funzionano e si riferiscono al mercato selezionato.
-- Ricerca notizie per titolo tramite funzione Netlify server-side (Google News RSS + fallback Bing News), con link di verifica e nessun risultato inventato.
-- Resta disponibile il collegamento esterno quando le fonti non rispondono.

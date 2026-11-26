@@ -1,1 +1,0 @@
-Beta 10.1.7: Grafico Home usa solo snapshots reali osservati, senza ricostruzioni e trascinamenti del giorno precedente. Scelta data iniziale. Grafici titoli con intervallo personalizzato da/al (giorno/mese/anno) con prezzi storici verificati. Nessuna modifica alle transazioni o al portafoglio.
