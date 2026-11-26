@@ -1,3 +1,16 @@
+## Beta 10.9.81
+- Ripristinata la funzione Netlify `market-news`: era assente e impediva il caricamento delle notizie dal pannello principale e da Finn Radar.
+- Notizie da Yahoo Finance con ricerca RSS alternativa; etichetta della fonte reale mostrata all’utente. I titoli delle notizie rimangono link alle pagine originali, senza generazione di contenuti.
+- Sotto la lente: **Prezzo del titolo nel range 1A** e **Tuo PMC nel range 1A** tornano neutri, senza verde/arancione/rosso. Barre e valori restano leggibili.
+
+## Beta 10.9.80
+- Grafici futures: eliminato il riempimento/ombra SVG che formava triangoli artificiali in corrispondenza delle interruzioni della serie. La linea dei prezzi, i dati Yahoo, il cursore e il collegamento tratteggiato dell’ultima quotazione restano invariati.
+
+## Beta 10.9.79
+- Corretto il tema dinamico che rendeva completamente verdi o rossi i dettagli dei titoli e dei futures quando il portafoglio cambiava segno.
+- La finestra dei titoli e il grafico usano ora i colori neutri del tema selezionato, anche con colore dinamico attivo su Home o in tutta l’app.
+- Nessuna modifica alle quotazioni, ai dati del portafoglio e ai grafici Yahoo.
+
 ## Beta 10.9.78
 - Rimossa integralmente la sezione Academy «Le Borse italiane e le fonti dei grafici».
 - Spostate tutte le 100 domande del quiz all'interno dell'unico pannello Quiz e studio di Mira.

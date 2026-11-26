@@ -2252,7 +2252,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.78</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.79</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -5296,7 +5296,9 @@ function plotAssetDetail(points,a,opts={}){
  const marks=singleBond||(liveLast&&!isFutures)?'': '<circle cx="'+x(points[points.length-1].t).toFixed(2)+'" cy="'+y(points[points.length-1].p).toFixed(2)+'" r="'+(liveLast?'5.8':'4.4')+'" fill="'+(liveLast?'#f3c15a':color)+'" stroke="#0c192b" stroke-width="2"/>';
  const axis=singleBond?'<text x="'+(W/2)+'" y="'+(H-7)+'" text-anchor="middle" fill="#a9b9ce" font-size="10">Ultima rilevazione: '+svgEscape(detailDate(left,false))+'</text>':
  '<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+svgEscape(hasPrior?'Chiusura prec.':detailDate(left,assetDetailRange==='1d'))+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+svgEscape(detailDate(right,assetDetailRange==='1d'))+'</text>';
- const area=!singleBond&&drawHistorical.length>1?'<path d="'+d+' L'+x(drawHistorical[drawHistorical.length-1].t).toFixed(2)+' '+(H-B)+' L'+x(drawHistorical[0].t).toFixed(2)+' '+(H-B)+' Z" fill="url(#fhDetailFill)"/>':'';
+ // Futures often contain legitimate session breaks. Filling a multi-segment SVG path
+ // closes the gaps into artificial triangular shadows; keep the futures line-only.
+ const area=!isFutures&&!singleBond&&drawHistorical.length>1?'<path d="'+d+' L'+x(drawHistorical[drawHistorical.length-1].t).toFixed(2)+' '+(H-B)+' L'+x(drawHistorical[0].t).toFixed(2)+' '+(H-B)+' Z" fill="url(#fhDetailFill)"/>':'';
  const chartDefs='<defs><linearGradient id="fhDetailFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+color+'" stop-opacity=".22"/><stop offset="100%" stop-color="'+color+'" stop-opacity=".015"/></linearGradient></defs>';
  // Markers come directly from the transaction ledger, for all instrument types (including crypto).
  // Each dated operation remains individually available in the detail panel; nearby positions are visually grouped.
@@ -6725,7 +6727,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.78';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.79';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -7371,7 +7373,9 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
   try{
    const response=await fetch('/.netlify/functions/market-news?source='+encodeURIComponent(src),{cache:'no-store',headers:{Accept:'application/json'}});
    if(!response.ok)throw Error('Notizie non disponibili');const payload=await response.json();
-   if(!panel.classList.contains('hidden')&&source()===src){const items=Array.isArray(payload.articles)?payload.articles.slice(0,4):[];
+   if(!panel.classList.contains('hidden')&&source()===src){
+    const sourceLabel=document.getElementById('finholdraNewsSourceLabel');
+    if(sourceLabel && payload.source){sourceLabel.textContent='· '+String(payload.source).slice(0,90).toUpperCase();}const items=Array.isArray(payload.articles)?payload.articles.slice(0,4):[];
     if(items.length){results.innerHTML=items.map(n=>{const url=String(n.url||'');if(!/^https:\/\//i.test(url))return '';return '<article class="finholdra-news-item"><a href="'+safe(url)+'" target="_blank" rel="noopener noreferrer">'+safe(n.title||'Notizia')+'</a><div class="finholdra-news-meta">'+safe(n.source||'')+(n.publishedAt?' · '+safe(stamp(n.publishedAt)):'')+'</div></article>';}).join('')+(items.length<4?'<p class="finholdra-news-state">La fonte ha restituito '+items.length+' notizie disponibili su 4. Nessun articolo aggiunto senza una fonte verificabile.</p>':'');}
     else results.innerHTML='<p class="finholdra-news-state">La fonte non ha restituito notizie italiane recenti. Apri il sito della fonte oppure riprova più tardi.</p>';
     newsCache={source:src,at:Date.now()};}
@@ -8547,7 +8551,7 @@ function ensureLens(){
       $('.fh70-card-value',priceCard).textContent=Number.isFinite(price)?fmt(price,2)+' €':'—';
       $('.fh70-card-sub',priceCard).textContent=Number.isFinite(min)&&Number.isFinite(max)?('Range 1A '+fmt(min,2)+' – '+fmt(max,2)):'Prezzo attuale nel mercato dell’ultimo anno.';
       const p=Number.isFinite(min)&&Number.isFinite(max)&&max>min&&Number.isFinite(price)?((price-min)/(max-min)*100):NaN; paintTrack(priceCard,p);
-      const kind=rangeTone(p); if(kind) applyLensTone(priceCard,kind,kind); else clearLensTone(priceCard);
+      clearLensTone(priceCard); // Il range è descrittivo: nessun giudizio cromatico.
     }
     const pmcCard=$('#fh70LensPmc'); if(pmcCard){
       $('.fh70-card-value',pmcCard).textContent=Number.isFinite(pmc)?fmt(pmc,4)+' €':'—';
@@ -8555,7 +8559,7 @@ function ensureLens(){
       if(Number.isFinite(min)&&Number.isFinite(max)&&max>min&&Number.isFinite(pmc)) subt='Range 1A '+fmt(min,2)+' – '+fmt(max,2);
       $('.fh70-card-sub',pmcCard).textContent=subt;
       const p=Number.isFinite(min)&&Number.isFinite(max)&&max>min&&Number.isFinite(pmc)?((pmc-min)/(max-min)*100):NaN; paintTrack(pmcCard,p);
-      const kind=rangeTone(p); if(kind) applyLensTone(pmcCard,kind,kind); else clearLensTone(pmcCard);
+      clearLensTone(pmcCard); // Il PMC nel range è descrittivo: resta neutro.
     }
     const benchCard=$('#fh70LensBench'); if(benchCard){
       const valueNode=$('.fh70-card-value',benchCard);
@@ -8989,4 +8993,5 @@ header.top .new-header-brand #finholdraLogo{
 </style><script defer src="./finholdra-10967.js?v=10.9.74"></script>
 <link rel="stylesheet" href="./finholdra-premium.css?v=10.9.74">
 <link rel="stylesheet" href="./finholdra-fintech.css?v=10.9.74">
+<link rel="stylesheet" href="./asset-detail-neutral.css?v=10.9.79">
 </body></html>

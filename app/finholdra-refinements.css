@@ -42,3 +42,8 @@
 #finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="orange"] .fh70-card-value{color:#f4a34b!important}
 #finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="bad"] .fh70-card-value{color:var(--red)!important}
 #finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal] .fh70-chip{filter:saturate(1.15);opacity:.98}
+
+/* Beta 10.9.81 — I due range sono indicatori descrittivi, senza semafori. */
+#finInvestIntelligence #fh70LensGrid :is(#fh70LensPrice,#fh70LensPmc).fh70-card{background:var(--panel2)!important;border-color:var(--border)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important}
+#finInvestIntelligence #fh70LensGrid :is(#fh70LensPrice,#fh70LensPmc) .fh70-card-value{color:var(--text)!important}
+#finInvestIntelligence #fh70LensGrid :is(#fh70LensPrice,#fh70LensPmc) .fh70-card-title{color:var(--muted)!important}
