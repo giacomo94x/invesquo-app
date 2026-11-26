@@ -1,3 +1,17 @@
+## Beta 10.9.64
+- Catalogo titoli condiviso e persistente con Netlify Blobs: le ricerche utente leggono la cache, senza consumare chiamate OpenFIGI.
+- Le ricerche nuove o scadute vengono messe in coda e arricchite da un processo programmato ogni 15 minuti (massimo 3 ricerche OpenFIGI a ciclo).
+- Associazione dei ticker OpenFIGI verificata con metadati Yahoo Finance prima di renderli selezionabili; i risultati Yahoo pertinenti vengono memorizzati nel catalogo e i grafici continuano a usare Yahoo.
+- La ricerca live Yahoo/TradingView resta operativa per titoli assenti dal catalogo.
+- Necessaria pubblicazione Netlify tramite GitHub/build con installazione dipendenza @netlify/blobs; sincronizzazione cloud non funziona con sola apertura locale.
+- OpenFIGI non è una fonte bulk mondiale: catalogo progressivo, soggetto alla disponibilità e alle condizioni di licenza dei fornitori.
+
+## Beta 10.9.62
+- Ricerca titoli: risultati reali subito sotto il campo; il catalogo di suggerimenti non mostra più società non attinenti durante una ricerca.
+- Filtraggio pertinenza su nome, ticker e ISIN; quote italiane individuate in precedenza mantengono priorità tra i risultati corrispondenti.
+- Scorrimento categorie su PC con frecce, rotellina e barra orizzontale; catalogo richiudibile e ricerca automatica dopo digitazione.
+- Radar, Preferiti e Aggiungi titolo utilizzano gli stessi risultati condivisi e non sovrascrivono richieste obsolete.
+
 ## Beta 10.9.61
 - Ricerca azioni su Radar, Preferiti e Aggiungi investimento: ricerca generalizzata delle quotazioni a Milano (GEM e altri mercati azionari) tramite directory filtrata per mercato italiano, invece di dipendere da una lista di società preimpostate.
 - Risultati italiani individuati dalla directory aggiunti al motore comune e ordinati per primi; nessun ticker italiano inventato, con le alternative estere sempre disponibili.
@@ -561,3 +575,4 @@ Non eliminare i backup JSON locali finche` un ripristino reale su due dispositiv
 
 Beta 10.1.3: rimossa la prima voce duplicata e vuota 'Finn · Mascotte e giochi' nelle impostazioni Portafoglio. Mantenuta la voce funzionante e la sezione Gioca con Finn.
 Beta 10.9.32: aumentato il padding interno dei banner dei titoli nella vista Home espansa, cosi i bordi non restano troppo a filo con il testo.
+Beta 10.9.63: ricerca titoli integrata con OpenFIGI v3 su funzione Netlify, senza chiave obbligatoria. Fonte di identificazione affiancata a Yahoo/ricerca italiana; rispetto dei limiti al minuto, cache, fallback, controllo dei simboli Milano prima di mostrarli. Nessuna modifica a acquisti o storico.
