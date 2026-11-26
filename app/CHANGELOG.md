@@ -1,3 +1,13 @@
+## Beta 10.9.76
+- Colore dinamico · Performance generale: rimossa la logica a soglie Finn.
+- Ora il colore usa una regola diretta: **verde se il rendimento lordo del portafoglio è positivo**, **rosso se è negativo**, neutro solo a zero.
+- Aggiornate anche etichetta e descrizione nelle Impostazioni per chiarire il comportamento.
+
+## Beta 10.9.75
+- Sotto la lente: tutte le schede usano ora una semantica cromatica coerente **verde / arancio / rosso** per rendere subito visibile la condizione.
+- Colorazione estesa anche alle schede **PMC vs minimo**, **Prezzo del titolo nel range 1A**, **Tuo PMC nel range 1A**, **Andamento** e **Confronto col mercato**.
+- I casi neutri o intermedi vengono resi in arancio, evitando il giallo, per una lettura visiva più compatta e coerente.
+
 ## Beta 10.9.74 — 26/11/2026
 - Restyling fintech raffinato: superfici, pannelli, profondità, controlli, tipografia, focus e contrasto adattivo, senza modifiche ai dati finanziari.
 - Rimosso tema/stile Natale dalle Impostazioni; eventuali impostazioni Natale pregresse ripiegano sullo stile Flat, i costumi rimangono disponibili.

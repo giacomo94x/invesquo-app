@@ -26,3 +26,19 @@
 
 #fh70ZoomReadout{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.5;font-size:clamp(12px,3.3vw,16px)!important}
 #fh70ZoomReadout strong{font-weight:800}
+
+
+/* Beta 10.9.75 — Sotto la lente: usa una semantica cromatica coerente su tutte le schede. */
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="good"]{border-color:color-mix(in srgb,var(--green) 52%,var(--border))!important;background:linear-gradient(180deg,color-mix(in srgb,var(--green) 12%,var(--panel2)),color-mix(in srgb,var(--green) 6%,var(--panel)))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 12px 28px rgba(38,148,114,.10)}
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="neutral"],
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="orange"]{border-color:color-mix(in srgb,#f4a34b 58%,var(--border))!important;background:linear-gradient(180deg,color-mix(in srgb,#f4a34b 13%,var(--panel2)),color-mix(in srgb,#f4a34b 6%,var(--panel)))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 12px 28px rgba(244,163,75,.09)}
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="bad"]{border-color:color-mix(in srgb,var(--red) 58%,var(--border))!important;background:linear-gradient(180deg,color-mix(in srgb,var(--red) 13%,var(--panel2)),color-mix(in srgb,var(--red) 6%,var(--panel)))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 12px 28px rgba(244,124,138,.10)}
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="good"] .fh70-card-title{color:color-mix(in srgb,var(--green) 35%,var(--text))!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="neutral"] .fh70-card-title,
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="orange"] .fh70-card-title{color:color-mix(in srgb,#f4a34b 45%,var(--text))!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="bad"] .fh70-card-title{color:color-mix(in srgb,var(--red) 40%,var(--text))!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="good"] .fh70-card-value{color:var(--green)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="neutral"] .fh70-card-value,
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="orange"] .fh70-card-value{color:#f4a34b!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal="bad"] .fh70-card-value{color:var(--red)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card[data-fh111-signal] .fh70-chip{filter:saturate(1.15);opacity:.98}

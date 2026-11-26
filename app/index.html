@@ -2292,7 +2292,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <div class="section-head"><h2>Preferenze</h2><span class="sub">Le modifiche si salvano automaticamente</span></div>
 <details class="setting-group" open=""><summary>Aspetto e colori</summary><div class="setting-field"><label for="finholdraLanguageSetting">Lingua / Language</label><select id="finholdraLanguageSetting"><option value="it">Italiano</option><option value="en">English</option></select></div>
 <div class="setting-field"><label for="settingTheme">Tema dell'app</label><select id="settingTheme"><option value="dark">Blu notte (attuale)</option><option value="ocean">Blu oceano</option><option value="light">Chiaro</option><option value="amethyst">Ametista</option><option value="graphite">Grafite</option><option value="modern">Modern · fintech contemporaneo</option><option value="nero">Nero · luxury</option><option value="pine">Verde petrolio</option><option value="sunset">Sunset · rosé sera</option><option value="copper">Rame · warm premium</option><option value="arctic">Artico · ghiaccio</option><option value="neon">Neon · cyber</option><option value="aurora">Aurora</option><option value="iconblue">Blu Finholdra</option><option value="honey">Miele e grafite</option><option value="burgundy">Borgogna</option><option value="system">Automatico (iPhone)</option></select></div>
-<div class="setting-field"><label for="settingMarketColorScope">Colore dinamico del mercato</label><select id="settingMarketColorScope"><option value="all">In tutta l’app</option><option value="home">Solo Dashboard</option><option value="off">Disattivato</option></select><p class="hint">Segui il primo preferito oppure il rendimento complessivo, usando le soglie emotive di Finn.</p><label for="settingMarketColorBasis">Colore dinamico basato su</label><select id="settingMarketColorBasis"><option value="favorite">Primo titolo preferito · variazione giornaliera</option><option value="portfolio">Performance generale · soglie Finn</option></select><details class="fh115-closed-submenu" style="margin-top:12px"><summary>Colore neutro · mercati chiusi</summary><div class="setting-field"><label for="settingClosedMarketColor">Colorazione nei giorni senza contrattazioni</label><select id="settingClosedMarketColor"><option value="theme">Predefinito del tema</option><option value="gold">Giallo Finholdra</option><option value="blue">Blu ghiaccio</option><option value="plum">Prugna</option><option value="forest">Verde bosco</option><option value="custom">Personalizzato · tavolozza</option></select><label class="fh117-colorpicker" for="settingClosedMarketCustom">Scegli una tonalità <input id="settingClosedMarketCustom" type="color" value="#245a49" aria-label="Tavolozza colore mercati chiusi"></label><p class="hint">Predefinito del tema mantiene i colori del tema attivo. Le altre opzioni colorano la Home quando i mercati sono chiusi.</p></div></details></div><div class="setting-field"><label for="settingAppearanceMode">Stile dell'interfaccia e dei menu</label><select id="settingAppearanceMode" aria-label="Stile dell'interfaccia"><option value="flat">Flat · essenziale</option><option value="glass">Liquid Glass · vetro e trasparenze</option><option value="studio">Studio</option><option value="moderno">Moderno</option><option value="fiducia">Fiducia</option><option value="tradizionale">Tradizione</option><option value="arcade">Arcade · pixel-fintech</option><option value="editorial">Editoriale · impaginazione premium</option></select><p class="hint">Tema e stile sono indipendenti.</p></div>
+<div class="setting-field"><label for="settingMarketColorScope">Colore dinamico del mercato</label><select id="settingMarketColorScope"><option value="all">In tutta l’app</option><option value="home">Solo Dashboard</option><option value="off">Disattivato</option></select><p class="hint">Segui il primo preferito oppure il rendimento lordo complessivo del portafoglio.</p><label for="settingMarketColorBasis">Colore dinamico basato su</label><select id="settingMarketColorBasis"><option value="favorite">Primo titolo preferito · variazione giornaliera</option><option value="portfolio">Performance generale · rendimento lordo portafoglio</option></select><details class="fh115-closed-submenu" style="margin-top:12px"><summary>Colore neutro · mercati chiusi</summary><div class="setting-field"><label for="settingClosedMarketColor">Colorazione nei giorni senza contrattazioni</label><select id="settingClosedMarketColor"><option value="theme">Predefinito del tema</option><option value="gold">Giallo Finholdra</option><option value="blue">Blu ghiaccio</option><option value="plum">Prugna</option><option value="forest">Verde bosco</option><option value="custom">Personalizzato · tavolozza</option></select><label class="fh117-colorpicker" for="settingClosedMarketCustom">Scegli una tonalità <input id="settingClosedMarketCustom" type="color" value="#245a49" aria-label="Tavolozza colore mercati chiusi"></label><p class="hint">Predefinito del tema mantiene i colori del tema attivo. Le altre opzioni colorano la Home quando i mercati sono chiusi.</p></div></details></div><div class="setting-field"><label for="settingAppearanceMode">Stile dell'interfaccia e dei menu</label><select id="settingAppearanceMode" aria-label="Stile dell'interfaccia"><option value="flat">Flat · essenziale</option><option value="glass">Liquid Glass · vetro e trasparenze</option><option value="studio">Studio</option><option value="moderno">Moderno</option><option value="fiducia">Fiducia</option><option value="tradizionale">Tradizione</option><option value="arcade">Arcade · pixel-fintech</option><option value="editorial">Editoriale · impaginazione premium</option></select><p class="hint">Tema e stile sono indipendenti.</p></div>
 <div class="setting-field"><label for="settingPalette">Palette mascotte</label><select id="settingPalette"><option value="classic">Classica · verde / menta / rosso</option><option value="ocean">Oceano · turchese / azzurro / blu</option><option value="royal">Royal · blu / celeste / indaco</option><option value="forest">Bosco · smeraldo / lime / corallo</option></select></div><div class="setting-field" id="settingCategoryColorsSection"><label>Colori delle categorie del grafico</label><p class="hint">Personalizza le fette del donut e la legenda. Le intestazioni e i titoli dell'app mantengono il colore del tema.</p><div class="category-color-grid" id="settingCategoryColors"></div><button type="button" class="btn" id="settingCategoryColorsReset">Ripristina tutti i colori</button></div></details><details class="setting-group"><summary>Finn · Mascotte e giochi</summary><label class="toggle setting-toggle"><input id="settingShowHeaderFinn" type="checkbox" checked> Mostra Finn nell’header dell’app</label><p class="hint">Nasconde Finn soltanto in alto. La mascotte e i giochi restano disponibili.</p><div class="mood-settings"><strong>Soglie emotive sul rendimento lordo (%)</strong><p class="hint">Soglie di reazione della mascotte.</p><div class="mood-setting-grid"><label>Zona neutra ± %<input id="settingMoodNeutral" type="number" min="0" max="50" step="0.1" value="1"/></label><label>Felice/arrabbiata ± %<input id="settingMoodPositive" type="number" min="0.1" max="100" step="0.1" value="2"/></label><label>Super felice/triste ± %<input id="settingMoodExtreme" type="number" min="0.2" max="200" step="0.1" value="5"/></label></div></div><div class="setting-field"><label for="settingMascotStyle">Modello mascotte</label><select id="settingMascotStyle"><option value="rounded">Candela classica</option><option value="slim">Candela sottile</option><option value="square">Candela geometrica</option></select></div><label class="toggle setting-toggle"><input id="settingGlow" type="checkbox" checked> Alone luminoso intorno alla mascotte</label><div class="setting-field"><label for="settingMotion">Movimento mascotte</label><select id="settingMotion"><option value="lively">Vivace</option><option value="normal">Normale</option><option value="off">Disattivato</option></select></div>
 </details>
 <details class="setting-group"><summary>Privacy e visualizzazione</summary>
@@ -6491,8 +6491,7 @@ function updateFavoriteHomeTint(){
    const capital=totalCapital(),profit=totalValue()-capital+saleRealizedGain();
    const sold=trades.filter(t=>t.kind==='sale'&&filter[t.cat]).reduce((n,t)=>n+Number(t.costBasis||0),0);
    const basis=capital+sold,rate=basis?100*profit/basis:0;
-   const neutral=Math.max(0,Number(prefs.moodNeutral??1));
-   tone=rate>neutral?'up':rate< -neutral?'down':'neutral';delta=rate;
+   tone=rate>0?'up':rate<0?'down':'neutral';delta=rate;
  }
  const weekend=[0,6].includes(new Date().getDay());
  const closedTone='closed-'+(['theme','gold','blue','plum','forest','custom'].includes(prefs.closedMarketColor)?prefs.closedMarketColor:(prefs.weekendYellow===false?'blue':'gold'));
@@ -8458,33 +8457,38 @@ function ensureLens(){
     const minSig=$('#finMinSignal')?.textContent?.trim()||'—';
     const minExp=$('#finMinExplain')?.textContent?.trim()||'';
     const bench=$('#finBenchSummary')?.textContent?.trim()||'Confronto in preparazione…';
+    const clearLensTone=node=>{ if(!node) return; delete node.dataset.fh111Signal; node.classList.remove('fh111-under','fh111-over'); const v=$('.fh70-card-value',node); if(v) v.classList.remove('fh70-good','fh70-mid','fh70-bad','fh70-neutral','fh70-orange'); };
+    const applyLensTone=(node,kind,valueClass)=>{ if(!node) return; clearLensTone(node); if(kind) node.dataset.fh111Signal=kind; const v=$('.fh70-card-value',node); if(v && valueClass){ v.classList.add(valueClass.startsWith('fh70-')?valueClass:'fh70-'+valueClass); } };
+    const rangeTone=pct=>!Number.isFinite(pct)?'':(pct<=33?'good':pct<=66?'orange':'bad');
     const trend=$('#fh70LensTrend'); if(trend){
       $('.fh70-card-value',trend).textContent=headline;
       $('.fh70-card-sub',trend).textContent=pos||'Lettura sintetica della tua posizione.';
-      const v=$('.fh70-card-value',trend); v.classList.remove('fh70-good','fh70-mid','fh70-bad');
-      if(/vantaggio|sopra/i.test(headline)) v.classList.add('fh70-good'); else if(/drawdown|pressione/i.test(headline)) v.classList.add('fh70-bad'); else v.classList.add('fh70-mid');
+      let kind='orange', valueClass='orange';
+      if(/vantaggio|sopra|forza|opportunit/i.test(headline)){ kind='good'; valueClass='good'; }
+      else if(/drawdown|pressione|debole|sotto/i.test(headline)){ if(/piccolo|contenut|limitat|lieve/i.test(headline)){ kind='orange'; valueClass='orange'; } else { kind='bad'; valueClass='bad'; } }
+      applyLensTone(trend,kind,valueClass);
     }
     const buy=$('#fh70LensBuy'); if(buy){
       $('.fh70-card-value',buy).textContent=minSig;
       $('.fh70-card-sub',buy).textContent=minExp||'Quanto il tuo ultimo acquisto si discosta dal minimo disponibile.';
-      const v=$('.fh70-card-value',buy); v.classList.remove('fh70-good','fh70-mid','fh70-bad');
       const pctm=minSig.match(/([+-]?\d+(?:[.,]\d+)?)\s*%/); const pval=pctm?num(pctm[1]):NaN;
-      if(Number.isFinite(pval)){ const kind=pval<0?'good':pval<=3?'neutral':pval<=10?'orange':'bad';v.classList.add('fh70-'+kind);buy.dataset.fh111Signal=kind; }
+      if(Number.isFinite(pval)){ const kind=pval<0?'good':pval<=3?'neutral':pval<=10?'orange':'bad'; applyLensTone(buy,kind,kind==='neutral'?'orange':kind); }
+      else clearLensTone(buy);
     }
      const pmcMinCard=$('#fh10612LensPmcMin');if(pmcMinCard){
        const match=minExp.match(/minimo(?:\s+dei\s+6\s+mesi\s+precedenti)?\s+([0-9]+[.,][0-9]+)/i);
        const observedLow=match?num(match[1]):NaN;
        const dist=Number.isFinite(observedLow)&&observedLow>0&&Number.isFinite(pmc)&&pmc>0?(pmc/observedLow-1)*100:NaN;
        const val=$('.fh70-card-value',pmcMinCard),sub=$('.fh70-card-sub',pmcMinCard);
-       val.classList.remove('fh70-good','fh70-neutral','fh70-orange','fh70-bad');
+       clearLensTone(pmcMinCard);
        if(Number.isFinite(dist)){
          const kind=dist<0?'good':dist<=3?'neutral':dist<=10?'orange':'bad';
-         val.classList.add('fh70-'+kind);pmcMinCard.dataset.fh111Signal=kind;
+         applyLensTone(pmcMinCard,kind,kind==='neutral'?'orange':kind);
          const face=dist<0?'☺':dist<=3?'◉':dist<=10?'◔':'☹';
          const position=dist<0?'Sotto il minimo':Math.abs(dist)<0.005?'Al minimo':'Sopra il minimo';
          val.textContent=face+' '+position+' · '+(dist>0?'+':'')+fmt(dist,2)+'%';
          sub.textContent='Tuo PMC '+fmt(pmc,3)+' € · minimo verificato dei 6 mesi precedenti '+fmt(observedLow,3)+' €';
-       }else{val.textContent='n.d.';delete pmcMinCard.dataset.fh111Signal;sub.textContent='Servono PMC e minimo storico verificato.';}
+       }else{val.textContent='n.d.';clearLensTone(pmcMinCard);sub.textContent='Servono PMC e minimo storico verificato.';}
      }
     // Latest quote versus documented execution/PMC; keep the security currency unchanged.
     const lensAsset=typeof getDetailAssetById==='function'?getDetailAssetById(assetDetailId):null;
@@ -8498,23 +8502,24 @@ function ensureLens(){
     ]){
       const node=$('#'+id);if(!node)continue;
       const val=$('.fh70-card-value',node),sub=$('.fh70-card-sub',node);
-      val.classList.remove('fh70-good','fh70-bad','fh70-mid');
+      clearLensTone(node);
       if(Number.isFinite(quote)&&quote>0&&Number.isFinite(basis)&&basis>0){
         const delta=quote-basis,percent=100*delta/basis,green=delta>=0;
-        val.classList.add(green?'fh70-good':'fh70-bad');
+        applyLensTone(node,green?'good':'bad',green?'good':'bad');
         // Esporre un confronto leggibile come le schede "vs minimo", mantenendo
         // invariati verso e denominatore della variazione: (quotazione/base - 1).
         const relativeTo=id==='fh10937LensBuyNow'?'acquisto':'PMC';
         const position=Math.abs(percent)<0.005?'Alla pari':green?'Quotazione sopra '+(relativeTo==='PMC'?'il PMC':"l’acquisto"):'Quotazione sotto '+(relativeTo==='PMC'?'il PMC':"l’acquisto");
         val.textContent=(green?'◉ ':'◔ ')+position+' · '+(percent>0?'+':'')+fmt(percent,2)+'%';
         sub.textContent='Quotazione attuale '+fmt(quote,3)+' '+ccy+' · '+(relativeTo==='PMC'?'tuo PMC':'ultimo acquisto')+' '+fmt(basis,3)+' '+ccy+(id==='fh10937LensBuyNow'?' il '+lastBuy.date:'')+' · scarto '+(delta>0?'+':'')+fmt(delta,3)+' '+ccy;
-      }else {val.textContent='n.d.';sub.textContent='Servono una quotazione e '+label+' documentati nella stessa valuta.';}
+      }else {val.textContent='n.d.';clearLensTone(node);sub.textContent='Servono una quotazione e '+label+' documentati nella stessa valuta.';}
     }
     const paintTrack=(host,val)=>{ if(!host) return; const track=$('.fh70-track',host); if(!track) return; track.style.setProperty('--fill', (Number.isFinite(val)?Math.max(3,Math.min(97,val)):50)+'%'); };
     const priceCard=$('#fh70LensPrice'); if(priceCard){
       $('.fh70-card-value',priceCard).textContent=Number.isFinite(price)?fmt(price,2)+' €':'—';
       $('.fh70-card-sub',priceCard).textContent=Number.isFinite(min)&&Number.isFinite(max)?('Range 1A '+fmt(min,2)+' – '+fmt(max,2)):'Prezzo attuale nel mercato dell’ultimo anno.';
       const p=Number.isFinite(min)&&Number.isFinite(max)&&max>min&&Number.isFinite(price)?((price-min)/(max-min)*100):NaN; paintTrack(priceCard,p);
+      const kind=rangeTone(p); if(kind) applyLensTone(priceCard,kind,kind); else clearLensTone(priceCard);
     }
     const pmcCard=$('#fh70LensPmc'); if(pmcCard){
       $('.fh70-card-value',pmcCard).textContent=Number.isFinite(pmc)?fmt(pmc,4)+' €':'—';
@@ -8522,6 +8527,7 @@ function ensureLens(){
       if(Number.isFinite(min)&&Number.isFinite(max)&&max>min&&Number.isFinite(pmc)) subt='Range 1A '+fmt(min,2)+' – '+fmt(max,2);
       $('.fh70-card-sub',pmcCard).textContent=subt;
       const p=Number.isFinite(min)&&Number.isFinite(max)&&max>min&&Number.isFinite(pmc)?((pmc-min)/(max-min)*100):NaN; paintTrack(pmcCard,p);
+      const kind=rangeTone(p); if(kind) applyLensTone(pmcCard,kind,kind); else clearLensTone(pmcCard);
     }
     const benchCard=$('#fh70LensBench'); if(benchCard){
       const valueNode=$('.fh70-card-value',benchCard);
@@ -8532,8 +8538,7 @@ function ensureLens(){
       if(neg)headline=headline.replace(/^\s*\+(?=\d)/,'−');
       valueNode.textContent=headline;
       $('.fh70-card-sub',benchCard).textContent=bench;
-      benchCard.classList.toggle('fh111-under',neg);
-      benchCard.classList.toggle('fh111-over',!neg&&pos);
+      applyLensTone(benchCard,neg?'bad':(pos?'good':'orange'),neg?'bad':(pos?'good':'orange'));
     }
   };
   // Update only when source measurements change. Never observe the panel that refresh() writes to.
