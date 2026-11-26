@@ -1,3 +1,9 @@
+## Beta 10.9.86
+- Finn City: ricerca della polizia su 5 livelli di intensità; il livello aumenta per spari, furti, investimenti e distruzione dei veicoli. Una stella significa una volante lenta e inseguimento limitato, mentre 5 stelle generano fino a 7 volanti e più agenti rapidi. Decadimento graduale delle stelle fuori dalla loro vista.
+- Finn City: tutti i veicoli si distruggono dopo esattamente tre colpi. Conteggio danni, esplosione, rimozione del veicolo, rischio e reazione della polizia.
+- FinnSolid: missione bonus originale opzionale «Il Vault dei Segnali», tre stanze con sequenze luminose sempre nuove, tre errori consentiti, personaggi Nexus/Mira e badge salvato nel browser; non altera la progressione della campagna principale.
+- Versione e cache dei file di gioco aggiornate; restano incluse le modifiche della 10.9.85.
+
 ## Beta 10.9.84
 - Dettaglio strumenti: eliminata palette blu fissa dal pannello. Ora eredita direttamente i colori attivi dell’app, compresa la colorazione dinamica e i temi personalizzati.
 - Ridotta l’oscuratura dell’app dietro la finestra, conservando contrasto e leggibilità.
@@ -695,3 +701,5 @@ Non eliminare i backup JSON locali finche` un ripristino reale su due dispositiv
 Beta 10.1.3: rimossa la prima voce duplicata e vuota 'Finn · Mascotte e giochi' nelle impostazioni Portafoglio. Mantenuta la voce funzionante e la sezione Gioca con Finn.
 Beta 10.9.32: aumentato il padding interno dei banner dei titoli nella vista Home espansa, cosi i bordi non restano troppo a filo con il testo.
 Beta 10.9.63: ricerca titoli integrata con OpenFIGI v3 su funzione Netlify, senza chiave obbligatoria. Fonte di identificazione affiancata a Yahoo/ricerca italiana; rispetto dei limiti al minuto, cache, fallback, controllo dei simboli Milano prima di mostrarli. Nessuna modifica a acquisti o storico.
+
+Beta 10.9.85: il grafico Home ora resta agganciato ai colori del tema selezionato anche con colore dinamico dei mercati attivo; aggiunti 5 temi nuovi (Azzurro Glass, Capri luminoso, Ghiaccio blu, Menta chiara, Lavanda soft); Mira e Nexus hanno il riquadro ritratto senza sfondo blu interno, con solo bordo e animazione idle piu` viva in stile Finn; piccoli ritocchi di leggibilita` nelle card e nei risultati di ricerca.

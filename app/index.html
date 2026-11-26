@@ -1855,7 +1855,7 @@ header.top .new-header-nav{margin-bottom:0!important}
 #tradeEventList .transaction-history-row{flex-wrap:nowrap}
 @media(max-width:430px){#tradeEventList .fh1015-entry-ident{gap:8px}#tradeEventList .transaction-history-row>.btn{flex-shrink:0}}
 </style>
-<link rel="stylesheet" href="./market-radar.css?v=10.9.40">
+<link rel="stylesheet" href="./market-radar.css?v=10.9.85">
 <link rel="stylesheet" href="finholdra-refinements.css?v=10.9.25"/>
 <style id="fh1071-fixes">
 /* Beta 10.9.25: selectable neutral/closed-market palette. */
@@ -7938,7 +7938,7 @@ window.finholdraPublicView=()=>({assets:state.assets.filter(a=>filter[a.cat]).ma
 </style>
 <div id="finnGamePicker" role="dialog" aria-modal="true" aria-label="Scegli il gioco di Finn"><div class="fgp-panel">
  <h2>Finn</h2><p>Scegli un gioco.</p>
- <div class="fgp-options"><button type="button" id="fgpAstro"><span class="ico">🚀</span><strong>AstroFinn</strong><small>Arcade spaziale.</small></button><button type="button" id="fgpSolid"><span class="ico">🕵️</span><strong>FinnSolid</strong><small>16 missioni · fuga sulla neve.</small></button><button type="button" id="fgpPong"><span class="ico">🏓</span><strong>FinnPong</strong><small>Sfida arcade.</small></button><button type="button" id="fgpTheftAuto"><span class="ico">🚗</span><strong>Finn City</strong><small>Mondo aperto top-down · free roaming finanziario.</small></button></div>
+ <div class="fgp-options"><button type="button" id="fgpAstro"><span class="ico">🚀</span><strong>AstroFinn</strong><small>Arcade spaziale.</small></button><button type="button" id="fgpSolid"><span class="ico">🕵️</span><strong>FinnSolid</strong><small>16 missioni + Vault bonus.</small></button><button type="button" id="fgpPong"><span class="ico">🏓</span><strong>FinnPong</strong><small>Sfida arcade.</small></button><button type="button" id="fgpTheftAuto"><span class="ico">🚗</span><strong>Finn City</strong><small>Mondo aperto top-down · free roaming finanziario.</small></button></div>
  <button type="button" class="fgp-close" id="fgpClose">Annulla</button>
 </div></div>
 <div id="finnSolid" role="dialog" aria-modal="true" aria-label="FinnSolid: infiltrazione">
@@ -8162,7 +8162,8 @@ canvas.addEventListener('pointerdown',e=>{if(!running)return;e.preventDefault();
 window.addEventListener('keydown',e=>{if(!open)return;if(e.key==='Escape'){leave();return}if(e.key===' '&&running){e.preventDefault();shoot()}if((e.key==='b'||e.key==='B')&&running){e.preventDefault();useBox()}if((e.key==='g'||e.key==='G')&&running){e.preventDefault();gadgetUse()}if(dirs[e.key]){e.preventDefault();keys.add(e.key)}});window.addEventListener('keyup',e=>{if(dirs[e.key])keys.delete(e.key)});
 for(const btn of root.querySelectorAll('[data-fs-dir]')){const key={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'}[btn.dataset.fsDir];const remove=()=>keys.delete(key);btn.addEventListener('pointerdown',e=>{e.preventDefault();keys.add(key);try{btn.setPointerCapture(e.pointerId)}catch(_){}});for(const ev of ['pointerup','pointercancel','lostpointercapture'])btn.addEventListener(ev,remove);btn.addEventListener('click',e=>e.preventDefault());}
 window.addEventListener('resize',()=>{if(open){resize();render()}});document.addEventListener('visibilitychange',()=>{if(document.hidden&&open&&running){running=false;cancelAnimationFrame(raf);overlay('IN PAUSA','L’infiltrazione è stata sospesa. Puoi riprovare dallo stesso livello.','Ricomincia')}});
-})();</script><script id="finCheat9958">
+})();</script>
+<link rel="stylesheet" href="./finnsolid-bonus.css?v=10.9.86"><script src="./finnsolid-bonus.js?v=10.9.86" defer></script><script id="finCheat9958">
 // Beta 9.9.77: hidden level selector, exact controller sequence.
 (()=>{const root=document.getElementById('finnSolid');if(!root)return;const pattern=['up','up','down','down','left','right','left','right','fire'];let entered=[];root.addEventListener('pointerdown',e=>{const key=e.target.closest('[data-fs-dir]')?.dataset.fsDir||(e.target.closest('#fsFire')?'fire':null);if(!key)return;entered.push(key);if(entered.length>pattern.length)entered.shift();if(entered.join('|')!==pattern.join('|'))return;entered=[];const choices=[...root.querySelectorAll('#fsSecretLevel')];if(choices.length){choices[0].remove();return;}const bar=document.createElement('div');bar.id='fsSecretLevel';bar.className='fs-secret-floating';bar.innerHTML='<b style="font-size:11px">LIVELLO SEGRETO</b>'+Array.from({length:16},(_,i)=>i+1).map(n=>'<button type="button" data-fs-secret="'+n+'" style="padding:8px 12px;border:1px solid #59d8ab;border-radius:9px;background:#244e63;color:#fff;font-weight:800">'+n+'</button>').join('');root.querySelector('.fs-world')?.appendChild(bar);bar.addEventListener('click',ev=>{const btn=ev.target.closest('[data-fs-secret]');if(!btn)return;root.dataset.next=btn.dataset.fsSecret;document.getElementById('fsStart')?.click();});},true);})();
 </script>
@@ -8726,7 +8727,7 @@ result.replaceChildren();const lead=document.createElement('div');lead.textConte
 q.addEventListener('input',update);p.addEventListener('input',update);
 const obs=new MutationObserver(()=>{if(!document.getElementById('assetDetailOverlay').classList.contains('hidden')){q.value='';p.value='';update();panel.hidden=false;}});
 obs.observe(document.getElementById('assetDetailTitle'),{childList:true,characterData:true,subtree:true});
-})();</script><link rel="stylesheet" href="./beta80.css?v=10.9.1"><link rel="stylesheet" href="./cloud-theme.css?v=10.9.1"><script src="./beta80.js?v=10.9.1" defer></script><script src="./google-drive-config.js?v=10.9.1" defer></script><script src="./cloud-drive.js?v=10.9.1" defer></script><script>
+})();</script><link rel="stylesheet" href="./beta80.css?v=10.9.85"><link rel="stylesheet" href="./cloud-theme.css?v=10.9.1"><script src="./beta80.js?v=10.9.85" defer></script><script src="./google-drive-config.js?v=10.9.1" defer></script><script src="./cloud-drive.js?v=10.9.1" defer></script><script>
 (function(){function boot(){if(typeof fh102SetupUI!=='function')return;fh102SetupUI();setTimeout(()=>{fh102SetupUI();fh102SafeRender();void fh102Refresh(false)},1800)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot()})();
 </script>
 <style id="fh102-ui">
@@ -8925,7 +8926,7 @@ header.top .new-header-brand #finholdraLogo{
 }
 </style>
 <link rel="stylesheet" href="./home-capital-chart.css?v=10.9.40">
-<link rel="stylesheet" href="./finn-theft-auto.css?v=10.9.25">
+<link rel="stylesheet" href="./finn-theft-auto.css?v=10.9.86">
 <style id="fh1091-gamepicker-layout">
 /* Four games in two tidy columns even on a phone. */
 #finnGamePicker .fgp-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
@@ -8939,7 +8940,7 @@ header.top .new-header-brand #finholdraLogo{
  <div class="fta-controls"><div class="fta-dpad" aria-label="Movimento"><span></span><button type="button" data-fta-dir="up" aria-label="Vai su">▲</button><span></span><button type="button" data-fta-dir="left" aria-label="Vai a sinistra">◀</button><button type="button" data-fta-dir="down" aria-label="Vai giù">▼</button><button type="button" data-fta-dir="right" aria-label="Vai a destra">▶</button></div><div class="fta-actions"><button type="button" id="ftaInteract"><span>🚙</span>Entra</button><button type="button" id="ftaAttack"><span>👊</span>Colpisci</button><button type="button" id="ftaWeapon"><span>🔄</span>Arma</button><button type="button" id="ftaTips" onclick="document.getElementById('ftaMessage').textContent='PC: WASD / frecce · E veicolo · F attacco · Q arma. Su smartphone usa i pulsanti.';document.getElementById('ftaMessage').classList.add('show')"><span>ℹ️</span>Comandi</button></div></div>
  <div class="fta-footnote">In auto usa le frecce per guidare. I crimini fanno salire le stelle: la polizia ti insegue finché non sfuggi. Free roaming illustrato e originale.</div>
 </div>
-<script src="./finn-theft-auto.js?v=10.9.25"></script>
+<script src="./finn-theft-auto.js?v=10.9.86"></script>
 <style id="fh10933RadarSearchCss">
 #fhRadarTitleSearch .fh-radar-title-query{display:flex;gap:8px;align-items:center;margin-top:12px}
 #fhRadarTitleSearch .fh-radar-title-query input{flex:1;min-width:0;font-size:16px}
@@ -8992,7 +8993,7 @@ header.top .new-header-brand #finholdraLogo{
 #radarView #mrRows .mr-row[data-radar-chart]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media(max-width:600px){#radarView #mrModes{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}#radarView #mrModes>button{min-width:0;width:100%;min-height:42px}}
 </style>
-<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.40"><link rel="stylesheet" href="./finholdra-themes-extended.css?v=10.9.40"><link rel="stylesheet" href="./home-unified-charts.css?v=10.9.52"><script src="./home-unified-charts.js?v=10.9.52"></script><link rel="stylesheet" href="./academy-behavioral.css?v=10.9.48"><script src="./academy-behavioral.js?v=10.9.48"></script><link rel="stylesheet" href="./finholdra-10959.css?v=10.9.59"><script defer src="./finholdra-10959.js?v=10.9.59"></script><style id="fh10962SearchUX">
+<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.40"><link rel="stylesheet" href="./finholdra-themes-extended.css?v=10.9.85"><link rel="stylesheet" href="./home-unified-charts.css?v=10.9.85"><script src="./home-unified-charts.js?v=10.9.85"></script><link rel="stylesheet" href="./academy-behavioral.css?v=10.9.48"><script src="./academy-behavioral.js?v=10.9.48"></script><link rel="stylesheet" href="./finholdra-10959.css?v=10.9.59"><script defer src="./finholdra-10959.js?v=10.9.59"></script><style id="fh10962SearchUX">
 /* Keep matching results next to the search field, separate from the curated catalogue. */
 #assetBrowse.fh-browse-collapsed,#favoriteBrowse.fh-browse-collapsed{display:none!important}
 #assetSearchResults:not(:empty){margin:9px 0 12px}
@@ -9004,7 +9005,7 @@ header.top .new-header-brand #finholdraLogo{
 .fh-browse-scroll-tools .btn{min-width:40px;min-height:32px;padding:3px 10px;font-size:19px;line-height:1}
 @media(pointer:coarse){.browse-tab{min-height:42px}.fh-browse-scroll-tools .btn{min-width:44px;min-height:38px}}
 </style><script defer src="./finholdra-10967.js?v=10.9.74"></script>
-<link rel="stylesheet" href="./finholdra-premium.css?v=10.9.74">
+<link rel="stylesheet" href="./finholdra-premium.css?v=10.9.85">
 <link rel="stylesheet" href="./finholdra-fintech.css?v=10.9.74">
 <link rel="stylesheet" href="./asset-detail-neutral.css?v=10.9.79">
 <link rel="stylesheet" href="./finholdra-10982.css?v=10.9.84">

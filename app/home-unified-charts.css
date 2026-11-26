@@ -213,3 +213,19 @@
  #fhHomeCapitalCard .fh115-host .fh115-plot{padding:11px 12px 6px!important;max-height:340px!important;}
  #fhHomeCapitalCard .fh115-host .fh115-plot svg.fh115-svg{width:100%!important;height:auto!important;max-height:315px!important;}
 }
+
+
+/* Beta 10.9.85 — Home chart must stay tied to the selected theme, not to dynamic market tint. */
+body.fh-home-active{--fh-home-chart-surface:var(--fh-theme-chart-surface,var(--panel));--fh-home-chart-border:var(--fh-theme-chart-border,var(--border));}
+#fhHomeCapitalCard .fh115-plot{background:var(--fh-theme-chart-surface,var(--fh-home-chart-surface,var(--panel)))!important;border-color:var(--fh-theme-chart-border,var(--fh-home-chart-border,var(--border)))!important;box-shadow:inset 0 1px rgba(255,255,255,.04)}
+#fh115Fullscreen{background:var(--fh-theme-bg,var(--bg));color:var(--fh-theme-text,var(--text))}
+#fh115Fullscreen .fh115-modal{background:var(--fh-theme-bg,var(--bg));color:var(--fh-theme-text,var(--text))}
+#fh115Fullscreen .fh115-range button{color:var(--fh-theme-text,var(--text));background:var(--fh-theme-panel2,var(--panel2));border-color:var(--fh-theme-border,var(--border))}
+#fh115Fullscreen .fh115-range button.selected{color:var(--fh-theme-bg,var(--bg))!important;background:var(--fh-theme-blue,var(--blue))!important;border-color:var(--fh-theme-blue,var(--blue))!important}
+#fh115Fullscreen .fh115-modal-readout{color:var(--fh-theme-text,var(--text));background:var(--fh-theme-panel2,var(--panel2));border-color:var(--fh-theme-border,var(--border))}
+#fh115Fullscreen .fh115-zoom button{background:var(--fh-theme-panel2,var(--panel2));border-color:var(--fh-theme-border,var(--border));color:var(--fh-theme-text,var(--text))}
+#fh115Fullscreen .fh115-zoom button.selected{background:var(--fh-theme-blue,var(--blue));border-color:var(--fh-theme-blue,var(--blue));color:var(--fh-theme-bg,var(--bg))}
+#fh115Fullscreen .fh117-investment-style .fh115-modal-plot{border-color:var(--fh-theme-chart-border,var(--border));background:var(--fh-theme-chart-surface,var(--panel))}
+#fhHomeCapitalCard .fh115-dot.green,#fh115Fullscreen .fh115-dot.green{background:var(--fh-theme-green,var(--green))}
+#fhHomeCapitalCard .fh115-dot.red,#fh115Fullscreen .fh115-dot.red{background:var(--fh-theme-red,var(--red))}
+#fhHomeCapitalCard .fh115-dot.gold,#fh115Fullscreen .fh115-dot.gold{background:#f1c464}

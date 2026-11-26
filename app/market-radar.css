@@ -74,3 +74,7 @@ body.fh-home-active[data-favorite-tint="weekend"]{--fh-home-chart-surface:#11314
 body.fh-home-active:is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="up"]{--fh-home-chart-surface:#e0f5e4;--fh-home-chart-border:#b7d0bd}
 body.fh-home-active:is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="down"]{--fh-home-chart-surface:#fae3e5;--fh-home-chart-border:#debec0}
 body.fh-home-active:is([data-theme="light"],[data-theme="modern"])[data-favorite-tint="weekend"]{--fh-home-chart-surface:#e7eff8;--fh-home-chart-border:#c1cedc}
+
+
+/* Beta 10.9.85 — keep the Home chart on theme colors even when the page tint changes with markets. */
+body.fh-home-active{--fh-home-chart-surface:var(--fh-theme-chart-surface,var(--panel))!important;--fh-home-chart-border:var(--fh-theme-chart-border,var(--border))!important}

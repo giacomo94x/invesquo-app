@@ -7,7 +7,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const profileName=()=>{try{const id=localStorage.getItem('invesquo_unlocked_account_v75');const xs=JSON.parse(localStorage.getItem('invesquo_local_profiles_v75')||'[]');return (xs.find(p=>p.id===id)||{}).name||'Finholdra';}catch(_){return 'Finholdra';}};
 function setupSettings(){
   const theme=$('#settingTheme'),appearance=$('#settingAppearanceMode');
-  if(theme){const newOptions=[['iconblue','Blu Finholdra'],['honey','Miele'],['burgundy','Borgogna'],['goldblue','Giallo e Blu Finholdra']];for(const [val,label] of newOptions){if(![...theme.options].some(o=>o.value===val))theme.add(new Option(label,val));} if([...theme.options].some(o=>o.value===document.body.dataset.theme))theme.value=document.body.dataset.theme;}
+  if(theme){const newOptions=[['iconblue','Blu Finholdra'],['honey','Miele'],['burgundy','Borgogna'],['goldblue','Giallo e Blu Finholdra'],['azureglass','Azzurro Glass'],['capriblue','Capri luminoso'],['iceblue','Ghiaccio blu'],['mintday','Menta chiara'],['lavenderlight','Lavanda soft']];for(const [val,label] of newOptions){if(![...theme.options].some(o=>o.value===val))theme.add(new Option(label,val));} if([...theme.options].some(o=>o.value===document.body.dataset.theme))theme.value=document.body.dataset.theme;}
   if(appearance){appearance.querySelector('option[value="fiducia"]')?.replaceChildren(document.createTextNode('Fiducia'));appearance.querySelector('option[value="tradizionale"]')?.replaceChildren(document.createTextNode('Tradizione'));}
   const mascotSection=$('#mascotLab'),groups=$('#settingsSection');
   if(mascotSection&&groups&&!mascotSection.dataset.fh8Done){
