@@ -1940,7 +1940,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 #settingsView .settings-macro-content #finholdraCloudSync .actions{display:flex;flex-wrap:wrap;gap:9px}
 #settingsView .settings-macro-content #finholdraCloudSync .actions .btn{flex:1 1 150px}
 </style>
-</head><body><section id="accountGate" aria-labelledby="accountTitle">
+<link rel="stylesheet" href="./finholdra-10969.css?v=10.9.69"></head><body><section id="accountGate" aria-labelledby="accountTitle">
 <div class="account-panel"><img class="finholdra-gate-logo" src="./finholdra-header-bianco-neutral.svg?v=10.9.1" alt="Finholdra"><p class="finholdra-payoff">Every investments you hold. One view.</p><div class="eyebrow">PROFILI LOCALI</div><h1 id="accountTitle">Il tuo spazio investimenti</h1>
 <p class="hint">Scegli un profilo. I dati restano su questo dispositivo.</p>
 <div class="finholdra-language-gate"><label for="finholdraLanguageWelcome">Lingua / Language</label><select id="finholdraLanguageWelcome"><option value="it">Italiano</option><option value="en">English</option></select></div><div class="account-tabs"><button type="button" id="accountTabCreate" class="selected">Nuovo profilo</button><button type="button" id="accountTabLogin">Accedi</button></div>
@@ -2042,7 +2042,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
   if(b.dailyObservations)put('finholdra_observations_v9930',b.dailyObservations);
   if(b.quoteHistory||b.detailQuoteHistory)put('invesquo_asset_prices_v58',b.detailQuoteHistory||b.quoteHistory);
   if(b.returnMethod)restored['invesquo_return_method_v57']=String(b.returnMethod);
-  // 10.9.68: lossless compression BEFORE writing a Drive/JSON restore. The
+  // 10.9.69: lossless compression BEFORE writing a Drive/JSON restore. The
   // archive remains untouched in Drive; all financial data is checked after write.
   // Without this, the canonical history is expanded and can exceed localStorage quota.
   const compact=window.FinholdraCompact;
@@ -2253,7 +2253,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.68</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.69</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -4651,13 +4651,19 @@ function renderWealthGraph(){
  const moneyMarks=arr.map((p,i)=>i&&intervals[i].buys>0?'<g pointer-events="none"><title>Acquisti registrati '+eur(intervals[i].buys)+'</title><text x="'+x(p)+'" y="'+Math.max(12,y(p.value)-9)+'" text-anchor="middle" font-size="12">💰</text></g>':'').join('');
  const dots=arr.map((p,i)=>'<g data-wealth-day="'+p.date+'" role="button" tabindex="0" aria-label="'+shortDate(p.date)+' '+eur(p.value)+'"><circle cx="'+x(p)+'" cy="'+y(p.value)+'" r="'+(p.date===wealthSelectedDate?4.1:2.8)+'" fill="'+segmentColor(i)+'"/>'+(p.date===wealthSelectedDate?'<circle cx="'+x(p)+'" cy="'+y(p.value)+'" r="8" fill="none" stroke="#ffffff" stroke-opacity=".7" stroke-width="1"/>':'')+'<circle cx="'+x(p)+'" cy="'+y(p.value)+'" r="10" fill="transparent"/></g>').join('');
  const chosen=arr.find(p=>p.date===wealthSelectedDate)||arr.at(-1);const ci=arr.indexOf(chosen),iv=intervals[ci];const signed=n=>(n>=0?'+':'')+eur(n);
+ const dailyObserved=arr.map((p,i)=>({date:p.date,gain:intervals[i].gain})).filter(p=>Number.isFinite(p.gain));
+ const bestDay=dailyObserved.filter(p=>p.gain>0).sort((a,b)=>b.gain-a.gain)[0];
+ const worstDay=dailyObserved.filter(p=>p.gain<0).sort((a,b)=>a.gain-b.gain)[0];
+ const peakDayHtml='<div class="fh10969-day-extremes" aria-label="Miglior guadagno e maggior perdita giornaliera nel periodo">'+
+ '<div class="fh10969-day-best"><span>Maggior guadagno giornaliero</span><strong>'+(bestDay?signed(bestDay.gain):'n.d.')+'</strong><small>'+(bestDay?shortDate(bestDay.date):'Nessun guadagno rilevato')+'</small></div>'+
+ '<div class="fh10969-day-worst"><span>Maggiore perdita giornaliera</span><strong>'+(worstDay?signed(worstDay.gain):'n.d.')+'</strong><small>'+(worstDay?shortDate(worstDay.date):'Nessuna perdita rilevata')+'</small></div></div>';
  const indicativeCount=arr.filter(p=>p.provisional>0).length;
  const gaps=arr.slice(1).reduce((n,p,i)=>n+(days(p.date)-days(arr[i].date)>1?days(p.date)-days(arr[i].date)-1:0),0);
  // Pass the already verified daily valuation and transaction-derived flow metrics to fullscreen view;
  // no second valuation engine, no changes to historical calculations.
  target.dataset.wealthPoints=JSON.stringify(arr.map((p,i)=>({date:p.date,value:Number(p.value),gain:intervals[i].gain,buys:intervals[i].buys,sales:intervals[i].sales,provisional:!!p.provisional})));
  // Detailed diagnostics stay in Settings → Archivio quotazioni, never in Home.
- target.innerHTML='<button class="fh1084-capital-expand" type="button" id="fhWealthFullscreenOpen" aria-label="Ingrandisci grafico andamento patrimonio"><span>Valore totale nel tempo</span><span>Ingrandisci ↗</span></button><svg class="history-plot wealth-plot"'+abSeriesAttribute(arr.map(p=>({x:x(p),y:y(p.value),value:p.value,label:shortDate(p.date)})),'wealth')+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Valore giornaliero del patrimonio da '+shortDate(arr[0].date)+' a '+shortDate(arr.at(-1).date)+'">'+path+''+dots+moneyMarks+'<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+shortDate(arr[0].date)+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+shortDate(arr.at(-1).date)+'</text></svg><div class="wealth-day-focus"><span>'+shortDate(chosen.date)+(chosen.provisional?' · indicativo':'')+'</span><strong>'+eur(chosen.value)+'</strong></div>'+(ci>0?'<div class="fh103-flow"><span>Variazione patrimonio <b>'+signed(iv.delta)+'</b></span><span>💰 Acquisti <b>'+eur(iv.buys)+'</b></span><span>Vendite <b>'+eur(iv.sales)+'</b></span><span>Risultato al netto dei movimenti <b style="color:'+segmentColor(ci)+'">'+(iv.gain===null?'n.d.':signed(iv.gain))+'</b></span></div>':'')+'<div class="sub">Verde: rendimento positivo · Rosso: negativo · 💰 acquisti.</div>';
+ target.innerHTML='<button class="fh1084-capital-expand" type="button" id="fhWealthFullscreenOpen" aria-label="Ingrandisci grafico andamento patrimonio"><span>Valore totale nel tempo</span><span>Ingrandisci ↗</span></button><svg class="history-plot wealth-plot"'+abSeriesAttribute(arr.map(p=>({x:x(p),y:y(p.value),value:p.value,label:shortDate(p.date)})),'wealth')+' viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Valore giornaliero del patrimonio da '+shortDate(arr[0].date)+' a '+shortDate(arr.at(-1).date)+'">'+path+''+dots+moneyMarks+'<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+shortDate(arr[0].date)+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+shortDate(arr.at(-1).date)+'</text></svg><div class="wealth-day-focus"><span>'+shortDate(chosen.date)+(chosen.provisional?' · indicativo':'')+'</span><strong>'+eur(chosen.value)+'</strong></div>'+(ci>0?'<div class="fh103-flow"><span>Variazione patrimonio <b>'+signed(iv.delta)+'</b></span><span>💰 Acquisti <b>'+eur(iv.buys)+'</b></span><span>Vendite <b>'+eur(iv.sales)+'</b></span><span>Risultato al netto dei movimenti <b style="color:'+segmentColor(ci)+'">'+(iv.gain===null?'n.d.':signed(iv.gain))+'</b></span></div>':'')+peakDayHtml+'<div class="sub">Verde: rendimento positivo · Rosso: negativo · 💰 acquisti.</div>';
 }
 document.getElementById('wealthRanges').addEventListener('click',e=>{const b=e.target.closest('button[data-wealth-range]');if(!b)return;wealthRange=b.dataset.wealthRange;document.getElementById('wealthFromDate').value='';wealthSelectedDate=null;renderWealthGraph()});
 document.getElementById('wealthFromDate').addEventListener('change',e=>{if(e.target.value>today())e.target.value=today();wealthSelectedDate=null;renderWealthGraph()});
@@ -5250,12 +5256,15 @@ function plotAssetDetail(points,a,opts={}){
  const d=singleBond?'M'+L+' '+y(points[0].p).toFixed(2)+' L'+(W-R)+' '+y(points[0].p).toFixed(2):
   drawHistorical.map((p,i)=>(i?'L':'M')+x(p.t).toFixed(2)+' '+y(p.p).toFixed(2)).join(' ');
  const liveLast=points[points.length-1].live?points[points.length-1]:null;
- const tail=liveLast&&historical.length?'<line x1="'+x(historical[historical.length-1].t).toFixed(2)+'" y1="'+y(historical[historical.length-1].p).toFixed(2)+'" x2="'+x(liveLast.t).toFixed(2)+'" y2="'+y(liveLast.p).toFixed(2)+'" stroke="#f3c15a" stroke-width="2.4" stroke-dasharray="5 5"/>':'';
+ // The live quote is a discrete observation, not an interpolated price path.
+ // Do not join the last historical tick to it: a dashed diagonal would suggest
+ // price action for which Yahoo did not provide any intermediate observations.
+ const tail=liveLast&&historical.length?'<circle cx="'+x(liveLast.t).toFixed(2)+'" cy="'+y(liveLast.p).toFixed(2)+'" r="5.8" fill="#f3c15a" stroke="#fff" stroke-width="1.5"><title>Ultima quotazione isolata; dati intermedi non disponibili</title></circle>':'';
  const borderTop='<line x1="'+L+'" y1="'+T+'" x2="'+(W-R)+'" y2="'+T+'" stroke="#52647a" stroke-opacity=".5" stroke-dasharray="3 6"/>',borderBottom='<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#52647a" stroke-opacity=".5" stroke-dasharray="3 6"/>';
  const mc=pmc&&Number.isFinite(pmc)&&pmc>0?'<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(pmc).toFixed(2)+'" y2="'+y(pmc).toFixed(2)+'" stroke="#f3c15a" stroke-width="1.6" stroke-dasharray="5 5"/><text x="'+(W-R)+'" y="'+Math.max(11,y(pmc)-6).toFixed(2)+'" fill="#f3c15a" font-size="10" text-anchor="end">PMC '+(a.cat==='Obbligazioni'?number(pmc):localMoney(pmc,currencyOf(a)))+'</text>':'';
  const upward=sessionPoints.at(-1).p>=sessionPoints[0].p,color=upward?'#45dbae':'#fa8090';
  const priorMark=hasPrior?'<g><line x1="'+x(points[0].t)+'" y1="'+y(close)+'" x2="'+x(sessionPoints[0].t)+'" y2="'+y(sessionPoints[0].p)+'" stroke="#a9b9ce" stroke-dasharray="4 4" stroke-width="1.8"/><circle cx="'+x(points[0].t)+'" cy="'+y(close)+'" r="5" fill="#f3c15a"><title>Chiusura precedente: '+number(close)+'</title></circle></g>':'';
- const marks=singleBond?'': '<circle cx="'+x(points[points.length-1].t).toFixed(2)+'" cy="'+y(points[points.length-1].p).toFixed(2)+'" r="'+(liveLast?'5.8':'4.4')+'" fill="'+(liveLast?'#f3c15a':color)+'" stroke="#0c192b" stroke-width="2"/>';
+ const marks=singleBond||liveLast?'': '<circle cx="'+x(points[points.length-1].t).toFixed(2)+'" cy="'+y(points[points.length-1].p).toFixed(2)+'" r="4.4" fill="'+color+'" stroke="#0c192b" stroke-width="2"/>';
  const axis=singleBond?'<text x="'+(W/2)+'" y="'+(H-7)+'" text-anchor="middle" fill="#a9b9ce" font-size="10">Ultima rilevazione: '+svgEscape(detailDate(left,false))+'</text>':
  '<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+svgEscape(hasPrior?'Chiusura prec.':detailDate(left,assetDetailRange==='1d'))+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+svgEscape(detailDate(right,assetDetailRange==='1d'))+'</text>';
  const area=!singleBond&&drawHistorical.length>1?'<path d="'+d+' L'+x(drawHistorical[drawHistorical.length-1].t).toFixed(2)+' '+(H-B)+' L'+x(drawHistorical[0].t).toFixed(2)+' '+(H-B)+' Z" fill="url(#fhDetailFill)"/>':'';
@@ -6688,7 +6697,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.68';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.69';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -8940,6 +8949,6 @@ header.top .new-header-brand #finholdraLogo{
 .fh-browse-scroll-tools{display:flex;justify-content:flex-end;gap:6px;margin-bottom:6px}
 .fh-browse-scroll-tools .btn{min-width:40px;min-height:32px;padding:3px 10px;font-size:19px;line-height:1}
 @media(pointer:coarse){.browse-tab{min-height:42px}.fh-browse-scroll-tools .btn{min-width:44px;min-height:38px}}
-</style><script defer src="./finholdra-10967.js?v=10.9.68"></script>
-<link rel="stylesheet" href="./finholdra-premium.css?v=10.9.68">
+</style><script defer src="./finholdra-10967.js?v=10.9.69"></script>
+<link rel="stylesheet" href="./finholdra-premium.css?v=10.9.69">
 </body></html>

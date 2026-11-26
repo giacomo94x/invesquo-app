@@ -1,3 +1,9 @@
+## Beta 10.9.69 — 26 novembre 2026
+- Grafici strumenti, incluso E-mini S&P 500: eliminato il collegamento arancione tratteggiato fra storico e ultima quotazione isolata. Il punto live è mostrato senza implicare movimenti non osservati.
+- Patrimonio e valore: per ogni intervallo selezionato (1G, 1S, 1M, 3M, 6M, 1A, MAX e date custom) mostra maggior guadagno e maggiore perdita giornaliera in euro, con data.
+- Calcolo basato sul risultato giornaliero già rettificato per acquisti/vendite, non sulla semplice differenza di patrimonio che potrebbe includere versamenti. Dati non disponibili resi come n.d.
+- Statistiche disponibili sia nel pannello normale che nella visualizzazione a schermo intero.
+
 ## Beta 10.9.68 — Ripristino Google Drive / JSON senza quota sprecata
 - Corretta la causa del fallimento mostrato su accesso Drive: lo storico `patrimonio_history_v36` veniva reimportato decompresso e superava la quota del browser.
 - Compressione lossless prima di scrivere i dati del backup, con verifica di decodifica prima e dopo la scrittura.
