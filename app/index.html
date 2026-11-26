@@ -2042,14 +2042,49 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
   if(b.dailyObservations)put('finholdra_observations_v9930',b.dailyObservations);
   if(b.quoteHistory||b.detailQuoteHistory)put('invesquo_asset_prices_v58',b.detailQuoteHistory||b.quoteHistory);
   if(b.returnMethod)restored['invesquo_return_method_v57']=String(b.returnMethod);
-  // Stage changes and roll back if browser storage is full.
+  // 10.9.68: lossless compression BEFORE writing a Drive/JSON restore. The
+  // archive remains untouched in Drive; all financial data is checked after write.
+  // Without this, the canonical history is expanded and can exceed localStorage quota.
+  const compact=window.FinholdraCompact;
+  if(!compact?.encode||!compact?.decode)throw Error('Modulo di archiviazione non caricato: aggiorna la pagina e riprova.');
+  const prepared={};let compacted=0;
+  for(const [key,value] of Object.entries(restored)){
+   const encoded=compact.matches(key)?compact.encode(key,value,true):value;
+   if(encoded!==value){
+    if(compact.decode(encoded)!==value)throw Error('Verifica compressione fallita per '+key);
+    compacted++;
+   }
+   prepared[key]=encoded;
+  }
+  // Keep the new profile in compressed mode so the next price/history update
+  // does not immediately expand it back to full size.
+  prepared['finholdra_compact_mode_v1']='1';
   const existing=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k?.startsWith(prefix))existing.push([k,localStorage.getItem(k)])}
+  const written=[];
   try{
    existing.forEach(([k])=>localStorage.removeItem(k));
-   Object.entries(restored).forEach(([k,v])=>localStorage.setItem(prefix+k,v));
-   // A successful restore must include every original data set, not just visible holdings.
-   for(const [k,v] of Object.entries(restored))if(localStorage.getItem(prefix+k)!==v)throw Error('Verifica fallita per '+k);
-  }catch(err){Object.keys(restored).forEach(k=>localStorage.removeItem(prefix+k));existing.forEach(([k,v])=>localStorage.setItem(k,v));throw Error('Ripristino annullato: impossibile salvare tutti gli archivi. '+err.message)}
+   // Write smallest keys first: the large archives are already compacted.
+   for(const [key,value] of Object.entries(prepared).sort((a,b)=>a[1].length-b[1].length)){
+    const full=prefix+key;localStorage.setItem(full,value);written.push(full);
+   }
+   for(const [key,value] of Object.entries(prepared)){
+    const found=localStorage.getItem(prefix+key);
+    if(found!==value||compact.decode(found)!==(key==='finholdra_compact_mode_v1'?'1':restored[key])){
+     throw Error('Verifica di rilettura fallita per '+key);
+    }
+   }
+  }catch(err){
+   // All of this profile's staging writes are removed BEFORE restoring the
+   // original bytes, so rollback never needs the old and new copies together.
+   for(const full of written)localStorage.removeItem(full);
+   for(const key of Object.keys(prepared))localStorage.removeItem(prefix+key);
+   const rollbackFailed=[];
+   for(const [key,value] of existing){try{localStorage.setItem(key,value)}catch(rollbackErr){rollbackFailed.push(key)}}
+   if(rollbackFailed.length)throw Error('Spazio insufficiente; anche il ripristino del profilo precedente è stato ostacolato. Conserva il backup Drive e non cancellare dati. '+rollbackFailed.length+' archivi da recuperare.');
+   const quota=err?.name==='QuotaExceededError'||/quota|storage/i.test(String(err?.message||''));
+   throw Error((quota?'Spazio del browser insufficiente anche dopo compressione senza perdita. ':'Ripristino annullato. ')+
+    'Il backup su Drive non è stato modificato; nessun archivio è stato eliminato. '+(err?.message||err));
+  }
  }
  $('accountLoginJson').onclick=()=>$('accountLoginJsonFile').click();
  window.finholdraRestoreLoginFile=async (file,targetId)=>{
@@ -2218,7 +2253,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.67</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.68</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -6653,7 +6688,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.67';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.68';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -8905,6 +8940,6 @@ header.top .new-header-brand #finholdraLogo{
 .fh-browse-scroll-tools{display:flex;justify-content:flex-end;gap:6px;margin-bottom:6px}
 .fh-browse-scroll-tools .btn{min-width:40px;min-height:32px;padding:3px 10px;font-size:19px;line-height:1}
 @media(pointer:coarse){.browse-tab{min-height:42px}.fh-browse-scroll-tools .btn{min-width:44px;min-height:38px}}
-</style><script defer src="./finholdra-10967.js?v=10.9.67"></script>
-<link rel="stylesheet" href="./finholdra-premium.css?v=10.9.67">
+</style><script defer src="./finholdra-10967.js?v=10.9.68"></script>
+<link rel="stylesheet" href="./finholdra-premium.css?v=10.9.68">
 </body></html>

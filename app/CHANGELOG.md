@@ -1,3 +1,11 @@
+## Beta 10.9.68 — Ripristino Google Drive / JSON senza quota sprecata
+- Corretta la causa del fallimento mostrato su accesso Drive: lo storico `patrimonio_history_v36` veniva reimportato decompresso e superava la quota del browser.
+- Compressione lossless prima di scrivere i dati del backup, con verifica di decodifica prima e dopo la scrittura.
+- Modalità compressa mantenuta sui successivi aggiornamenti di storico, transazioni e prezzi.
+- Ripristino con rollback del profilo esistente in caso di quota insufficiente; nessuna eliminazione di altri profili o modifica del file su Drive.
+- Messaggio specifico se la capienza del browser non basta neppure con la compressione.
+- Nessuna modifica alle quotazioni, ai dati finanziari o alle altre sezioni.
+
 ## Beta 10.9.67 — Ricerca, Academy e finiture
 - Ricerca: combinazione Yahoo globale e Yahoo Italia con TradingView con interrogazioni distinte per Milano e filtro ISIN per varianti dello stesso strumento.
 - Risultati da directory marcati come identificativi; non confondere presenza del ticker con prezzo Yahoo recuperato.
