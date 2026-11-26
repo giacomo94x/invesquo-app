@@ -4199,7 +4199,22 @@ function updateHistoryAndSearchSettings(){
 document.getElementById('settingShowReconstructed').addEventListener('change',e=>{prefs.showReconstructed=e.target.checked;savePreferences();renderHistory();renderWealthGraph()});
 document.getElementById('settingSearchRegion').addEventListener('change',e=>{prefs.searchRegion=e.target.value;savePreferences()});
 updateHistoryAndSearchSettings();syncBackfillVisibility();
-function savePreferences(){try{store.setItem(PREF_KEY,JSON.stringify(prefs));store.setItem(VISIT_SUPPRESS_KEY,String(!prefs.warnings));window.dispatchEvent(new Event('finholdra:changed'))}catch(e){}applyPreferences();render();$('settingsSaved').textContent='Preferenze salvate sul dispositivo.'}
+function savePreferences(){
+ let saved=false,reason='';
+ try{
+  if(!ACCOUNT_PREFIX)throw new Error('Nessun profilo locale attivo');
+  const serialized=JSON.stringify(prefs);
+  store.setItem(PREF_KEY,serialized);
+  if(store.getItem(PREF_KEY)!==serialized)throw new Error('Verifica della memorizzazione non riuscita');
+  saved=true;
+  try{store.setItem(VISIT_SUPPRESS_KEY,String(!prefs.warnings))}catch(_){/* secondary preference; main settings are already verified */}
+ }catch(e){reason=e?.message||'Memoria locale non accessibile';console.warn('[Finholdra] Preferenze non salvate:',e)}
+ applyPreferences();render();
+ const feedback=$('settingsSaved');
+ if(feedback){feedback.textContent=saved?'Preferenze salvate e verificate su questo dispositivo.':'ATTENZIONE: preferenze NON salvate ('+reason+'). Accedi a un profilo locale e verifica che la memoria del browser sia disponibile.';feedback.setAttribute('role',saved?'status':'alert');}
+ if(saved){window.dispatchEvent(new Event('finholdra:changed'));if(typeof window.renderHomeCapitalChart==='function')requestAnimationFrame(()=>window.renderHomeCapitalChart());}
+ return saved;
+}
 function updateVisitStatus(){let n=0;try{const x=JSON.parse(store.getItem(VISIT_COUNTER_KEY));if(x&&x.date===getVisitDay())n=Number(x.count)||0}catch(e){}$('visitToday').textContent='Ingressi oggi: '+n}
 $('settingMarketColorScope').onchange=e=>{prefs.marketColorScope=e.target.value;savePreferences()};$('settingMarketColorBasis').onchange=e=>{prefs.marketColorBasis=e.target.value==='portfolio'?'portfolio':'favorite';savePreferences();updateFavoriteHomeTint()};$('settingClosedMarketColor').onchange=e=>{prefs.closedMarketColor=['theme','gold','blue','plum','forest','custom'].includes(e.target.value)?e.target.value:'gold';prefs.weekendYellow=prefs.closedMarketColor==='gold';savePreferences();updateFavoriteHomeTint();finnUpdateFigure()};
 $('settingClosedMarketCustom').oninput=e=>{if(!validColor(e.target.value))return;prefs.closedMarketCustom=e.target.value;prefs.closedMarketColor='custom';savePreferences();updateFavoriteHomeTint();finnUpdateFigure()};$('settingTheme').onchange=e=>{prefs.theme=e.target.value;savePreferences()};
@@ -8997,7 +9012,7 @@ header.top .new-header-brand #finholdraLogo{
 #radarView #mrRows .mr-row[data-radar-chart]:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media(max-width:600px){#radarView #mrModes{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}#radarView #mrModes>button{min-width:0;width:100%;min-height:42px}}
 </style>
-<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.40"><link rel="stylesheet" href="./finholdra-themes-extended.css?v=10.9.87"><link rel="stylesheet" href="./home-unified-charts.css?v=10.9.85"><script src="./home-unified-charts.js?v=10.9.89"></script><link rel="stylesheet" href="./academy-behavioral.css?v=10.9.48"><script src="./academy-behavioral.js?v=10.9.48"></script><link rel="stylesheet" href="./finholdra-10959.css?v=10.9.59"><script defer src="./finholdra-10959.js?v=10.9.59"></script><style id="fh10962SearchUX">
+<link rel="stylesheet" href="./dashboard-fullscreen.css?v=10.9.40"><link rel="stylesheet" href="./finholdra-themes-extended.css?v=10.9.87"><link rel="stylesheet" href="./home-unified-charts.css?v=10.9.85"><script src="./home-unified-charts.js?v=10.9.90"></script><link rel="stylesheet" href="./academy-behavioral.css?v=10.9.48"><script src="./academy-behavioral.js?v=10.9.48"></script><link rel="stylesheet" href="./finholdra-10959.css?v=10.9.59"><script defer src="./finholdra-10959.js?v=10.9.59"></script><style id="fh10962SearchUX">
 /* Keep matching results next to the search field, separate from the curated catalogue. */
 #assetBrowse.fh-browse-collapsed,#favoriteBrowse.fh-browse-collapsed{display:none!important}
 #assetSearchResults:not(:empty){margin:9px 0 12px}
@@ -9013,5 +9028,5 @@ header.top .new-header-brand #finholdraLogo{
 <link rel="stylesheet" href="./finholdra-fintech.css?v=10.9.74">
 <link rel="stylesheet" href="./asset-detail-neutral.css?v=10.9.79">
 <link rel="stylesheet" href="./finholdra-10982.css?v=10.9.84">
-<link rel="stylesheet" href="./finholdra-1089-appearance.css?v=10.9.89">
+<link rel="stylesheet" href="./finholdra-1089-appearance.css?v=10.9.90">
 </body></html>

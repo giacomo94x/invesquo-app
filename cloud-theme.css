@@ -1,0 +1,40 @@
+/* Finholdra 10.1.0: Lens follows the selected theme, rather than a fixed teal palette. */
+#finInvestIntelligence.fin-insight-panel{
+  background:var(--panel)!important;color:var(--text)!important;
+  border:1px solid var(--border)!important;box-shadow:none!important;
+}
+#finInvestIntelligence.fin-insight-panel::before{background:var(--blue)!important}
+#finInvestIntelligence .fin-tag,
+#finInvestIntelligence .fin-insight-head h3,
+#finInvestIntelligence .fh70-card-title{color:var(--text)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card{
+  background:var(--panel2)!important;
+  color:var(--text)!important;
+  border:1px solid var(--border)!important;
+  box-shadow:none!important;
+}
+#finInvestIntelligence #fh70LensGrid .fh70-card-value{color:var(--text)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card-sub{color:var(--muted)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card-value.fh70-good{color:var(--green)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card-value.fh70-bad{color:var(--red)!important}
+#finInvestIntelligence #fh70LensGrid .fh70-card-value.fh70-mid{color:var(--text)!important}
+#finInvestIntelligence .fh70-fill,
+#finInvestIntelligence .fh70-marker{background:var(--blue)!important}
+body[data-theme="goldblue"] #finInvestIntelligence .fin-tag{color:var(--blue)!important}
+.fh101-sync .fh101AutoLabel{margin:14px 0 8px}
+.fh101-sync .field input{width:100%;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text)}
+.fh101-sync .field{margin-bottom:9px}
+.fh101-sync .field label{display:block;color:var(--muted);margin:0 0 6px}
+.fh101-sync .fh101-error{color:var(--red)!important}
+.fh101-sync .foot{margin:10px 0 0;line-height:1.55}
+.fh101-sync button[hidden]{display:none!important}
+
+/* Cloud login is available even before a local portfolio has been selected. */
+#accountGate .fh1012-gate-cloud{border:1px solid rgba(112,174,237,.48);border-radius:15px;margin:18px 0;padding:16px;background:#112744}
+#accountGate .fh1012-gate-cloud h2{font-size:1.06rem;margin:0 0 7px;color:#f7fbff}
+#accountGate .fh1012-gate-cloud p{font-size:.83rem;color:#bacce2;margin:0 0 12px;line-height:1.4}
+#accountGate .fh1012-gate-cloud label{display:block;font-size:.85rem;margin:9px 0 6px}
+#accountGate .fh1012-gate-cloud input{display:block;width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #577fa9;background:#0d1c32;color:#fff;font:inherit}
+#accountGate .fh1012-gate-cloud .account-primary{display:block;width:100%;margin-top:10px}
+#accountGate .fh1012-gate-cloud #fh1012GateNote{margin-top:10px;white-space:normal;overflow-wrap:anywhere}
+#accountGate .fh1012-gate-cloud .fh101-error{color:#ff8a98}

@@ -1,0 +1,4 @@
+/* Finholdra 10.9.88 — the bonus reuses the main playfield, no separate puzzle UI. */
+#finnSolid .fs-overlay-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+#finnSolid .fs-bonus-trigger{flex:1 1 190px;min-height:44px;background:#22546b;border:1px solid #65d8be;border-radius:12px;color:#e8fff5;font-weight:800;font-family:inherit;font-size:12px;padding:10px 12px;cursor:pointer}
+#finnSolid .fs-bonus-trigger:focus-visible{outline:2px solid #efffd3;outline-offset:3px}
