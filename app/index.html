@@ -2216,7 +2216,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.65</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.66</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -5883,7 +5883,7 @@ function correctAccidentalCryptoCategory(){
 // No guessed Italian ticker is created. Only actual scoped directory results are displayed.
 // Ricerca live Yahoo/TradingView con directory italiana e fallback identificativi locali.
 const FIN_GEM_SEARCH_CACHE=new Map();
-async function discoverItalianEquities(q){
+async function discoverItalianListings(q){
  const query=String(q||'').trim();
  if(query.length<2||/\b(?:futures?|bitcoin|ethereum|forex|obbligazion|btp|crypto)\b/i.test(query))return [];
  const key=query.toLowerCase(),cached=FIN_GEM_SEARCH_CACHE.get(key);
@@ -5892,7 +5892,7 @@ async function discoverItalianEquities(q){
  try{
   const res=await fetch('/.netlify/functions/gem-search?q='+encodeURIComponent(query),{signal:ctl.signal});
   if(!res.ok)return [];
-  const data=await res.json();const rows=Array.isArray(data.quotes)?data.quotes.filter(r=>/\.MI$/i.test(String(r.symbol))&&['EQUITY','STOCK'].includes(String(r.quoteType).toUpperCase())):[];
+  const data=await res.json();const rows=Array.isArray(data.quotes)?data.quotes.filter(r=>/\.MI$/i.test(String(r.symbol))&&['EQUITY','STOCK','ETF','FUND'].includes(String(r.quoteType).toUpperCase())):[];
   FIN_GEM_SEARCH_CACHE.set(key,{at:Date.now(),rows});return rows;
  }catch(_){return []}finally{clearTimeout(timer)}
 }
@@ -5929,7 +5929,7 @@ async function searchYahooQuotes(term){
  if(isin||/\b(?:btp|bond|obbligazion|mot|titolo di stato|bund|treasury)\b/i.test(word)){
   try{const r=await fetch('/.netlify/functions/bond-search?q='+encodeURIComponent(word),{cache:'no-store'});if(r.ok){const d=await r.json();candidates.push(...(d.results||[]))}}catch(_){}
  }
- const found=await Promise.allSettled([...lookups.map(q=>yahooSearchTerm(q)),discoverItalianEquities(word)]);
+ const found=await Promise.allSettled([...lookups.map(q=>yahooSearchTerm(q)),discoverItalianListings(word)]);
  found.forEach(r=>{if(r.status==='fulfilled')candidates.push(...r.value)});
  if(guessYahooCode(t)&&!candidates.some(c=>String(c.symbol).toUpperCase()===t))candidates.unshift({symbol:t,shortname:t,longname:t,quoteType:/=F$/i.test(t)?'FUTURE':'EQUITY'});
  const map=new Map();for(const c of candidates){if(!c.symbol)continue;const key=String(c.symbol).toUpperCase();if(!map.has(key)||futuresType(c)&&!futuresType(map.get(key)))map.set(key,c)}
@@ -5952,8 +5952,8 @@ async function searchYahooQuotes(term){
  // Italian listings (GEM included) first among meaningful, same-issuer matches.
  // A deliberately qualified ticker, e.g. NVDA or NVDA.MI, still matches exactly.
  const explicitVenue=/\.[a-z]{1,4}$/i.test(word)||/[=^]/.test(word);
- const equities=x=>['EQUITY','STOCK',''].includes(String(x.quoteType||'').toUpperCase());
- const preferredVenue=x=>equities(x)?venueRank(x):venueRank(x)+1;
+ const italianFirst=x=>['EQUITY','STOCK','ETF','FUND',''].includes(String(x.quoteType||'').toUpperCase());
+ const preferredVenue=x=>italianFirst(x)?venueRank(x):venueRank(x)+1;
  const relevantTier=x=>{const n=relevance(x);return n<=4?0:1};
  return all.sort((a,b)=>priorityFutures?(Number(futuresType(b))-Number(futuresType(a))||relevance(a)-relevance(b)):explicitVenue?(relevance(a)-relevance(b)||preferredVenue(a)-preferredVenue(b)):(relevantTier(a)-relevantTier(b)||preferredVenue(a)-preferredVenue(b)||relevance(a)-relevance(b)||Number(!invesquoRegion(a))-Number(!invesquoRegion(b))||String(a.symbol).localeCompare(String(b.symbol)))).slice(0,45);
 }
@@ -6647,7 +6647,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.65';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.66';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;

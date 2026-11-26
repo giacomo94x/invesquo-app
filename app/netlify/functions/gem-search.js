@@ -1,4 +1,4 @@
-// Discover Italian equity listings for *any* issuer rather than relying on a hand-curated GEM list.
+// Discover Italian equity AND ETF listings by queried name, ticker or ISIN; no guessed symbols.
 // TradingView is a symbol directory, not an authorized historical-price feed.
 const clean = v => String(v ?? '').replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').trim();
 const norm = v => clean(v).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -17,8 +17,8 @@ function fromTV(r){
   const exchange=clean(r.exchange||r.source_id).toUpperCase(), ticker=clean(r.ticker||String(r.symbol||'').split(':').pop());
   if (!['MIL','BIT','MILAN'].includes(exchange)||!ticker) return null;
   const type=clean(r.type).toLowerCase();
-  if (type && !['stock','equity','common_stock'].includes(type)) return null;
-  return {symbol:/\.MI$/i.test(ticker)?ticker:ticker+'.MI',shortname:clean(r.description||r.name||ticker),longname:clean(r.description||r.name||ticker),exchange:'MIL',exchDisp:'Borsa Italiana · Milano',currency:clean(r.currency_code||r.currency)||'EUR',isin:clean(r.isin),quoteType:'EQUITY',source:'TradingView · directory',referenceOnly:true};
+  if (type && !['stock','equity','common_stock','fund','etf','mutual_fund','exchange_traded_fund','dr','depositary_receipt'].includes(type)) return null;
+  return {symbol:/\.MI$/i.test(ticker)?ticker:ticker+'.MI',shortname:clean(r.description||r.name||ticker),longname:clean(r.description||r.name||ticker),exchange:'MIL',exchDisp:['fund','etf','mutual_fund','exchange_traded_fund'].includes(type)?'Borsa Italiana · ETFplus':'Borsa Italiana · Milano',currency:clean(r.currency_code||r.currency)||'EUR',isin:clean(r.isin),quoteType:['fund','etf','mutual_fund','exchange_traded_fund'].includes(type)?'ETF':'EQUITY',source:'TradingView · directory',referenceOnly:true};
 }
 async function get(url){const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),3800);try{const res=await fetch(url,{signal:ctl.signal,headers:{'Accept':'application/json','User-Agent':'Mozilla/5.0'}});if(!res.ok)throw Error('HTTP '+res.status);return await res.json();}finally{clearTimeout(timer);}}
 exports.handler=async event=>{

@@ -1,3 +1,9 @@
+## Beta 10.9.66
+- Ricerca quotazioni italiane estesa ad azioni e fondi/ETF: la directory filtrata su Milano non scarta più gli ETF di ETFplus.
+- Le ricerche per nome, ticker e ISIN interrogano fonti di identificazione Yahoo/TradingView e accorpano le corrispondenze milanesi; anche gli ETF ricevono priorità alla quotazione italiana pertinente.
+- Nessuno scraping automatico del sito Borsa Italiana: i suoi elenchi sono fonti di consultazione e confronto, mentre la ricerca applicativa rimane sulle directory esistenti. Nessuna nuova API a pagamento o job Netlify.
+- Restano distinti metadati dei simboli e disponibilità delle quotazioni Yahoo; nessun prezzo generato.
+
 ## Beta 10.9.65
 - Rimossi OpenFIGI, catalogo Netlify Blobs, funzioni di aggiornamento programmato e relativa dipendenza; nessun job automatico a consumo per la ricerca.
 - Corretto un errore JavaScript nella funzione di ricerca: la dichiarazione delle varianti futures era stata inglobata in un commento, provocando un errore su ricerche anche comuni come Tesla.
