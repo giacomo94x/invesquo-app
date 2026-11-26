@@ -2183,15 +2183,7 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 <p class="hint">Contenuti didattici, non consulenza finanziaria.</p></section>
 <section class="card"><h2>Piccolo glossario</h2><div class="learning-glossary"><p><strong>PMC</strong> — prezzo medio di carico delle quote acquistate.</p><p><strong>TWRR</strong> — rendimento concatenato dei sotto-periodi, che riduce l'effetto dei versamenti.</p><p><strong>MWRR / XIRR</strong> — rendimento che considera importo e momento dei flussi di cassa.</p><p><strong>Drawdown</strong> — calo dal precedente massimo del valore.</p><p><strong>TER</strong> — costi correnti annui di un fondo o ETF, non necessariamente tutti i costi sostenuti.</p><p><strong>Rischio di cambio</strong> — variazione del valore in euro quando la valuta del titolo è diversa.</p><p><strong>Tracking difference</strong> — differenza effettiva di rendimento tra ETF e indice.</p><p><strong>Spread denaro-lettera</strong> — costo implicito della differenza tra il miglior prezzo in acquisto e in vendita.</p><p><strong>Duration</strong> — sensibilità indicativa del prezzo obbligazionario ai tassi.</p><p><strong>Rendimento reale</strong> — rendimento al netto della perdita di potere d’acquisto.</p><p><strong>Margine futures</strong> — garanzia richiesta, non costo totale del contratto.</p></div></section>
 <section class="card" id="fhQuizPanel"><div class="section-head"><h2>Finholdra Quiz · 100 domande, livello avanzato</h2><span class="sub">Finanza, mercati e investimenti</span></div><div class="fh-quiz-meta"><span id="fhQuizProgress">Domanda 1 di 100</span><span id="fhQuizRecord">Record: 0/100</span></div><div class="fh-quiz-question" id="fhQuizQuestion"></div><div class="fh-quiz-options" id="fhQuizOptions"></div><p class="fh-quiz-feedback" id="fhQuizFeedback" aria-live="polite"></p><button type="button" class="btn primary fh-quiz-next" id="fhQuizNext" disabled>Prossima domanda</button><button type="button" class="btn" id="fhQuizRestart" style="margin-left:8px">Ricomincia</button><p class="hint">Il miglior punteggio è conservato nel profilo locale ; esporta il backup per conservarlo.</p></section>
-<section class="card" id="fhBehavioralAcademy" aria-labelledby="fhBehavioralTitle">
-<div class="fh-beh-head"><button type="button" class="fh-beh-portrait" id="fhBehavioralMiraPortrait" aria-label="Mostra la risposta di Mira"><img src="./mira-academy.webp?v=10.9.1" alt="Mira, tutor Academy" loading="lazy"></button><div><div class="eyebrow">ACADEMY · MENTE E MERCATI</div><h2 id="fhBehavioralTitle">Finanza comportamentale</h2><p>Psicologia dell'investimento · dialoghi con Mira</p></div></div>
-<p class="hint">Capire le reazioni ai mercati e distinguere emozioni, rischi e decisioni.</p>
-<div id="fhBehavioralContext" class="fh-beh-context" aria-live="polite"></div>
-<div class="section-head"><strong>Come ti senti rispetto al portafoglio?</strong><button type="button" class="btn fh-beh-refresh" id="fhBehavioralRefresh" title="Rileggi i dati del portafoglio">↻ Aggiorna</button></div>
-<div id="fhBehavioralQuestions" class="fh-beh-questions" role="group" aria-label="Situazioni e domande per Mira"></div>
-<div id="fhBehavioralReply" class="fh-beh-replies" aria-live="polite" aria-atomic="true"></div>
-<div id="fhBehavioralSources" class="fh-beh-sources" aria-label="Studi di riferimento"></div>
-</section>
+
 <section class="card" id="fhMarketVenuesAcademy" aria-labelledby="fhMarketVenuesTitle">
  <div class="section-head"><h2 id="fhMarketVenuesTitle">🇮🇹 Le Borse italiane e le fonti dei grafici</h2><span class="sub">Academy · Mercati e quotazioni</span></div>
  <p class="hint">Lo stesso strumento può avere più ticker su piazze diverse. Nella ricerca Finholdra privilegia le quotazioni italiane quando disponibili: verifica sempre ISIN, valuta, liquidità e orario di negoziazione.</p>
@@ -2209,14 +2201,24 @@ body[data-favorite-tint="closed-custom"] #dashboardView #donut{background:var(--
 </section>
 <section class="card mira-academy-card" aria-labelledby="miraAcademyTitle">
  <div class="mira-academy-top"><button type="button" id="miraAcademyOpen" class="mira-academy-portrait" aria-expanded="false" aria-controls="miraAcademyChat" aria-label="Parla con Mira, tutor del quiz"><img src="./mira-academy.webp?v=10.9.1" alt="Mira, tutor di Finholdra Academy dai capelli castani" loading="lazy"></button><div><h2 id="miraAcademyTitle">Mira · Tutor Academy</h2><p class="sub">La tua alleata nei quiz: spiegazioni, progresso e suggerimenti per studiare meglio.</p><span class="mira-academy-hint">Tocca Mira per parlarle</span></div></div>
- <div class="mira-academy-chat" id="miraAcademyChat" hidden><p id="miraAcademyReply" class="mira-academy-reply" role="status">MIRA: «Ciao! Sono qui per aiutarti ad allenarti con la finanza, una domanda alla volta.»</p><div class="mira-academy-actions"><button type="button" data-mira-help="score">Il mio punteggio</button><button type="button" data-mira-help="help">Come funziona il quiz</button><button type="button" data-mira-help="study">Consiglio di studio</button></div></div>
+ <div class="fh-mira-modes" role="tablist" aria-label="Parla con Mira"><button type="button" class="fh-mira-mode active" id="fhMiraModeQuiz" aria-selected="true" role="tab" aria-controls="miraAcademyChat">Quiz e studio</button><button type="button" class="fh-mira-mode" id="fhMiraModeBehavior" aria-selected="false" role="tab" aria-controls="fhBehavioralAcademy">Finanza comportamentale</button></div>
+ <div class="fh-mira-shared-response" id="fhMiraSharedResponse"> <div class="mira-academy-chat" id="miraAcademyChat"><p id="miraAcademyReply" class="mira-academy-reply" role="status">MIRA: «Ciao! Sono qui per aiutarti ad allenarti con la finanza, una domanda alla volta.»</p><div class="mira-academy-actions"><button type="button" data-mira-help="score">Il mio punteggio</button><button type="button" data-mira-help="help">Come funziona il quiz</button><button type="button" data-mira-help="study">Consiglio di studio</button></div></div>
+<section class="fh-mira-mode-panel" id="fhBehavioralAcademy">
+
+<p class="hint">Capire le reazioni ai mercati e distinguere emozioni, rischi e decisioni.</p>
+<div id="fhBehavioralContext" class="fh-beh-context" aria-live="polite"></div>
+<div class="section-head"><strong>Come ti senti rispetto al portafoglio?</strong><button type="button" class="btn fh-beh-refresh" id="fhBehavioralRefresh" title="Rileggi i dati del portafoglio">↻ Aggiorna</button></div>
+<div id="fhBehavioralQuestions" class="fh-beh-questions" role="group" aria-label="Situazioni e domande per Mira"></div>
+<div id="fhBehavioralReply" class="fh-beh-replies" aria-live="polite" aria-atomic="true"></div>
+<div id="fhBehavioralSources" class="fh-beh-sources" aria-label="Studi di riferimento"></div>
+</section></div>
 </section>
 <p id="fhAcademyDisclaimer" class="hint">Contenuti di educazione finanziaria e psicologia comportamentale: non sostituiscono una valutazione individuale di obiettivi, rischi e necessità di liquidità. Le performance future sono incerte.</p>
 </section>
 <section aria-label="Impostazioni Finholdra" class="settings-view app-view hidden" id="settingsView">
 <div class="settings-screen-head"><button aria-label="Torna alla dashboard" class="back-btn" id="backDashboard" type="button"><span aria-hidden="true">‹</span></button><div><div class="eyebrow">FINHOLDRA</div><h1 id="settingsScreenTitle" tabindex="-1">Impostazioni</h1></div></div><p class="finholdra-settings-payoff">Every investments you hold. One view.</p>
 <div class="settings-status-panel" aria-label="Versione dell’applicazione e stato dei servizi">
- <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.66</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
+ <div class="settings-status-info"><span class="settings-status-label">VERSIONE APP</span><strong id="appBuildVersion">Beta 10.9.67</strong><span class="sub">Profili locali · backup Drive opzionale</span></div>
  <div class="settings-status-info"><span class="settings-status-label">SERVIZI APP</span><div class="settings-status-state" role="status" aria-live="polite"><i id="netlifyServerLed" class="server-led checking" aria-hidden="true"></i><strong id="netlifyServerState">Verifica in corso</strong></div><span class="sub" style="color:#53d5a8">● App locale attiva</span><span id="netlifyServerDetail" class="sub">Verifica funzioni Netlify.</span></div>
  <button class="btn settings-status-refresh" type="button" id="checkNetlifyServer" aria-label="Ricontrolla lo stato del server" title="Ricontrolla lo stato del server">↻</button>
  </div>
@@ -5937,11 +5939,15 @@ async function searchYahooQuotes(term){
  // for 'sandisk' must show the US listing even when Italy is selected.
  const original=[...map.values()];
  const keyQuery=word.toLocaleLowerCase('it-IT');
+ const matchedIsins=new Set(original.filter(x=>{
+  const name=String(x.longname||x.shortname||'').toLocaleLowerCase('it-IT');const ticker=String(x.symbol||'').toLowerCase();
+  return (name.includes(keyQuery)||ticker===keyQuery||ticker.split('.')[0]===keyQuery)&&/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/i.test(String(x.isin||''));
+ }).map(x=>String(x.isin).toUpperCase()));
  // Only emit matched securities, not unrelated results returned by broad provider searches.
  const all=original.filter(x=>{
    const symbol=String(x.symbol||'').toLowerCase(),name=String(x.longname||x.shortname||'').toLocaleLowerCase('it-IT'),ticker=symbol.replace(/\.[a-z]{1,4}$/i,'');
    const identifier=String(x.isin||'').toLowerCase();
-   return name.includes(keyQuery)||symbol.includes(keyQuery)||ticker===keyQuery||identifier===keyQuery||
+   return name.includes(keyQuery)||symbol.includes(keyQuery)||ticker===keyQuery||identifier===keyQuery||(identifier&&matchedIsins.has(identifier.toUpperCase()))||
      knownIssuerMatches(word).some(k=>String(k.symbol).toLowerCase()===symbol)||futureAliases.some(k=>String(k.symbol).toLowerCase()===symbol)||
      (isin&&identifier===keyQuery);
  });
@@ -6647,7 +6653,7 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // v7.6: Server LED reflects only Netlify Functions reachability, not market-data health.
-const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.66';
+const FINHOLDRA_VERSION_FALLBACK='Beta 10.9.67';
 async function updateFinholdraVersion(){
  const versionLabel=document.getElementById('appBuildVersion');
  if(!versionLabel)return;
@@ -8899,4 +8905,6 @@ header.top .new-header-brand #finholdraLogo{
 .fh-browse-scroll-tools{display:flex;justify-content:flex-end;gap:6px;margin-bottom:6px}
 .fh-browse-scroll-tools .btn{min-width:40px;min-height:32px;padding:3px 10px;font-size:19px;line-height:1}
 @media(pointer:coarse){.browse-tab{min-height:42px}.fh-browse-scroll-tools .btn{min-width:44px;min-height:38px}}
-</style></body></html>
+</style><script defer src="./finholdra-10967.js?v=10.9.67"></script>
+<link rel="stylesheet" href="./finholdra-premium.css?v=10.9.67">
+</body></html>

@@ -21,14 +21,22 @@ exports.handler = async event => {
   if (event.httpMethod !== 'GET') return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
   if (q.length < 2) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Inserisci almeno due caratteri' }) };
   const yahoo = 'https://query1.finance.yahoo.com/v1/finance/search?q=' + encodeURIComponent(q) + '&quotesCount=50&newsCount=0';
-  const tv = 'https://symbol-search.tradingview.com/symbol_search/v3/?text=' + encodeURIComponent(q) + '&hl=1&exchange=&lang=en&search_type=undefined&domain=production';
+  const yahooIT = yahoo + '&region=IT&lang=it-IT';
+  const tvBase = 'https://symbol-search.tradingview.com/symbol_search/v3/?text=' + encodeURIComponent(q) + '&hl=1&lang=en&search_type=undefined&domain=production';
+  const tv = tvBase+'&exchange=';
+  const tvItalia = tvBase+'&exchange=MIL';
+  const tvItalianETF = tvBase+'&exchange=BIT';
   const calls = await Promise.allSettled([
     json(yahoo, { 'User-Agent': 'Mozilla/5.0 (compatible; Finholdra/1.0)', 'Accept': 'application/json' }),
-    json(tv, { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36', 'Origin': 'https://www.tradingview.com', 'Referer': 'https://www.tradingview.com/', 'Accept': 'application/json' })
+    json(yahooIT, { 'User-Agent': 'Mozilla/5.0 (compatible; Finholdra/1.0)', 'Accept': 'application/json' }),
+    json(tv, { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' }),
+    json(tvItalia, { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' }),
+    json(tvItalianETF, { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' })
   ]);
   const results = [];
-  if (calls[0].status === 'fulfilled' && Array.isArray(calls[0].value.quotes)) results.push(...calls[0].value.quotes);
-  if (calls[1].status === 'fulfilled' && Array.isArray(calls[1].value.symbols)) results.push(...calls[1].value.symbols.map(convert).filter(Boolean));
-  const seen = new Set(), quotes = results.filter(r => { const id = String(r.symbol || '').toUpperCase(); if (!id || seen.has(id)) return false; seen.add(id); return true; }).slice(0, 70);
-  return { statusCode: quotes.length ? 200 : calls.every(x => x.status === 'rejected') ? 503 : 200, headers, body: JSON.stringify({ quotes, sources: calls.map((r, i) => ({ name: i ? 'TradingView' : 'Yahoo', available: r.status === 'fulfilled' })) }) };
+  for (const result of calls.slice(0,2)) if (result.status === 'fulfilled' && Array.isArray(result.value.quotes)) results.push(...result.value.quotes);
+  for (const result of calls.slice(2)) if (result.status === 'fulfilled' && Array.isArray(result.value.symbols)) results.push(...result.value.symbols.map(convert).filter(Boolean));
+  const unique = new Map(); for (const r of results) { const id = String(r.symbol || '').toUpperCase(); if (!id) continue; if (!unique.has(id) || (unique.get(id).referenceOnly && !r.referenceOnly)) unique.set(id, r); }
+  const quotes = [...unique.values()].slice(0, 90);
+  return { statusCode: quotes.length ? 200 : calls.every(x => x.status === 'rejected') ? 503 : 200, headers, body: JSON.stringify({ quotes, sources: calls.map((r, i) => ({ name: i < 2 ? (i ? 'Yahoo Italia' : 'Yahoo') : 'TradingView', available: r.status === 'fulfilled' })) }) };
 };

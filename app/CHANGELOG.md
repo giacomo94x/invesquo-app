@@ -1,3 +1,12 @@
+## Beta 10.9.67 — Ricerca, Academy e finiture
+- Ricerca: combinazione Yahoo globale e Yahoo Italia con TradingView con interrogazioni distinte per Milano e filtro ISIN per varianti dello stesso strumento.
+- Risultati da directory marcati come identificativi; non confondere presenza del ticker con prezzo Yahoo recuperato.
+- Mira: unico riquadro di dialogo con schede Quiz e Finanza comportamentale; conservati contenuti e risposte.
+- Ritratti Mira e Nexus: proporzioni, ritaglio coerente, cornice e luci senza bande da letterboxing.
+- Grafica: superfici, riflessi discreti, micro-interazioni e bordi più curati, rispettando la modalità riduzione movimento.
+- Nessuna modifica ai dati patrimoniali e alle operazioni.
+- Limite noto: API di mercato terze parti non garantiscono copertura universale né quotazione per ogni ticker.
+
 ## Beta 10.9.66
 - Ricerca quotazioni italiane estesa ad azioni e fondi/ETF: la directory filtrata su Milano non scarta più gli ETF di ETFplus.
 - Le ricerche per nome, ticker e ISIN interrogano fonti di identificazione Yahoo/TradingView e accorpano le corrispondenze milanesi; anche gli ETF ricevono priorità alla quotazione italiana pertinente.
