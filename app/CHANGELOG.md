@@ -1,3 +1,15 @@
+## Beta 10.9.74 — 26/11/2026
+- Restyling fintech raffinato: superfici, pannelli, profondità, controlli, tipografia, focus e contrasto adattivo, senza modifiche ai dati finanziari.
+- Rimosso tema/stile Natale dalle Impostazioni; eventuali impostazioni Natale pregresse ripiegano sullo stile Flat, i costumi rimangono disponibili.
+- Nuovo gadget separato “Barba di Babbo Natale”, abbinabile a qualsiasi costume, incluso il cappello Babbo Natale.
+- Versione allineata nel manifest JSON.
+
+## Beta 10.9.73 — 26/11/2026
+- Grafico Patrimonio e valore: gli estremi sono selezionati tra le DIFFERENZE (Valore − Capitale) mostrate per ogni data del periodo, non dai risultati giornalieri cash-flow-adjusted. Nessun valore è inventato quando non esistono differenze positive/negative.
+- Rimossa la sezione Chiedi a Finn dalla scheda del singolo titolo, inclusi i relativi script e funzioni Netlify.
+- Futures: ripristinato il collegamento arancione tratteggiato fra ultimo dato intraday e quotazione più recente (senza implicare prezzi intermedi reali).
+- Nessuna modifica ai dati e alle transazioni del portafoglio.
+
 ## Beta 10.9.72 — Chiedi a Finn: andamento di oggi e confronto USA
 - Pulsante intuitivo «Come andrà oggi?» basato su Opening Range Breakout (primi 15 minuti e volumi Yahoo disponibili), senza livelli inventati né previsioni garantite.
 - Per le azioni di Milano, pulsante «Com’è andato negli USA?»; consulta un ticker USA corrispondente o candidato, segnala i match trovati solo per nome e confronta variazioni percentuali e date; dove disponibili isola anche i movimenti USA dopo le 17:30 italiane usando candele intraday da 15 minuti.

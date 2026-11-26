@@ -36,22 +36,20 @@ function readout(s,all){const p=all.find(p=>p.date===s.selected)||all.at(-1);if(
  if(s.ab&&s.A)return `<span>A: ${fmt(s.A.date)} · ${euros(s.A.value)}</span><strong>Seleziona B</strong>`;
  const delta=p.value-p.capital,pctBase=p.capital?delta/Math.abs(p.capital)*100:null;return `<span class="fh149-date">${fmt(p.date)}${p.provisional?' · indicativo':''}</span><span class="fh149-metric"><b>Valore</b> <span>${euros(p.value)}</span></span><span class="fh149-metric fh149-difference ${delta>=0?'fh149-positive':'fh149-negative'}"><b>Differenza</b> <span>${signedEuros(delta)} · ${signedPct(pctBase)}</span></span><span class="fh149-metric"><b>Capitale</b> <span>${euros(p.capital)}</span></span>`;}
 function dailyExtremes(all,s){
- // The day gain is calculated by the ledger-aware valuation engine and
- // explicitly excludes subscriptions and withdrawals; never substitute
- // the unadjusted change in portfolio value for market performance.
- // Respect the selected date range independently of the visible zoom window.
- // 1G represents exactly the most recent day's verified P&L, even if a
- // prior-day valuation is displayed only as a visual baseline.
+ // The selected-date readout displays Differenza = Valore - Capitale.
+ // The extrema MUST compare those exact same per-date differences, rather
+ // than the separate day-on-day, cash-flow-adjusted performance metric.
+ // Use the entire selected date interval, regardless of chart zoom.
  const source=s?.data?.()||all;
- const sorted=source.filter(p=>p&&/^\d{4}-\d{2}-\d{2}$/.test(p.date)).sort((a,b)=>a.date.localeCompare(b.date));
+ const sorted=source.filter(p=>p&&/^\d{4}-\d{2}-\d{2}$/.test(p.date)&&Number.isFinite(p.value)&&Number.isFinite(p.capital)).sort((a,b)=>a.date.localeCompare(b.date));
  const end=sorted.at(-1)?.date||all.at(-1)?.date;
  const cutoff=s?.from?s.from:(s?.range==='all'?'':end?new Date(dt(end)-Math.max(0,Number(s?.range||0)-1)*86400000).toISOString().slice(0,10):'');
  const upto=s?.to||end;
- const observed=sorted.filter(p=>(!cutoff||p.date>=cutoff)&&(!upto||p.date<=upto)&&Number.isFinite(p.gain));
- const positive=observed.filter(p=>p.gain>0).sort((a,b)=>b.gain-a.gain)[0];
- const negative=observed.filter(p=>p.gain<0).sort((a,b)=>a.gain-b.gain)[0];
- const card=(kind,label,entry,empty)=>`<div class="fh10969-day-${kind}"><span>${label}</span><strong>${entry?signedEuros(entry.gain):'n.d.'}</strong><small>${entry?fmt(entry.date):empty}</small></div>`;
- return `<div class="fh10969-day-extremes" aria-label="Miglior guadagno e maggiore perdita giornaliera nel periodo selezionato">${card('best','Maggior guadagno giornaliero',positive,'Nessun guadagno rilevato')}${card('worst','Maggiore perdita giornaliera',negative,'Nessuna perdita rilevata')}</div>`;
+ const observed=sorted.filter(p=>(!cutoff||p.date>=cutoff)&&(!upto||p.date<=upto)).map(p=>({date:p.date,difference:p.value-p.capital}));
+ const positive=observed.filter(p=>p.difference>0).sort((a,b)=>b.difference-a.difference)[0];
+ const negative=observed.filter(p=>p.difference<0).sort((a,b)=>a.difference-b.difference)[0];
+ const card=(kind,label,entry,empty)=>`<div class="fh10969-day-${kind}"><span>${label}</span><strong>${entry?signedEuros(entry.difference):'n.d.'}</strong><small>${entry?fmt(entry.date):empty}</small></div>`;
+ return `<div class="fh10969-day-extremes" aria-label="Differenza più alta e più bassa del periodo selezionato, calcolata come valore meno capitale">${card('best','Maggior guadagno del periodo',positive,'Nessuna differenza positiva')}${card('worst','Maggiore perdita del periodo',negative,'Nessuna differenza negativa')}</div>`;
 }
 function controls(s){
  const today=new Date().toISOString().slice(0,10);

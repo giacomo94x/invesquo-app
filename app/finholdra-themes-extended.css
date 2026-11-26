@@ -33,14 +33,6 @@ body[data-appearance="editorial"] :is(.card,.hero,.box,.setting-group){border-ra
 body[data-appearance="editorial"] :is(h2,h3,.hero strong){font-weight:750!important;letter-spacing:-.05em}
 body[data-appearance="editorial"] :is(.btn,.chip,.gear-btn){border-radius:0!important}
 /* Holidays: ornament band, candy-cane touches, warm cards and snow; no overlays on values. */
-body[data-appearance="natale"] .hero{background:linear-gradient(126deg,#14513c,#631b30)!important;border:2px solid #dbb76c!important;box-shadow:0 9px 25px #001a1470,inset 0 1px 0 #ffefb488!important}
-body[data-appearance="natale"] .hero::before{content:"❄  ✦  ❄  ✦"!important;position:absolute!important;right:12px!important;top:9px!important;color:#fff2ca!important;opacity:.85!important;font-size:13px!important;letter-spacing:8px!important}
-body[data-appearance="natale"] .card:not(.hero){border-color:color-mix(in srgb,#c5a461 60%,var(--border))!important;background-image:linear-gradient(160deg,rgba(20,102,72,.09),rgba(157,31,52,.10))!important}
-body[data-appearance="natale"] :is(.btn.primary,.seg button.selected,.nav-tool.active,.fh115-range button.selected){background:linear-gradient(125deg,#165f45,#b63248)!important;border:1px solid #d6b267!important;color:#fff!important}
-body[data-appearance="natale"] :is(.gear-btn,.nav-tool){border:1px solid #d5ae64!important;box-shadow:inset 0 1px #ffe4ad55!important}
-body[data-appearance="natale"] #filters .chip:not(.off){border-color:#cda864!important}
-body[data-appearance="natale"] .section-head h2::before{content:"✦ ";color:#dab46c;font-size:.64em;vertical-align:middle}
-body[data-appearance="natale"] #performanceFace{filter:drop-shadow(0 2px 5px rgba(208,56,73,.28))}
 @media(prefers-reduced-transparency:reduce){body[data-appearance="glass"] :is(.card,.box,.hero,.setting-group){-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--panel)!important}}
 @media(prefers-reduced-motion:reduce){body[data-appearance="glass"] :is(.btn,.gear-btn,.nav-tool,.chip){transition:none!important}}
 /* Neutral market palette is an expandable subgroup of dynamic market colors. */
