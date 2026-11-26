@@ -1,6 +1,14 @@
-/* Finholdra 9.9.19 — Yahoo Finance indices regardless of news source.
-   Quote change is relative to previous regular-market close, not intraday chart origin. */
+// Indices: report only verified real quotations, omit unreachable feeds.
 'use strict';
-const LIST=[['FTSE MIB','^FTSEMIB'],['S&P 500','^GSPC'],['Nasdaq Composite','^IXIC'],['Dow Jones','^DJI'],['Euro Stoxx 50','^STOXX50E'],['DAX','^GDAXI'],['Nikkei 225','^N225']];
-async function read(name,symbol){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),6000);try{const url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(symbol)+'?range=5d&interval=1d';const r=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json','User-Agent':'Mozilla/5.0 (compatible; Finholdra/1.0)'}});if(!r.ok)throw Error('HTTP '+r.status);const data=await r.json(),result=data?.chart?.result?.[0],meta=result?.meta;if(!meta)return null;let close=Number(meta.regularMarketPrice),prev=Number(meta.previousClose||meta.chartPreviousClose);if(!(close>0&&prev>0))return null;const timestamp=Number(meta.regularMarketTime||0);return {name,symbol,price:close,changePercent:(close-prev)/prev*100,marketTime:timestamp>0?new Date(timestamp*1000).toISOString():null};}catch(_){return null}finally{clearTimeout(timer)}}
-exports.handler=async function(){const quotes=(await Promise.all(LIST.map(([name,symbol])=>read(name,symbol)))).filter(Boolean);return {statusCode:200,headers:{'content-type':'application/json; charset=utf-8','cache-control':'public, max-age=120, s-maxage=300'},body:JSON.stringify({indices:quotes,source:'Yahoo Finance'})}};
+const {ok,fail,yahooChart,lastQuote}=require('../lib/market-data');
+const INDEX=[['S&P 500','^GSPC'],['Nasdaq Composite','^IXIC'],['Dow Jones','^DJI'],['FTSE MIB','FTSEMIB.MI'],['DAX','^GDAXI'],['Euro Stoxx 50','^STOXX50E']];
+exports.handler=async event=>{
+ if(event.httpMethod&&event.httpMethod!=='GET')return fail('Metodo non consentito',405);
+ const results=await Promise.allSettled(INDEX.map(async ([name,symbol])=>{
+  const r=await yahooChart(symbol);const p=lastQuote(r),prev=Number(r.meta.chartPreviousClose||r.meta.previousClose);
+  if(!(prev>0))throw Error('Chiusura precedente non verificata');
+  return {name,symbol,price:p.price,changePercent:(p.price-prev)/prev*100,marketTime:p.asOf,currency:p.currency,source:p.source};
+ }));
+ const indices=results.filter(x=>x.status==='fulfilled').map(x=>x.value);
+ return indices.length?ok({indices,available:true}):fail('Indici non disponibili dalla fonte esterna');
+};

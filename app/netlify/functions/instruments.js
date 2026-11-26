@@ -1,35 +1,12 @@
-// Optional ISIN-to-market reference lookup. Requires a Netlify Functions deployment.
-// OpenFIGI provides reference identities but not trade prices. A market quote is verified separately.
-const venueSymbols = {
-  'US': '', 'LN': '.L', 'LONDON': '.L', 'IM': '.MI', 'MILAN': '.MI',
-  'GM': '.DE', 'GY': '.DE', 'FRANKFURT': '.F', 'FP': '.PA',
-  'NA': '.AS', 'SW': '.SW', 'SM': '.MC', 'HK': '.HK', 'JP': '.T', 'CN': '.TO'
-};
-const allowedIsin = /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/;
-function checksum(isin){const chars=isin.split('').map(c=>/[A-Z]/.test(c)?String(c.charCodeAt(0)-55):c).join('');let sum=0,twice=false;for(let i=chars.length-1;i>=0;i--){let n=+chars[i];if(twice){n*=2;if(n>9)n-=9}sum+=n;twice=!twice}return sum%10===0}
+// ISIN directory: lookup only, not a quotation or statement that an instrument trades on MOT.
+'use strict';
+const {ok,fail,remote,validIsin}=require('../lib/market-data');
 exports.handler=async event=>{
- const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'};
- const isin=String(event.queryStringParameters?.isin||'').trim().toUpperCase();
- if(!allowedIsin.test(isin)||!checksum(isin))return{statusCode:400,headers,body:JSON.stringify({error:'ISIN non valido'})};
- const ctrl=new AbortController(),timeout=setTimeout(()=>ctrl.abort(),6500);
+ if(event.httpMethod&&event.httpMethod!=='GET')return fail('Metodo non consentito',405);
+ const isin=String(event.queryStringParameters?.isin||'').toUpperCase();if(!validIsin(isin))return fail('ISIN non valido',400);
  try{
-  const resp=await fetch('https://api.openfigi.com/v3/mapping',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify([{idType:'ID_ISIN',idValue:isin}]),signal:ctrl.signal});
-  if(!resp.ok)throw Error('OpenFIGI HTTP '+resp.status);
-  const list=await resp.json(),records=Array.isArray(list?.[0]?.data)?list[0].data:[];
-  const found=[],seen=new Set();
-  for(const record of records){
-   const exchange=String(record.exchCode||'').toUpperCase();
-   const ticker=String(record.ticker||'').trim();
-   // These are *candidate* Yahoo symbols, not assertions of a matching listing.
-   if(!ticker||!Object.hasOwn(venueSymbols,exchange))continue;
-   const symbol=ticker+venueSymbols[exchange],key=symbol+'|'+exchange;
-   if(seen.has(key)||!/^[A-Za-z0-9.\-^]{1,22}$/.test(symbol))continue;
-   seen.add(key);
-   const sector=String(record.marketSector||'').toLowerCase(),stype=String(record.securityType2||record.securityType||'').toLowerCase();
-   found.push({symbol,name:record.name||record.securityDescription||ticker,market:exchange,exchange,type:stype.includes('etf')?'ETF':sector.includes('gov')||sector.includes('corp')||stype.includes('bond')?'BOND':'EQUITY',currency:'da verificare',figi:record.figi});
-   if(found.length>=25)break;
-  }
-  return{statusCode:200,headers,body:JSON.stringify({results:found,source:'OpenFIGI',disclaimer:'I simboli sono candidati: verificare ISIN, borsa e valuta con la quotazione selezionata.'})};
- }catch(e){return{statusCode:503,headers,body:JSON.stringify({error:'Ricerca ISIN non disponibile',detail:String(e.message||e)})}}
- finally{clearTimeout(timeout)}
+  const d=await remote('https://query1.finance.yahoo.com/v1/finance/search?q='+encodeURIComponent(isin)+'&quotesCount=30&newsCount=0');
+  const rows=(d.quotes||[]).filter(q=>String(q.isin||'').toUpperCase()===isin);
+  return ok({isin,results:rows.map(q=>({isin,symbol:q.symbol,name:q.longname||q.shortname||q.symbol,market:q.exchDisp||q.exchange||'',exchange:q.exchange||'',type:q.quoteType||'',currency:q.currency||''}))});
+ }catch(e){return fail('Catalogo strumenti non raggiungibile: '+String(e.message).slice(0,100))}
 };
