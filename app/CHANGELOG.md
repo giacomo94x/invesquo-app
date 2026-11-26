@@ -1,3 +1,8 @@
+## Beta 10.9.84
+- Dettaglio strumenti: eliminata palette blu fissa dal pannello. Ora eredita direttamente i colori attivi dell’app, compresa la colorazione dinamica e i temi personalizzati.
+- Ridotta l’oscuratura dell’app dietro la finestra, conservando contrasto e leggibilità.
+- Invariati quotazioni, grafici e raccordo tratteggiato iniziale ripristinato nella beta 10.9.83.
+
 ## Beta 10.9.83
 - Grafici intraday/futures: ripristinato il tratteggio iniziale tra chiusura precedente e prima quotazione disponibile della seduta. Resta un raccordo visivo separato, non una candela artificiale.
 - Nessuna modifica ai dati Yahoo, al tratteggio finale verso l’ultima quotazione o al tema del pannello dettagli.
