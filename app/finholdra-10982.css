@@ -1,0 +1,30 @@
+/* Finholdra Beta 10.9.82 — modal colors belong to the SELECTED theme.
+   Market-sentiment backgrounds are for Home; they must never repaint detail sheets.
+   The overlay opacity adapts to a light or dark selected theme. */
+body{--fh-detail-bg:#091829;--fh-detail-panel:#12263d;--fh-detail-panel2:#1c3351;--fh-detail-border:#304c68;--fh-detail-text:#edf5ff;--fh-detail-muted:#adc0d3;--fh-detail-accent:#88adff;--fh-detail-veil:rgba(5,14,30,.50)}
+body[data-theme="light"]{--fh-detail-bg:#edf2f8;--fh-detail-panel:#fff;--fh-detail-panel2:#e9eef6;--fh-detail-border:#d6deea;--fh-detail-text:#18293f;--fh-detail-muted:#596b80;--fh-detail-accent:#315ebd;--fh-detail-veil:rgba(37,53,75,.22)}
+body[data-theme="modern"]{--fh-detail-bg:#f2f4f6;--fh-detail-panel:#fff;--fh-detail-panel2:#edf1f4;--fh-detail-border:#dce3e8;--fh-detail-text:#152127;--fh-detail-muted:#61707a;--fh-detail-accent:#244a63;--fh-detail-veil:rgba(30,46,57,.22)}
+body[data-theme="nero"]{--fh-detail-bg:#080b11;--fh-detail-panel:#111720;--fh-detail-panel2:#1a222e;--fh-detail-border:#2a3544;--fh-detail-text:#f7f9fc;--fh-detail-muted:#9caabc;--fh-detail-accent:#76a2f9;--fh-detail-veil:rgba(2,5,10,.53)}
+body[data-theme="ocean"]{--fh-detail-bg:#091b2a;--fh-detail-panel:#123145;--fh-detail-panel2:#204156;--fh-detail-border:#365b6b;--fh-detail-text:#edf5ff;--fh-detail-muted:#b6d0d9;--fh-detail-accent:#8bdded}
+body[data-theme="graphite"]{--fh-detail-bg:#11141b;--fh-detail-panel:#202630;--fh-detail-panel2:#2d3541;--fh-detail-border:#465262;--fh-detail-text:#edf5ff;--fh-detail-muted:#bac4d2}
+body[data-theme="amethyst"]{--fh-detail-bg:#171329;--fh-detail-panel:#292341;--fh-detail-panel2:#393253;--fh-detail-border:#51476b;--fh-detail-text:#edf5ff;--fh-detail-muted:#c7b8db}
+body[data-theme="pine"]{--fh-detail-bg:#0b2122;--fh-detail-panel:#173538;--fh-detail-panel2:#24484a;--fh-detail-border:#376365;--fh-detail-text:#edf5ff;--fh-detail-muted:#add0c9}
+body[data-theme="sunset"]{--fh-detail-bg:#24151d;--fh-detail-panel:#3b2332;--fh-detail-panel2:#563247;--fh-detail-border:#8f5a73;--fh-detail-text:#fff8fb;--fh-detail-muted:#ead0d8;--fh-detail-accent:#ffc06a}
+body[data-theme="copper"]{--fh-detail-bg:#1f1a17;--fh-detail-panel:#352923;--fh-detail-panel2:#4b382c;--fh-detail-border:#8e6652;--fh-detail-text:#fdf0e4;--fh-detail-muted:#ddc4b2;--fh-detail-accent:#f0ae73}
+body[data-theme="arctic"]{--fh-detail-bg:#102736;--fh-detail-panel:#1c4354;--fh-detail-panel2:#2b5869;--fh-detail-border:#77a3b0;--fh-detail-text:#effbff;--fh-detail-muted:#c3dbe2;--fh-detail-accent:#a3e2fa}
+body[data-theme="neon"]{--fh-detail-bg:#0e1020;--fh-detail-panel:#1b2040;--fh-detail-panel2:#2d3158;--fh-detail-border:#5f57ba;--fh-detail-text:#f2f2ff;--fh-detail-muted:#bfc4ef;--fh-detail-accent:#70d5ff}
+body .asset-detail-overlay{background:var(--fh-detail-veil)!important;backdrop-filter:blur(4px)!important;-webkit-backdrop-filter:blur(4px)!important}
+body #assetDetailSheet{
+ --bg:var(--fh-detail-bg);--panel:var(--fh-detail-panel);--panel2:var(--fh-detail-panel2);
+ --border:var(--fh-detail-border);--text:var(--fh-detail-text);--muted:var(--fh-detail-muted);--blue:var(--fh-detail-accent);
+ color-scheme:dark;background:var(--panel)!important;color:var(--text)!important;
+ border:1px solid var(--border)!important;background-image:none!important;
+ box-shadow:0 16px 46px rgba(0,0,0,.18)!important;
+}
+body:is([data-theme="light"],[data-theme="modern"]) #assetDetailSheet{color-scheme:light;box-shadow:0 16px 45px rgba(28,45,65,.14)!important}
+body #assetDetailSheet :is(.asset-detail-top-stat,.asset-detail-stat,.stat-box,.asset-detail-card,.asset-chart-wrap){background:var(--panel2)!important;color:var(--text);border-color:var(--border)!important}
+body #assetDetailSheet .asset-chart-wrap{background:var(--bg)!important}
+body #assetDetailSheet :is(.asset-detail-ranges button:not(.selected),.btn:not(.primary):not(.selected),select,input){background:var(--panel2)!important;color:var(--text)!important;border-color:var(--border)!important}
+body #assetDetailSheet :is(.asset-detail-note,.asset-chart-foot,.asset-detail-info span,.asset-detail-sub){color:var(--muted)!important}
+body #assetDetailSheet #assetDetailProvider option{background:var(--panel2);color:var(--text)}
+body #assetDetailSheet .asset-detail-ranges button.selected{background:var(--blue)!important;color:var(--bg)!important;border-color:var(--blue)!important}

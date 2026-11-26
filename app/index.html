@@ -5158,8 +5158,12 @@ async function fetchDetailHistory(a,range){
  const sources=[['server',server],['Yahoo',uri],...relayUrls(uri).map((url,i)=>['proxy'+i,url])];
  // The CME session can include hours outside the ordinary US cash session.
  // If the 1-minute endpoint is unavailable, retain a genuine 5-minute fallback.
- if(isFutureDay){const backup=base+'?range=5d&interval=5m&includePrePost=true';
-  sources.push(['Yahoo 5m',backup]);
+ if(isFutureDay){
+  // 1-day and 5-day Yahoo feeds can have different update cadence and session
+  // coverage. Query both, retaining only real candles for this symbol/currency.
+  sources.push(['Yahoo 1d 1m',base+'?range=1d&interval=1m&includePrePost=true']);
+  sources.push(['Yahoo 5d 2m',base+'?range=5d&interval=2m&includePrePost=true']);
+  sources.push(['Yahoo 5d 5m',base+'?range=5d&interval=5m&includePrePost=true']);
  }
  const failures=[];
  try{
@@ -5187,11 +5191,19 @@ async function fetchDetailHistory(a,range){
    good.sort((a,b)=>score(b)-score(a));data=good[0];
    // Merge only actual matching-timestamp Yahoo observations, not synthetic
    // interpolation, avoiding sparse gaps when one feed has extra bars.
-   const bestEnd=freshness(data),merged=new Map();
-   for(const feed of good)if(Math.abs(freshness(feed)-bestEnd)<3*3600000)
-    for(const point of feed.points){if(Number.isFinite(point.t)&&Number.isFinite(point.p)&&point.p>0)merged.set(point.t,point)}
+   // Use all verified real candles, even when one Yahoo response ends earlier.
+   // Prefer higher-resolution data (1m > 2m > 5m) on duplicate timestamps.
+   const merged=new Map();
+   const ordered=good.slice().sort((a,b)=>{
+    const granularity=d=>d.points.length>1?Math.min(...d.points.slice(1,Math.min(d.points.length,90)).map((p,i)=>p.t-d.points[i].t).filter(n=>n>0)):Infinity;
+    return granularity(b)-granularity(a);
+   });
+   for(const feed of ordered)for(const point of feed.points){
+    if(Number.isFinite(point.t)&&Number.isFinite(point.p)&&point.p>0)merged.set(point.t,point);
+   }
    const full=[...merged.values()].sort((a,b)=>a.t-b.t);
-   if(full.length>data.points.length)data={...data,points:full,source:data.source+' · sessione elettronica integrata'};
+   if(full.length>data.points.length||full.at(-1)?.t>freshness(data))
+    data={...data,points:full,source:'Yahoo Finance · '+a.symbol+' · candele verificate integrate'};
   }else data=await Promise.any(contenders);
   detailCache.set(key,{at:Date.now(),data});return data;
  }catch(_){/* Fall through to real, locally observed quote history. */}
@@ -5269,7 +5281,7 @@ function plotAssetDetail(points,a,opts={}){
  const chart=$('assetDetailChart');assetDetailPoints=points;
  if(!points.length){detailEmpty('Non ci sono ancora rilevazioni sufficienti per questo periodo.');return}
  const sessionPoints=points;const close=assetDetailRange==='1d'?fh1069PriorClose(a,points,opts.previousClose):null;const hasPrior=assetDetailRange==='1d'&&(detailIsMarketAsset(a)||a.cat==='Obbligazioni')&&Number.isFinite(close)&&close>0;
- if(hasPrior){const gap=Math.max(60000,(points.at(-1).t-points[0].t)*.09);points=[{t:points[0].t-gap,p:close,priorClose:true},...points];}
+ if(hasPrior){const gap=Math.max(60000,Math.min(15*60000,(points.at(-1).t-points[0].t)*.025));points=[{t:points[0].t-gap,p:close,priorClose:true},...points];}
  const W=360,H=215,L=18,R=18,T=22,B=27;
  const values=points.map(p=>p.p),pmc=(detailIsMarketAsset(a)||a.id==='btp')?Number(a.pmc):null;
  const limits=pmc&&Number.isFinite(pmc)&&pmc>0?[...values,pmc]:values;
@@ -5292,7 +5304,7 @@ function plotAssetDetail(points,a,opts={}){
  const borderTop='<line x1="'+L+'" y1="'+T+'" x2="'+(W-R)+'" y2="'+T+'" stroke="#52647a" stroke-opacity=".5" stroke-dasharray="3 6"/>',borderBottom='<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#52647a" stroke-opacity=".5" stroke-dasharray="3 6"/>';
  const mc=pmc&&Number.isFinite(pmc)&&pmc>0?'<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(pmc).toFixed(2)+'" y2="'+y(pmc).toFixed(2)+'" stroke="#f3c15a" stroke-width="1.6" stroke-dasharray="5 5"/><text x="'+(W-R)+'" y="'+Math.max(11,y(pmc)-6).toFixed(2)+'" fill="#f3c15a" font-size="10" text-anchor="end">PMC '+(a.cat==='Obbligazioni'?number(pmc):localMoney(pmc,currencyOf(a)))+'</text>':'';
  const upward=sessionPoints.at(-1).p>=sessionPoints[0].p,color=upward?'#45dbae':'#fa8090';
- const priorMark=hasPrior?'<g><line x1="'+x(points[0].t)+'" y1="'+y(close)+'" x2="'+x(sessionPoints[0].t)+'" y2="'+y(sessionPoints[0].p)+'" stroke="#a9b9ce" stroke-dasharray="4 4" stroke-width="1.8"/><circle cx="'+x(points[0].t)+'" cy="'+y(close)+'" r="5" fill="#f3c15a"><title>Chiusura precedente: '+number(close)+'</title></circle></g>':'';
+ const priorMark=hasPrior?'<g><circle cx="'+x(points[0].t)+'" cy="'+y(close)+'" r="5" fill="#f3c15a"><title>Chiusura precedente: '+number(close)+' (riferimento, non candela intraday)</title></circle></g>':'';
  const marks=singleBond||(liveLast&&!isFutures)?'': '<circle cx="'+x(points[points.length-1].t).toFixed(2)+'" cy="'+y(points[points.length-1].p).toFixed(2)+'" r="'+(liveLast?'5.8':'4.4')+'" fill="'+(liveLast?'#f3c15a':color)+'" stroke="#0c192b" stroke-width="2"/>';
  const axis=singleBond?'<text x="'+(W/2)+'" y="'+(H-7)+'" text-anchor="middle" fill="#a9b9ce" font-size="10">Ultima rilevazione: '+svgEscape(detailDate(left,false))+'</text>':
  '<text x="'+L+'" y="'+(H-7)+'" fill="#a9b9ce" font-size="10">'+svgEscape(hasPrior?'Chiusura prec.':detailDate(left,assetDetailRange==='1d'))+'</text><text x="'+(W-R)+'" y="'+(H-7)+'" text-anchor="end" fill="#a9b9ce" font-size="10">'+svgEscape(detailDate(right,assetDetailRange==='1d'))+'</text>';
@@ -8994,4 +9006,5 @@ header.top .new-header-brand #finholdraLogo{
 <link rel="stylesheet" href="./finholdra-premium.css?v=10.9.74">
 <link rel="stylesheet" href="./finholdra-fintech.css?v=10.9.74">
 <link rel="stylesheet" href="./asset-detail-neutral.css?v=10.9.79">
+<link rel="stylesheet" href="./finholdra-10982.css?v=10.9.82">
 </body></html>

@@ -1,3 +1,9 @@
+## Beta 10.9.82
+- Dettaglio strumenti: finestra, pulsanti e pannelli seguono la palette del tema scelto (chiaro, moderno, nero e altri), senza essere scuriti dal colore dinamico dei mercati. Sfondo esterno meno opaco, soprattutto nei temi chiari.
+- Futures ES=F: recupero parallelo di candele Yahoo 1d/1m, 5d/1m, 5d/2m e 5d/5m; integrazione dei soli timestamp reali verificati, con precedenza alle serie più granulari.
+- Grafici: la chiusura precedente resta un indicatore distinto e non viene collegata con un finto segmento di prezzo; preservati il tratteggio arancione verso l’ultima quotazione e l’assenza di ombre triangolari.
+- Dati non pubblicati da Yahoo: nessuna interpolazione artificiale. In assenza di candele, la discontinuità resta visibile.
+
 ## Beta 10.9.81
 - Ripristinata la funzione Netlify `market-news`: era assente e impediva il caricamento delle notizie dal pannello principale e da Finn Radar.
 - Notizie da Yahoo Finance con ricerca RSS alternativa; etichetta della fonte reale mostrata all’utente. I titoli delle notizie rimangono link alle pagine originali, senza generazione di contenuti.
