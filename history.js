@@ -65,16 +65,22 @@ exports.handler = async event => {
     const samples=new Map();
     const metadata=good.slice().sort((a,b)=>a.latest-b.latest).at(-1).item.meta;
     for(const feed of good.slice().reverse()){
-      const ts=feed.item.timestamp,close=feed.item.indicators.quote[0].close;
+      const ts=feed.item.timestamp,q=feed.item.indicators.quote[0];
       for(let i=0;i<ts.length;i++){
-        const t=Number(ts[i]),p=Number(close[i]);
-        if(Number.isFinite(t)&&p>0&&Number.isFinite(p))samples.set(t,p);
+        const t=Number(ts[i]),p=Number(q.close[i]);
+        if(!Number.isFinite(t)||!Number.isFinite(p)||p<=0)continue;
+        const o=Number(q.open?.[i]),h=Number(q.high?.[i]),l=Number(q.low?.[i]);
+        const genuine=q.open?.[i]!=null&&q.high?.[i]!=null&&q.low?.[i]!=null&&Number.isFinite(o)&&Number.isFinite(h)&&Number.isFinite(l)&&o>0&&l>0&&h>=Math.max(o,p)&&l<=Math.min(o,p);
+        samples.set(t,{close:p,open:genuine?o:null,high:genuine?h:null,low:genuine?l:null});
       }
     }
     const times=[...samples.keys()].sort((a,b)=>a-b);
     const latest=times.at(-1),cutoff=latest-5*86400;
     const kept=times.filter(t=>t>=cutoff);
-    const output={chart:{result:[{meta:metadata,timestamp:kept,indicators:{quote:[{close:kept.map(t=>samples.get(t))}]}}],error:null}};
+    const output={chart:{result:[{meta:metadata,timestamp:kept,indicators:{quote:[{
+      close:kept.map(t=>samples.get(t).close),open:kept.map(t=>samples.get(t).open),
+      high:kept.map(t=>samples.get(t).high),low:kept.map(t=>samples.get(t).low)
+    }]}}],error:null}};
     return {statusCode:200,headers:{...headers,'Cache-Control':'public, max-age=55, stale-while-revalidate=120'},body:JSON.stringify(output)};
   }catch(e){return {statusCode:502,headers,body:JSON.stringify({error:'Candele futures Yahoo non disponibili',detail:String(e.message||'errore').slice(0,100)})}}
 };
