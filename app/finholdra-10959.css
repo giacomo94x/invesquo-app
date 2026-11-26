@@ -1,0 +1,16 @@
+/* Beta 10.9.59 — portraits, accessibility and settings shortcuts */
+#fhBehavioralAcademy .fh-beh-head,#educationView .mira-academy-top,#radarView .nexus-head{display:flex;align-items:center;gap:13px;min-width:0}
+#fhBehavioralAcademy .fh-beh-portrait,#educationView #miraAcademyOpen,#radarView #nexusOpen{box-sizing:border-box;width:98px!important;height:116px!important;flex:0 0 98px!important;min-width:98px;border:1px solid #4dbb9f;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#061936;padding:5px!important;cursor:pointer}
+#fhBehavioralAcademy .fh-beh-portrait img,#educationView #miraAcademyOpen img,#radarView #nexusOpen img{box-sizing:border-box!important;display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;padding:0!important;scale:1!important;transform:none!important;animation:none!important;filter:none!important}
+#fhBehavioralAcademy .fh-beh-replies{display:block;margin-top:14px}
+#fhBehavioralAcademy .fh-beh-dialogue{margin:0;padding:17px 18px;border-radius:15px;line-height:1.7;font-size:14px;min-height:92px}
+#fhBehavioralAcademy .fh-beh-dialogue p{margin:0 0 11px;line-height:1.7}#fhBehavioralAcademy .fh-beh-dialogue p:last-child{margin-bottom:0}
+#historyGraph .fh73-comparison{touch-action:none!important}
+#historyGraph #fh73TouchArea{touch-action:none!important}
+/* Settings: quick find, available without expanding every panel. */
+.fh10959-settings-toolbar{display:flex;gap:9px;align-items:center;padding:10px 0 12px;flex-wrap:wrap}
+.fh10959-settings-toolbar input{min-width:160px;flex:1 1 230px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);color:var(--text);font:inherit;font-size:13px;padding:10px 12px;min-height:42px;outline-offset:2px}
+.fh10959-settings-toolbar button{min-height:42px;padding:9px 13px;border:1px solid var(--border);border-radius:11px;background:var(--panel2);color:var(--text);font-weight:700;cursor:pointer}
+.fh10959-settings-toolbar small{width:100%;color:var(--muted);font-size:11px}
+.fh10959-settings-empty{display:none;margin:6px 0 12px;color:var(--muted);font-size:12px}.fh10959-settings-empty.visible{display:block}
+@media(max-width:480px){#fhBehavioralAcademy .fh-beh-dialogue{padding:15px;font-size:13px}#fhBehavioralAcademy .fh-beh-head,#educationView .mira-academy-top,#radarView .nexus-head{gap:10px}}

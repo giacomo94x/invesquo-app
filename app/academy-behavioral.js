@@ -80,7 +80,7 @@
   focus.innerHTML=contextLabel(c);
   const {lines,refs}=script(topic,c);
   response.replaceChildren();
-  lines.forEach((t,i)=>{const block=document.createElement('p');block.className=i?'fh-beh-dialogue secondary':'fh-beh-dialogue';const who=document.createElement('strong');who.textContent='MIRA';const span=document.createElement('span');span.textContent=t;block.append(who,span);response.append(block)});
+  const block=document.createElement('div');block.className='fh-beh-dialogue';const who=document.createElement('strong');who.textContent='MIRA';block.append(who);lines.forEach(t=>{const paragraph=document.createElement('p');paragraph.textContent=t;block.append(paragraph)});response.append(block);
   sources.replaceChildren();
   refs.forEach(r=>{const a=document.createElement('a');a.href=links[r];a.target='_blank';a.rel='noopener noreferrer';a.textContent=studies[r];sources.append(a)});
  }

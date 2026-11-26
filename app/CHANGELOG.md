@@ -1,3 +1,10 @@
+## Beta 10.9.59
+- Academy: Mira ha riquadri e proporzioni coerenti fra Quiz e Finanza comportamentale, e una sola risposta ampia per ogni tema.
+- Radar: Nexus a corpo intero, stessa cornice e proporzioni di Mira.
+- Finn: correzione vestibilità cappello Babbo Natale e prevenzione di sovrapposizioni nel tema natalizio.
+- Impostazioni: «Giochi di Finn» rinominata «Finn»; nuova ricerca rapida fra sezioni con azzeramento e conteggio risultati.
+- Storico Rendimento: cursore ROI/TWRR/MWRR corretto con trasformazione SVG effettiva, hit area completa, selezione di primo/ultimo punto e supporto tastiera; nessuna modifica ai dati.
+
 ## Beta 10.9.58
 - Finn Store: costumi e gadget in due schede compatte, filtri scorrevoli e pagine di 8 oggetti, senza lunghi elenchi verticali.
 - Un solo tocco sblocca gratuitamente ed equipaggia subito l’oggetto; sblocchi precedenti, anteprima e salvataggio profilo restano invariati.
